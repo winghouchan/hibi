@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "postinstall": "husky"
+    "postinstall": "husky",
+    "database:migrations:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
