@@ -1,0 +1,33 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "332fe58c-667e-4495-8a84-ed89d9d9a324",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "mock": {
+      "name": "mock",
+      "columns": {
+        "mock_column": {
+          "name": "mock_column",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

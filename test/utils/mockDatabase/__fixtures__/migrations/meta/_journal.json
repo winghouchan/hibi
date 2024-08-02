@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1722553200000,
+      "tag": "20240802000000_add-mock-table",
+      "breakpoints": true
+    }
+  ]
+}
