@@ -1,7 +1,26 @@
-import type { Config } from 'jest'
+import type { JestConfigWithTsJest } from 'ts-jest'
 
-const config: Config = {
+const config: JestConfigWithTsJest = {
   preset: 'jest-expo',
+
+  /**
+   * The configuration for `extensionsToTreatAsEsm`, `moduleNameMapper` and
+   * `transform` enables ESM support.
+   *
+   * @see {@link https://kulshekhar.github.io/ts-jest/docs/guides/esm-support/ | ts-jest Documentation}
+   */
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
 }
 
 export default config

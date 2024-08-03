@@ -52,7 +52,7 @@ test('...', async () => {
 })
 ```
 
-#### `jest.doMock`
+#### `jest.doMock` / `jest.unstable_mockModule`
 
 Whilst [`jest.mock`](https://jestjs.io/docs/jest-object#jestmockmodulename-factory-options) works, it does not allow for the resetting of the database mock between test cases. This is because `jest.mock` is hoisted above imports to ensure imported modules use the mock.
 
@@ -115,12 +115,14 @@ test('...', () => {
 })
 ```
 
+[`unstable_mockModule`](https://jestjs.io/docs/ecmascript-modules) is similar to `doMock` in the way that it is not hoisted. The additional difference is that it provides support for module mocking when using ESM with Jest.
+
 #### Mock database utility function
 
 To improve the ease of creating a database mock, a utility function called [`mockDatabase`](./index.ts) has been created. It does the following:
 
 1. Resets the Jest module registry (`jest.resetModules()`).
-2. Enables the mocks (`jest.doMock(...)`).
+2. Enables the mocks (`jest.unstable_mockModule(...)`).
 3. Runs database migrations.
 4. Returns the mocked versions of `database`, `nativeDatabase` and a function (`resetDatabaseMock`) that closes the database connection.
 
@@ -129,8 +131,8 @@ Here is some example usage:
 ##### Called in test case
 
 ```typescript
-test('`mockDatabase()` opens an in-memory database', () => {
-  const { nativeDatabase, resetDatabaseMock } = mockDatabase()
+test('`mockDatabase()` opens an in-memory database', async () => {
+  const { nativeDatabase, resetDatabaseMock } = await mockDatabase()
 
   expect(nativeDatabase.open).toBe(true)
   expect(nativeDatabase.memory).toBe(true)
@@ -142,11 +144,13 @@ test('`mockDatabase()` opens an in-memory database', () => {
 ##### Called in test hook
 
 ```typescript
-let nativeDatabase: ReturnType<typeof mockDatabase>['nativeDatabase'],
-  resetDatabaseMock: ReturnType<typeof mockDatabase>['resetDatabaseMock']
+let nativeDatabase: Awaited<ReturnType<typeof mockDatabase>>['nativeDatabase'],
+  resetDatabaseMock: Awaited<
+    ReturnType<typeof mockDatabase>
+  >['resetDatabaseMock']
 
-beforeEach(() => {
-  ;({ nativeDatabase, resetDatabaseMock } = mockDatabase())
+beforeEach(async () => {
+  ;({ nativeDatabase, resetDatabaseMock } = await mockDatabase())
 })
 
 afterEach(() => {

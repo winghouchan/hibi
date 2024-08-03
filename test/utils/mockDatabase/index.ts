@@ -1,5 +1,6 @@
-import { drizzle } from '@/__mocks__/drizzle-orm/expo-sqlite'
-import { openDatabaseSync } from '@/__mocks__/expo-sqlite'
+import * as drizzleOrmExpoSqliteMock from '@/__mocks__/drizzle-orm/expo-sqlite'
+import * as expoSqliteMock from '@/__mocks__/expo-sqlite'
+import { jest } from '@jest/globals'
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 
 /**
@@ -40,7 +41,7 @@ export type DatabaseModuleMock = {
    * @see {@link https://github.com/DefinitelyTyped/DefinitelyTyped/blob/aeddb679ec7112375941d277fcbc3ecac85e2f2d/types/better-sqlite3/index.d.ts#L103-L106 | Better SQLite 3 Type Definitions}
    * @see {@link https://docs.expo.dev/versions/latest/sdk/sqlite/#sqliterunresult | Expo Documentation}
    */
-  database: ReturnType<typeof drizzle>
+  database: ReturnType<typeof drizzleOrmExpoSqliteMock.drizzle>
 
   /**
    * The type for the underlying database when Expo SQLite is mocked with Better
@@ -52,7 +53,7 @@ export type DatabaseModuleMock = {
    * @see {@link https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/better-sqlite3/index.d.ts | Better SQLite 3 Type Definitions}
    * @see {@link https://docs.expo.dev/versions/latest/sdk/sqlite | Expo Documentation}
    */
-  nativeDatabase: ReturnType<typeof openDatabaseSync>
+  nativeDatabase: ReturnType<typeof expoSqliteMock.openDatabaseSync>
 }
 
 /**
@@ -62,13 +63,20 @@ export type DatabaseModuleMock = {
  * - README (in this directory) for more information.
  * - Tests for example usage.
  */
-export default function mockDatabase() {
+export default async function mockDatabase() {
   jest.resetModules()
-  jest.doMock('drizzle-orm/expo-sqlite')
-  jest.doMock('expo-sqlite')
+  jest.unstable_mockModule(
+    'drizzle-orm/expo-sqlite',
+    () => drizzleOrmExpoSqliteMock,
+  )
+  jest.unstable_mockModule('expo-sqlite', () => expoSqliteMock)
 
-  const { database, nativeDatabase } =
-    require('@/database') as DatabaseModuleMock
+  // Import `@/database` here because module registry has been reset and dependencies are now mocked
+  const { database, nativeDatabase } = (await import(
+    '@/database'
+    // Casting is necessary because the database mock, from Better SQLite 3, is
+    // now returned which has a different structure from Expo SQLite.
+  )) as unknown as DatabaseModuleMock
 
   migrate(database, { migrationsFolder: './database/migrations' })
 

@@ -1,13 +1,18 @@
+import { jest } from '@jest/globals'
 import Database from 'better-sqlite3'
-import {
+import { serializedData } from './__fixtures__'
+import * as expoSqliteMock from './index'
+
+jest.unstable_mockModule('expo-sqlite', () => expoSqliteMock)
+
+const {
   deleteDatabaseAsync,
   deleteDatabaseSync,
   deserializeDatabaseAsync,
   deserializeDatabaseSync,
   openDatabaseAsync,
   openDatabaseSync,
-} from 'expo-sqlite'
-import { serializedData } from './__fixtures__'
+} = await import('expo-sqlite')
 
 test('`deleteDatabaseAsync()` does not throw', () => {
   expect(

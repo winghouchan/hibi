@@ -1,4 +1,5 @@
-import { SqliteError } from 'better-sqlite3'
+import { jest } from '@jest/globals'
+import Database, { SqliteError } from 'better-sqlite3'
 import mockDatabase from '.'
 
 /**
@@ -10,10 +11,8 @@ jest.mock('drizzle-orm/better-sqlite3/migrator', () => ({
   migrate: jest.fn(),
 }))
 
-test('`mockDatabase()` opens an in-memory database', () => {
-  const { nativeDatabase, resetDatabaseMock } = mockDatabase()
-  // `Database` needs to be imported here because Jest's module registry was reset in `mockDatabase`
-  const Database = require('better-sqlite3')
+test('`mockDatabase()` opens an in-memory database', async () => {
+  const { nativeDatabase, resetDatabaseMock } = await mockDatabase()
 
   expect(nativeDatabase).toBeInstanceOf(Database)
   expect(nativeDatabase.name).toBe(':memory:')
@@ -23,8 +22,8 @@ test('`mockDatabase()` opens an in-memory database', () => {
   resetDatabaseMock()
 })
 
-test('`resetDatabaseMock()` closes the mocked database', () => {
-  const { nativeDatabase, resetDatabaseMock } = mockDatabase()
+test('`resetDatabaseMock()` closes the mocked database', async () => {
+  const { nativeDatabase, resetDatabaseMock } = await mockDatabase()
 
   resetDatabaseMock()
 
@@ -36,8 +35,8 @@ test('`resetDatabaseMock()` closes the mocked database', () => {
   ).toThrow(new TypeError('The database connection is not open'))
 })
 
-test('`mockDatabase()` after `resetDatabaseMock()` creates an isolated database', () => {
-  let { nativeDatabase, resetDatabaseMock } = mockDatabase()
+test('`mockDatabase()` after `resetDatabaseMock()` creates an isolated database', async () => {
+  let { nativeDatabase, resetDatabaseMock } = await mockDatabase()
 
   function createTableMock() {
     return nativeDatabase
@@ -61,7 +60,7 @@ test('`mockDatabase()` after `resetDatabaseMock()` creates an isolated database'
   resetDatabaseMock()
 
   // prettier-ignore - Stop removing preceding empty line
-  ;({ nativeDatabase, resetDatabaseMock } = mockDatabase())
+  ;({ nativeDatabase, resetDatabaseMock } = await mockDatabase())
 
   expect(createTableMock).not.toThrow(
     new SqliteError('table mock_table already exists', 'SQLITE_ERROR'),
