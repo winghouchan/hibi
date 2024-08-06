@@ -13,6 +13,7 @@ const config: JestConfigWithTsJest = {
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
+  setupFilesAfterEnv: ['./test/setup.ts'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',

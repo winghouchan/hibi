@@ -1,3 +1,5 @@
+import { schema as collectionSchema } from '@/collections'
+
 /**
  * Database schema. Import and spread individual schemas into the object below.
  * Example:
@@ -12,6 +14,8 @@
  * }
  * ```
  */
-const schema = {} satisfies Record<string, unknown>
+const schema = {
+  ...collectionSchema,
+} satisfies Record<string, unknown>
 
 export default schema
