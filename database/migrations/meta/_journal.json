@@ -8,6 +8,20 @@
       "when": 1723052537530,
       "tag": "20240807174217_store-collections",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1723128789316,
+      "tag": "20240808145309_store-notes",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1723225889574,
+      "tag": "20240809175129_store-reviewables",
+      "breakpoints": true
     }
   ]
 }

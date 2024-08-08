@@ -1,5 +1,4 @@
-import { database } from '@/database'
-import { collection } from '../collection.schema'
+import { collection } from '../schema/collection.schema'
 
 export interface Collection<Name extends string = string>
   extends Omit<typeof collection.$inferInsert, 'id' | 'created_at'> {
@@ -9,6 +8,8 @@ export interface Collection<Name extends string = string>
 export default async function createCollection<Name extends string>({
   name,
 }: Collection<Name>) {
+  const { database } = await import('@/database')
+
   const [result] = await database
     .insert(collection)
     .values({ name })

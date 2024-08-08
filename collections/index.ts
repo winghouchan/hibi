@@ -1,1 +1,2 @@
-export * as schema from './collection.schema'
+export * as schema from './schema'
+export { default as createCollection } from './createCollection'
