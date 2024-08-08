@@ -20,4 +20,15 @@ module.exports = {
     ],
     'prettier/prettier': 'error',
   },
+  overrides: [
+    {
+      files: ['**/*.test.{js,jsx,ts,tsx}'],
+      plugins: ['jest', 'jest-extended'],
+      extends: [
+        'plugin:jest/recommended',
+        'plugin:jest/style',
+        'plugin:jest-extended/all',
+      ],
+    },
+  ],
 }
