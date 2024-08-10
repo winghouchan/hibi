@@ -1,23 +1,10 @@
-import { sql } from 'drizzle-orm'
+import { createdAt } from '@/database/utils'
 import { blob, integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 export const note = sqliteTable('note', {
   id: integer('id').primaryKey({ autoIncrement: true }),
 
-  /**
-   * The timestamp of when the collection was created, represented as milliseconds
-   * since Unix epoch.
-   *
-   * NOTE: uses `unixepoch()` as opposed to `current_timestamp` because `current_timestamp`
-   * returns a string representation with the format `YYYY-MM-DD HH:MM:SS` as opposed to
-   * seconds/milliseconds since Unix epoch.
-   *
-   * @see {@link https://www.sqlite.org/lang_createtable.html#the_default_clause | SQLite Documentation for `current_timestamp`}
-   * @see {@link https://www.sqlite.org/lang_datefunc.html | SQLite Documentation for `unixepoch()`}
-   */
-  created_at: integer('created_at', { mode: 'timestamp_ms' })
-    .notNull()
-    .default(sql`(unixepoch('now', 'subsec') * 1000)`),
+  created_at: createdAt(),
 })
 
 export const noteField = sqliteTable('note_field', {
@@ -38,18 +25,5 @@ export const noteField = sqliteTable('note_field', {
    */
   value: blob('value').notNull().$type<Uint8Array | string>(),
 
-  /**
-   * The timestamp of when the collection was created, represented as milliseconds
-   * since Unix epoch.
-   *
-   * NOTE: uses `unixepoch()` as opposed to `current_timestamp` because `current_timestamp`
-   * returns a string representation with the format `YYYY-MM-DD HH:MM:SS` as opposed to
-   * seconds/milliseconds since Unix epoch.
-   *
-   * @see {@link https://www.sqlite.org/lang_createtable.html#the_default_clause | SQLite Documentation for `current_timestamp`}
-   * @see {@link https://www.sqlite.org/lang_datefunc.html | SQLite Documentation for `unixepoch()`}
-   */
-  created_at: integer('created_at', { mode: 'timestamp_ms' })
-    .notNull()
-    .default(sql`(unixepoch('now', 'subsec') * 1000)`),
+  created_at: createdAt(),
 })

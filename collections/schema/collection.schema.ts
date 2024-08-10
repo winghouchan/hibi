@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { createdAt } from '@/database/utils'
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const collection = sqliteTable('collection', {
@@ -15,18 +15,5 @@ export const collection = sqliteTable('collection', {
    */
   name: text('name').notNull(),
 
-  /**
-   * The timestamp of when the collection was created, represented as milliseconds
-   * since Unix epoch.
-   *
-   * NOTE: uses `unixepoch()` as opposed to `current_timestamp` because `current_timestamp`
-   * returns a string representation with the format `YYYY-MM-DD HH:MM:SS` as opposed to
-   * seconds/milliseconds since Unix epoch.
-   *
-   * @see {@link https://www.sqlite.org/lang_createtable.html#the_default_clause | SQLite Documentation for `current_timestamp`}
-   * @see {@link https://www.sqlite.org/lang_datefunc.html | SQLite Documentation for `unixepoch()`}
-   */
-  created_at: integer('created_at', { mode: 'timestamp_ms' })
-    .notNull()
-    .default(sql`(unixepoch('now', 'subsec') * 1000)`),
+  created_at: createdAt(),
 })
