@@ -78,6 +78,7 @@ export default async function createNote({
         return {
           ...insertedReviewable,
           fields: insertedReviewableFields,
+          reviews: [],
         }
       }),
     )
