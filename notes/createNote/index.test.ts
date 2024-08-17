@@ -959,8 +959,12 @@ describe('createNote', () => {
       },
     }
 
-    await expect(async () => await createNote(input)).rejects.toThrow(
-      'CHECK constraint failed: length(`value`) > 0',
+    await expect(async () => await createNote(input)).rejects.toEqual(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          'CHECK constraint failed: length(`value`) > 0',
+        ),
+      }),
     )
 
     resetDatabaseMock()
@@ -1000,8 +1004,10 @@ describe('createNote', () => {
       },
     }
 
-    await expect(async () => await createNote(input)).rejects.toThrow(
-      'FOREIGN KEY constraint failed',
+    await expect(async () => await createNote(input)).rejects.toEqual(
+      expect.objectContaining({
+        message: expect.stringContaining('FOREIGN KEY constraint failed'),
+      }),
     )
 
     resetDatabaseMock()

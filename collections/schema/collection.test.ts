@@ -13,11 +13,15 @@ describe('`collection` table', () => {
             .returning({ id: collection.id })
         )[0]
 
-      await expect(() => insertCollection({ id: 'string' })).rejects.toThrow(
-        'datatype mismatch',
+      await expect(insertCollection({ id: 'string' })).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       )
-      await expect(() => insertCollection({ id: 0.1 })).rejects.toThrow(
-        'datatype mismatch',
+      await expect(insertCollection({ id: 0.1 })).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       )
       await expect(insertCollection({ id: 1 })).resolves.toEqual({ id: 1 })
 
@@ -98,8 +102,12 @@ describe('`collection` table', () => {
           name: null as unknown as string,
         })
 
-      await expect(insertCollectionWithNullName).rejects.toThrow(
-        'NOT NULL constraint failed: collection.name',
+      await expect(insertCollectionWithNullName).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: collection.name',
+          ),
+        }),
       )
 
       resetDatabaseMock()
@@ -110,8 +118,10 @@ describe('`collection` table', () => {
       const insertCollectionWithEmptyName = async () =>
         await database.insert(collection).values({ name: '' })
 
-      await expect(insertCollectionWithEmptyName).rejects.toThrow(
-        'CHECK constraint failed: name',
+      await expect(insertCollectionWithEmptyName).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed: name'),
+        }),
       )
 
       resetDatabaseMock()
@@ -175,8 +185,12 @@ describe('`collection` table', () => {
           name: 'Collection 1',
         })
 
-      await expect(insertCollectionWithNullCreatedAt).rejects.toThrow(
-        'NOT NULL constraint failed: collection.created_at',
+      await expect(insertCollectionWithNullCreatedAt).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: collection.created_at',
+          ),
+        }),
       )
 
       resetDatabaseMock()

@@ -63,8 +63,12 @@ describe('createCollection', () => {
     const { default: createCollection } = await import('.')
     const input = {} as Collection // Cast empty object to `Collection` so that compile time checks pass and run time checks can be tested
 
-    await expect(async () => await createCollection(input)).rejects.toThrow(
-      'NOT NULL constraint failed: collection.name',
+    await expect(async () => await createCollection(input)).rejects.toEqual(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          'NOT NULL constraint failed: collection.name',
+        ),
+      }),
     )
 
     resetDatabaseMock()
@@ -77,8 +81,10 @@ describe('createCollection', () => {
       name: '',
     }
 
-    await expect(async () => await createCollection(input)).rejects.toThrow(
-      'CHECK constraint failed: name',
+    await expect(async () => await createCollection(input)).rejects.toEqual(
+      expect.objectContaining({
+        message: expect.stringContaining('CHECK constraint failed: name'),
+      }),
     )
 
     resetDatabaseMock()
