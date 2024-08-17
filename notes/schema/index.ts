@@ -1,2 +1,2 @@
-export * from './note.schema'
-export * from './relations.schema'
+export * from './note'
+export * from './relations'

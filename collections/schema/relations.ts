@@ -1,8 +1,8 @@
 import { createdAt } from '@/database/utils'
-import { note } from '@/notes/schema/note.schema'
+import { note } from '@/notes/schema/note'
 import { relations } from 'drizzle-orm'
 import { integer, primaryKey, sqliteTable } from 'drizzle-orm/sqlite-core'
-import { collection } from './collection.schema'
+import { collection } from './collection'
 
 export const collectionToNote = sqliteTable(
   'collection_notes',

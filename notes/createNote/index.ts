@@ -1,8 +1,8 @@
 import { collection, collectionToNote } from '@/collections/schema'
 import { createReviewables } from '@/reviews'
-import { reviewable, reviewableField } from '@/reviews/schema/reviewable.schema'
+import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
 import { inArray } from 'drizzle-orm'
-import { noteField, note } from '../schema/note.schema'
+import { noteField, note } from '../schema/note'
 
 interface Field
   extends Omit<typeof noteField.$inferInsert, 'id' | 'created_at' | 'note'> {}

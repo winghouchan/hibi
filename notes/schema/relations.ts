@@ -1,7 +1,7 @@
-import { collectionToNote } from '@/collections/schema/relations.schema'
-import { reviewable, reviewableField } from '@/reviews/schema/reviewable.schema'
+import { collectionToNote } from '@/collections/schema/relations'
+import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
 import { relations } from 'drizzle-orm'
-import { noteField, note } from './note.schema'
+import { noteField, note } from './note'
 
 export const noteRelations = relations(note, ({ many }) => ({
   collections: many(collectionToNote),

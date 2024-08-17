@@ -1,2 +1,2 @@
-export * from './collection.schema'
-export * from './relations.schema'
+export * from './collection'
+export * from './relations'

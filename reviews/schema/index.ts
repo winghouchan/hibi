@@ -1,3 +1,3 @@
-export * from './relations.schema'
-export * from './review.schema'
-export * from './reviewable.schema'
+export * from './relations'
+export * from './review'
+export * from './reviewable'

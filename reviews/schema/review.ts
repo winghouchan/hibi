@@ -1,6 +1,6 @@
 import { createdAt } from '@/database/utils'
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { reviewable } from './reviewable.schema'
+import { reviewable } from './reviewable'
 
 export const review = sqliteTable('review', {
   id: integer('id').primaryKey({ autoIncrement: true }),
