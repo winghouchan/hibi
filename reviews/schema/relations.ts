@@ -1,7 +1,8 @@
 import { note, noteField } from '@/notes/schema/note'
 import { relations } from 'drizzle-orm'
-import { review, reviewableSnapshot } from './review'
+import { review } from './review'
 import { reviewable, reviewableField } from './reviewable'
+import { reviewableSnapshot } from './reviewableSnapshot'
 
 export const reviewableRelations = relations(reviewable, ({ many, one }) => ({
   note: one(note, {
