@@ -1,5 +1,5 @@
 import { createdAt } from '@/database/utils'
-import { blob, integer, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { blob, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const note = sqliteTable('note', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -24,6 +24,16 @@ export const noteField = sqliteTable('note_field', {
    * @see {@link https://orm.drizzle.team/docs/indexes-constraints#check | Drizzle Documentation}
    */
   value: blob('value').notNull().$type<Uint8Array | string>(),
+
+  /**
+   * A hash of the value of the field.
+   *
+   * SHA-256 is the algorithm currently used as there is a very small risk of
+   * collision and it has acceptable performance. The digest is stored in base64
+   * to reduce the storage size compared to hexadecimal and improve the ease of
+   * use compared to binary.
+   */
+  hash: text('hash').notNull(),
 
   created_at: createdAt(),
 })

@@ -2,10 +2,14 @@ import { collection, collectionToNote } from '@/collections/schema'
 import { createReviewables } from '@/reviews'
 import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
 import { inArray } from 'drizzle-orm'
+import hash from 'sha.js'
 import { noteField, note } from '../schema/note'
 
 interface Field
-  extends Omit<typeof noteField.$inferInsert, 'id' | 'created_at' | 'note'> {}
+  extends Omit<
+    typeof noteField.$inferInsert,
+    'id' | 'created_at' | 'hash' | 'note'
+  > {}
 
 interface Note extends Omit<typeof note.$inferInsert, 'id' | 'created_at'> {
   fields: Field[]
@@ -40,6 +44,7 @@ export default async function createNote({
         fields.map((field) => ({
           ...field,
           note: insertedNote.id,
+          hash: hash('sha256').update(field.value).digest('base64'),
         })),
       )
       .returning()

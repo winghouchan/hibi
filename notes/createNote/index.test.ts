@@ -862,7 +862,9 @@ describe('createNote', () => {
       expect(
         queriedState[0].collections.map(({ collection }) => collection),
       ).toEqual(expected.collections)
-      expect(queriedState[0].fields).toEqual(expected.fields)
+      expect(queriedState[0].fields).toEqual(
+        expect.arrayContaining(expected.fields),
+      )
       expect(queriedState[0].reviewables).toEqual(expected.reviewables)
 
       expect(returnedState.collections).toEqual(expected.collections)

@@ -1,13 +1,19 @@
-import { createNote, schema } from '@/notes'
+import { schema } from '@/notes'
 import { mockDatabase } from '@/test/utils'
+import hash from 'sha.js'
 
 function generateFieldMocks(length: number) {
-  return Array.from({ length }, () => ({ value: 'Field Mock' }))
+  return Array.from({ length }, () => ({
+    value: 'Field Mock',
+    hash: hash('sha256').update('Field Mock').digest('base64'),
+  }))
 }
 
 async function setupNote({
   fields,
-}: Omit<Parameters<typeof createNote>[0]['note'], 'collections'>) {
+}: {
+  fields: ReturnType<typeof generateFieldMocks>
+}) {
   const { database } = await import('@/database')
 
   return await database.transaction(async (transaction) => {
@@ -18,7 +24,12 @@ async function setupNote({
 
     const insertedFields = await transaction
       .insert(schema.noteField)
-      .values(fields.map((field) => ({ ...field, note: insertedNote.id })))
+      .values(
+        fields.map((field) => ({
+          ...field,
+          note: insertedNote.id,
+        })),
+      )
       .returning()
 
     return {

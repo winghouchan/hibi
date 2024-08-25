@@ -1,4 +1,5 @@
 import { mockDatabase } from '@/test/utils'
+import hash from 'sha.js'
 import { note, noteField } from './note'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
@@ -101,7 +102,10 @@ describe('`note_field` table', () => {
     insertNoteField: (
       values: Any<typeof noteField.$inferInsert>,
     ) => Promise<typeof noteField.$inferSelect>,
-    noteFieldMock: Pick<typeof noteField.$inferSelect, 'note' | 'value'>
+    generateNoteFieldMock: () => Pick<
+      typeof noteField.$inferSelect,
+      'hash' | 'note' | 'value'
+    >
 
   beforeEach(async () => {
     ;({ database, resetDatabaseMock } = await mockDatabase())
@@ -111,10 +115,11 @@ describe('`note_field` table', () => {
       .values({})
       .returning({ noteId: note.id })
 
-    noteFieldMock = {
+    generateNoteFieldMock = () => ({
       note: noteId,
       value: 'Note Field Value',
-    }
+      hash: hash('sha256').update('Note Field Value').digest('base64'),
+    })
 
     insertNoteField = async (values) =>
       (await database.insert(noteField).values(values).returning())[0]
@@ -131,29 +136,29 @@ describe('`note_field` table', () => {
       })
 
       await expect(
-        insertNoteField({ ...noteFieldMock, id: 'string' }),
+        insertNoteField({ ...generateNoteFieldMock(), id: 'string' }),
       ).rejects.toEqual(datatypeMismatch)
       await expect(
-        insertNoteField({ ...noteFieldMock, id: 0.1 }),
+        insertNoteField({ ...generateNoteFieldMock(), id: 0.1 }),
       ).rejects.toEqual(datatypeMismatch)
       await expect(
-        insertNoteField({ ...noteFieldMock, id: 1 }),
+        insertNoteField({ ...generateNoteFieldMock(), id: 1 }),
       ).resolves.toEqual(expect.objectContaining({ id: expect.any(Number) }))
     })
 
     it('cannot be `null`', async () => {
       await expect(
-        insertNoteField({ ...noteFieldMock, id: undefined }),
+        insertNoteField({ ...generateNoteFieldMock(), id: undefined }),
       ).resolves.toEqual(expect.objectContaining({ id: expect.any(Number) }))
       await expect(
-        insertNoteField({ ...noteFieldMock, id: null }),
+        insertNoteField({ ...generateNoteFieldMock(), id: null }),
       ).resolves.toEqual(expect.objectContaining({ id: expect.any(Number) }))
     })
 
     it('auto-increments', async () => {
       const output = [
-        await insertNoteField(noteFieldMock),
-        await insertNoteField(noteFieldMock),
+        await insertNoteField(generateNoteFieldMock()),
+        await insertNoteField(generateNoteFieldMock()),
       ]
 
       expect(output).toEqual([
@@ -166,7 +171,7 @@ describe('`note_field` table', () => {
   describe('`note` column', () => {
     it('must reference a note', async () => {
       await expect(
-        insertNoteField({ ...noteFieldMock, note: 0 }),
+        insertNoteField({ ...generateNoteFieldMock(), note: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining('FOREIGN KEY constraint failed'),
@@ -182,10 +187,10 @@ describe('`note_field` table', () => {
       })
 
       await expect(
-        insertNoteField({ ...noteFieldMock, note: undefined }),
+        insertNoteField({ ...generateNoteFieldMock(), note: undefined }),
       ).rejects.toEqual(notNullConstraintFailed)
       await expect(
-        insertNoteField({ ...noteFieldMock, note: null }),
+        insertNoteField({ ...generateNoteFieldMock(), note: null }),
       ).rejects.toEqual(notNullConstraintFailed)
     })
   })
@@ -193,28 +198,31 @@ describe('`note_field` table', () => {
   describe('`value` column', () => {
     it('is the type that was inserted', async () => {
       await expect(
-        insertNoteField({ ...noteFieldMock, value: 0.1 }),
+        insertNoteField({ ...generateNoteFieldMock(), value: 0.1 }),
       ).resolves.toEqual(
         expect.objectContaining({
           value: 0.1,
         }),
       )
       await expect(
-        insertNoteField({ ...noteFieldMock, value: 1 }),
+        insertNoteField({ ...generateNoteFieldMock(), value: 1 }),
       ).resolves.toEqual(
         expect.objectContaining({
           value: 1,
         }),
       )
       await expect(
-        insertNoteField({ ...noteFieldMock, value: 'string' }),
+        insertNoteField({ ...generateNoteFieldMock(), value: 'string' }),
       ).resolves.toEqual(
         expect.objectContaining({
           value: 'string',
         }),
       )
       await expect(
-        insertNoteField({ ...noteFieldMock, value: new Uint8Array(1) }),
+        insertNoteField({
+          ...generateNoteFieldMock(),
+          value: new Uint8Array(1),
+        }),
       ).resolves.toEqual(
         expect.objectContaining({
           value: new Uint8Array(1),
@@ -230,16 +238,20 @@ describe('`note_field` table', () => {
       })
 
       await expect(
-        insertNoteField({ note: noteFieldMock.note, value: undefined }),
+        insertNoteField({
+          note: generateNoteFieldMock().note,
+          hash: '',
+          value: undefined,
+        }),
       ).rejects.toEqual(notNullConstraintFailed)
       await expect(
-        insertNoteField({ ...noteFieldMock, value: null }),
+        insertNoteField({ ...generateNoteFieldMock(), value: null }),
       ).rejects.toEqual(notNullConstraintFailed)
     })
 
     it('cannot be an empty string', async () => {
       await expect(
-        insertNoteField({ ...noteFieldMock, value: '' }),
+        insertNoteField({ ...generateNoteFieldMock(), value: '' }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(
@@ -251,7 +263,10 @@ describe('`note_field` table', () => {
 
     it('cannot be an empty blob', async () => {
       await expect(
-        insertNoteField({ ...noteFieldMock, value: new Uint8Array() }),
+        insertNoteField({
+          ...generateNoteFieldMock(),
+          value: new Uint8Array(),
+        }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(
@@ -262,21 +277,66 @@ describe('`note_field` table', () => {
     })
   })
 
+  describe('`hash` column', () => {
+    it('is a string with length 44', async () => {
+      const checkConstraintFailed = expect.objectContaining({
+        message: expect.stringContaining(
+          'CHECK constraint failed: length(`hash`) = 44',
+        ),
+      })
+
+      await expect(
+        insertNoteField({
+          ...generateNoteFieldMock(),
+          hash: Array.from({ length: 43 }, () => 'a').join(''),
+        }),
+      ).rejects.toEqual(checkConstraintFailed)
+      expect(
+        (await insertNoteField(generateNoteFieldMock())).hash,
+      ).toHaveLength(44)
+      await expect(
+        insertNoteField({
+          ...generateNoteFieldMock(),
+          hash: Array.from({ length: 45 }, () => 'a').join(''),
+        }),
+      ).rejects.toEqual(checkConstraintFailed)
+    })
+
+    it('cannot be `null`', async () => {
+      const notNullConstraintFailed = expect.objectContaining({
+        message: expect.stringContaining(
+          'NOT NULL constraint failed: note_field.hash',
+        ),
+      })
+
+      await expect(
+        insertNoteField({
+          note: generateNoteFieldMock().note,
+          value: generateNoteFieldMock().value,
+          hash: undefined,
+        }),
+      ).rejects.toEqual(notNullConstraintFailed)
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), hash: null }),
+      ).rejects.toEqual(notNullConstraintFailed)
+    })
+  })
+
   describe('`created_at` column', () => {
     it('is a date', async () => {
       const now = new Date()
 
       await expect(() =>
-        insertNoteField({ ...noteFieldMock, created_at: 'string' }),
+        insertNoteField({ ...generateNoteFieldMock(), created_at: 'string' }),
       ).rejects.toThrow()
       await expect(() =>
-        insertNoteField({ ...noteFieldMock, created_at: 0.1 }),
+        insertNoteField({ ...generateNoteFieldMock(), created_at: 0.1 }),
       ).rejects.toThrow()
       await expect(() =>
-        insertNoteField({ ...noteFieldMock, created_at: 1 }),
+        insertNoteField({ ...generateNoteFieldMock(), created_at: 1 }),
       ).rejects.toThrow()
       await expect(
-        insertNoteField({ ...noteFieldMock, created_at: now }),
+        insertNoteField({ ...generateNoteFieldMock(), created_at: now }),
       ).resolves.toEqual(
         expect.objectContaining({
           created_at: now,
@@ -285,7 +345,7 @@ describe('`note_field` table', () => {
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertNoteField(noteFieldMock)
+      const { created_at } = await insertNoteField(generateNoteFieldMock())
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
@@ -297,7 +357,7 @@ describe('`note_field` table', () => {
 
     it('cannot be `null`', async () => {
       await expect(
-        insertNoteField({ ...noteFieldMock, created_at: null }),
+        insertNoteField({ ...generateNoteFieldMock(), created_at: null }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(

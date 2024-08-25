@@ -1,5 +1,6 @@
 import { note, noteField } from '@/notes/schema'
 import { mockDatabase } from '@/test/utils'
+import hash from 'sha.js'
 import { reviewable, reviewableField } from './reviewable'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
@@ -178,7 +179,13 @@ describe('`reviewable_field` table', () => {
 
     const [{ fieldId }] = await database
       .insert(noteField)
-      .values([{ note: noteId, value: 'Field 1' }])
+      .values([
+        {
+          note: noteId,
+          value: 'Field 1',
+          hash: hash('sha256').update('Field 1').digest('base64'),
+        },
+      ])
       .returning({ fieldId: noteField.id })
 
     reviewableFieldMock = {
