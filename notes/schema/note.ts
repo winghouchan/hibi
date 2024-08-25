@@ -35,5 +35,9 @@ export const noteField = sqliteTable('note_field', {
    */
   hash: text('hash').notNull(),
 
+  is_archived: integer('is_archived', { mode: 'boolean' })
+    .notNull()
+    .default(false),
+
   created_at: createdAt(),
 })

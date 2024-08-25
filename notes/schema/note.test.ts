@@ -322,6 +322,49 @@ describe('`note_field` table', () => {
     })
   })
 
+  describe('`is_archived` column', () => {
+    it('is a boolean', async () => {
+      const insertNoteFieldWithIsArchived = async (is_archived: any) =>
+        (await insertNoteField({ ...generateNoteFieldMock(), is_archived }))
+          .is_archived
+
+      await expect(insertNoteFieldWithIsArchived(true)).resolves.toBeTrue()
+      await expect(insertNoteFieldWithIsArchived(1)).resolves.toBeTrue()
+      await expect(insertNoteFieldWithIsArchived(0.1)).resolves.toBeTrue()
+      await expect(insertNoteFieldWithIsArchived('string')).resolves.toBeTrue()
+      await expect(insertNoteFieldWithIsArchived([])).resolves.toBeTrue()
+      await expect(insertNoteFieldWithIsArchived({})).resolves.toBeTrue()
+      await expect(insertNoteFieldWithIsArchived(0)).resolves.toBeFalse()
+      await expect(insertNoteFieldWithIsArchived(false)).resolves.toBeFalse()
+    })
+
+    it('cannot be `null`', async () => {
+      await expect(
+        insertNoteField({
+          ...generateNoteFieldMock(),
+          is_archived: null,
+        }),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.is_archived',
+          ),
+        }),
+      )
+    })
+
+    it('defaults to `false`', async () => {
+      expect(
+        (
+          await insertNoteField({
+            ...generateNoteFieldMock(),
+            is_archived: undefined,
+          })
+        ).is_archived,
+      ).toBeFalse()
+    })
+  })
+
   describe('`created_at` column', () => {
     it('is a date', async () => {
       const now = new Date()
