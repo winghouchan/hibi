@@ -1,0 +1,1 @@
+ALTER TABLE `note_field` ADD `position` integer NOT NULL CHECK (`position` >= 0);

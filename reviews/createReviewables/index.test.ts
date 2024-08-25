@@ -25,9 +25,10 @@ async function setupNote({
     const insertedFields = await transaction
       .insert(schema.noteField)
       .values(
-        fields.map((field) => ({
+        fields.map((field, index) => ({
           ...field,
           note: insertedNote.id,
+          position: index,
         })),
       )
       .returning()

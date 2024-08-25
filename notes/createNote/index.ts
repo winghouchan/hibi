@@ -8,7 +8,7 @@ import { noteField, note } from '../schema/note'
 interface Field
   extends Omit<
     typeof noteField.$inferInsert,
-    'id' | 'created_at' | 'hash' | 'note'
+    'id' | 'created_at' | 'hash' | 'note' | 'position'
   > {}
 
 interface Note extends Omit<typeof note.$inferInsert, 'id' | 'created_at'> {
@@ -41,10 +41,11 @@ export default async function createNote({
     const insertedFields = await transaction
       .insert(noteField)
       .values(
-        fields.map((field) => ({
+        fields.map((field, index) => ({
           ...field,
           note: insertedNote.id,
           hash: hash('sha256').update(field.value).digest('base64'),
+          position: index,
         })),
       )
       .returning()

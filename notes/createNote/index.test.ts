@@ -26,10 +26,12 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
         ],
         reviewables: [
@@ -59,10 +61,12 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
         ],
         reviewables: [
@@ -106,10 +110,12 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
         ],
         reviewables: [
@@ -139,10 +145,12 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
         ],
         reviewables: [
@@ -189,14 +197,17 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
         ],
         reviewables: [
@@ -230,14 +241,17 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
         ],
         reviewables: [
@@ -289,14 +303,17 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
         ],
         reviewables: [
@@ -340,14 +357,17 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
         ],
         reviewables: [
@@ -450,18 +470,22 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
           expect.objectContaining({
             id: 4,
             note: 1,
+            position: 3,
           }),
         ],
         reviewables: [
@@ -499,18 +523,22 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
           expect.objectContaining({
             id: 4,
             note: 1,
+            position: 3,
           }),
         ],
         reviewables: [
@@ -570,18 +598,22 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
           expect.objectContaining({
             id: 4,
             note: 1,
+            position: 3,
           }),
         ],
         reviewables: [
@@ -639,18 +671,22 @@ describe('createNote', () => {
           expect.objectContaining({
             id: 1,
             note: 1,
+            position: 0,
           }),
           expect.objectContaining({
             id: 2,
             note: 1,
+            position: 1,
           }),
           expect.objectContaining({
             id: 3,
             note: 1,
+            position: 2,
           }),
           expect.objectContaining({
             id: 4,
             note: 1,
+            position: 3,
           }),
         ],
         reviewables: [

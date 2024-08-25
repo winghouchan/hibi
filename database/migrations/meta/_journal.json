@@ -43,6 +43,13 @@
       "when": 1724431678269,
       "tag": "20240823164758_store-note-field-archived-state",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1724595015587,
+      "tag": "20240825141015_store-note-field-position",
+      "breakpoints": true
     }
   ]
 }

@@ -104,7 +104,7 @@ describe('`note_field` table', () => {
     ) => Promise<typeof noteField.$inferSelect>,
     generateNoteFieldMock: () => Pick<
       typeof noteField.$inferSelect,
-      'hash' | 'note' | 'value'
+      'hash' | 'note' | 'value' | 'position'
     >
 
   beforeEach(async () => {
@@ -119,6 +119,7 @@ describe('`note_field` table', () => {
       note: noteId,
       value: 'Note Field Value',
       hash: hash('sha256').update('Note Field Value').digest('base64'),
+      position: 0,
     })
 
     insertNoteField = async (values) =>
@@ -242,6 +243,7 @@ describe('`note_field` table', () => {
           note: generateNoteFieldMock().note,
           hash: '',
           value: undefined,
+          position: 0,
         }),
       ).rejects.toEqual(notNullConstraintFailed)
       await expect(
@@ -314,10 +316,45 @@ describe('`note_field` table', () => {
           note: generateNoteFieldMock().note,
           value: generateNoteFieldMock().value,
           hash: undefined,
+          position: 0,
         }),
       ).rejects.toEqual(notNullConstraintFailed)
       await expect(
         insertNoteField({ ...generateNoteFieldMock(), hash: null }),
+      ).rejects.toEqual(notNullConstraintFailed)
+    })
+  })
+
+  describe('`position` column', () => {
+    it('is a value greater than or equal to 0', async () => {
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), position: -1 }),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed: position'),
+        }),
+      )
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), position: 0 }),
+      ).toResolve()
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), position: 1 }),
+      ).toResolve()
+    })
+
+    it('cannot be `null`', async () => {
+      const { position, ...noteFieldMock } = generateNoteFieldMock()
+      const notNullConstraintFailed = expect.objectContaining({
+        message: expect.stringContaining(
+          'NOT NULL constraint failed: note_field.position',
+        ),
+      })
+
+      await expect(
+        insertNoteField({ ...noteFieldMock, position: undefined }),
+      ).rejects.toEqual(notNullConstraintFailed)
+      await expect(
+        insertNoteField({ ...noteFieldMock, position: null }),
       ).rejects.toEqual(notNullConstraintFailed)
     })
   })

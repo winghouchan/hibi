@@ -184,6 +184,7 @@ describe('`reviewable_field` table', () => {
           note: noteId,
           value: 'Field 1',
           hash: hash('sha256').update('Field 1').digest('base64'),
+          position: 0,
         },
       ])
       .returning({ fieldId: noteField.id })
