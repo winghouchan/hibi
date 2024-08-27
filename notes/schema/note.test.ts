@@ -59,6 +59,86 @@ describe('`note` table', () => {
     })
   })
 
+  describe('`is_reversible` column', () => {
+    it('is a boolean', async () => {
+      const insertNoteWithIsReversible = async (is_reversible: any) =>
+        (await insertNote({ is_reversible })).is_reversible
+
+      await expect(insertNoteWithIsReversible(true)).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible(1)).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible(0.1)).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible('string')).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible([])).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible({})).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible(0)).resolves.toBeFalse()
+      await expect(insertNoteWithIsReversible(false)).resolves.toBeFalse()
+    })
+
+    it('cannot be `null`', async () => {
+      await expect(
+        insertNote({
+          is_reversible: null,
+        }),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note.is_reversible',
+          ),
+        }),
+      )
+    })
+
+    it('defaults to `false`', async () => {
+      expect(
+        (
+          await insertNote({
+            is_reversible: undefined,
+          })
+        ).is_reversible,
+      ).toBeFalse()
+    })
+  })
+
+  describe('`is_separable` column', () => {
+    it('is a boolean', async () => {
+      const insertNoteWithIsReversible = async (is_separable: any) =>
+        (await insertNote({ is_separable })).is_separable
+
+      await expect(insertNoteWithIsReversible(true)).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible(1)).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible(0.1)).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible('string')).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible([])).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible({})).resolves.toBeTrue()
+      await expect(insertNoteWithIsReversible(0)).resolves.toBeFalse()
+      await expect(insertNoteWithIsReversible(false)).resolves.toBeFalse()
+    })
+
+    it('cannot be `null`', async () => {
+      await expect(
+        insertNote({
+          is_separable: null,
+        }),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note.is_separable',
+          ),
+        }),
+      )
+    })
+
+    it('defaults to `false`', async () => {
+      expect(
+        (
+          await insertNote({
+            is_separable: undefined,
+          })
+        ).is_separable,
+      ).toBeFalse()
+    })
+  })
+
   describe('`created_at` column', () => {
     it('is a date', async () => {
       const now = new Date()

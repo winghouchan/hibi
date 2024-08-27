@@ -385,7 +385,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '3' }]
@@ -426,7 +426,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '2' }]
@@ -467,7 +467,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '2' }]
@@ -508,7 +508,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '1' }]
@@ -549,7 +549,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '3' }, { value: '4' }]
@@ -595,7 +595,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '3' }]
@@ -636,7 +636,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '1' }]
@@ -677,7 +677,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '2' }]
@@ -718,7 +718,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '1' }]
@@ -759,7 +759,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '3' }, { value: '4' }]
@@ -805,7 +805,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '3' }]
@@ -850,7 +850,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '1' }]
@@ -895,7 +895,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '3' }, { value: '4' }]
@@ -949,7 +949,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
 
@@ -993,7 +993,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
 
@@ -1037,7 +1037,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
 
@@ -1081,7 +1081,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
 
@@ -1126,7 +1126,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
 
@@ -1175,7 +1175,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
 
@@ -1219,7 +1219,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '1a' }]
@@ -1264,7 +1264,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '2a' }]
@@ -1314,7 +1314,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '2a' }]
@@ -1355,7 +1355,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       const newNoteFields = [{ value: '1a' }, { value: '2a' }]
@@ -1401,7 +1401,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       // Archive the first note field
@@ -1446,7 +1446,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       // Archive the first note field
@@ -1491,7 +1491,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       // Archive the first note field
@@ -1536,7 +1536,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       // Archive the first note field
@@ -1585,7 +1585,7 @@ describe('updateNote', () => {
         },
         config: {
           reversible: false,
-          reviewFieldsSeparately: false,
+          separable: false,
         },
       })
       // Archive the first note field

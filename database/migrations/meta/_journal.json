@@ -50,6 +50,13 @@
       "when": 1724595015587,
       "tag": "20240825141015_store-note-field-position",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1724762516180,
+      "tag": "20240827124156_store-note-configuration",
+      "breakpoints": true
     }
   ]
 }

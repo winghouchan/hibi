@@ -8,7 +8,7 @@ interface Note extends Pick<InferSelectModel<typeof schema.note>, 'id'> {
 interface CreateReviewablesParameters {
   config: {
     reversible: boolean
-    reviewFieldsSeparately: boolean
+    separable: boolean
   }
   note: Note
 }
@@ -29,8 +29,8 @@ type CreateReviewablesReturn = {
  *
  * - `reversible`: when set to `true`, the field(s) designated as the 'back' can
  *   be used as a prompt.
- * - `reviewFieldsSeparately`: when set to `true`,  very field can be combined
- *   with another field in a prompt/answer relationship.
+ * - `separable`: when set to `true`, every field can be combined with another
+ *   field in a prompt/answer relationship.
  *
  * Examples below, where each letter represents a field, the left hand side of
  * the arrow represents the note to create reviewables from, the right hand side
@@ -39,32 +39,32 @@ type CreateReviewablesReturn = {
  * tuple represents the answer:
  *
  * ```
- * // reversible: false, reviewFieldsSeparately: false
+ * // reversible: false, separable: false
  * [A, B]   -> [A, B]
  * [A, BC]  -> [A, BC]
  * [A, BCD] -> [A, BCD]
  *
- * // reversible: true, reviewFieldsSeparately: false
+ * // reversible: true, separable: false
  * [A, B]   -> [A, B] [B, A]
  * [A, BC]  -> [A, BC] [BC, A]
  * [A, BCD] -> [A, BCD] [BCD, A]
  *
- * // reversible: false, reviewFieldsSeparately: true
+ * // reversible: false, separable: true
  * [A, B]   -> [A, B]
  * [A, BC]  -> [A, B] [A, C]
  * [A, BCD] -> [A, B] [A, C] [A, D]
  *
- * // reversible: true, reviewFieldsSeparately: true
+ * // reversible: true, separable: true
  * [A, B]   -> [A, B] [B, A]
  * [A, BC]  -> [A, B] [A, C] [B, A] [B, C] [C, A] [C, B]
  * [A, BCD] -> [A, B] [A, C] [A, D] [B, A] [B, C] [B, D] [C, A] [C, B] [C, D] [D, A] [D, B] [D, C]
  * ```
  */
 export default function createReviewables({
-  config: { reversible, reviewFieldsSeparately },
+  config: { reversible, separable },
   note: { id, fields },
 }: CreateReviewablesParameters): CreateReviewablesReturn {
-  if (reviewFieldsSeparately) {
+  if (separable) {
     if (reversible) {
       return fields.reduce<CreateReviewablesReturn>(
         (accumulator, current, _, array) => [

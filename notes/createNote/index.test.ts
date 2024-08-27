@@ -18,7 +18,7 @@ describe('createNote', () => {
      * 2 fields
      */
     {
-      config: { reversible: false, reviewFieldsSeparately: false },
+      config: { reversible: false, separable: false },
       fields: generateFieldMocks(2),
       expected: {
         collections: expectedCollection,
@@ -53,7 +53,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: true, reviewFieldsSeparately: false },
+      config: { reversible: true, separable: false },
       fields: generateFieldMocks(2),
       expected: {
         collections: expectedCollection,
@@ -102,7 +102,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: false, reviewFieldsSeparately: true },
+      config: { reversible: false, separable: true },
       fields: generateFieldMocks(2),
       expected: {
         collections: expectedCollection,
@@ -137,7 +137,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: true, reviewFieldsSeparately: true },
+      config: { reversible: true, separable: true },
       fields: generateFieldMocks(2),
       expected: {
         collections: expectedCollection,
@@ -189,7 +189,7 @@ describe('createNote', () => {
      * 3 fields
      */
     {
-      config: { reversible: false, reviewFieldsSeparately: false },
+      config: { reversible: false, separable: false },
       fields: generateFieldMocks(3),
       expected: {
         collections: expectedCollection,
@@ -233,7 +233,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: true, reviewFieldsSeparately: false },
+      config: { reversible: true, separable: false },
       fields: generateFieldMocks(3),
       expected: {
         collections: expectedCollection,
@@ -295,7 +295,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: false, reviewFieldsSeparately: true },
+      config: { reversible: false, separable: true },
       fields: generateFieldMocks(3),
       expected: {
         collections: expectedCollection,
@@ -349,7 +349,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: true, reviewFieldsSeparately: true },
+      config: { reversible: true, separable: true },
       fields: generateFieldMocks(3),
       expected: {
         collections: expectedCollection,
@@ -462,7 +462,7 @@ describe('createNote', () => {
      * 4 fields
      */
     {
-      config: { reversible: false, reviewFieldsSeparately: false },
+      config: { reversible: false, separable: false },
       fields: generateFieldMocks(4),
       expected: {
         collections: expectedCollection,
@@ -515,7 +515,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: true, reviewFieldsSeparately: false },
+      config: { reversible: true, separable: false },
       fields: generateFieldMocks(4),
       expected: {
         collections: expectedCollection,
@@ -590,7 +590,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: false, reviewFieldsSeparately: true },
+      config: { reversible: false, separable: true },
       fields: generateFieldMocks(4),
       expected: {
         collections: expectedCollection,
@@ -663,7 +663,7 @@ describe('createNote', () => {
       },
     },
     {
-      config: { reversible: true, reviewFieldsSeparately: true },
+      config: { reversible: true, separable: true },
       fields: generateFieldMocks(4),
       expected: {
         collections: expectedCollection,
@@ -862,7 +862,7 @@ describe('createNote', () => {
       },
     },
   ])(
-    'given $fields.length fields, reversible: $config.reversible, reviewFieldsSeparately: $config.reviewFieldsSeparately, correctly creates notes and reviewables',
+    'given $fields.length fields, reversible: $config.reversible, separable: $config.separable, correctly creates notes and reviewables',
     async ({ config, fields, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
       const { createCollection } = await import('@/collections')
@@ -902,10 +902,14 @@ describe('createNote', () => {
         expect.arrayContaining(expected.fields),
       )
       expect(queriedState[0].reviewables).toEqual(expected.reviewables)
+      expect(queriedState[0].is_reversible).toEqual(config.reversible)
+      expect(queriedState[0].is_separable).toEqual(config.separable)
 
       expect(returnedState.collections).toEqual(expected.collections)
       expect(returnedState.fields).toEqual(expected.fields)
       expect(returnedState.reviewables).toEqual(expected.reviewables)
+      expect(returnedState.is_reversible).toEqual(config.reversible)
+      expect(returnedState.is_separable).toEqual(config.separable)
 
       resetDatabaseMock()
     },
@@ -919,7 +923,7 @@ describe('createNote', () => {
     const input = {
       config: {
         reversible: false,
-        reviewFieldsSeparately: false,
+        separable: false,
       },
       note: {
         collections: [collectionMock.id],
@@ -947,7 +951,7 @@ describe('createNote', () => {
     const input = {
       config: {
         reversible: false,
-        reviewFieldsSeparately: false,
+        separable: false,
       },
       note: {
         collections: [collectionMock.id],
@@ -968,7 +972,7 @@ describe('createNote', () => {
     const input = {
       config: {
         reversible: false,
-        reviewFieldsSeparately: false,
+        separable: false,
       },
       note: {
         collections: [collectionMock.id],
@@ -989,7 +993,7 @@ describe('createNote', () => {
     const input = {
       config: {
         reversible: false,
-        reviewFieldsSeparately: false,
+        separable: false,
       },
       note: {
         collections: [collectionMock.id],
@@ -1014,7 +1018,7 @@ describe('createNote', () => {
     const input = {
       config: {
         reversible: false,
-        reviewFieldsSeparately: false,
+        separable: false,
       },
       note: {
         collections: [],
@@ -1034,7 +1038,7 @@ describe('createNote', () => {
     const input = {
       config: {
         reversible: false,
-        reviewFieldsSeparately: false,
+        separable: false,
       },
       note: {
         collections: [nonExistentCollectionId],

@@ -38,7 +38,7 @@ describe('createReview', () => {
         const noteMock = await createNote({
           config: {
             reversible: false,
-            reviewFieldsSeparately: false,
+            separable: false,
           },
           note: {
             collections: [collectionMock.id],
@@ -169,7 +169,7 @@ describe('createReview', () => {
         const noteMock = await createNote({
           config: {
             reversible: false,
-            reviewFieldsSeparately: false,
+            separable: false,
           },
           note: {
             collections: [collectionMock.id],
@@ -342,7 +342,7 @@ describe('createReview', () => {
         const noteMock = await createNote({
           config: {
             reversible: false,
-            reviewFieldsSeparately: false,
+            separable: false,
           },
           note: {
             collections: [collectionMock.id],

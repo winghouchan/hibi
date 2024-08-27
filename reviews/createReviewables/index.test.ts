@@ -46,7 +46,7 @@ describe('createReviewables', () => {
      */
     {
       fields: generateFieldMocks(2),
-      config: { reversible: false, reviewFieldsSeparately: false },
+      config: { reversible: false, separable: false },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -63,7 +63,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(2),
-      config: { reversible: true, reviewFieldsSeparately: false },
+      config: { reversible: true, separable: false },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -91,7 +91,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(2),
-      config: { reversible: false, reviewFieldsSeparately: true },
+      config: { reversible: false, separable: true },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -108,7 +108,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(2),
-      config: { reversible: true, reviewFieldsSeparately: true },
+      config: { reversible: true, separable: true },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -139,7 +139,7 @@ describe('createReviewables', () => {
      */
     {
       fields: generateFieldMocks(3),
-      config: { reversible: false, reviewFieldsSeparately: false },
+      config: { reversible: false, separable: false },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -159,7 +159,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(3),
-      config: { reversible: true, reviewFieldsSeparately: false },
+      config: { reversible: true, separable: false },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -193,7 +193,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(3),
-      config: { reversible: false, reviewFieldsSeparately: true },
+      config: { reversible: false, separable: true },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -221,7 +221,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(3),
-      config: { reversible: true, reviewFieldsSeparately: true },
+      config: { reversible: true, separable: true },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -296,7 +296,7 @@ describe('createReviewables', () => {
      */
     {
       fields: generateFieldMocks(4),
-      config: { reversible: false, reviewFieldsSeparately: false },
+      config: { reversible: false, separable: false },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -319,7 +319,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(4),
-      config: { reversible: true, reviewFieldsSeparately: false },
+      config: { reversible: true, separable: false },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -359,7 +359,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(4),
-      config: { reversible: false, reviewFieldsSeparately: true },
+      config: { reversible: false, separable: true },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -398,7 +398,7 @@ describe('createReviewables', () => {
     },
     {
       fields: generateFieldMocks(4),
-      config: { reversible: true, reviewFieldsSeparately: true },
+      config: { reversible: true, separable: true },
       generateExpectation: (note: Awaited<ReturnType<typeof setupNote>>) => [
         expect.objectContaining({
           note: note.id,
@@ -535,7 +535,7 @@ describe('createReviewables', () => {
       ],
     },
   ])(
-    '$fields.length fields, reversible: $config.reversible, reviewFieldsSeparately: $config.reviewFieldsSeparately',
+    '$fields.length fields, reversible: $config.reversible, separable: $config.separable',
     async ({ fields, config, generateExpectation }) => {
       const { resetDatabaseMock } = await mockDatabase()
       const { default: createReviewables } = await import('.')

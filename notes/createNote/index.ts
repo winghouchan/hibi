@@ -36,7 +36,13 @@ export default async function createNote({
   }
 
   return await database.transaction(async (transaction) => {
-    const [insertedNote] = await transaction.insert(note).values({}).returning()
+    const [insertedNote] = await transaction
+      .insert(note)
+      .values({
+        is_reversible: config.reversible,
+        is_separable: config.separable,
+      })
+      .returning()
 
     const insertedFields = await transaction
       .insert(noteField)
