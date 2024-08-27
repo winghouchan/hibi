@@ -379,10 +379,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -420,10 +418,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -461,10 +457,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '1' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -502,10 +496,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '1' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -543,10 +535,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -589,10 +579,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -630,10 +618,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -671,10 +657,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '1' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -712,10 +696,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '1' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -753,10 +735,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -799,10 +779,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -844,10 +822,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -889,10 +865,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -943,10 +917,8 @@ describe('updateNote', () => {
         { value: '3' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -987,10 +959,8 @@ describe('updateNote', () => {
         { value: '3' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1031,10 +1001,8 @@ describe('updateNote', () => {
         { value: '3' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1075,10 +1043,8 @@ describe('updateNote', () => {
         { value: '1' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1120,10 +1086,8 @@ describe('updateNote', () => {
         { value: '4' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1169,10 +1133,8 @@ describe('updateNote', () => {
         { value: '3' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1213,10 +1175,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1258,10 +1218,8 @@ describe('updateNote', () => {
         { value: '3' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1308,10 +1266,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1349,10 +1305,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [{ value: '1' }, { value: '2' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1395,10 +1349,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: noteFields,
-        },
+        collections: [collectionMock.id],
+        fields: noteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1440,10 +1392,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: noteFields,
-        },
+        collections: [collectionMock.id],
+        fields: noteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1485,10 +1435,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: noteFields,
-        },
+        collections: [collectionMock.id],
+        fields: noteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1530,10 +1478,8 @@ describe('updateNote', () => {
       const { default: updateNote } = await import('.')
       const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: noteFields,
-        },
+        collections: [collectionMock.id],
+        fields: noteFields,
         config: {
           reversible: false,
           separable: false,
@@ -1579,10 +1525,8 @@ describe('updateNote', () => {
         { value: '3' },
       ]
       const noteMock = await createNote({
-        note: {
-          collections: [collectionMock.id],
-          fields: existingNoteFields,
-        },
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
         config: {
           reversible: false,
           separable: false,

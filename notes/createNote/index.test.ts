@@ -870,10 +870,8 @@ describe('createNote', () => {
       const collectionMock = await createCollection({ name: 'Collection Mock' })
       const input = {
         config,
-        note: {
-          collections: [collectionMock.id],
-          fields,
-        },
+        collections: [collectionMock.id],
+        fields,
       }
 
       const returnedState = await createNote(input)
@@ -925,10 +923,8 @@ describe('createNote', () => {
         reversible: false,
         separable: false,
       },
-      note: {
-        collections: [collectionMock.id],
-        fields: [{ value: 'Value Mock' }, { value: 'Value Mock' }],
-      },
+      collections: [collectionMock.id],
+      fields: [{ value: 'Value Mock' }, { value: 'Value Mock' }],
     }
 
     await createNote(input)
@@ -953,10 +949,8 @@ describe('createNote', () => {
         reversible: false,
         separable: false,
       },
-      note: {
-        collections: [collectionMock.id],
-        fields: [],
-      },
+      collections: [collectionMock.id],
+      fields: [],
     }
 
     await expect(async () => await createNote(input)).rejects.toThrow()
@@ -974,10 +968,8 @@ describe('createNote', () => {
         reversible: false,
         separable: false,
       },
-      note: {
-        collections: [collectionMock.id],
-        fields: [{ value: 'Value Mock' }],
-      },
+      collections: [collectionMock.id],
+      fields: [{ value: 'Value Mock' }],
     }
 
     await expect(async () => await createNote(input)).rejects.toThrow()
@@ -995,10 +987,8 @@ describe('createNote', () => {
         reversible: false,
         separable: false,
       },
-      note: {
-        collections: [collectionMock.id],
-        fields: [{ value: '' }, { value: '' }],
-      },
+      collections: [collectionMock.id],
+      fields: [{ value: '' }, { value: '' }],
     }
 
     await expect(async () => await createNote(input)).rejects.toEqual(
@@ -1020,10 +1010,8 @@ describe('createNote', () => {
         reversible: false,
         separable: false,
       },
-      note: {
-        collections: [],
-        fields: [{ value: 'Value Mock' }, { value: 'Value Mock' }],
-      },
+      collections: [],
+      fields: [{ value: 'Value Mock' }, { value: 'Value Mock' }],
     }
 
     await expect(async () => await createNote(input)).rejects.toThrow()
@@ -1040,10 +1028,8 @@ describe('createNote', () => {
         reversible: false,
         separable: false,
       },
-      note: {
-        collections: [nonExistentCollectionId],
-        fields: [{ value: 'Value Mock' }, { value: 'Value Mock' }],
-      },
+      collections: [nonExistentCollectionId],
+      fields: [{ value: 'Value Mock' }, { value: 'Value Mock' }],
     }
 
     await expect(async () => await createNote(input)).rejects.toEqual(

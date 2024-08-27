@@ -11,18 +11,15 @@ interface Field
     'id' | 'created_at' | 'hash' | 'note' | 'position'
   > {}
 
-interface Note extends Omit<typeof note.$inferInsert, 'id' | 'created_at'> {
-  fields: Field[]
-  collections: (typeof collection.$inferSelect)['id'][]
-}
-
 interface CreateNoteParameters {
-  note: Note
+  collections: (typeof collection.$inferSelect)['id'][]
+  fields: Field[]
   config: Parameters<typeof createReviewables>[0]['config']
 }
 
 export default async function createNote({
-  note: { collections, fields },
+  collections,
+  fields,
   config,
 }: CreateNoteParameters) {
   const { database } = await import('@/database')
