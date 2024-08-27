@@ -1,5 +1,6 @@
 import { createdAt } from '@/database/utils'
-import { note, noteField } from '@/notes/schema/note'
+import { note } from '@/notes/schema/note'
+import { noteField } from '@/notes/schema/noteField'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 export const reviewable = sqliteTable('reviewable', {

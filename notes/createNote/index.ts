@@ -3,7 +3,7 @@ import { createReviewables } from '@/reviews'
 import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
 import { inArray } from 'drizzle-orm'
 import hash from 'sha.js'
-import { noteField, note } from '../schema/note'
+import { noteField, note } from '../schema'
 
 interface Field
   extends Omit<
