@@ -158,7 +158,7 @@ describe('`reviewable_field` table', () => {
     resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
     reviewableFieldMock: Pick<
       typeof reviewableField.$inferInsert,
-      'reviewable' | 'field'
+      'reviewable' | 'field' | 'side'
     >,
     insertReviewableField: (
       values: Any<typeof reviewableField.$inferInsert>,
@@ -185,6 +185,7 @@ describe('`reviewable_field` table', () => {
           value: 'Field 1',
           hash: hash('sha256').update('Field 1').digest('base64'),
           position: 0,
+          side: 0,
         },
       ])
       .returning({ fieldId: noteField.id })
@@ -192,6 +193,7 @@ describe('`reviewable_field` table', () => {
     reviewableFieldMock = {
       reviewable: reviewableId,
       field: fieldId,
+      side: 0,
     }
 
     insertReviewableField = async (values) =>
@@ -301,6 +303,42 @@ describe('`reviewable_field` table', () => {
       ).rejects.toEqual(notNullConstraintFailed)
       await expect(
         insertReviewableField({ ...reviewableFieldMock, field: null }),
+      ).rejects.toEqual(notNullConstraintFailed)
+    })
+  })
+
+  describe('`side` column', () => {
+    it('is either 0 or 1', async () => {
+      const checkConstraintFailed = expect.objectContaining({
+        message: expect.stringContaining('CHECK constraint failed: side'),
+      })
+
+      await expect(
+        insertReviewableField({ ...reviewableFieldMock, side: -1 }),
+      ).rejects.toEqual(checkConstraintFailed)
+      await expect(
+        insertReviewableField({ ...reviewableFieldMock, side: 0 }),
+      ).toResolve()
+      await expect(
+        insertReviewableField({ ...reviewableFieldMock, side: 1 }),
+      ).toResolve()
+      await expect(
+        insertReviewableField({ ...reviewableFieldMock, side: 2 }),
+      ).rejects.toEqual(checkConstraintFailed)
+    })
+
+    it('cannot be `null`', async () => {
+      const notNullConstraintFailed = expect.objectContaining({
+        message: expect.stringContaining(
+          'NOT NULL constraint failed: reviewable_field.side',
+        ),
+      })
+
+      await expect(
+        insertReviewableField({ ...reviewableFieldMock, side: undefined }),
+      ).rejects.toEqual(notNullConstraintFailed)
+      await expect(
+        insertReviewableField({ ...reviewableFieldMock, side: null }),
       ).rejects.toEqual(notNullConstraintFailed)
     })
   })

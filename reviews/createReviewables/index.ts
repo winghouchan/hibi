@@ -1,8 +1,7 @@
 import { schema } from '@/notes'
-import { InferSelectModel } from 'drizzle-orm'
 
-interface Note extends Pick<InferSelectModel<typeof schema.note>, 'id'> {
-  fields: InferSelectModel<typeof schema.noteField>[]
+interface Note extends Pick<typeof schema.note.$inferSelect, 'id'> {
+  fields: (typeof schema.noteField.$inferSelect)[]
 }
 
 interface CreateReviewablesParameters {
@@ -14,9 +13,10 @@ interface CreateReviewablesParameters {
 }
 
 type CreateReviewablesReturn = {
-  note: InferSelectModel<typeof schema.note>['id']
+  note: (typeof schema.note.$inferSelect)['id']
   fields: {
-    field: InferSelectModel<typeof schema.noteField>['id']
+    field: (typeof schema.noteField.$inferSelect)['id']
+    side: (typeof schema.noteField.$inferSelect)['side']
   }[]
 }[]
 
@@ -43,71 +43,89 @@ type CreateReviewablesReturn = {
  * [A, B]   -> [A, B]
  * [A, BC]  -> [A, BC]
  * [A, BCD] -> [A, BCD]
+ * [AB, CD] -> [AB, CD]
  *
  * // reversible: true, separable: false
  * [A, B]   -> [A, B] [B, A]
  * [A, BC]  -> [A, BC] [BC, A]
  * [A, BCD] -> [A, BCD] [BCD, A]
+ * [AB, CD] -> [AB, CD] [CD, AB]
  *
  * // reversible: false, separable: true
  * [A, B]   -> [A, B]
  * [A, BC]  -> [A, B] [A, C]
  * [A, BCD] -> [A, B] [A, C] [A, D]
+ * [AB, CD] -> [AB, C] [AB, D]
  *
  * // reversible: true, separable: true
  * [A, B]   -> [A, B] [B, A]
  * [A, BC]  -> [A, B] [A, C] [B, A] [B, C] [C, A] [C, B]
  * [A, BCD] -> [A, B] [A, C] [A, D] [B, A] [B, C] [B, D] [C, A] [C, B] [C, D] [D, A] [D, B] [D, C]
+ * [AB, CD] -> [AB, C] [AB, D] [C, AB] [C, D] [D, AB] [D, C]
  * ```
  */
 export default function createReviewables({
   config: { reversible, separable },
   note: { id, fields },
 }: CreateReviewablesParameters): CreateReviewablesReturn {
+  const [front, back] = fields.reduce<
+    (typeof schema.noteField.$inferSelect)[][]
+  >((state, field) => {
+    state[field.side] = [...(state[field.side] ?? []), field]
+
+    return state
+  }, [])
+
   if (separable) {
-    if (reversible) {
-      return fields.reduce<CreateReviewablesReturn>(
-        (accumulator, current, _, array) => [
-          ...accumulator,
-          ...array.reduce<CreateReviewablesReturn>(
-            (accumulator2, current2) =>
-              current.id === current2.id
-                ? accumulator2
-                : [
-                    ...accumulator2,
-                    {
-                      note: id,
-                      fields: [{ field: current.id }, { field: current2.id }],
-                    },
-                  ],
-            [],
-          ),
-        ],
-        [],
-      )
-    } else {
-      const [front, ...back] = fields
-
-      return back.map((field) => ({
-        note: id,
-        fields: [{ field: front.id }, { field: field.id }],
-      }))
-    }
-  } else {
-    const [front, ...back] = fields
-
-    return [
+    return back.flatMap((field) => [
       {
         note: id,
-        fields: fields.map((field) => ({ field: field.id })),
+        fields: [
+          ...front.map((field) => ({ field: field.id, side: 0 })),
+          { field: field.id, side: 1 },
+        ],
       },
       ...(reversible
         ? [
             {
               note: id,
               fields: [
-                ...back.map((field) => ({ field: field.id })),
-                { field: front.id },
+                { field: field.id, side: 0 },
+                ...front.map((field) => ({ field: field.id, side: 1 })),
+              ],
+            },
+            ...back.reduce<CreateReviewablesReturn>(
+              (state, field2) =>
+                field.id !== field2.id
+                  ? [
+                      ...state,
+                      {
+                        note: id,
+                        fields: [
+                          { field: field.id, side: 0 },
+                          { field: field2.id, side: 1 },
+                        ],
+                      },
+                    ]
+                  : state,
+              [],
+            ),
+          ]
+        : []),
+    ])
+  } else {
+    return [
+      {
+        note: id,
+        fields: fields.map((field) => ({ field: field.id, side: field.side })),
+      },
+      ...(reversible
+        ? [
+            {
+              note: id,
+              fields: [
+                ...back.map((field) => ({ field: field.id, side: 0 })),
+                ...front.map((field) => ({ field: field.id, side: 1 })),
               ],
             },
           ]

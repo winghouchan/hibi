@@ -8,6 +8,7 @@ import m0004 from './20240823140608_store-note-field-value-hash.sql'
 import m0005 from './20240823164758_store-note-field-archived-state.sql'
 import m0006 from './20240825141015_store-note-field-position.sql'
 import m0007 from './20240827124156_store-note-configuration.sql'
+import m0008 from './20240827152029_store-note-field-side.sql'
 import journal from './meta/_journal.json'
 
 export default {
@@ -21,5 +22,6 @@ export default {
     m0005,
     m0006,
     m0007,
+    m0008,
   },
 }

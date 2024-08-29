@@ -29,6 +29,7 @@ async function setupNote({
           ...field,
           note: insertedNote.id,
           position: index,
+          side: index === 0 ? 0 : 1,
         })),
       )
       .returning()
@@ -53,9 +54,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -70,9 +73,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -81,9 +86,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 1,
             }),
           ],
         }),
@@ -98,9 +105,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -115,9 +124,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -126,9 +137,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 1,
             }),
           ],
         }),
@@ -146,12 +159,15 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -166,12 +182,15 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -180,12 +199,15 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 1,
             }),
           ],
         }),
@@ -200,9 +222,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -211,9 +235,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -228,9 +254,37 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[1].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[0].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[1].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -239,9 +293,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -249,21 +305,12 @@ describe('createReviewables', () => {
           note: note.id,
           fields: [
             expect.objectContaining({
-              field: note.fields[1].id,
+              field: note.fields[2].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[0].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[1].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -272,20 +319,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[2].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[0].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[2].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -303,15 +341,19 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
             expect.objectContaining({
               field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -326,15 +368,19 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
             expect.objectContaining({
               field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -343,15 +389,19 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[3].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 1,
             }),
           ],
         }),
@@ -366,9 +416,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
             }),
           ],
         }),
@@ -377,9 +429,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
@@ -388,9 +442,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -405,9 +461,50 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[1].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[0].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[1].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[2].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[1].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -416,9 +513,50 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[2].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[0].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[2].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[1].id,
+              side: 1,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          note: note.id,
+          fields: [
+            expect.objectContaining({
+              field: note.fields[2].id,
+              side: 0,
+            }),
+            expect.objectContaining({
+              field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -427,9 +565,11 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -437,65 +577,25 @@ describe('createReviewables', () => {
           note: note.id,
           fields: [
             expect.objectContaining({
-              field: note.fields[1].id,
+              field: note.fields[3].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[0].id,
+              side: 1,
             }),
           ],
         }),
         expect.objectContaining({
           note: note.id,
           fields: [
-            expect.objectContaining({
-              field: note.fields[1].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[2].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[1].id,
-            }),
             expect.objectContaining({
               field: note.fields[3].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[2].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[0].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[2].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[1].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[2].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[3].id,
+              side: 1,
             }),
           ],
         }),
@@ -504,38 +604,18 @@ describe('createReviewables', () => {
           fields: [
             expect.objectContaining({
               field: note.fields[3].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[0].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[3].id,
-            }),
-            expect.objectContaining({
-              field: note.fields[1].id,
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          note: note.id,
-          fields: [
-            expect.objectContaining({
-              field: note.fields[3].id,
+              side: 0,
             }),
             expect.objectContaining({
               field: note.fields[2].id,
+              side: 1,
             }),
           ],
         }),
       ],
     },
   ])(
-    '$fields.length fields, reversible: $config.reversible, separable: $config.separable',
+    'given $fields.length fields with 1 field on the front, reversible: $config.reversible, separable: $config.separable, creates the correct reviewable',
     async ({ fields, config, generateExpectation }) => {
       const { resetDatabaseMock } = await mockDatabase()
       const { default: createReviewables } = await import('.')

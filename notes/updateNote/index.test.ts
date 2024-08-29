@@ -330,12 +330,14 @@ describe('updateNote', () => {
           value: 'Field 1',
           hash: hash('sha256').update('Field 1').digest('base64'),
           position: 0,
+          side: 0,
         },
         {
           note: noteId,
           value: 'Field 2',
           hash: hash('sha256').update('Field 2').digest('base64'),
           position: 1,
+          side: 0,
         },
       ])
       const precedingState = await database.query.noteField.findMany({
@@ -375,805 +377,9 @@ describe('updateNote', () => {
       resetDatabaseMock()
     })
 
-    it('is able to prepend a note field with a value that does not already exist', async () => {
+    it('is able to replace a single note field on the first side', async () => {
       const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '3' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...newNoteFields, ...existingNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field with the same value as an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...newNoteFields, ...existingNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field when at least two existing fields have the same value', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '1' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...newNoteFields, ...existingNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field with the same value as at least two existing note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '1' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...newNoteFields, ...existingNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend multiple note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '3' }, { value: '4' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...newNoteFields, ...existingNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 3,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field with a value that does not already exist', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '3' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...existingNoteFields, ...newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field with the same value as an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...existingNoteFields, ...newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field when at least two existing fields have the same value', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '1' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...existingNoteFields, ...newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field with the same value as at least two existing note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '1' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...existingNoteFields, ...newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append multiple note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '3' }, { value: '4' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [...existingNoteFields, ...newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[1].value,
-          position: 3,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to insert a note field with a value that does not already exist in between two existing note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '3' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          newNoteFields[0],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to insert a note field with the same value as an existing note field in between two existing note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          newNoteFields[0],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to insert multiple note fields between existing note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '3' }, { value: '4' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          ...newNoteFields,
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 3,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[1].value,
-          position: 2,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to archive the first note field for a note', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[1], existingNoteFields[2]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to archive a note field that is not the first nor last for a note', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], existingNoteFields[2]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to archive the last note field for a note', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 2,
-          is_archived: true,
-        }),
-      ])
-    })
-
-    it('is able to archive a note field when another note field has the same value', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '1' },
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 2,
-          is_archived: true,
-        }),
-      ])
-    })
-
-    it('is able to archive multiple note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
-        { value: '4' },
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 2,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[3].value,
-          position: 3,
-          is_archived: true,
-        }),
-      ])
-    })
-
-    it('is able to swap the positions of two note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          existingNoteFields[2],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to replace the value of the first note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
       const noteMock = await createNote({
         collections: [collectionMock.id],
         fields: existingNoteFields,
@@ -1186,36 +392,1098 @@ describe('updateNote', () => {
 
       await updateNote({
         id: noteMock.id,
-        fields: [newNoteFields[0], existingNoteFields[1]],
+        fields: [newNoteFields, existingNoteFields[1]],
       })
 
       const noteFields = await database.select().from(noteField)
 
       expect(noteFields).toEqual([
         expect.objectContaining({
-          value: existingNoteFields[0].value,
+          value: existingNoteFields[0][0].value,
+          side: 0,
           position: 0,
           is_archived: true,
         }),
         expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
           value: newNoteFields[0].value,
+          side: 0,
           position: 0,
           is_archived: false,
         }),
       ])
     })
 
-    it('is able to replace the value of a note field that is neither the first nor last', async () => {
+    it('is able to replace a single note field on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '2a' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [existingNoteFields[0], newNoteFields],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to replace multiple note fields on the first side', async () => {
       const { default: updateNote } = await import('.')
       const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
+        [{ value: '1a' }, { value: '1b' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '1A' }, { value: '1B' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [newNoteFields, existingNoteFields[1]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 1,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[1].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to replace multiple note fields on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2a' }, { value: '2b' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '2A' }, { value: '2B' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [existingNoteFields[0], newNoteFields],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][1].value,
+          side: 1,
+          position: 1,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[1].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to prepend a note field on the first side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: 'a' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [...newNoteFields, ...existingNoteFields[0]],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to prepend a note field on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: 'a' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          existingNoteFields[0],
+          [...newNoteFields, ...existingNoteFields[1]],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to prepend a note field on the first side with a value of an existing note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '2' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [...newNoteFields, ...existingNoteFields[0]],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to prepend a note field on the second side with a value of an existing note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '1' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          existingNoteFields[0],
+          [...newNoteFields, ...existingNoteFields[1]],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to append a note field on the first side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: 'a' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [...existingNoteFields[0], ...newNoteFields],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to append a note field on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: 'a' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          existingNoteFields[0],
+          [...existingNoteFields[1], ...newNoteFields],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to append a note field on the first side with a value of an existing note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '1' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [...existingNoteFields[0], ...newNoteFields],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to append a note field on the second side with a value of an existing note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '2' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          existingNoteFields[0],
+          [...existingNoteFields[1], ...newNoteFields],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove the first note field on the first side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1a' }, { value: '1b' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [[existingNoteFields[0][1]], existingNoteFields[1]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove the first note field on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2a' }, { value: '2b' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [existingNoteFields[0], [existingNoteFields[1][1]]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][1].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove the last note field on the first side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1a' }, { value: '1b' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [[existingNoteFields[0][0]], existingNoteFields[1]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 1,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove the last note field on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2a' }, { value: '2b' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [existingNoteFields[0], [existingNoteFields[1][0]]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][1].value,
+          side: 1,
+          position: 1,
+          is_archived: true,
+        }),
+      ])
+    })
+
+    it('is able to remove a note field in between two other note fields on the first side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1a' }, { value: '1b' }, { value: '1c' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [existingNoteFields[0][0], existingNoteFields[0][2]],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 1,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][2].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove a note field in between two other note fields on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2a' }, { value: '2b' }, { value: '2c' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          existingNoteFields[0],
+          [existingNoteFields[1][0], existingNoteFields[1][2]],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][1].value,
+          side: 1,
+          position: 1,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][2].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove a note field on the first side that has the same value as another note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }, { value: '1' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [[existingNoteFields[0][1]], existingNoteFields[1]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 1,
+          is_archived: true,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to remove a note field on the second side that has the same value as another note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2' }, { value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [existingNoteFields[0], [existingNoteFields[1][0]]],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][1].value,
+          side: 1,
+          position: 1,
+          is_archived: true,
+        }),
+      ])
+    })
+
+    it('is able to insert a new field between two fields on the first side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1a' }, { value: '1c' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '1b' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [
+            existingNoteFields[0][0],
+            ...newNoteFields,
+            existingNoteFields[0][1],
+          ],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 2,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to insert a new field between two fields on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2a' }, { value: '2c' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '2b' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          existingNoteFields[0],
+          [
+            existingNoteFields[1][0],
+            ...newNoteFields,
+            existingNoteFields[1][1],
+          ],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][1].value,
+          side: 1,
+          position: 2,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to insert a new field between two fields on the first side with a value of an existing note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1a' }, { value: '1c' }],
+        [{ value: '2' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newNoteFields = [{ value: '1a' }]
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [
+          [
+            existingNoteFields[0][0],
+            ...newNoteFields,
+            existingNoteFields[0][1],
+          ],
+          existingNoteFields[1],
+        ],
+      })
+
+      const noteFields = await database.select().from(noteField)
+
+      expect(noteFields).toEqual([
+        expect.objectContaining({
+          value: existingNoteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[0][1].value,
+          side: 0,
+          position: 2,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: newNoteFields[0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to insert a new field between two fields on the second side with a value of an existing note field', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2a' }, { value: '2c' }],
       ]
       const noteMock = await createNote({
         collections: [collectionMock.id],
@@ -1231,8 +1499,11 @@ describe('updateNote', () => {
         id: noteMock.id,
         fields: [
           existingNoteFields[0],
-          newNoteFields[0],
-          existingNoteFields[2],
+          [
+            existingNoteFields[1][0],
+            ...newNoteFields,
+            existingNoteFields[1][1],
+          ],
         ],
       })
 
@@ -1240,114 +1511,35 @@ describe('updateNote', () => {
 
       expect(noteFields).toEqual([
         expect.objectContaining({
-          value: existingNoteFields[0].value,
+          value: existingNoteFields[0][0].value,
+          side: 0,
           position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: true,
+          value: existingNoteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
         }),
         expect.objectContaining({
-          value: existingNoteFields[2].value,
+          value: existingNoteFields[1][1].value,
+          side: 1,
           position: 2,
           is_archived: false,
         }),
         expect.objectContaining({
           value: newNoteFields[0].value,
+          side: 1,
           position: 1,
           is_archived: false,
         }),
       ])
     })
 
-    it('is able to replace the value of the last note field', async () => {
+    it('is able to un-archive the first note field on the first side', async () => {
       const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], newNoteFields[0]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to replace multiple note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [{ value: '1' }, { value: '2' }]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1a' }, { value: '2a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: newNoteFields,
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[1].value,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to un-archive the first note field', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
+      const noteFields = [[{ value: '1' }, { value: '2' }], [{ value: '3' }]]
       const noteMock = await createNote({
         collections: [collectionMock.id],
         fields: noteFields,
@@ -1356,10 +1548,10 @@ describe('updateNote', () => {
           separable: false,
         },
       })
-      // Archive the first note field
+      // Archive the first note field in the first side
       await updateNote({
         id: noteMock.id,
-        fields: [noteFields[1], noteFields[2]],
+        fields: [[noteFields[0][1]], noteFields[1]],
       })
 
       await updateNote({
@@ -1371,26 +1563,29 @@ describe('updateNote', () => {
 
       expect(noteFieldsState).toEqual([
         expect.objectContaining({
-          value: noteFields[0].value,
+          value: noteFields[0][0].value,
+          side: 0,
           position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[1].value,
+          value: noteFields[0][1].value,
+          side: 0,
           position: 1,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[2].value,
-          position: 2,
+          value: noteFields[1][0].value,
+          side: 1,
+          position: 0,
           is_archived: false,
         }),
       ])
     })
 
-    it('is able to un-archive a note field that is neither the first nor last', async () => {
+    it('is able to un-archive the first note field on the second side', async () => {
       const { default: updateNote } = await import('.')
-      const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
+      const noteFields = [[{ value: '1' }], [{ value: '2' }, { value: '3' }]]
       const noteMock = await createNote({
         collections: [collectionMock.id],
         fields: noteFields,
@@ -1399,10 +1594,10 @@ describe('updateNote', () => {
           separable: false,
         },
       })
-      // Archive the first note field
+      // Archive the first note field in the second side
       await updateNote({
         id: noteMock.id,
-        fields: [noteFields[0], noteFields[2]],
+        fields: [noteFields[0], [noteFields[1][1]]],
       })
 
       await updateNote({
@@ -1414,26 +1609,29 @@ describe('updateNote', () => {
 
       expect(noteFieldsState).toEqual([
         expect.objectContaining({
-          value: noteFields[0].value,
+          value: noteFields[0][0].value,
+          side: 0,
           position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[1].value,
-          position: 1,
+          value: noteFields[1][0].value,
+          side: 1,
+          position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[2].value,
-          position: 2,
+          value: noteFields[1][1].value,
+          side: 1,
+          position: 1,
           is_archived: false,
         }),
       ])
     })
 
-    it('is able to un-archive the last note field', async () => {
+    it('is able to un-archive the last note field on the first side', async () => {
       const { default: updateNote } = await import('.')
-      const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
+      const noteFields = [[{ value: '1' }, { value: '2' }], [{ value: '3' }]]
       const noteMock = await createNote({
         collections: [collectionMock.id],
         fields: noteFields,
@@ -1442,10 +1640,10 @@ describe('updateNote', () => {
           separable: false,
         },
       })
-      // Archive the first note field
+      // Archive the first note field in the first side
       await updateNote({
         id: noteMock.id,
-        fields: [noteFields[0], noteFields[1]],
+        fields: [[noteFields[0][0]], noteFields[1]],
       })
 
       await updateNote({
@@ -1457,26 +1655,29 @@ describe('updateNote', () => {
 
       expect(noteFieldsState).toEqual([
         expect.objectContaining({
-          value: noteFields[0].value,
+          value: noteFields[0][0].value,
+          side: 0,
           position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[1].value,
+          value: noteFields[0][1].value,
+          side: 0,
           position: 1,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[2].value,
-          position: 2,
+          value: noteFields[1][0].value,
+          side: 1,
+          position: 0,
           is_archived: false,
         }),
       ])
     })
 
-    it('is able to un-archive and swap positions of note fields together', async () => {
+    it('is able to un-archive the last note field on the second side', async () => {
       const { default: updateNote } = await import('.')
-      const noteFields = [{ value: '1' }, { value: '2' }, { value: '3' }]
+      const noteFields = [[{ value: '1' }], [{ value: '2' }, { value: '3' }]]
       const noteMock = await createNote({
         collections: [collectionMock.id],
         fields: noteFields,
@@ -1485,92 +1686,203 @@ describe('updateNote', () => {
           separable: false,
         },
       })
-      // Archive the first note field
+      // Archive the first note field in the second side
       await updateNote({
         id: noteMock.id,
-        fields: [noteFields[1], noteFields[2]],
+        fields: [noteFields[0], [noteFields[1][0]]],
       })
 
       await updateNote({
         id: noteMock.id,
-        fields: [noteFields[1], noteFields[0], noteFields[2]],
+        fields: noteFields,
       })
 
       const noteFieldsState = await database.select().from(noteField)
 
       expect(noteFieldsState).toEqual([
         expect.objectContaining({
-          value: noteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1].value,
+          value: noteFields[0][0].value,
+          side: 0,
           position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: noteFields[2].value,
-          position: 2,
+          value: noteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][1].value,
+          side: 1,
+          position: 1,
           is_archived: false,
         }),
       ])
     })
 
-    it('is able to un-archive and replace note fields together', async () => {
+    it('is able to swap note positions of note fields on the first side', async () => {
       const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' },
+      const noteFields = [[{ value: '1' }, { value: '2' }], [{ value: '3' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: noteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [[noteFields[0][1], noteFields[0][0]], noteFields[1]],
+      })
+
+      const noteFieldsState = await database.select().from(noteField)
+
+      expect(noteFieldsState).toEqual([
+        expect.objectContaining({
+          value: noteFields[0][0].value,
+          side: 0,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[0][1].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to swap note positions of note fields on the second side', async () => {
+      const { default: updateNote } = await import('.')
+      const noteFields = [[{ value: '1' }], [{ value: '2' }, { value: '3' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: noteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [noteFields[0], [noteFields[1][1], noteFields[1][0]]],
+      })
+
+      const noteFieldsState = await database.select().from(noteField)
+
+      expect(noteFieldsState).toEqual([
+        expect.objectContaining({
+          value: noteFields[0][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][0].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][1].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to swap the sides of a note with a single note field each', async () => {
+      const { default: updateNote } = await import('.')
+      const noteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: noteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: [noteFields[1], noteFields[0]],
+      })
+
+      const noteFieldsState = await database.select().from(noteField)
+
+      expect(noteFieldsState).toEqual([
+        expect.objectContaining({
+          value: noteFields[0][0].value,
+          side: 1,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+      ])
+    })
+
+    it('is able to swap the sides of a note with multiple note fields', async () => {
+      const { default: updateNote } = await import('.')
+      const noteFields = [
+        [{ value: '1a' }, { value: '1b' }],
+        [{ value: '2a' }, { value: '2b' }],
       ]
       const noteMock = await createNote({
         collections: [collectionMock.id],
-        fields: existingNoteFields,
+        fields: noteFields,
         config: {
           reversible: false,
           separable: false,
         },
       })
-      // Archive the first note field
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[1], existingNoteFields[2]],
-      })
-
-      const newNoteFields = [{ value: '2a' }, { value: '3a' }]
 
       await updateNote({
         id: noteMock.id,
-        fields: [newNoteFields[0], existingNoteFields[0], newNoteFields[1]],
+        fields: [noteFields[1], noteFields[0]],
       })
 
       const noteFieldsState = await database.select().from(noteField)
 
       expect(noteFieldsState).toEqual([
         expect.objectContaining({
-          value: existingNoteFields[0].value,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1].value,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[2].value,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
+          value: noteFields[0][0].value,
+          side: 1,
           position: 0,
           is_archived: false,
         }),
         expect.objectContaining({
-          value: newNoteFields[1].value,
-          position: 2,
+          value: noteFields[0][1].value,
+          side: 1,
+          position: 1,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][0].value,
+          side: 0,
+          position: 0,
+          is_archived: false,
+        }),
+        expect.objectContaining({
+          value: noteFields[1][1].value,
+          side: 0,
+          position: 1,
           is_archived: false,
         }),
       ])

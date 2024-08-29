@@ -1,24 +1,24 @@
 import { collection, collectionToNote } from '@/collections/schema'
 import { and, eq, notInArray } from 'drizzle-orm'
 import hash from 'sha.js'
-import { note, noteField } from '../schema/note'
+import { note, noteField } from '../schema'
 
 interface Field
   extends Omit<
     typeof noteField.$inferInsert,
-    'id' | 'created_at' | 'hash' | 'note' | 'position'
+    'id' | 'created_at' | 'hash' | 'note' | 'position' | 'side'
   > {}
 
 interface UpdateNoteParameters {
   id: Exclude<(typeof note.$inferInsert)['id'], undefined>
   collections?: (typeof collection.$inferSelect)['id'][]
-  fields?: Field[]
+  fields?: Field[][]
 }
 
 export default async function updateNote({
   id,
   collections,
-  fields,
+  fields: sides,
 }: UpdateNoteParameters) {
   const { database } = await import('@/database')
 
@@ -44,34 +44,47 @@ export default async function updateNote({
         .onConflictDoNothing()
     }
 
-    if (fields && fields.length > 0) {
+    if (sides && sides.length > 0) {
       const currentFields = await transaction
         .select()
         .from(noteField)
         .where(eq(noteField.note, id))
-        .orderBy(noteField.position)
       const currentFieldPositionsByHash = currentFields.reduce<
-        Record<string, number[]>
+        Record<
+          (typeof noteField.$inferSelect)['hash'],
+          Pick<typeof noteField.$inferSelect, 'id' | 'side' | 'position'>[]
+        >
       >(
-        (state, current, index) => ({
+        (state, current) => ({
           ...state,
-          [current.hash]: [...(state[current.hash] ?? []), index],
+          [current.hash]: [
+            ...(state[current.hash] ?? []),
+            { id: current.id, side: current.side, position: current.position },
+          ],
         }),
         {},
       )
-      const newFieldPositionsByHash = fields.reduce<Record<string, number[]>>(
-        (state, current, index) => {
-          const fieldHash = hash('sha256')
-            .update(current.value)
-            .digest('base64')
+      const newFieldPositionsByHash = sides.reduce<
+        Record<
+          (typeof noteField.$inferSelect)['hash'],
+          Pick<typeof noteField.$inferInsert, 'side' | 'position'>[]
+        >
+      >((state, fields, side) => {
+        const newState = {
+          ...state,
+        }
 
-          return {
-            ...state,
-            [fieldHash]: [...(state[fieldHash] ?? []), index],
-          }
-        },
-        {},
-      )
+        fields.forEach((field, position) => {
+          const fieldHash = hash('sha256').update(field.value).digest('base64')
+
+          newState[fieldHash] = [
+            ...(newState[fieldHash] ?? []),
+            { side, position },
+          ]
+        })
+
+        return newState
+      }, {})
       const fieldHashes = [
         ...new Set([
           ...Object.keys(currentFieldPositionsByHash),
@@ -99,11 +112,12 @@ export default async function updateNote({
           } else if (!currentPositions) {
             // The field had no current positions (i.e. did not exist), so are inserted
             await transaction.insert(noteField).values(
-              newPositions.map((position) => ({
+              newPositions.map(({ position, side }) => ({
                 note: id,
-                value: fields[position].value,
+                value: sides[side][position].value,
                 hash: fieldHash,
                 position,
+                side,
               })),
             )
           } else {
@@ -111,37 +125,42 @@ export default async function updateNote({
 
             if (currentPositions.length > newPositions.length) {
               await Promise.all(
-                currentPositions.map(async (position, index) => {
+                currentPositions.map(async ({ id, position, side }, index) => {
                   if (index > newPositions.length - 1) {
                     // The field currently exists at an index that does not exist in the new state, so is archived
                     return await transaction
                       .update(noteField)
                       .set({ is_archived: true })
-                      .where(eq(noteField.id, currentFields[position].id))
+                      .where(eq(noteField.id, id))
                   }
 
-                  if (position !== newPositions[index]) {
+                  if (
+                    position !== newPositions[index].position ||
+                    side !== newPositions[index].side
+                  ) {
                     // The field position is not the same as the position in the new state, so is updated
                     return await transaction
                       .update(noteField)
                       .set({
                         is_archived: false,
-                        position: newPositions[index],
+                        position: newPositions[index].position,
+                        side: newPositions[index].side,
                       })
-                      .where(eq(noteField.id, currentFields[position].id))
+                      .where(eq(noteField.id, id))
                   }
                 }),
               )
             } else {
               await Promise.all(
-                newPositions.map(async (position, index) => {
+                newPositions.map(async ({ position, side }, index) => {
                   if (index > currentPositions.length - 1) {
                     // The field exists at an index in the new state that does exist in the current state, so is inserted
                     return await transaction.insert(noteField).values({
                       note: id,
-                      value: fields[position].value,
+                      value: sides[side][position].value,
                       hash: fieldHash,
                       position,
+                      side,
                     })
                   }
 
@@ -151,13 +170,9 @@ export default async function updateNote({
                     .set({
                       is_archived: false,
                       position,
+                      side,
                     })
-                    .where(
-                      eq(
-                        noteField.id,
-                        currentFields[currentPositions[index]].id,
-                      ),
-                    )
+                    .where(eq(noteField.id, currentPositions[index].id))
                 }),
               )
             }

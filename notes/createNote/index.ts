@@ -8,18 +8,18 @@ import { noteField, note } from '../schema'
 interface Field
   extends Omit<
     typeof noteField.$inferInsert,
-    'id' | 'created_at' | 'hash' | 'note' | 'position'
+    'id' | 'created_at' | 'hash' | 'note' | 'position' | 'side'
   > {}
 
 interface CreateNoteParameters {
   collections: (typeof collection.$inferSelect)['id'][]
-  fields: Field[]
+  fields: Field[][]
   config: Parameters<typeof createReviewables>[0]['config']
 }
 
 export default async function createNote({
   collections,
-  fields,
+  fields: sides,
   config,
 }: CreateNoteParameters) {
   const { database } = await import('@/database')
@@ -28,8 +28,12 @@ export default async function createNote({
     throw new TypeError('at least 1 collection is required')
   }
 
-  if (fields.length < 2) {
-    throw new TypeError('at least 2 fields are required')
+  if (sides.length !== 2) {
+    throw new TypeError('2 sides are required')
+  }
+
+  if (!sides.every((side) => side.length > 0)) {
+    throw new TypeError('every side requires at least 1 field')
   }
 
   return await database.transaction(async (transaction) => {
@@ -44,12 +48,19 @@ export default async function createNote({
     const insertedFields = await transaction
       .insert(noteField)
       .values(
-        fields.map((field, index) => ({
-          ...field,
-          note: insertedNote.id,
-          hash: hash('sha256').update(field.value).digest('base64'),
-          position: index,
-        })),
+        sides.reduce<(typeof noteField.$inferInsert)[]>(
+          (state, fields, side) => [
+            ...state,
+            ...fields.map((field, position) => ({
+              ...field,
+              note: insertedNote.id,
+              hash: hash('sha256').update(field.value).digest('base64'),
+              position,
+              side,
+            })),
+          ],
+          [],
+        ),
       )
       .returning()
 
@@ -77,9 +88,10 @@ export default async function createNote({
         const insertedReviewableFields = await transaction
           .insert(reviewableField)
           .values(
-            fields.map(({ field }) => ({
+            fields.map(({ field, side }) => ({
               reviewable: insertedReviewable.id,
               field,
+              side,
             })),
           )
           .returning()

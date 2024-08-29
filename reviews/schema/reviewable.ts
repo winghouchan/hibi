@@ -24,5 +24,7 @@ export const reviewableField = sqliteTable('reviewable_field', {
     .notNull()
     .references(() => noteField.id),
 
+  side: integer('side').notNull(),
+
   created_at: createdAt(),
 })
