@@ -1,8 +1,8 @@
 import { collection, collectionToNote } from '@/collections/schema'
 import { mockDatabase } from '@/test/utils'
 import { eq } from 'drizzle-orm'
-import hash from 'sha.js'
 import createNoteFn from '../createNote'
+import hashNoteFieldValue from '../hashNoteFieldValue'
 import { note, noteField } from '../schema'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
@@ -324,22 +324,15 @@ describe('updateNote', () => {
         .insert(note)
         .values({})
         .returning({ noteId: note.id })
-      await database.insert(noteField).values([
-        {
+      await database.insert(noteField).values(
+        ['Field 1', 'Field 2'].map((value, position) => ({
           note: noteId,
-          value: 'Field 1',
-          hash: hash('sha256').update('Field 1').digest('base64'),
-          position: 0,
+          value,
+          hash: hashNoteFieldValue(value),
+          position,
           side: 0,
-        },
-        {
-          note: noteId,
-          value: 'Field 2',
-          hash: hash('sha256').update('Field 2').digest('base64'),
-          position: 1,
-          side: 0,
-        },
-      ])
+        })),
+      )
       const precedingState = await database.query.noteField.findMany({
         where: eq(noteField.note, noteId),
       })

@@ -1,6 +1,6 @@
 import { collection, collectionToNote } from '@/collections/schema'
 import { and, eq, notInArray } from 'drizzle-orm'
-import hash from 'sha.js'
+import hashNoteFieldValue from '../hashNoteFieldValue'
 import { note, noteField } from '../schema'
 
 interface Field
@@ -75,7 +75,7 @@ export default async function updateNote({
         }
 
         fields.forEach((field, position) => {
-          const fieldHash = hash('sha256').update(field.value).digest('base64')
+          const fieldHash = hashNoteFieldValue(field.value)
 
           newState[fieldHash] = [
             ...(newState[fieldHash] ?? []),

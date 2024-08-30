@@ -1,6 +1,6 @@
+import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { note, noteField } from '@/notes/schema'
 import { mockDatabase } from '@/test/utils'
-import hash from 'sha.js'
 import { reviewable, reviewableField } from './reviewable'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
@@ -179,15 +179,15 @@ describe('`reviewable_field` table', () => {
 
     const [{ fieldId }] = await database
       .insert(noteField)
-      .values([
-        {
+      .values(
+        ['Field 1'].map((value, position) => ({
           note: noteId,
-          value: 'Field 1',
-          hash: hash('sha256').update('Field 1').digest('base64'),
-          position: 0,
+          value,
+          hash: hashNoteFieldValue(value),
+          position,
           side: 0,
-        },
-      ])
+        })),
+      )
       .returning({ fieldId: noteField.id })
 
     reviewableFieldMock = {

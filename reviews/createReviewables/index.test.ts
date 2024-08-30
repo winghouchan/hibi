@@ -1,12 +1,16 @@
 import { schema } from '@/notes'
+import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockDatabase } from '@/test/utils'
-import hash from 'sha.js'
 
 function generateFieldMocks(length: number) {
-  return Array.from({ length }, () => ({
-    value: 'Field Mock',
-    hash: hash('sha256').update('Field Mock').digest('base64'),
-  }))
+  return Array.from({ length }, () => {
+    const value = 'Field Mock'
+
+    return {
+      value,
+      hash: hashNoteFieldValue(value),
+    }
+  })
 }
 
 async function setupNote({

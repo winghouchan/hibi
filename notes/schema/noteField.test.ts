@@ -1,5 +1,5 @@
 import { mockDatabase } from '@/test/utils'
-import hash from 'sha.js'
+import hashNoteFieldValue from '../hashNoteFieldValue'
 import { note } from './note'
 import { noteField } from './noteField'
 
@@ -27,13 +27,17 @@ describe('`note_field` table', () => {
       .values({})
       .returning({ noteId: note.id })
 
-    generateNoteFieldMock = () => ({
-      note: noteId,
-      value: 'Note Field Value',
-      hash: hash('sha256').update('Note Field Value').digest('base64'),
-      position: 0,
-      side: 0,
-    })
+    generateNoteFieldMock = () => {
+      const value = 'Note Field Value'
+
+      return {
+        note: noteId,
+        value,
+        hash: hashNoteFieldValue(value),
+        position: 0,
+        side: 0,
+      }
+    }
 
     insertNoteField = async (values) =>
       (await database.insert(noteField).values(values).returning())[0]
