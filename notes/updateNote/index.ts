@@ -1,5 +1,9 @@
 import { collection, collectionToNote } from '@/collections/schema'
-import { and, eq, notInArray } from 'drizzle-orm'
+import { createReviewables } from '@/reviews'
+import { reviewable, reviewableField } from '@/reviews/schema'
+import { and, eq, inArray, notInArray } from 'drizzle-orm'
+import differenceWith from 'lodash/differenceWith'
+import isEqual from 'lodash/isEqual'
 import hashNoteFieldValue from '../hashNoteFieldValue'
 import { note, noteField } from '../schema'
 
@@ -13,16 +17,45 @@ interface UpdateNoteParameters {
   id: Exclude<(typeof note.$inferInsert)['id'], undefined>
   collections?: (typeof collection.$inferSelect)['id'][]
   fields?: Field[][]
+  config?: Partial<Parameters<typeof createReviewables>[0]['config']>
 }
 
 export default async function updateNote({
   id,
   collections,
   fields: sides,
+  config,
 }: UpdateNoteParameters) {
   const { database } = await import('@/database')
 
   return await database.transaction(async (transaction) => {
+    const currentConfig = await transaction.query.note.findFirst({
+      where: eq(note.id, id),
+      columns: {
+        is_reversible: true,
+        is_separable: true,
+      },
+    })
+
+    const newConfig = {
+      reversible:
+        config?.reversible ?? (currentConfig?.is_reversible as boolean),
+      separable: config?.separable ?? (currentConfig?.is_separable as boolean),
+    }
+
+    if (
+      newConfig.reversible !== currentConfig?.is_reversible ||
+      newConfig.separable !== currentConfig.is_separable
+    ) {
+      await transaction
+        .update(note)
+        .set({
+          is_reversible: newConfig.reversible,
+          is_separable: newConfig.separable,
+        })
+        .where(eq(note.id, id))
+    }
+
     if (collections && collections.length > 0) {
       await transaction
         .delete(collectionToNote)
@@ -179,6 +212,116 @@ export default async function updateNote({
           }
         }),
       )
+    }
+
+    if (config || sides) {
+      const fieldState = await transaction.query.noteField.findMany({
+        where: eq(noteField.note, id),
+      })
+
+      const currentReviewables = await transaction.query.reviewable.findMany({
+        where: eq(reviewable.note, id),
+        columns: {
+          id: true,
+          is_archived: true,
+        },
+        with: {
+          fields: {
+            columns: {
+              field: true,
+              side: true,
+            },
+          },
+        },
+      })
+
+      const newReviewables = createReviewables({
+        config: newConfig,
+        note: { id, fields: fieldState },
+      })
+
+      const reviewablesToInsert = []
+      const reviewablesToUnarchive = []
+
+      for (
+        let newReviewableIndex = 0,
+          newReviewablesLastIndex = newReviewables.length - 1;
+        newReviewableIndex <= newReviewablesLastIndex;
+        newReviewableIndex++
+      ) {
+        if (currentReviewables.length === 0) {
+          reviewablesToInsert.push(newReviewables[newReviewableIndex])
+        } else {
+          for (
+            let currentReviewableIndex = 0,
+              currentReviewablesLastIndex = currentReviewables.length - 1;
+            currentReviewableIndex <= currentReviewablesLastIndex;
+            currentReviewableIndex++
+          ) {
+            const newFields = newReviewables[newReviewableIndex].fields
+            const currentFields =
+              currentReviewables[currentReviewableIndex].fields
+
+            if (
+              newFields.length === currentFields.length &&
+              differenceWith(newFields, currentFields, isEqual).length === 0
+            ) {
+              const reviewable = currentReviewables.shift()
+
+              if (reviewable?.is_archived) {
+                reviewablesToUnarchive.push(reviewable)
+              }
+
+              break
+            }
+
+            if (currentReviewableIndex === currentReviewablesLastIndex) {
+              reviewablesToInsert.push(newReviewables[newReviewableIndex])
+            }
+          }
+        }
+      }
+
+      const reviewablesToArchive = currentReviewables
+
+      await Promise.all(
+        reviewablesToInsert.map(async ({ fields }) => {
+          const [insertedReviewable] = await transaction
+            .insert(reviewable)
+            .values({
+              note: id,
+            })
+            .returning()
+
+          await transaction.insert(reviewableField).values(
+            fields.map(({ field, side }) => ({
+              reviewable: insertedReviewable.id,
+              field,
+              side,
+            })),
+          )
+        }),
+      )
+
+      await transaction
+        .update(reviewable)
+        .set({ is_archived: true })
+        .where(
+          inArray(
+            reviewable.id,
+            reviewablesToArchive.map(({ id }) => id),
+          ),
+        )
+
+      await transaction
+        .update(reviewable)
+        .set({ is_archived: false })
+        .where(
+          inArray(
+            reviewable.id,
+            reviewablesToUnarchive.map(({ id }) => id),
+          ),
+        )
     }
 
     const newState = await transaction.query.note.findFirst({

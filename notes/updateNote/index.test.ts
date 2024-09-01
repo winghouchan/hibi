@@ -1,4 +1,5 @@
 import { collection, collectionToNote } from '@/collections/schema'
+import { reviewable } from '@/reviews/schema'
 import { mockDatabase } from '@/test/utils'
 import { eq } from 'drizzle-orm'
 import createNoteFn from '../createNote'
@@ -1877,6 +1878,516 @@ describe('updateNote', () => {
           side: 0,
           position: 1,
           is_archived: false,
+        }),
+      ])
+    })
+  })
+
+  describe('when given a config', () => {
+    let database: DatabaseMock['database'],
+      resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
+      collectionMock: typeof collection.$inferSelect,
+      createNote: typeof createNoteFn
+
+    beforeEach(async () => {
+      ;({ database, resetDatabaseMock } = await mockDatabase())
+      createNote = (await import('../createNote')).default
+
+      collectionMock = (
+        await database
+          .insert(collection)
+          .values({ name: 'Collection 1' })
+          .returning()
+      )[0]
+    })
+
+    afterEach(() => {
+      resetDatabaseMock()
+    })
+
+    it('updates the config state of the note', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      const newConfig = {
+        reversible: true,
+        separable: true,
+      }
+
+      await updateNote({
+        id: noteMock.id,
+        fields: existingNoteFields,
+        config: newConfig,
+      })
+
+      const noteState = await database.query.note.findFirst({
+        where: eq(note.id, noteMock.id),
+      })
+
+      expect(noteState).toEqual(
+        expect.objectContaining({
+          is_reversible: true,
+          is_separable: true,
+        }),
+      )
+    })
+
+    it('is able to update a note from being not reversible to reversible', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: existingNoteFields,
+        config: {
+          reversible: true,
+        },
+      })
+
+      const reviewables = await database.query.reviewable.findMany({
+        where: eq(reviewable.note, noteMock.id),
+        with: {
+          fields: {
+            with: {
+              field: true,
+            },
+          },
+        },
+      })
+
+      expect(reviewables).toEqual([
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+          ],
+        }),
+      ])
+    })
+
+    it('is able to update a note from being reversible to not reversible', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: true,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+        },
+      })
+
+      const reviewables = await database.query.reviewable.findMany({
+        where: eq(reviewable.note, noteMock.id),
+        with: {
+          fields: {
+            with: {
+              field: true,
+            },
+          },
+        },
+      })
+
+      expect(reviewables).toEqual([
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: true,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+          ],
+        }),
+      ])
+    })
+
+    it('is able to update a note from being not separable to separable', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2' }, { value: '3' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: existingNoteFields,
+        config: {
+          separable: true,
+        },
+      })
+
+      const reviewables = await database.query.reviewable.findMany({
+        where: eq(reviewable.note, noteMock.id),
+        with: {
+          fields: {
+            with: {
+              field: true,
+            },
+          },
+        },
+      })
+
+      expect(reviewables).toEqual([
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: true,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][1].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][1].value,
+              }),
+            }),
+          ],
+        }),
+      ])
+    })
+
+    it('is able to update a note from being separable to not separable', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2' }, { value: '3' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: true,
+        },
+      })
+
+      await updateNote({
+        id: noteMock.id,
+        fields: existingNoteFields,
+        config: {
+          separable: false,
+        },
+      })
+
+      const reviewables = await database.query.reviewable.findMany({
+        where: eq(reviewable.note, noteMock.id),
+        with: {
+          fields: {
+            with: {
+              field: true,
+            },
+          },
+        },
+      })
+
+      expect(reviewables).toEqual([
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: true,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: true,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][1].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][1].value,
+              }),
+            }),
+          ],
+        }),
+      ])
+    })
+
+    it('is able to un-archive a reviewable', async () => {
+      const { default: updateNote } = await import('.')
+      const existingNoteFields = [
+        [{ value: '1' }],
+        [{ value: '2' }, { value: '3' }],
+      ]
+      const noteMock = await createNote({
+        collections: [collectionMock.id],
+        fields: existingNoteFields,
+        config: {
+          reversible: false,
+          separable: false,
+        },
+      })
+      await updateNote({
+        id: noteMock.id,
+        config: {
+          separable: true,
+        },
+      })
+      await updateNote({
+        id: noteMock.id,
+        config: {
+          separable: false,
+        },
+      })
+
+      const reviewables = await database.query.reviewable.findMany({
+        where: eq(reviewable.note, noteMock.id),
+        with: {
+          fields: {
+            with: {
+              field: true,
+            },
+          },
+        },
+      })
+
+      expect(reviewables).toEqual([
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: false,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][1].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: true,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][0].value,
+              }),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          note: noteMock.id,
+          is_archived: true,
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              field: expect.objectContaining({
+                value: existingNoteFields[0][0].value,
+              }),
+            }),
+            expect.objectContaining({
+              side: 1,
+              field: expect.objectContaining({
+                value: existingNoteFields[1][1].value,
+              }),
+            }),
+          ],
         }),
       ])
     })

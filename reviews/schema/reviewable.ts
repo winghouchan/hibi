@@ -10,6 +10,10 @@ export const reviewable = sqliteTable('reviewable', {
     .notNull()
     .references(() => note.id),
 
+  is_archived: integer('is_archived', { mode: 'boolean' })
+    .notNull()
+    .default(false),
+
   created_at: createdAt(),
 })
 

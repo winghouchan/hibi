@@ -64,6 +64,13 @@
       "when": 1724772029691,
       "tag": "20240827152029_store-note-field-side",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1725117705292,
+      "tag": "20240831152145_store-reviewable-archived-state",
+      "breakpoints": true
     }
   ]
 }

@@ -106,6 +106,48 @@ describe('`reviewable` table', () => {
     })
   })
 
+  describe('`is_archived` column', () => {
+    it('is a boolean', async () => {
+      const insertReviewableWithIsArchived = async (is_archived: any) =>
+        (await insertReviewable({ ...reviewableMock, is_archived })).is_archived
+
+      await expect(insertReviewableWithIsArchived(true)).resolves.toBeTrue()
+      await expect(insertReviewableWithIsArchived(1)).resolves.toBeTrue()
+      await expect(insertReviewableWithIsArchived(0.1)).resolves.toBeTrue()
+      await expect(insertReviewableWithIsArchived('string')).resolves.toBeTrue()
+      await expect(insertReviewableWithIsArchived([])).resolves.toBeTrue()
+      await expect(insertReviewableWithIsArchived({})).resolves.toBeTrue()
+      await expect(insertReviewableWithIsArchived(0)).resolves.toBeFalse()
+      await expect(insertReviewableWithIsArchived(false)).resolves.toBeFalse()
+    })
+
+    it('cannot be `null`', async () => {
+      await expect(
+        insertReviewable({
+          ...reviewableMock,
+          is_archived: null,
+        }),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable.is_archived',
+          ),
+        }),
+      )
+    })
+
+    it('defaults to `false`', async () => {
+      expect(
+        (
+          await insertReviewable({
+            ...reviewableMock,
+            is_archived: undefined,
+          })
+        ).is_archived,
+      ).toBeFalse()
+    })
+  })
+
   describe('`created_at` column', () => {
     it('is a date', async () => {
       const now = new Date()
