@@ -1,112 +1,96 @@
 import { mockDatabase } from '@/test/utils'
-import { eq } from 'drizzle-orm'
 import { collection } from '../schema'
+import updateCollection, { Collection } from '.'
 
 describe('updateCollection', () => {
-  describe('when given a collection to update', () => {
-    it('updates it with the new data', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const [collectionToUpdate] = await database
-        .insert(collection)
-        .values({ name: 'Collection Name' })
-        .returning()
-      const { default: updateCollection } = await import('.')
-      const input = { id: collectionToUpdate.id, name: 'New Collection Name' }
+  test.each([
+    {
+      name: 'when the collection ID references a non-existent collection, does not alter the database state',
+      input: { id: -1, name: 'Non Existent Collection' },
+      expected: {
+        databaseState: [],
+        output: undefined,
+      },
+    },
+    {
+      name: 'when the collection name is an empty string, throws an error and does not alter the database state',
+      fixture: [{ name: 'Existing Collection Name' }],
+      input: { name: '' },
+      expected: {
+        databaseState: [
+          {
+            id: expect.any(Number),
+            name: 'Existing Collection Name',
+            created_at: expect.any(Date),
+          },
+        ],
+        output: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed: name'),
+        }),
+      },
+    },
+    {
+      name: 'when the collection name is a non-empty string, updates the collection name and returns the updated collection',
+      fixture: [{ name: 'Existing Collection Name' }],
+      input: { name: 'New Collection Name' },
+      expected: {
+        databaseState: [
+          {
+            id: expect.any(Number),
+            name: 'New Collection Name',
+            created_at: expect.any(Date),
+          },
+        ],
+        output: {
+          id: expect.any(Number),
+          name: 'New Collection Name',
+          created_at: expect.any(Date),
+        },
+      },
+    },
+    {
+      name: 'when other collections exist, does not alter other collections',
+      fixture: [
+        { name: 'Existing Collection Name To Update' },
+        { name: 'Existing Collection Name' },
+      ],
+      input: { name: 'New Collection Name' },
+      expected: {
+        databaseState: [
+          {
+            id: expect.any(Number),
+            name: 'New Collection Name',
+            created_at: expect.any(Date),
+          },
+          {
+            id: expect.any(Number),
+            name: 'Existing Collection Name',
+            created_at: expect.any(Date),
+          },
+        ],
+        output: {
+          id: expect.any(Number),
+          name: 'New Collection Name',
+          created_at: expect.any(Date),
+        },
+      },
+    },
+  ])('$name', async ({ fixture, input, expected }) => {
+    const { database, resetDatabaseMock } = await mockDatabase()
+    const fixtureData =
+      fixture && (await database.insert(collection).values(fixture).returning())
+    const collectionToUpdate = fixtureData?.[0]
 
-      await updateCollection(input)
-      const output = await database.query.collection.findMany()
+    const output = await updateCollection({
+      id: collectionToUpdate?.id,
+      ...input,
+      // Cast as `Collection` as `id` will be defined when `fixture` is defined
+    } as Collection).catch((error) => error)
+    const databaseState = await database.query.collection.findMany()
 
-      expect(output).toHaveLength(1)
-      expect(output[0]).toHaveProperty('id', collectionToUpdate.id)
-      expect(output[0]).toHaveProperty('name', input.name)
-      expect(output[0]).toHaveProperty(
-        'created_at',
-        collectionToUpdate.created_at,
-      )
+    expect(output).toEqual(expected.output)
+    expect(databaseState).toEqual(expected.databaseState)
 
-      resetDatabaseMock()
-    })
-
-    it('returns the updated collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const [collectionToUpdate] = await database
-        .insert(collection)
-        .values({ name: 'Collection Name' })
-        .returning()
-      const { default: updateCollection } = await import('.')
-      const input = { id: collectionToUpdate.id, name: 'New Collection Name' }
-
-      const output = await updateCollection(input)
-
-      expect(output).toHaveProperty('id', collectionToUpdate.id)
-      expect(output).toHaveProperty('name', input.name)
-      expect(output).toHaveProperty('created_at', collectionToUpdate.created_at)
-
-      resetDatabaseMock()
-    })
-
-    it('does not alter other collections', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const [collectionToUpdate] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning()
-      const [collectionToNotUpdate] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning()
-      const { default: updateCollection } = await import('.')
-      const input = { id: collectionToUpdate.id, name: 'New Collection Name' }
-
-      await updateCollection(input)
-      const output = await database.query.collection.findFirst({
-        where: eq(collection.id, collectionToNotUpdate.id),
-      })
-
-      expect(output).toHaveProperty('id', collectionToNotUpdate.id)
-      expect(output).toHaveProperty('name', collectionToNotUpdate.name)
-      expect(output).toHaveProperty(
-        'created_at',
-        collectionToNotUpdate.created_at,
-      )
-
-      resetDatabaseMock()
-    })
-  })
-
-  describe('when given a non-existent collection to update', () => {
-    it('returns `undefined`', async () => {
-      const { resetDatabaseMock } = await mockDatabase()
-      const { default: updateCollection } = await import('.')
-      const input = { id: 0, name: 'New Collection Name' }
-
-      await expect(updateCollection(input)).resolves.toBeUndefined()
-
-      resetDatabaseMock()
-    })
-
-    it('does not alter other collections', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const [collectionToNotUpdate] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning()
-      const { default: updateCollection } = await import('.')
-      const input = { id: 0, name: 'New Collection Name' }
-
-      await updateCollection(input)
-      const output = await database.query.collection.findFirst({
-        where: eq(collection.id, collectionToNotUpdate.id),
-      })
-
-      expect(output).toHaveProperty('id', collectionToNotUpdate.id)
-      expect(output).toHaveProperty('name', collectionToNotUpdate.name)
-      expect(output).toHaveProperty(
-        'created_at',
-        collectionToNotUpdate.created_at,
-      )
-
-      resetDatabaseMock()
-    })
+    resetDatabaseMock()
   })
 })
