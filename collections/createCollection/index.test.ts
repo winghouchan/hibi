@@ -1,91 +1,73 @@
 import { mockDatabase } from '@/test/utils'
-import { Collection } from '.'
+import { collection } from '../schema'
+import createCollection from '.'
 
 describe('createCollection', () => {
-  it('inserts a new collection into the database', async () => {
+  test.each([
+    {
+      name: 'when the collection name is an empty string, throws an error and does not alter the database state',
+      input: { name: '' },
+      expected: {
+        databaseState: [],
+        output: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed: name'),
+        }),
+      },
+    },
+    {
+      name: 'when the collection name is a non-empty string, creates a collection with the given name and returns the created collection',
+      input: { name: 'New Collection Name' },
+      expected: {
+        databaseState: [
+          {
+            id: expect.any(Number),
+            name: 'New Collection Name',
+            created_at: expect.any(Date),
+          },
+        ],
+        output: {
+          id: expect.any(Number),
+          name: 'New Collection Name',
+          created_at: expect.any(Date),
+        },
+      },
+    },
+    {
+      name: 'when other collections exist, does not alter other collections',
+      fixture: { name: 'Existing Collection Name' },
+      input: { name: 'New Collection Name' },
+      expected: {
+        databaseState: [
+          {
+            id: expect.any(Number),
+            name: 'Existing Collection Name',
+            created_at: expect.any(Date),
+          },
+          {
+            id: expect.any(Number),
+            name: 'New Collection Name',
+            created_at: expect.any(Date),
+          },
+        ],
+        output: {
+          id: expect.any(Number),
+          name: 'New Collection Name',
+          created_at: expect.any(Date),
+        },
+      },
+    },
+  ])('$name', async ({ fixture, input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: createCollection } = await import('.')
-    const input = { name: 'Collection' }
 
-    await createCollection(input)
-    const output = await database.query.collection.findMany()
-
-    expect(output).toHaveLength(1)
-    expect(output[0]).toHaveProperty('id', 1)
-    expect(output[0]).toHaveProperty('name', input.name)
-    // The `created_at` datetime is determined in the database and not something that can be mocked.
-    // Expect it to be within 1000 ms of when the assertion is executed.
-    expect(output[0].created_at).toBeBetween(
-      new Date(new Date().valueOf() - 1000),
-      new Date(),
-    )
-
-    resetDatabaseMock()
-  })
-
-  it('returns the created collection', async () => {
-    const { resetDatabaseMock } = await mockDatabase()
-    const { default: createCollection } = await import('.')
-    const input = { name: 'Collection' }
-
-    const output = await createCollection(input)
-
-    expect(output).toHaveProperty('id', 1)
-    expect(output).toHaveProperty('name', input.name)
-    // The `created_at` datetime is determined in the database and not something that can be mocked.
-    // Expect it to be within 1000 ms of when the assertion is executed.
-    expect(output.created_at).toBeBetween(
-      new Date(new Date().valueOf() - 1000),
-      new Date(),
-    )
-
-    resetDatabaseMock()
-  })
-
-  it('auto-increments the collection ID', async () => {
-    const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: createCollection } = await import('.')
-    const input = { name: 'Collection' }
-
-    await createCollection(input)
-    await createCollection(input)
-    const output = await database.query.collection.findMany()
-
-    expect(output).toHaveLength(2)
-    expect(output[0]).toHaveProperty('id', 1)
-    expect(output[1]).toHaveProperty('id', 2)
-
-    resetDatabaseMock()
-  })
-
-  it('when no collection name is provided, does not create a collection', async () => {
-    const { resetDatabaseMock } = await mockDatabase()
-    const { default: createCollection } = await import('.')
-    const input = {} as Collection // Cast empty object to `Collection` so that compile time checks pass and run time checks can be tested
-
-    await expect(async () => await createCollection(input)).rejects.toEqual(
-      expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: collection.name',
-        ),
-      }),
-    )
-
-    resetDatabaseMock()
-  })
-
-  it('when the collection name is an empty string, does not create a collection', async () => {
-    const { resetDatabaseMock } = await mockDatabase()
-    const { default: createCollection } = await import('.')
-    const input = {
-      name: '',
+    if (fixture) {
+      await database.insert(collection).values(fixture)
     }
 
-    await expect(async () => await createCollection(input)).rejects.toEqual(
-      expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed: name'),
-      }),
-    )
+    const output = await createCollection(input).catch((error) => error)
+    const databaseState = await database.query.collection.findMany()
+
+    expect(output).toEqual(expected.output)
+    expect(databaseState).toEqual(expected.databaseState)
 
     resetDatabaseMock()
   })
