@@ -4,6 +4,7 @@ import { reviewable, reviewableField } from '@/reviews/schema'
 import { and, eq, inArray, notInArray } from 'drizzle-orm'
 import differenceWith from 'lodash/differenceWith'
 import isEqual from 'lodash/isEqual'
+import { RequireAtLeastOne } from 'type-fest'
 import hashNoteFieldValue from '../hashNoteFieldValue'
 import { note, noteField } from '../schema'
 
@@ -13,12 +14,16 @@ interface Field
     'id' | 'created_at' | 'hash' | 'note' | 'position' | 'side'
   > {}
 
-interface UpdateNoteParameters {
+type UpdateNoteParameters = {
   id: Exclude<(typeof note.$inferInsert)['id'], undefined>
-  collections?: (typeof collection.$inferSelect)['id'][]
-  fields?: Field[][]
-  config?: Partial<Parameters<typeof createReviewables>[0]['config']>
-}
+} & RequireAtLeastOne<
+  {
+    collections?: (typeof collection.$inferSelect)['id'][]
+    config?: Partial<Parameters<typeof createReviewables>[0]['config']>
+    fields?: Field[][]
+  },
+  'collections' | 'config' | 'fields'
+>
 
 export default async function updateNote({
   id,

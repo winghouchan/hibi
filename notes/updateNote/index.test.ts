@@ -29,7 +29,7 @@ describe('updateNote', () => {
         where: eq(collectionToNote.note, noteId),
       })
 
-      const returnedState = await updateNote({ id: noteId })
+      const returnedState = await updateNote({ id: noteId } as any)
       const succeedingState = await database.query.collectionToNote.findMany({
         where: eq(collectionToNote.note, noteId),
       })
@@ -338,7 +338,7 @@ describe('updateNote', () => {
         where: eq(noteField.note, noteId),
       })
 
-      await updateNote({ id: noteId })
+      await updateNote({ id: noteId } as any)
       const succeedingState = await database.query.noteField.findMany({
         where: eq(noteField.note, noteId),
       })
