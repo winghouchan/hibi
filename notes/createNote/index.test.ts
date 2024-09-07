@@ -20,6 +20,20 @@ describe('createNote', () => {
       },
     },
     {
+      name: 'when the collection ID references a non-existent collection, throws an error and does not alter the database state',
+      input: {
+        collections: [-1],
+        fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+        config: { reversible: false, separable: false },
+      },
+      expected: {
+        databaseState: [],
+        output: expect.objectContaining({
+          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+        }),
+      },
+    },
+    {
       name: 'when an empty list of fields is provided, throws an error and does not alter the database state',
       input: {
         collections: [1],
@@ -75,6 +89,23 @@ describe('createNote', () => {
         output: expect.objectContaining({
           message: expect.stringContaining(
             'every side requires at least 1 field',
+          ),
+        }),
+      },
+    },
+
+    {
+      name: 'when a field value is an empty string, throws an error and does not alter the database state',
+      input: {
+        collections: [1],
+        fields: [[{ value: '' }], [{ value: 'Back 1' }]],
+        config: { reversible: false, separable: false },
+      },
+      expected: {
+        databaseState: [],
+        output: expect.objectContaining({
+          message: expect.stringContaining(
+            'CHECK constraint failed: length(`value`) > 0',
           ),
         }),
       },
