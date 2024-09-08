@@ -8,11 +8,69 @@ import updateNote from '.'
 describe('updateNote', () => {
   test.each([
     {
+      name: 'when the note ID references a non-existent note, throws an error and does not alter the database state',
+      input: { id: -1, collections: [1] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining('Note -1 not found'),
+        }),
+      },
+    },
+    {
+      name: 'when an empty list of collection IDs is provided, throws an error and does not alter the database state',
+      input: { collections: [] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining('at least 1 collection is required'),
+        }),
+      },
+    },
+    {
       name: 'when a collection ID references a non-existent collection, throws an error and does not alter the database state',
       input: { collections: [-1] },
       expected: {
         output: expect.objectContaining({
           message: expect.stringContaining('FOREIGN KEY constraint failed'),
+        }),
+      },
+    },
+    {
+      name: 'when an empty list of fields is provided, throws an error and does not alter the database state',
+      input: { id: 1, fields: [] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining('2 sides are required'),
+        }),
+      },
+    },
+    {
+      name: 'when less than two sides are provided, throws an error and does not alter the database state',
+      input: { id: 1, fields: [[{ value: 'Front 1' }]] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining('2 sides are required'),
+        }),
+      },
+    },
+    {
+      name: 'when all sides have no fields, throws an error and does not alter the database state',
+      input: { id: 1, fields: [[], []] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining(
+            'every side requires at least 1 field',
+          ),
+        }),
+      },
+    },
+    {
+      name: 'when a side has no fields, throws an error and does not alter the database state',
+      input: { id: 1, fields: [[{ value: 'Front 1' }], []] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining(
+            'every side requires at least 1 field',
+          ),
         }),
       },
     },

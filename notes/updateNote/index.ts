@@ -33,6 +33,20 @@ export default async function updateNote({
 }: UpdateNoteParameters) {
   const { database } = await import('@/database')
 
+  if (collections && collections.length < 1) {
+    throw new TypeError('at least 1 collection is required')
+  }
+
+  if (sides) {
+    if (sides.length !== 2) {
+      throw new TypeError('2 sides are required')
+    }
+
+    if (!sides.every((side) => side.length > 0)) {
+      throw new TypeError('every side requires at least 1 field')
+    }
+  }
+
   return database.transaction((transaction) => {
     const currentConfig = transaction.query.note
       .findFirst({
@@ -43,6 +57,10 @@ export default async function updateNote({
         },
       })
       .sync()
+
+    if (!currentConfig) {
+      throw new Error(`Note ${id} not found`)
+    }
 
     const newConfig = {
       reversible:
