@@ -1,2395 +1,3829 @@
 import { collection, collectionToNote } from '@/collections/schema'
-import { reviewable } from '@/reviews/schema'
 import { mockDatabase } from '@/test/utils'
 import { eq } from 'drizzle-orm'
-import createNoteFn from '../createNote'
-import hashNoteFieldValue from '../hashNoteFieldValue'
-import { note, noteField } from '../schema'
-
-type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
+import createNote from '../createNote'
+import { note } from '../schema'
+import updateNote from '.'
 
 describe('updateNote', () => {
-  describe('when given no collections', () => {
-    it('does nothing', async () => {
+  describe('when the list of collections provided', () => {
+    test.each([
+      {
+        name: 'includes a new collection, adds the note to the collection',
+        fixture: {
+          collections: ['Collection 1', 'Collection 2'],
+          note: { collections: [0] },
+        },
+        input: { collections: [0, 1] },
+        expected: [
+          {
+            id: expect.any(Number),
+            name: 'Collection 1',
+            created_at: expect.any(Date),
+          },
+          {
+            id: expect.any(Number),
+            name: 'Collection 2',
+            created_at: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'excludes a collection the note was in, removes the note from that collection',
+        fixture: {
+          collections: ['Collection 1', 'Collection 2'],
+          note: { collections: [0, 1] },
+        },
+        input: { collections: [0] },
+        expected: [
+          {
+            id: expect.any(Number),
+            name: 'Collection 1',
+            created_at: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'includes new collections and excludes collections the note was in, moves the note to the new collections',
+        fixture: {
+          collections: ['Collection 1', 'Collection 2'],
+          note: { collections: [0] },
+        },
+        input: { collections: [1] },
+        expected: [
+          {
+            id: expect.any(Number),
+            name: 'Collection 2',
+            created_at: expect.any(Date),
+          },
+        ],
+      },
+    ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ existingCollectionId }] = await database
+      const collections = await database
         .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning({ existingCollectionId: collection.id })
+        .values(fixture.collections.map((name) => ({ name })))
+        .returning({ id: collection.id })
       const [{ noteId }] = await database
         .insert(note)
         .values({})
         .returning({ noteId: note.id })
-      await database.insert(collectionToNote).values({
-        collection: existingCollectionId,
-        note: noteId,
-      })
-      const precedingState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      const returnedState = await updateNote({ id: noteId } as any)
-      const succeedingState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      expect(returnedState).toEqual(
-        expect.objectContaining({
-          collections: [
-            expect.objectContaining({
-              id: existingCollectionId,
-            }),
-          ],
-        }),
-      )
-      expect(succeedingState).toEqual(precedingState)
-
-      resetDatabaseMock()
-    })
-  })
-
-  describe('when given collection(s)', () => {
-    it('is able to move a note into a new collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ existingCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning({ existingCollectionId: collection.id })
-      const [{ newCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 2' })
-        .returning({ newCollectionId: collection.id })
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      await database.insert(collectionToNote).values({
-        collection: existingCollectionId,
-        note: noteId,
-      })
-
-      const returnedState = await updateNote({
-        id: noteId,
-        collections: [newCollectionId],
-      })
-      const queriedState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      expect(returnedState).toEqual(
-        expect.objectContaining({
-          collections: [
-            expect.objectContaining({
-              id: newCollectionId,
-            }),
-          ],
-        }),
-      )
-      expect(queriedState).toHaveLength(1)
-      expect(queriedState[0]).toHaveProperty('note', noteId)
-      expect(queriedState[0]).toHaveProperty('collection', newCollectionId)
-
-      resetDatabaseMock()
-    })
-
-    it('is able to add a note to a new collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ existingCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning({ existingCollectionId: collection.id })
-      const [{ newCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 2' })
-        .returning({ newCollectionId: collection.id })
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      const [{ created_at }] = await database
-        .insert(collectionToNote)
-        .values({
-          collection: existingCollectionId,
+      await database.insert(collectionToNote).values(
+        fixture.note.collections.map((collection) => ({
+          collection: collections[collection].id,
           note: noteId,
-        })
-        .returning()
-
-      const returnedState = await updateNote({
-        id: noteId,
-        collections: [existingCollectionId, newCollectionId],
-      })
-      const queriedState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      expect(returnedState).toEqual(
-        expect.objectContaining({
-          collections: [
-            expect.objectContaining({
-              id: existingCollectionId,
-            }),
-            expect.objectContaining({
-              id: newCollectionId,
-            }),
-          ],
-        }),
-      )
-      expect(queriedState).toEqual([
-        expect.objectContaining({
-          note: noteId,
-          collection: existingCollectionId,
-          created_at,
-        }),
-        expect.objectContaining({
-          note: noteId,
-          collection: newCollectionId,
-        }),
-      ])
-
-      resetDatabaseMock()
-    })
-
-    it('is able to remove a note from a collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [collectionToKeepNoteIn] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning()
-      const [collectionToRemoveNoteFrom] = await database
-        .insert(collection)
-        .values({ name: 'Collection 2' })
-        .returning()
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      await database
-        .insert(collectionToNote)
-        .values([
-          { collection: collectionToKeepNoteIn.id, note: noteId },
-          { collection: collectionToRemoveNoteFrom.id, note: noteId },
-        ])
-        .returning()
-
-      const returnedState = await updateNote({
-        id: noteId,
-        collections: [collectionToKeepNoteIn.id],
-      })
-      const queriedState = await database.query.collectionToNote.findMany()
-
-      expect(returnedState).toEqual(
-        expect.objectContaining({
-          collections: [
-            expect.objectContaining({
-              id: collectionToKeepNoteIn.id,
-            }),
-          ],
-        }),
-      )
-      expect(queriedState).toHaveLength(1)
-      expect(queriedState[0]).toHaveProperty(
-        'collection',
-        collectionToKeepNoteIn.id,
-      )
-      expect(queriedState[0]).toHaveProperty('note', noteId)
-
-      resetDatabaseMock()
-    })
-
-    it('does not leave a note without a collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ existingCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning({ existingCollectionId: collection.id })
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      await database.insert(collectionToNote).values({
-        collection: existingCollectionId,
-        note: noteId,
-      })
-
-      const returnedState = await updateNote({ id: noteId, collections: [] })
-      const queriedState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      expect(returnedState).toEqual(
-        expect.objectContaining({
-          collections: [
-            expect.objectContaining({
-              id: existingCollectionId,
-            }),
-          ],
-        }),
-      )
-      expect(queriedState).toHaveLength(1)
-      expect(queriedState[0]).toHaveProperty('note', noteId)
-      expect(queriedState[0]).toHaveProperty('collection', existingCollectionId)
-
-      resetDatabaseMock()
-    })
-
-    it('does not add a note to a non-existent collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ existingCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning({ existingCollectionId: collection.id })
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      await database.insert(collectionToNote).values({
-        collection: existingCollectionId,
-        note: noteId,
-      })
-      const nonExistentCollectionId = 0
-
-      await expect(
-        updateNote({
-          id: noteId,
-          collections: [existingCollectionId, nonExistentCollectionId],
-        }),
-      ).rejects.toEqual(
-        expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
-        }),
-      )
-      const output = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      expect(output).toHaveLength(1)
-      expect(output[0]).toHaveProperty('note', noteId)
-      expect(output[0]).toHaveProperty('collection', existingCollectionId)
-
-      resetDatabaseMock()
-    })
-
-    it('does nothing if note is already in the collection', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ existingCollectionId }] = await database
-        .insert(collection)
-        .values({ name: 'Collection 1' })
-        .returning({ existingCollectionId: collection.id })
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      await database.insert(collectionToNote).values({
-        collection: existingCollectionId,
-        note: noteId,
-      })
-      const precedingState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      const returnedState = await updateNote({
-        id: noteId,
-        collections: [existingCollectionId],
-      })
-      const succeedingState = await database.query.collectionToNote.findMany({
-        where: eq(collectionToNote.note, noteId),
-      })
-
-      expect(returnedState).toEqual(
-        expect.objectContaining({
-          collections: [
-            expect.objectContaining({
-              id: existingCollectionId,
-            }),
-          ],
-        }),
-      )
-      expect(succeedingState).toEqual(precedingState)
-
-      resetDatabaseMock()
-    })
-  })
-
-  describe('when given no fields', () => {
-    it('does nothing', async () => {
-      const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
-      const [{ noteId }] = await database
-        .insert(note)
-        .values({})
-        .returning({ noteId: note.id })
-      await database.insert(noteField).values(
-        ['Field 1', 'Field 2'].map((value, position) => ({
-          note: noteId,
-          value,
-          hash: hashNoteFieldValue(value),
-          position,
-          side: 0,
         })),
       )
-      const precedingState = await database.query.noteField.findMany({
-        where: eq(noteField.note, noteId),
-      })
 
-      await updateNote({ id: noteId } as any)
-      const succeedingState = await database.query.noteField.findMany({
-        where: eq(noteField.note, noteId),
+      const output = await updateNote({
+        id: noteId,
+        collections: input.collections.map(
+          (collection) => collections[collection].id,
+        ),
       })
+      const databaseState = (
+        await database.query.note.findMany({
+          with: {
+            collections: {
+              with: {
+                collection: true,
+              },
+            },
+          },
+        })
+      ).map((note) => ({
+        ...note,
+        collections: note.collections.map(({ collection }) => collection),
+      }))
 
-      expect(succeedingState).toEqual(precedingState)
+      expect(output).toEqual(expect.objectContaining({ collections: expected }))
+      expect(databaseState).toEqual([
+        expect.objectContaining({ collections: expected }),
+      ])
 
       resetDatabaseMock()
     })
   })
 
-  describe('when given field(s)', () => {
-    let database: DatabaseMock['database'],
-      resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
-      collectionMock: typeof collection.$inferSelect,
-      createNote: typeof createNoteFn
+  describe('when the list of fields provided', () => {
+    test.each([
+      {
+        name: 'replaces a single field on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: { fields: [[{ value: '1a' }], [{ value: '2' }]] },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'replaces a single field on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: { fields: [[{ value: '1' }], [{ value: '2a' }]] },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'replaces multiple fields on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1A' }, { value: '1B' }], [{ value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1A',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1B',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1A',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1B',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 5,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'replaces multiple fields on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2a' }, { value: '2b' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }], [{ value: '2A' }, { value: '2B' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2A',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2B',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2A',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2B',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 5,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'prepends a note field on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: 'a' }, { value: '1' }], [{ value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: 'a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: 'a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'prepends a note field on the first side with a value of an existing note field, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '2' }, { value: '1' }], [{ value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'prepends a note field on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }], [{ value: 'a' }, { value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: 'a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: 'a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'prepends a note field on the second side with a value of an existing note field, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }], [{ value: '1' }, { value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'appends a note field on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1b',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'appends a note field on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'appends a note field on the first side with a value of an existing note field, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }, { value: '1' }], [{ value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'appends a note field on the second side with a value  of an existing note field, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }], [{ value: '2' }, { value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes the first note field on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1b' }], [{ value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1b',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes the first note field on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }], [{ value: '2b' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes the last note field on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }], [{ value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes the last note field on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }], [{ value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: true,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes a note field between two fields on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [
+              [{ value: '1a' }, { value: '1b' }, { value: '1c' }],
+              [{ value: '2a' }],
+            ],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }, { value: '1c' }], [{ value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1c',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '1c',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes a note field between two fields on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [
+              [{ value: '1a' }],
+              [{ value: '2a' }, { value: '2b' }, { value: '2c' }],
+            ],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2c' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2c',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2c',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes a note field on the first side that has the same value as another field, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }, { value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }], [{ value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 1,
+                  is_archived: true,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'removes a note field on the second side that has the same value as another field, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }, { value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1' }], [{ value: '2' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 1,
+                  is_archived: true,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'inserts a new note field between two fields on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }, { value: '1c' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [
+            [{ value: '1a' }, { value: '1b' }, { value: '1c' }],
+            [{ value: '2a' }],
+          ],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1c',
+                side: 0,
+                position: 2,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1b',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1c',
+                  side: 0,
+                  position: 2,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'inserts a new note field between two fields on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2c' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [
+            [{ value: '1a' }],
+            [{ value: '2a' }, { value: '2b' }, { value: '2c' }],
+          ],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2c',
+                side: 1,
+                position: 2,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2c',
+                  side: 1,
+                  position: 2,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'inserts a new note field with a value of an existing note field between two fields on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }, { value: '2' }], [{ value: '3' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [
+            [{ value: '1' }, { value: '1' }, { value: '2' }],
+            [{ value: '3' }],
+          ],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 0,
+                position: 2,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '3',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 0,
+                  position: 2,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '3',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'inserts a new note field  with a value of an existing note field between two fields on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }, { value: '3' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [
+            [{ value: '1' }],
+            [{ value: '2' }, { value: '2' }, { value: '3' }],
+          ],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '3',
+                side: 1,
+                position: 2,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '3',
+                  side: 1,
+                  position: 2,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'swaps positions of note fields on the first side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1b' }, { value: '1a' }], [{ value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1b',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'swaps positions of note fields on the second side, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '1a' }], [{ value: '2b' }, { value: '2a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'swaps sides with a single note field each, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [[{ value: '2a' }], [{ value: '1a' }]],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'swaps sides with a multiple note fields each, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [
+              [{ value: '1a' }, { value: '1b' }],
+              [{ value: '2a' }, { value: '2b' }],
+            ],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          fields: [
+            [{ value: '2a' }, { value: '2b' }],
+            [{ value: '1a' }, { value: '1b' }],
+          ],
+        },
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 4,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 4,
+                      side: 0,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+    ])('$name', async ({ fixture, input, expected }) => {
+      const { database, resetDatabaseMock } = await mockDatabase()
+      const [{ collectionId }] = await database
+        .insert(collection)
+        .values({ name: 'Collection Name' })
+        .returning({ collectionId: collection.id })
+      const { id: noteId } = await createNote({
+        collections: [collectionId],
+        ...fixture.note,
+      })
 
-    beforeEach(async () => {
-      ;({ database, resetDatabaseMock } = await mockDatabase())
-      createNote = (await import('../createNote')).default
+      const output = await updateNote({
+        id: noteId,
+        fields: input.fields,
+      })
+      const databaseState = await database.query.note.findMany({
+        where: eq(note.id, noteId),
+        with: {
+          fields: true,
+          reviewables: {
+            with: {
+              fields: true,
+            },
+          },
+        },
+      })
 
-      collectionMock = (
-        await database
-          .insert(collection)
-          .values({ name: 'Collection 1' })
-          .returning()
-      )[0]
-    })
+      expect(output).toEqual(expected.output)
+      expect(databaseState).toEqual(expected.databaseState)
 
-    afterEach(() => {
       resetDatabaseMock()
     })
 
-    it('is able to replace a single note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [newNoteFields, existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to replace a single note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to replace multiple note fields on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1a' }, { value: '1b' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1A' }, { value: '1B' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [newNoteFields, existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[1].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to replace multiple note fields on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2a' }, { value: '2b' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2A' }, { value: '2B' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], newNoteFields],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[1].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: 'a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [...newNoteFields, ...existingNoteFields[0]],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: 'a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [...newNoteFields, ...existingNoteFields[1]],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field on the first side with a value of an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [...newNoteFields, ...existingNoteFields[0]],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to prepend a note field on the second side with a value of an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [...newNoteFields, ...existingNoteFields[1]],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: 'a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [...existingNoteFields[0], ...newNoteFields],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: 'a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [...existingNoteFields[1], ...newNoteFields],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field on the first side with a value of an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [...existingNoteFields[0], ...newNoteFields],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to append a note field on the second side with a value of an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '2' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [...existingNoteFields[1], ...newNoteFields],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove the first note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1a' }, { value: '1b' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [[existingNoteFields[0][1]], existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove the first note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2a' }, { value: '2b' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], [existingNoteFields[1][1]]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove the last note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1a' }, { value: '1b' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [[existingNoteFields[0][0]], existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove the last note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2a' }, { value: '2b' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], [existingNoteFields[1][0]]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 1,
-          is_archived: true,
-        }),
-      ])
-    })
-
-    it('is able to remove a note field in between two other note fields on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1a' }, { value: '1b' }, { value: '1c' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [existingNoteFields[0][0], existingNoteFields[0][2]],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][2].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove a note field in between two other note fields on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2a' }, { value: '2b' }, { value: '2c' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [existingNoteFields[1][0], existingNoteFields[1][2]],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][2].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove a note field on the first side that has the same value as another note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }, { value: '1' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [[existingNoteFields[0][1]], existingNoteFields[1]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 1,
-          is_archived: true,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to remove a note field on the second side that has the same value as another note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2' }, { value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [existingNoteFields[0], [existingNoteFields[1][0]]],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 1,
-          is_archived: true,
-        }),
-      ])
-    })
-
-    it('is able to insert a new field between two fields on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1a' }, { value: '1c' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newNoteFields = [{ value: '1b' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [
-            existingNoteFields[0][0],
-            ...newNoteFields,
-            existingNoteFields[0][1],
+    test.each([
+      {
+        name: 'includes a note field on the first side in the first position that was previously archived, the correct state is produced and returned',
+        fixture: {
+          note: [
+            {
+              fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+              config: { reversible: false, separable: false },
+            },
+            {
+              fields: [[{ value: '1b' }], [{ value: '2a' }]],
+              config: { reversible: false, separable: false },
+            },
           ],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to insert a new field between two fields on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2a' }, { value: '2c' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
         },
-      })
-      const newNoteFields = [{ value: '2b' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [
-            existingNoteFields[1][0],
-            ...newNoteFields,
-            existingNoteFields[1][1],
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1b',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
           ],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to insert a new field between two fields on the first side with a value of an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1a' }, { value: '1c' }],
-        [{ value: '2' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
         },
-      })
-      const newNoteFields = [{ value: '1a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          [
-            existingNoteFields[0][0],
-            ...newNoteFields,
-            existingNoteFields[0][1],
+      },
+      {
+        name: 'includes a note field on the second side in the first position that was previously archived, the correct state is produced and returned',
+        fixture: {
+          note: [
+            {
+              fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+              config: { reversible: false, separable: false },
+            },
+            {
+              fields: [[{ value: '1a' }], [{ value: '2b' }]],
+              config: { reversible: false, separable: false },
+            },
           ],
-          existingNoteFields[1],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[0][1].value,
-          side: 0,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to insert a new field between two fields on the second side with a value of an existing note field', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2a' }, { value: '2c' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
         },
-      })
-      const newNoteFields = [{ value: '2a' }]
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [
-          existingNoteFields[0],
-          [
-            existingNoteFields[1][0],
-            ...newNoteFields,
-            existingNoteFields[1][1],
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
           ],
-        ],
-      })
-
-      const noteFields = await database.select().from(noteField)
-
-      expect(noteFields).toEqual([
-        expect.objectContaining({
-          value: existingNoteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: existingNoteFields[1][1].value,
-          side: 1,
-          position: 2,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: newNoteFields[0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to un-archive the first note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }, { value: '2' }], [{ value: '3' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
         },
-      })
-      // Archive the first note field in the first side
-      await updateNote({
-        id: noteMock.id,
-        fields: [[noteFields[0][1]], noteFields[1]],
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: noteFields,
-      })
-
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[0][1].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to un-archive the first note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }], [{ value: '2' }, { value: '3' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
+      },
+      {
+        name: 'includes a note field on the first side in the last position that was previously archived, the correct state is produced and returned',
+        fixture: {
+          note: [
+            {
+              fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+              config: { reversible: false, separable: false },
+            },
+            {
+              fields: [[{ value: '1a' }], [{ value: '2a' }]],
+              config: { reversible: false, separable: false },
+            },
+          ],
         },
-      })
-      // Archive the first note field in the second side
-      await updateNote({
-        id: noteMock.id,
-        fields: [noteFields[0], [noteFields[1][1]]],
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: noteFields,
-      })
-
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][1].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to un-archive the last note field on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }, { value: '2' }], [{ value: '3' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '1b',
+                side: 0,
+                position: 1,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '1b',
+                  side: 0,
+                  position: 1,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
         },
-      })
-      // Archive the first note field in the first side
-      await updateNote({
-        id: noteMock.id,
-        fields: [[noteFields[0][0]], noteFields[1]],
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: noteFields,
-      })
-
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[0][1].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to un-archive the last note field on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }], [{ value: '2' }, { value: '3' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
+      },
+      {
+        name: 'includes a note field on the second side in the last position that was previously archived, the correct state is produced and returned',
+        fixture: {
+          note: [
+            {
+              fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+              config: { reversible: false, separable: false },
+            },
+            {
+              fields: [[{ value: '1a' }], [{ value: '2a' }]],
+              config: { reversible: false, separable: false },
+            },
+          ],
         },
-      })
-      // Archive the first note field in the second side
-      await updateNote({
-        id: noteMock.id,
-        fields: [noteFields[0], [noteFields[1][0]]],
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: noteFields,
-      })
-
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][1].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to swap note positions of note fields on the first side', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }, { value: '2' }], [{ value: '3' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
+        expected: {
+          output: expect.objectContaining({
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
         },
+      },
+    ])('$name', async ({ fixture, expected }) => {
+      const { database, resetDatabaseMock } = await mockDatabase()
+      const [{ collectionId }] = await database
+        .insert(collection)
+        .values({ name: 'Collection Name' })
+        .returning({ collectionId: collection.id })
+      const { id: noteId } = await createNote({
+        collections: [collectionId],
+        ...fixture.note[0],
       })
-
       await updateNote({
-        id: noteMock.id,
-        fields: [[noteFields[0][1], noteFields[0][0]], noteFields[1]],
+        id: noteId,
+        ...fixture.note[1],
       })
 
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[0][1].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to swap note positions of note fields on the second side', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }], [{ value: '2' }, { value: '3' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
+      const output = await updateNote({
+        id: noteId,
+        ...fixture.note[0],
+      })
+      const databaseState = await database.query.note.findMany({
+        where: eq(note.id, noteId),
+        with: {
+          fields: true,
+          reviewables: {
+            with: {
+              fields: true,
+            },
+          },
         },
       })
 
-      await updateNote({
-        id: noteMock.id,
-        fields: [noteFields[0], [noteFields[1][1], noteFields[1][0]]],
-      })
+      expect(output).toEqual(expected.output)
+      expect(databaseState).toEqual(expected.databaseState)
 
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][1].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to swap the sides of a note with a single note field each', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [noteFields[1], noteFields[0]],
-      })
-
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-      ])
-    })
-
-    it('is able to swap the sides of a note with multiple note fields', async () => {
-      const { default: updateNote } = await import('.')
-      const noteFields = [
-        [{ value: '1a' }, { value: '1b' }],
-        [{ value: '2a' }, { value: '2b' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: noteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: [noteFields[1], noteFields[0]],
-      })
-
-      const noteFieldsState = await database.select().from(noteField)
-
-      expect(noteFieldsState).toEqual([
-        expect.objectContaining({
-          value: noteFields[0][0].value,
-          side: 1,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[0][1].value,
-          side: 1,
-          position: 1,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][0].value,
-          side: 0,
-          position: 0,
-          is_archived: false,
-        }),
-        expect.objectContaining({
-          value: noteFields[1][1].value,
-          side: 0,
-          position: 1,
-          is_archived: false,
-        }),
-      ])
+      resetDatabaseMock()
     })
   })
 
-  describe('when given a config', () => {
-    let database: DatabaseMock['database'],
-      resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
-      collectionMock: typeof collection.$inferSelect,
-      createNote: typeof createNoteFn
+  describe('when the new config provided', () => {
+    test.each([
+      {
+        name: 'updates the note from not reversible to reversible, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          config: { reversible: true, separable: false },
+        },
+        expected: {
+          output: expect.objectContaining({
+            is_reversible: true,
+            is_separable: false,
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              is_reversible: true,
+              is_separable: false,
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'updates the note from reversible to not reversible, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1' }], [{ value: '2' }]],
+            config: { reversible: true, separable: false },
+          },
+        },
+        input: {
+          config: { reversible: false, separable: false },
+        },
+        expected: {
+          output: expect.objectContaining({
+            is_reversible: false,
+            is_separable: false,
+            fields: [
+              expect.objectContaining({
+                value: '1',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              is_reversible: false,
+              is_separable: false,
+              fields: [
+                expect.objectContaining({
+                  value: '1',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'updates the note from not separable to separable, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            config: { reversible: false, separable: false },
+          },
+        },
+        input: {
+          config: { reversible: false, separable: true },
+        },
+        expected: {
+          output: expect.objectContaining({
+            is_reversible: false,
+            is_separable: true,
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              is_reversible: false,
+              is_separable: true,
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 3,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 3,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      {
+        name: 'updates the note from separable to not separable, the correct state is produced and returned',
+        fixture: {
+          note: {
+            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            config: { reversible: false, separable: true },
+          },
+        },
+        input: {
+          config: { reversible: false, separable: false },
+        },
+        expected: {
+          output: expect.objectContaining({
+            is_reversible: false,
+            is_separable: false,
+            fields: [
+              expect.objectContaining({
+                value: '1a',
+                side: 0,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2a',
+                side: 1,
+                position: 0,
+                is_archived: false,
+              }),
+              expect.objectContaining({
+                value: '2b',
+                side: 1,
+                position: 1,
+                is_archived: false,
+              }),
+            ],
+          }),
+          databaseState: [
+            expect.objectContaining({
+              is_reversible: false,
+              is_separable: false,
+              fields: [
+                expect.objectContaining({
+                  value: '1a',
+                  side: 0,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2a',
+                  side: 1,
+                  position: 0,
+                  is_archived: false,
+                }),
+                expect.objectContaining({
+                  value: '2b',
+                  side: 1,
+                  position: 1,
+                  is_archived: false,
+                }),
+              ],
+              reviewables: [
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 1,
+                      field: 2,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: true,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 2,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_archived: false,
+                  fields: [
+                    expect.objectContaining({
+                      reviewable: 3,
+                      field: 1,
+                      side: 0,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 3,
+                      field: 2,
+                      side: 1,
+                    }),
+                    expect.objectContaining({
+                      reviewable: 3,
+                      field: 3,
+                      side: 1,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+    ])('$name', async ({ fixture, input, expected }) => {
+      const { database, resetDatabaseMock } = await mockDatabase()
+      const [{ collectionId }] = await database
+        .insert(collection)
+        .values({ name: 'Collection Name' })
+        .returning({ collectionId: collection.id })
+      const { id: noteId } = await createNote({
+        collections: [collectionId],
+        ...fixture.note,
+      })
 
-    beforeEach(async () => {
-      ;({ database, resetDatabaseMock } = await mockDatabase())
-      createNote = (await import('../createNote')).default
+      const output = await updateNote({
+        id: noteId,
+        config: input.config,
+      })
+      const databaseState = await database.query.note.findMany({
+        where: eq(note.id, noteId),
+        with: {
+          fields: true,
+          reviewables: {
+            with: {
+              fields: true,
+            },
+          },
+        },
+      })
 
-      collectionMock = (
-        await database
-          .insert(collection)
-          .values({ name: 'Collection 1' })
-          .returning()
-      )[0]
-    })
+      expect(output).toEqual(expected.output)
+      expect(databaseState).toEqual(expected.databaseState)
 
-    afterEach(() => {
       resetDatabaseMock()
-    })
-
-    it('updates the config state of the note', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      const newConfig = {
-        reversible: true,
-        separable: true,
-      }
-
-      await updateNote({
-        id: noteMock.id,
-        fields: existingNoteFields,
-        config: newConfig,
-      })
-
-      const noteState = await database.query.note.findFirst({
-        where: eq(note.id, noteMock.id),
-      })
-
-      expect(noteState).toEqual(
-        expect.objectContaining({
-          is_reversible: true,
-          is_separable: true,
-        }),
-      )
-    })
-
-    it('is able to update a note from being not reversible to reversible', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: existingNoteFields,
-        config: {
-          reversible: true,
-        },
-      })
-
-      const reviewables = await database.query.reviewable.findMany({
-        where: eq(reviewable.note, noteMock.id),
-        with: {
-          fields: {
-            with: {
-              field: true,
-            },
-          },
-        },
-      })
-
-      expect(reviewables).toEqual([
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-          ],
-        }),
-      ])
-    })
-
-    it('is able to update a note from being reversible to not reversible', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [[{ value: '1' }], [{ value: '2' }]]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: true,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-        },
-      })
-
-      const reviewables = await database.query.reviewable.findMany({
-        where: eq(reviewable.note, noteMock.id),
-        with: {
-          fields: {
-            with: {
-              field: true,
-            },
-          },
-        },
-      })
-
-      expect(reviewables).toEqual([
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: true,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-          ],
-        }),
-      ])
-    })
-
-    it('is able to update a note from being not separable to separable', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2' }, { value: '3' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: existingNoteFields,
-        config: {
-          separable: true,
-        },
-      })
-
-      const reviewables = await database.query.reviewable.findMany({
-        where: eq(reviewable.note, noteMock.id),
-        with: {
-          fields: {
-            with: {
-              field: true,
-            },
-          },
-        },
-      })
-
-      expect(reviewables).toEqual([
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: true,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][1].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][1].value,
-              }),
-            }),
-          ],
-        }),
-      ])
-    })
-
-    it('is able to update a note from being separable to not separable', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2' }, { value: '3' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: true,
-        },
-      })
-
-      await updateNote({
-        id: noteMock.id,
-        fields: existingNoteFields,
-        config: {
-          separable: false,
-        },
-      })
-
-      const reviewables = await database.query.reviewable.findMany({
-        where: eq(reviewable.note, noteMock.id),
-        with: {
-          fields: {
-            with: {
-              field: true,
-            },
-          },
-        },
-      })
-
-      expect(reviewables).toEqual([
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: true,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: true,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][1].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][1].value,
-              }),
-            }),
-          ],
-        }),
-      ])
-    })
-
-    it('is able to un-archive a reviewable', async () => {
-      const { default: updateNote } = await import('.')
-      const existingNoteFields = [
-        [{ value: '1' }],
-        [{ value: '2' }, { value: '3' }],
-      ]
-      const noteMock = await createNote({
-        collections: [collectionMock.id],
-        fields: existingNoteFields,
-        config: {
-          reversible: false,
-          separable: false,
-        },
-      })
-      await updateNote({
-        id: noteMock.id,
-        config: {
-          separable: true,
-        },
-      })
-      await updateNote({
-        id: noteMock.id,
-        config: {
-          separable: false,
-        },
-      })
-
-      const reviewables = await database.query.reviewable.findMany({
-        where: eq(reviewable.note, noteMock.id),
-        with: {
-          fields: {
-            with: {
-              field: true,
-            },
-          },
-        },
-      })
-
-      expect(reviewables).toEqual([
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: false,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][1].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: true,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][0].value,
-              }),
-            }),
-          ],
-        }),
-        expect.objectContaining({
-          id: expect.any(Number),
-          note: noteMock.id,
-          is_archived: true,
-          fields: [
-            expect.objectContaining({
-              side: 0,
-              field: expect.objectContaining({
-                value: existingNoteFields[0][0].value,
-              }),
-            }),
-            expect.objectContaining({
-              side: 1,
-              field: expect.objectContaining({
-                value: existingNoteFields[1][1].value,
-              }),
-            }),
-          ],
-        }),
-      ])
     })
   })
 })
