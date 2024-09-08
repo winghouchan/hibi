@@ -6,6 +6,57 @@ import { note } from '../schema'
 import updateNote from '.'
 
 describe('updateNote', () => {
+  test.each([
+    {
+      name: 'when a collection ID references a non-existent collection, throws an error and does not alter the database state',
+      input: { collections: [-1] },
+      expected: {
+        output: expect.objectContaining({
+          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+        }),
+      },
+    },
+    {
+      name: 'when a field value is an empty string, throws an error and does not alter the database state',
+      input: { id: 1, fields: [[{ value: '' }], [{ value: 'Back 1' }]] },
+      expected: {
+        output: expect.objectContaining({
+          message: 'CHECK constraint failed: length(`value`) > 0',
+        }),
+      },
+    },
+  ])('$name', async ({ input, expected }) => {
+    const { database, resetDatabaseMock } = await mockDatabase()
+    const [{ collectionId }] = await database
+      .insert(collection)
+      .values({ name: 'Collection Name' })
+      .returning({ collectionId: collection.id })
+    const { id: noteId } = await createNote({
+      collections: [collectionId],
+      fields: [[{ value: '1' }], [{ value: '2' }]],
+      config: { reversible: false, separable: false },
+    })
+    const getDatabaseState = async () =>
+      await database.query.note.findMany({
+        with: {
+          collections: true,
+          fields: true,
+          reviewables: true,
+        },
+      })
+
+    const precedingDatabaseState = await getDatabaseState()
+    const output = await updateNote({ id: noteId, ...input }).catch(
+      (error) => error,
+    )
+    const succeedingDatabaseState = await getDatabaseState()
+
+    expect(output).toEqual(expected.output)
+    expect(succeedingDatabaseState).toEqual(precedingDatabaseState)
+
+    resetDatabaseMock()
+  })
+
   describe('when the list of collections provided', () => {
     test.each([
       {
