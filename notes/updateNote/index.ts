@@ -221,7 +221,7 @@ export default async function updateNote({
 
     if (config || sides) {
       const fieldState = await transaction.query.noteField.findMany({
-        where: eq(noteField.note, id),
+        where: and(eq(noteField.note, id), eq(noteField.is_archived, false)),
       })
 
       const currentReviewables = await transaction.query.reviewable.findMany({
