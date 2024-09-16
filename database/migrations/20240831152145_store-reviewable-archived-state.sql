@@ -1,1 +1,0 @@
-ALTER TABLE `reviewable` ADD `is_archived` integer DEFAULT false NOT NULL;

@@ -1,1 +1,0 @@
-ALTER TABLE `note_field` ADD `hash` text NOT NULL CHECK (length(`hash`) = 44);

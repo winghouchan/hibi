@@ -1,1 +1,0 @@
-ALTER TABLE `note_field` ADD `is_archived` integer DEFAULT false NOT NULL;

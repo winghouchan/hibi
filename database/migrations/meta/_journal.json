@@ -5,71 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1723052537530,
-      "tag": "20240807174217_store-collections",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1723128789316,
-      "tag": "20240808145309_store-notes",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1723225889574,
-      "tag": "20240809175129_store-reviewables",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1723901666366,
-      "tag": "20240817133426_store-reviews",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1724421968714,
-      "tag": "20240823140608_store-note-field-value-hash",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1724431678269,
-      "tag": "20240823164758_store-note-field-archived-state",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1724595015587,
-      "tag": "20240825141015_store-note-field-position",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1724762516180,
-      "tag": "20240827124156_store-note-configuration",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1724772029691,
-      "tag": "20240827152029_store-note-field-side",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "6",
-      "when": 1725117705292,
-      "tag": "20240831152145_store-reviewable-archived-state",
+      "when": 1726479847676,
+      "tag": "20240916094407_base",
       "breakpoints": true
     }
   ]
