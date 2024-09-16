@@ -30,7 +30,7 @@ export const review = sqliteTable('review', {
   /**
    * The date and time the review was completed at.
    */
-  created_at: createdAt(),
+  createdAt: createdAt(),
 
   /**
    * Determines if a small pseudo-random delay is added to the due date of the
@@ -44,7 +44,7 @@ export const review = sqliteTable('review', {
    *
    * @see {@link https://github.com/open-spaced-repetition/ts-fsrs/blob/eee4f0c84f91d36f06f8fd55830f319d6a98e146/src/fsrs/algorithm.ts#L130-L147 | Source code for fuzzing in the scheduler}
    */
-  is_due_fuzzed: integer('is_due_fuzzed', { mode: 'boolean' }).notNull(),
+  dueFuzzed: integer('is_due_fuzzed', { mode: 'boolean' }).notNull(),
 
   /**
    * Determines if cards should go through the "learning" stage. It may be
@@ -54,7 +54,7 @@ export const review = sqliteTable('review', {
    * non-boolean values. The migration has been manually modified to include this
    * because Drizzle currently does not have support for adding check constraints.
    */
-  is_learning_enabled: integer('is_learning_enabled', {
+  learningEnabled: integer('is_learning_enabled', {
     mode: 'boolean',
   }).notNull(),
 
@@ -65,7 +65,7 @@ export const review = sqliteTable('review', {
    * below 0. The migration has been manually modified to include this because
    * Drizzle currently does not have support for adding check constraints.
    */
-  max_interval: integer('max_interval').notNull(),
+  maxInterval: integer('max_interval').notNull(),
 
   /**
    * The target probability of recall at the next review.

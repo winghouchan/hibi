@@ -16,9 +16,9 @@ describe('`review` table', () => {
       | 'reviewable'
       | 'rating'
       | 'duration'
-      | 'is_due_fuzzed'
-      | 'is_learning_enabled'
-      | 'max_interval'
+      | 'dueFuzzed'
+      | 'learningEnabled'
+      | 'maxInterval'
       | 'retention'
       | 'weights'
     >,
@@ -42,9 +42,9 @@ describe('`review` table', () => {
       reviewable: reviewableId,
       rating: 1,
       duration: 1000,
-      is_due_fuzzed: false,
-      is_learning_enabled: true,
-      max_interval: 36500,
+      dueFuzzed: false,
+      learningEnabled: true,
+      maxInterval: 36500,
       retention: 90,
       weights: [
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
@@ -195,29 +195,29 @@ describe('`review` table', () => {
       const now = new Date()
 
       await expect(
-        insertReview({ ...reviewMock, created_at: 'string' }),
+        insertReview({ ...reviewMock, createdAt: 'string' }),
       ).rejects.toThrow()
       await expect(
-        insertReview({ ...reviewMock, created_at: 0.1 }),
+        insertReview({ ...reviewMock, createdAt: 0.1 }),
       ).rejects.toThrow()
       await expect(
-        insertReview({ ...reviewMock, created_at: 1 }),
+        insertReview({ ...reviewMock, createdAt: 1 }),
       ).rejects.toThrow()
       await expect(
-        insertReview({ ...reviewMock, created_at: now }),
+        insertReview({ ...reviewMock, createdAt: now }),
       ).resolves.toEqual(
         expect.objectContaining({
-          created_at: now,
+          createdAt: now,
         }),
       )
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertReview(reviewMock)
+      const { createdAt } = await insertReview(reviewMock)
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
-      expect(created_at).toBeBetween(
+      expect(createdAt).toBeBetween(
         new Date(new Date().valueOf() - 1000),
         new Date(),
       )
@@ -225,7 +225,7 @@ describe('`review` table', () => {
 
     it('cannot be `null`', async () => {
       await expect(
-        insertReview({ ...reviewMock, created_at: null }),
+        insertReview({ ...reviewMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(
@@ -238,8 +238,8 @@ describe('`review` table', () => {
 
   describe('`is_due_fuzzed` column', () => {
     it('is a boolean', async () => {
-      const insertReviewWithIsDueFuzzed = async (is_due_fuzzed: any) =>
-        (await insertReview({ ...reviewMock, is_due_fuzzed })).is_due_fuzzed
+      const insertReviewWithIsDueFuzzed = async (dueFuzzed: any) =>
+        (await insertReview({ ...reviewMock, dueFuzzed })).dueFuzzed
 
       await expect(insertReviewWithIsDueFuzzed(true)).resolves.toBeTrue()
       await expect(insertReviewWithIsDueFuzzed(1)).resolves.toBeTrue()
@@ -252,8 +252,8 @@ describe('`review` table', () => {
     })
 
     it('cannot be `null`', async () => {
-      const insertReviewWithIsDueFuzzed = async (is_due_fuzzed: any) =>
-        (await insertReview({ ...reviewMock, is_due_fuzzed })).is_due_fuzzed
+      const insertReviewWithIsDueFuzzed = async (dueFuzzed: any) =>
+        (await insertReview({ ...reviewMock, dueFuzzed })).dueFuzzed
 
       const notNullConstraintFailed = expect.objectContaining({
         message: expect.stringContaining(
@@ -272,11 +272,8 @@ describe('`review` table', () => {
 
   describe('`is_learning_enabled` column', () => {
     it('is a boolean', async () => {
-      const insertReviewWithIsLearningEnabled = async (
-        is_learning_enabled: any,
-      ) =>
-        (await insertReview({ ...reviewMock, is_learning_enabled }))
-          .is_learning_enabled
+      const insertReviewWithIsLearningEnabled = async (learningEnabled: any) =>
+        (await insertReview({ ...reviewMock, learningEnabled })).learningEnabled
 
       await expect(insertReviewWithIsLearningEnabled(true)).resolves.toBeTrue()
       await expect(insertReviewWithIsLearningEnabled(1)).resolves.toBeTrue()
@@ -293,11 +290,8 @@ describe('`review` table', () => {
     })
 
     it('cannot be `null`', async () => {
-      const insertReviewWithIsLearningEnabled = async (
-        is_learning_enabled: any,
-      ) =>
-        (await insertReview({ ...reviewMock, is_learning_enabled }))
-          .is_learning_enabled
+      const insertReviewWithIsLearningEnabled = async (learningEnabled: any) =>
+        (await insertReview({ ...reviewMock, learningEnabled })).learningEnabled
 
       const notNullConstraintFailed = expect.objectContaining({
         message: expect.stringContaining(
@@ -317,7 +311,7 @@ describe('`review` table', () => {
   describe('`max_interval` column', () => {
     it('is a value greater than 0', async () => {
       await expect(
-        insertReview({ ...reviewMock, max_interval: 0 }),
+        insertReview({ ...reviewMock, maxInterval: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(
@@ -325,7 +319,7 @@ describe('`review` table', () => {
           ),
         }),
       )
-      await expect(insertReview({ ...reviewMock, max_interval: 1 })).toResolve()
+      await expect(insertReview({ ...reviewMock, maxInterval: 1 })).toResolve()
     })
 
     it('cannot be `null`', async () => {
@@ -336,10 +330,10 @@ describe('`review` table', () => {
       })
 
       await expect(
-        insertReview({ ...reviewMock, max_interval: undefined }),
+        insertReview({ ...reviewMock, maxInterval: undefined }),
       ).rejects.toEqual(notNullConstraintFailed)
       await expect(
-        insertReview({ ...reviewMock, max_interval: null }),
+        insertReview({ ...reviewMock, maxInterval: null }),
       ).rejects.toEqual(notNullConstraintFailed)
     })
   })

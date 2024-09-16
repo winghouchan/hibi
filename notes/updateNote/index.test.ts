@@ -128,12 +128,12 @@ describe('updateNote', () => {
           {
             id: expect.any(Number),
             name: 'Collection 1',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
           {
             id: expect.any(Number),
             name: 'Collection 2',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -148,7 +148,7 @@ describe('updateNote', () => {
           {
             id: expect.any(Number),
             name: 'Collection 1',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -163,7 +163,7 @@ describe('updateNote', () => {
           {
             id: expect.any(Number),
             name: 'Collection 2',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -232,13 +232,13 @@ describe('updateNote', () => {
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -249,24 +249,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -281,7 +281,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -316,13 +316,13 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -333,24 +333,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -365,7 +365,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -402,19 +402,19 @@ describe('updateNote', () => {
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1A',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1B',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -425,36 +425,36 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1A',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1B',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -474,7 +474,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -516,19 +516,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2A',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2B',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -539,36 +539,36 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2A',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2B',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -588,7 +588,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -630,19 +630,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: 'a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -653,24 +653,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: 'a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -685,7 +685,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -727,19 +727,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -750,24 +750,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -782,7 +782,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -824,19 +824,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: 'a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -847,24 +847,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: 'a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -879,7 +879,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -921,19 +921,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -944,24 +944,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -976,7 +976,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1018,19 +1018,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1b',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1041,24 +1041,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1073,7 +1073,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1115,19 +1115,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1138,24 +1138,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1170,7 +1170,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1212,19 +1212,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1235,24 +1235,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1267,7 +1267,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1309,19 +1309,19 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1332,24 +1332,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1364,7 +1364,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1406,13 +1406,13 @@ describe('updateNote', () => {
                 value: '1b',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1423,24 +1423,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1460,7 +1460,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1497,13 +1497,13 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1514,24 +1514,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1551,7 +1551,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1588,13 +1588,13 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1605,24 +1605,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1642,7 +1642,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1679,13 +1679,13 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1696,24 +1696,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1733,7 +1733,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1773,19 +1773,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1c',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1796,30 +1796,30 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '1c',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1844,7 +1844,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -1889,19 +1889,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2c',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -1912,30 +1912,30 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2c',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -1960,7 +1960,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2002,13 +2002,13 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2019,24 +2019,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1',
                   side: 0,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2056,7 +2056,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2093,13 +2093,13 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2110,24 +2110,24 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 1,
-                  is_archived: true,
+                  archived: true,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2147,7 +2147,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2187,25 +2187,25 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1c',
                 side: 0,
                 position: 2,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1b',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2216,30 +2216,30 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1c',
                   side: 0,
                   position: 2,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2259,7 +2259,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2309,25 +2309,25 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2c',
                 side: 1,
                 position: 2,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2338,30 +2338,30 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2c',
                   side: 1,
                   position: 2,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2381,7 +2381,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2431,25 +2431,25 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 0,
                 position: 2,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '3',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2460,30 +2460,30 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 0,
                   position: 2,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '3',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2503,7 +2503,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2553,25 +2553,25 @@ describe('updateNote', () => {
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '3',
                 side: 1,
                 position: 2,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2582,30 +2582,30 @@ describe('updateNote', () => {
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '3',
                   side: 1,
                   position: 2,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2625,7 +2625,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2672,19 +2672,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1b',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2695,24 +2695,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2754,19 +2754,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2777,24 +2777,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2836,13 +2836,13 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2853,18 +2853,18 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2879,7 +2879,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -2922,25 +2922,25 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -2951,30 +2951,30 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -2999,7 +2999,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3083,19 +3083,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1b',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -3106,24 +3106,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3143,7 +3143,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3183,19 +3183,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -3206,24 +3206,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3243,7 +3243,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3283,19 +3283,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '1b',
                 side: 0,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -3306,24 +3306,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '1b',
                   side: 0,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3343,7 +3343,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3383,19 +3383,19 @@ describe('updateNote', () => {
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
@@ -3406,24 +3406,24 @@ describe('updateNote', () => {
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3443,7 +3443,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3515,44 +3515,44 @@ describe('updateNote', () => {
         },
         expected: {
           output: expect.objectContaining({
-            is_reversible: true,
-            is_separable: false,
+            reversible: true,
+            separable: false,
             fields: [
               expect.objectContaining({
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
           databaseState: [
             expect.objectContaining({
-              is_reversible: true,
-              is_separable: false,
+              reversible: true,
+              separable: false,
               fields: [
                 expect.objectContaining({
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3567,7 +3567,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3599,44 +3599,44 @@ describe('updateNote', () => {
         },
         expected: {
           output: expect.objectContaining({
-            is_reversible: false,
-            is_separable: false,
+            reversible: false,
+            separable: false,
             fields: [
               expect.objectContaining({
                 value: '1',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
           databaseState: [
             expect.objectContaining({
-              is_reversible: false,
-              is_separable: false,
+              reversible: false,
+              separable: false,
               fields: [
                 expect.objectContaining({
                   value: '1',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3651,7 +3651,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3683,56 +3683,56 @@ describe('updateNote', () => {
         },
         expected: {
           output: expect.objectContaining({
-            is_reversible: false,
-            is_separable: true,
+            reversible: false,
+            separable: true,
             fields: [
               expect.objectContaining({
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
           databaseState: [
             expect.objectContaining({
-              is_reversible: false,
-              is_separable: true,
+              reversible: false,
+              separable: true,
               fields: [
                 expect.objectContaining({
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3752,7 +3752,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3767,7 +3767,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 3,
@@ -3799,56 +3799,56 @@ describe('updateNote', () => {
         },
         expected: {
           output: expect.objectContaining({
-            is_reversible: false,
-            is_separable: false,
+            reversible: false,
+            separable: false,
             fields: [
               expect.objectContaining({
                 value: '1a',
                 side: 0,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2a',
                 side: 1,
                 position: 0,
-                is_archived: false,
+                archived: false,
               }),
               expect.objectContaining({
                 value: '2b',
                 side: 1,
                 position: 1,
-                is_archived: false,
+                archived: false,
               }),
             ],
           }),
           databaseState: [
             expect.objectContaining({
-              is_reversible: false,
-              is_separable: false,
+              reversible: false,
+              separable: false,
               fields: [
                 expect.objectContaining({
                   value: '1a',
                   side: 0,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2a',
                   side: 1,
                   position: 0,
-                  is_archived: false,
+                  archived: false,
                 }),
                 expect.objectContaining({
                   value: '2b',
                   side: 1,
                   position: 1,
-                  is_archived: false,
+                  archived: false,
                 }),
               ],
               reviewables: [
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 1,
@@ -3863,7 +3863,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: true,
+                  archived: true,
                   fields: [
                     expect.objectContaining({
                       reviewable: 2,
@@ -3878,7 +3878,7 @@ describe('updateNote', () => {
                   ],
                 }),
                 expect.objectContaining({
-                  is_archived: false,
+                  archived: false,
                   fields: [
                     expect.objectContaining({
                       reviewable: 3,

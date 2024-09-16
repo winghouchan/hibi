@@ -15,5 +15,5 @@ export const collection = sqliteTable('collection', {
    */
   name: text('name').notNull(),
 
-  created_at: createdAt(),
+  createdAt: createdAt(),
 })

@@ -15,7 +15,7 @@ export const collectionToNote = sqliteTable(
       .notNull()
       .references(() => note.id),
 
-    created_at: createdAt(),
+    createdAt: createdAt(),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.collection, table.note] }),

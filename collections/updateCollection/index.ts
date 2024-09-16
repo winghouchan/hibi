@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import { collection } from '../schema/collection'
 
 export interface Collection<Name extends string = string>
-  extends Omit<typeof collection.$inferInsert, 'created_at'> {
+  extends Omit<typeof collection.$inferInsert, 'createdAt'> {
   id: number
   name: Name extends '' ? never : Name
 }

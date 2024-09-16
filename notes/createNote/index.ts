@@ -8,7 +8,7 @@ import { noteField, note } from '../schema'
 interface Field
   extends Omit<
     typeof noteField.$inferInsert,
-    'id' | 'created_at' | 'hash' | 'note' | 'position' | 'side'
+    'id' | 'createdAt' | 'hash' | 'note' | 'position' | 'side'
   > {}
 
 interface CreateNoteParameters {
@@ -40,8 +40,8 @@ export default async function createNote({
     const [insertedNote] = transaction
       .insert(note)
       .values({
-        is_reversible: config.reversible,
-        is_separable: config.separable,
+        reversible: config.reversible,
+        separable: config.separable,
       })
       .returning()
       .all()

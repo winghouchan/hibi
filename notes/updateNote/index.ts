@@ -11,7 +11,7 @@ import { note, noteField } from '../schema'
 interface Field
   extends Omit<
     typeof noteField.$inferInsert,
-    'id' | 'created_at' | 'hash' | 'note' | 'position' | 'side'
+    'id' | 'createdAt' | 'hash' | 'note' | 'position' | 'side'
   > {}
 
 type UpdateNoteParameters = {
@@ -52,8 +52,8 @@ export default async function updateNote({
       .findFirst({
         where: eq(note.id, id),
         columns: {
-          is_reversible: true,
-          is_separable: true,
+          reversible: true,
+          separable: true,
         },
       })
       .sync()
@@ -63,20 +63,19 @@ export default async function updateNote({
     }
 
     const newConfig = {
-      reversible:
-        config?.reversible ?? (currentConfig?.is_reversible as boolean),
-      separable: config?.separable ?? (currentConfig?.is_separable as boolean),
+      reversible: config?.reversible ?? (currentConfig?.reversible as boolean),
+      separable: config?.separable ?? (currentConfig?.separable as boolean),
     }
 
     if (
-      newConfig.reversible !== currentConfig?.is_reversible ||
-      newConfig.separable !== currentConfig.is_separable
+      newConfig.reversible !== currentConfig?.reversible ||
+      newConfig.separable !== currentConfig.separable
     ) {
       transaction
         .update(note)
         .set({
-          is_reversible: newConfig.reversible,
-          is_separable: newConfig.separable,
+          reversible: newConfig.reversible,
+          separable: newConfig.separable,
         })
         .where(eq(note.id, id))
         .run()
@@ -168,7 +167,7 @@ export default async function updateNote({
           // The field has no positions in the new state, so are archived
           transaction
             .update(noteField)
-            .set({ is_archived: true })
+            .set({ archived: true })
             .where(and(eq(noteField.note, id), eq(noteField.hash, fieldHash)))
             .run()
         } else if (!currentPositions) {
@@ -194,7 +193,7 @@ export default async function updateNote({
                 // The field currently exists at an index that does not exist in the new state, so is archived
                 return transaction
                   .update(noteField)
-                  .set({ is_archived: true })
+                  .set({ archived: true })
                   .where(eq(noteField.id, id))
                   .run()
               }
@@ -207,7 +206,7 @@ export default async function updateNote({
                 return transaction
                   .update(noteField)
                   .set({
-                    is_archived: false,
+                    archived: false,
                     position: newPositions[index].position,
                     side: newPositions[index].side,
                   })
@@ -235,7 +234,7 @@ export default async function updateNote({
               return transaction
                 .update(noteField)
                 .set({
-                  is_archived: false,
+                  archived: false,
                   position,
                   side,
                 })
@@ -250,7 +249,7 @@ export default async function updateNote({
     if (config || sides) {
       const fieldState = transaction.query.noteField
         .findMany({
-          where: and(eq(noteField.note, id), eq(noteField.is_archived, false)),
+          where: and(eq(noteField.note, id), eq(noteField.archived, false)),
         })
         .sync()
 
@@ -259,7 +258,7 @@ export default async function updateNote({
           where: eq(reviewable.note, id),
           columns: {
             id: true,
-            is_archived: true,
+            archived: true,
           },
           with: {
             fields: {
@@ -305,7 +304,7 @@ export default async function updateNote({
             ) {
               const reviewable = currentReviewables.shift()
 
-              if (reviewable?.is_archived) {
+              if (reviewable?.archived) {
                 reviewablesToUnarchive.push(reviewable)
               }
 
@@ -344,7 +343,7 @@ export default async function updateNote({
 
       transaction
         .update(reviewable)
-        .set({ is_archived: true })
+        .set({ archived: true })
         .where(
           inArray(
             reviewable.id,
@@ -355,7 +354,7 @@ export default async function updateNote({
 
       transaction
         .update(reviewable)
-        .set({ is_archived: false })
+        .set({ archived: false })
         .where(
           inArray(
             reviewable.id,
@@ -374,7 +373,7 @@ export default async function updateNote({
             with: { collection: true },
           },
           fields: {
-            where: eq(noteField.is_archived, false),
+            where: eq(noteField.archived, false),
           },
         },
       })

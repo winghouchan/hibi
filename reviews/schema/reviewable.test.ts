@@ -108,8 +108,8 @@ describe('`reviewable` table', () => {
 
   describe('`is_archived` column', () => {
     it('is a boolean', async () => {
-      const insertReviewableWithIsArchived = async (is_archived: any) =>
-        (await insertReviewable({ ...reviewableMock, is_archived })).is_archived
+      const insertReviewableWithIsArchived = async (archived: any) =>
+        (await insertReviewable({ ...reviewableMock, archived })).archived
 
       await expect(insertReviewableWithIsArchived(true)).resolves.toBeTrue()
       await expect(insertReviewableWithIsArchived(1)).resolves.toBeTrue()
@@ -125,7 +125,7 @@ describe('`reviewable` table', () => {
       await expect(
         insertReviewable({
           ...reviewableMock,
-          is_archived: null,
+          archived: null,
         }),
       ).rejects.toEqual(
         expect.objectContaining({
@@ -141,9 +141,9 @@ describe('`reviewable` table', () => {
         (
           await insertReviewable({
             ...reviewableMock,
-            is_archived: undefined,
+            archived: undefined,
           })
-        ).is_archived,
+        ).archived,
       ).toBeFalse()
     })
   })
@@ -153,29 +153,29 @@ describe('`reviewable` table', () => {
       const now = new Date()
 
       await expect(
-        insertReviewable({ ...reviewableMock, created_at: 'string' }),
+        insertReviewable({ ...reviewableMock, createdAt: 'string' }),
       ).rejects.toThrow()
       await expect(
-        insertReviewable({ ...reviewableMock, created_at: 0.1 }),
+        insertReviewable({ ...reviewableMock, createdAt: 0.1 }),
       ).rejects.toThrow()
       await expect(
-        insertReviewable({ ...reviewableMock, created_at: 1 }),
+        insertReviewable({ ...reviewableMock, createdAt: 1 }),
       ).rejects.toThrow()
       await expect(
-        insertReviewable({ ...reviewableMock, created_at: now }),
+        insertReviewable({ ...reviewableMock, createdAt: now }),
       ).resolves.toEqual(
         expect.objectContaining({
-          created_at: now,
+          createdAt: now,
         }),
       )
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertReviewable(reviewableMock)
+      const { createdAt } = await insertReviewable(reviewableMock)
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
-      expect(created_at).toBeBetween(
+      expect(createdAt).toBeBetween(
         new Date(new Date().valueOf() - 1000),
         new Date(),
       )
@@ -183,7 +183,7 @@ describe('`reviewable` table', () => {
 
     it('cannot be `null`', async () => {
       await expect(
-        insertReviewable({ ...reviewableMock, created_at: null }),
+        insertReviewable({ ...reviewableMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(
@@ -390,29 +390,29 @@ describe('`reviewable_field` table', () => {
       const now = new Date()
 
       await expect(
-        insertReviewableField({ ...reviewableFieldMock, created_at: 'string' }),
+        insertReviewableField({ ...reviewableFieldMock, createdAt: 'string' }),
       ).rejects.toThrow()
       await expect(
-        insertReviewableField({ ...reviewableFieldMock, created_at: 0.1 }),
+        insertReviewableField({ ...reviewableFieldMock, createdAt: 0.1 }),
       ).rejects.toThrow()
       await expect(
-        insertReviewableField({ ...reviewableFieldMock, created_at: 1 }),
+        insertReviewableField({ ...reviewableFieldMock, createdAt: 1 }),
       ).rejects.toThrow()
       await expect(
-        insertReviewableField({ ...reviewableFieldMock, created_at: now }),
+        insertReviewableField({ ...reviewableFieldMock, createdAt: now }),
       ).resolves.toEqual(
         expect.objectContaining({
-          created_at: now,
+          createdAt: now,
         }),
       )
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertReviewableField(reviewableFieldMock)
+      const { createdAt } = await insertReviewableField(reviewableFieldMock)
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
-      expect(created_at).toBeBetween(
+      expect(createdAt).toBeBetween(
         new Date(new Date().valueOf() - 1000),
         new Date(),
       )
@@ -420,7 +420,7 @@ describe('`reviewable_field` table', () => {
 
     it('cannot be `null`', async () => {
       await expect(
-        insertReviewableField({ ...reviewableFieldMock, created_at: null }),
+        insertReviewableField({ ...reviewableFieldMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(

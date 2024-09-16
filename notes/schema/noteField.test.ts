@@ -317,9 +317,9 @@ describe('`note_field` table', () => {
 
   describe('`is_archived` column', () => {
     it('is a boolean', async () => {
-      const insertNoteFieldWithIsArchived = async (is_archived: any) =>
-        (await insertNoteField({ ...generateNoteFieldMock(), is_archived }))
-          .is_archived
+      const insertNoteFieldWithIsArchived = async (archived: any) =>
+        (await insertNoteField({ ...generateNoteFieldMock(), archived }))
+          .archived
 
       await expect(insertNoteFieldWithIsArchived(true)).resolves.toBeTrue()
       await expect(insertNoteFieldWithIsArchived(1)).resolves.toBeTrue()
@@ -335,7 +335,7 @@ describe('`note_field` table', () => {
       await expect(
         insertNoteField({
           ...generateNoteFieldMock(),
-          is_archived: null,
+          archived: null,
         }),
       ).rejects.toEqual(
         expect.objectContaining({
@@ -351,9 +351,9 @@ describe('`note_field` table', () => {
         (
           await insertNoteField({
             ...generateNoteFieldMock(),
-            is_archived: undefined,
+            archived: undefined,
           })
-        ).is_archived,
+        ).archived,
       ).toBeFalse()
     })
   })
@@ -363,29 +363,29 @@ describe('`note_field` table', () => {
       const now = new Date()
 
       await expect(() =>
-        insertNoteField({ ...generateNoteFieldMock(), created_at: 'string' }),
+        insertNoteField({ ...generateNoteFieldMock(), createdAt: 'string' }),
       ).rejects.toThrow()
       await expect(() =>
-        insertNoteField({ ...generateNoteFieldMock(), created_at: 0.1 }),
+        insertNoteField({ ...generateNoteFieldMock(), createdAt: 0.1 }),
       ).rejects.toThrow()
       await expect(() =>
-        insertNoteField({ ...generateNoteFieldMock(), created_at: 1 }),
+        insertNoteField({ ...generateNoteFieldMock(), createdAt: 1 }),
       ).rejects.toThrow()
       await expect(
-        insertNoteField({ ...generateNoteFieldMock(), created_at: now }),
+        insertNoteField({ ...generateNoteFieldMock(), createdAt: now }),
       ).resolves.toEqual(
         expect.objectContaining({
-          created_at: now,
+          createdAt: now,
         }),
       )
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertNoteField(generateNoteFieldMock())
+      const { createdAt } = await insertNoteField(generateNoteFieldMock())
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
-      expect(created_at).toBeBetween(
+      expect(createdAt).toBeBetween(
         new Date(new Date().valueOf() - 1000),
         new Date(),
       )
@@ -393,7 +393,7 @@ describe('`note_field` table', () => {
 
     it('cannot be `null`', async () => {
       await expect(
-        insertNoteField({ ...generateNoteFieldMock(), created_at: null }),
+        insertNoteField({ ...generateNoteFieldMock(), createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(

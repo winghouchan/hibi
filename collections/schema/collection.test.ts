@@ -115,29 +115,29 @@ describe('`collection` table', () => {
       const now = new Date()
 
       await expect(() =>
-        insertCollection({ ...collectionMock, created_at: 'string' }),
+        insertCollection({ ...collectionMock, createdAt: 'string' }),
       ).rejects.toThrow()
       await expect(() =>
-        insertCollection({ ...collectionMock, created_at: 0.1 }),
+        insertCollection({ ...collectionMock, createdAt: 0.1 }),
       ).rejects.toThrow()
       await expect(() =>
-        insertCollection({ ...collectionMock, created_at: 1 }),
+        insertCollection({ ...collectionMock, createdAt: 1 }),
       ).rejects.toThrow()
       await expect(
-        insertCollection({ ...collectionMock, created_at: now }),
+        insertCollection({ ...collectionMock, createdAt: now }),
       ).resolves.toEqual(
         expect.objectContaining({
-          created_at: now,
+          createdAt: now,
         }),
       )
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertCollection(collectionMock)
+      const { createdAt } = await insertCollection(collectionMock)
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
-      expect(created_at).toBeBetween(
+      expect(createdAt).toBeBetween(
         new Date(new Date().valueOf() - 1000),
         new Date(),
       )
@@ -145,7 +145,7 @@ describe('`collection` table', () => {
 
     it('cannot be `null`', async () => {
       await expect(
-        insertCollection({ ...collectionMock, created_at: null }),
+        insertCollection({ ...collectionMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
           message: expect.stringContaining(

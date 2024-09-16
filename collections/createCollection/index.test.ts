@@ -22,13 +22,13 @@ describe('createCollection', () => {
           {
             id: expect.any(Number),
             name: 'New Collection Name',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
         ],
         output: {
           id: expect.any(Number),
           name: 'New Collection Name',
-          created_at: expect.any(Date),
+          createdAt: expect.any(Date),
         },
       },
     },
@@ -41,18 +41,18 @@ describe('createCollection', () => {
           {
             id: expect.any(Number),
             name: 'Existing Collection Name',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
           {
             id: expect.any(Number),
             name: 'New Collection Name',
-            created_at: expect.any(Date),
+            createdAt: expect.any(Date),
           },
         ],
         output: {
           id: expect.any(Number),
           name: 'New Collection Name',
-          created_at: expect.any(Date),
+          createdAt: expect.any(Date),
         },
       },
     },

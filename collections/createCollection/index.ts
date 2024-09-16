@@ -1,7 +1,7 @@
 import { collection } from '../schema/collection'
 
 export interface Collection<Name extends string = string>
-  extends Omit<typeof collection.$inferInsert, 'id' | 'created_at'> {
+  extends Omit<typeof collection.$inferInsert, 'id' | 'createdAt'> {
   name: Name extends '' ? never : Name
 }
 

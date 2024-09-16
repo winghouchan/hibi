@@ -32,10 +32,10 @@ export default async function createReview({
         and(eq(review.reviewable, reviewable), eq(review.rating, Rating.Again)),
       )
     const [{ lastReview = undefined } = {}] = await transaction
-      .select({ lastReview: review.created_at })
+      .select({ lastReview: review.createdAt })
       .from(review)
       .where(eq(review.reviewable, reviewable))
-      .orderBy(desc(review.created_at))
+      .orderBy(desc(review.createdAt))
       .limit(1)
     const lastSnapshot = (await transaction.query.reviewableSnapshot.findFirst({
       columns: {
@@ -45,7 +45,7 @@ export default async function createReview({
         state: true,
       },
       where: eq(reviewableSnapshot.reviewable, reviewable),
-      orderBy: [desc(reviewableSnapshot.created_at)],
+      orderBy: [desc(reviewableSnapshot.createdAt)],
     })) ?? {
       difficulty: 0,
       due: new Date(),
@@ -74,10 +74,10 @@ export default async function createReview({
         reviewable,
         rating,
         duration,
-        is_due_fuzzed: enable_fuzz,
-        max_interval: maximum_interval,
+        dueFuzzed: enable_fuzz,
+        maxInterval: maximum_interval,
         retention: request_retention * 100,
-        is_learning_enabled: enable_short_term,
+        learningEnabled: enable_short_term,
         weights: w,
       })
       .returning()
@@ -117,14 +117,14 @@ export default async function createReview({
         elapsed_days: 0,
         scheduled_days: 0,
       },
-      insertedReview.created_at,
+      insertedReview.createdAt,
       rating,
     ).card
 
     const [insertedSnapshot] = await transaction
       .insert(reviewableSnapshot)
       .values({
-        created_at: insertedReview.created_at,
+        createdAt: insertedReview.createdAt,
         review: insertedReview.id,
         difficulty,
         due,

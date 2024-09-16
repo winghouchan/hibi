@@ -42,5 +42,5 @@ export const reviewableSnapshot = sqliteTable('reviewable_snapshot', {
    */
   state: integer('state').notNull(),
 
-  created_at: createdAt(),
+  createdAt: createdAt(),
 })

@@ -34,9 +34,9 @@ describe('`reviewable_snapshot` table', () => {
     const [{ reviewId }] = await database
       .insert(review)
       .values({
-        is_due_fuzzed: false,
-        is_learning_enabled: true,
-        max_interval: 36500,
+        dueFuzzed: false,
+        learningEnabled: true,
+        maxInterval: 36500,
         retention: 90,
         weights: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
@@ -349,38 +349,38 @@ describe('`reviewable_snapshot` table', () => {
       await expect(
         insertReviewableSnapshot({
           ...reviewableSnapshotMock,
-          created_at: 'string',
+          createdAt: 'string',
         }),
       ).rejects.toThrow()
       await expect(
         insertReviewableSnapshot({
           ...reviewableSnapshotMock,
-          created_at: 0.1,
+          createdAt: 0.1,
         }),
       ).rejects.toThrow()
       await expect(
-        insertReviewableSnapshot({ ...reviewableSnapshotMock, created_at: 1 }),
+        insertReviewableSnapshot({ ...reviewableSnapshotMock, createdAt: 1 }),
       ).rejects.toThrow()
       await expect(
         insertReviewableSnapshot({
           ...reviewableSnapshotMock,
-          created_at: now,
+          createdAt: now,
         }),
       ).resolves.toEqual(
         expect.objectContaining({
-          created_at: now,
+          createdAt: now,
         }),
       )
     })
 
     it('defaults to _now_', async () => {
-      const { created_at } = await insertReviewableSnapshot(
+      const { createdAt } = await insertReviewableSnapshot(
         reviewableSnapshotMock,
       )
 
       // The `created_at` datetime is determined in the database and not something that can be mocked.
       // Expect it to be within 1000 ms of when the assertion is executed.
-      expect(created_at).toBeBetween(
+      expect(createdAt).toBeBetween(
         new Date(new Date().valueOf() - 1000),
         new Date(),
       )
@@ -390,7 +390,7 @@ describe('`reviewable_snapshot` table', () => {
       await expect(
         insertReviewableSnapshot({
           ...reviewableSnapshotMock,
-          created_at: null,
+          createdAt: null,
         }),
       ).rejects.toEqual(
         expect.objectContaining({

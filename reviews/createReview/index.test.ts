@@ -52,10 +52,10 @@ describe('createReview', () => {
         const returnedState = await createReview(input)
         const queriedState = {
           review: await database.query.review.findFirst({
-            orderBy: [desc(review.created_at)],
+            orderBy: [desc(review.createdAt)],
           }),
           snapshot: await database.query.reviewableSnapshot.findFirst({
-            orderBy: [desc(reviewableSnapshot.created_at)],
+            orderBy: [desc(reviewableSnapshot.createdAt)],
           }),
         }
 
@@ -64,10 +64,10 @@ describe('createReview', () => {
           reviewable: noteMock.reviewables[0].id,
           rating: input.rating,
           duration: input.duration,
-          is_due_fuzzed: expected.review.enable_fuzz,
-          max_interval: expected.review.maximum_interval,
+          dueFuzzed: expected.review.enable_fuzz,
+          maxInterval: expected.review.maximum_interval,
           retention: expected.review.request_retention * 100,
-          is_learning_enabled: expected.review.enable_short_term,
+          learningEnabled: expected.review.enable_short_term,
           weights: expected.review.w,
         })
         const expectedReviewCreatedAtBetween = [
@@ -81,7 +81,7 @@ describe('createReview', () => {
           state: expected.snapshot.state,
           stability: expected.snapshot.stability,
           difficulty: expected.snapshot.difficulty,
-          created_at: returnedState.review.created_at,
+          createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
           new Date(expected.snapshot.due.valueOf() - 1000),
@@ -93,7 +93,7 @@ describe('createReview', () => {
 
         // The `created_at` datetime is determined in the database and not something that can be mocked.
         // Expect it to be within 1000 ms of when the assertion is executed.
-        expect(returnedState.review.created_at).toBeBetween(
+        expect(returnedState.review.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
 
@@ -180,12 +180,12 @@ describe('createReview', () => {
               .map((log) => ({
                 reviewable: noteMock.reviewables[0].id,
                 rating: log.rating,
-                created_at: log.review,
+                createdAt: log.review,
                 duration,
-                is_due_fuzzed: data.parameters.enable_fuzz,
-                max_interval: data.parameters.maximum_interval,
+                dueFuzzed: data.parameters.enable_fuzz,
+                maxInterval: data.parameters.maximum_interval,
                 retention: data.parameters.request_retention,
-                is_learning_enabled: data.parameters.enable_short_term,
+                learningEnabled: data.parameters.enable_short_term,
                 weights: data.parameters.w,
               })),
           )
@@ -196,7 +196,7 @@ describe('createReview', () => {
               // Remove the last card as it contains the data assertions are made on
               .toSpliced(-1)
               .map((card, index) => ({
-                created_at: data.logs[index].review,
+                createdAt: data.logs[index].review,
                 difficulty: card.difficulty,
                 due: card.due,
                 review: index + 1,
@@ -215,10 +215,10 @@ describe('createReview', () => {
         const returnedState = await createReview(input)
         const queriedState = {
           review: await database.query.review.findFirst({
-            orderBy: [desc(review.created_at)],
+            orderBy: [desc(review.createdAt)],
           }),
           snapshot: await database.query.reviewableSnapshot.findFirst({
-            orderBy: [desc(reviewableSnapshot.created_at)],
+            orderBy: [desc(reviewableSnapshot.createdAt)],
           }),
         }
 
@@ -227,10 +227,10 @@ describe('createReview', () => {
           reviewable: noteMock.reviewables[0].id,
           rating: input.rating,
           duration: input.duration,
-          is_due_fuzzed: expected.review.enable_fuzz,
-          max_interval: expected.review.maximum_interval,
+          dueFuzzed: expected.review.enable_fuzz,
+          maxInterval: expected.review.maximum_interval,
           retention: expected.review.request_retention * 100,
-          is_learning_enabled: expected.review.enable_short_term,
+          learningEnabled: expected.review.enable_short_term,
           weights: expected.review.w,
         })
         const expectedReviewCreatedAtBetween = [
@@ -244,7 +244,7 @@ describe('createReview', () => {
           state: expected.snapshot.state,
           stability: expected.snapshot.stability,
           difficulty: expected.snapshot.difficulty,
-          created_at: returnedState.review.created_at,
+          createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
           new Date(expected.snapshot.due.valueOf() - 1000),
@@ -256,10 +256,10 @@ describe('createReview', () => {
 
         // The `created_at` datetime is determined in the database and not something that can be mocked.
         // Expect it to be within 1000 ms of when the assertion is executed.
-        expect(returnedState.review.created_at).toBeBetween(
+        expect(returnedState.review.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
-        expect(queriedState.review?.created_at).toBeBetween(
+        expect(queriedState.review?.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
 
@@ -351,12 +351,12 @@ describe('createReview', () => {
               .map((log) => ({
                 reviewable: noteMock.reviewables[0].id,
                 rating: log.rating,
-                created_at: log.review,
+                createdAt: log.review,
                 duration,
-                is_due_fuzzed: data.parameters.enable_fuzz,
-                max_interval: data.parameters.maximum_interval,
+                dueFuzzed: data.parameters.enable_fuzz,
+                maxInterval: data.parameters.maximum_interval,
                 retention: data.parameters.request_retention,
-                is_learning_enabled: data.parameters.enable_short_term,
+                learningEnabled: data.parameters.enable_short_term,
                 weights: data.parameters.w,
               })),
           )
@@ -367,7 +367,7 @@ describe('createReview', () => {
               // Remove the last card as it contains the data assertions are made on
               .toSpliced(-1)
               .map((card, index) => ({
-                created_at: data.logs[index].review,
+                createdAt: data.logs[index].review,
                 difficulty: card.difficulty,
                 due: card.due,
                 review: index + 1,
@@ -386,10 +386,10 @@ describe('createReview', () => {
         const returnedState = await createReview(input)
         const queriedState = {
           review: await database.query.review.findFirst({
-            orderBy: [desc(review.created_at)],
+            orderBy: [desc(review.createdAt)],
           }),
           snapshot: await database.query.reviewableSnapshot.findFirst({
-            orderBy: [desc(reviewableSnapshot.created_at)],
+            orderBy: [desc(reviewableSnapshot.createdAt)],
           }),
         }
 
@@ -398,10 +398,10 @@ describe('createReview', () => {
           reviewable: noteMock.reviewables[0].id,
           rating: input.rating,
           duration: input.duration,
-          is_due_fuzzed: expected.review.enable_fuzz,
-          max_interval: expected.review.maximum_interval,
+          dueFuzzed: expected.review.enable_fuzz,
+          maxInterval: expected.review.maximum_interval,
           retention: expected.review.request_retention * 100,
-          is_learning_enabled: expected.review.enable_short_term,
+          learningEnabled: expected.review.enable_short_term,
           weights: expected.review.w,
         })
         const expectedReviewCreatedAtBetween = [
@@ -415,7 +415,7 @@ describe('createReview', () => {
           state: expected.snapshot.state,
           stability: expected.snapshot.stability,
           difficulty: expected.snapshot.difficulty,
-          created_at: returnedState.review.created_at,
+          createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
           new Date(expected.snapshot.due.valueOf() - 1000),
@@ -427,10 +427,10 @@ describe('createReview', () => {
 
         // The `created_at` datetime is determined in the database and not something that can be mocked.
         // Expect it to be within 1000 ms of when the assertion is executed.
-        expect(returnedState.review.created_at).toBeBetween(
+        expect(returnedState.review.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
-        expect(queriedState.review?.created_at).toBeBetween(
+        expect(queriedState.review?.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
 

@@ -10,11 +10,11 @@ export const reviewable = sqliteTable('reviewable', {
     .notNull()
     .references(() => note.id),
 
-  is_archived: integer('is_archived', { mode: 'boolean' })
+  archived: integer('is_archived', { mode: 'boolean' })
     .notNull()
     .default(false),
 
-  created_at: createdAt(),
+  createdAt: createdAt(),
 })
 
 export const reviewableField = sqliteTable('reviewable_field', {
@@ -30,5 +30,5 @@ export const reviewableField = sqliteTable('reviewable_field', {
 
   side: integer('side').notNull(),
 
-  created_at: createdAt(),
+  createdAt: createdAt(),
 })
