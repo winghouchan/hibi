@@ -1,6 +1,5 @@
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
-import database from './database'
-import migrations from './migrations/migrations'
+import { database, migrations } from './database'
 
 /**
  * Apply migrations to the database.

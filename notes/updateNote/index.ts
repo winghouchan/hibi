@@ -31,7 +31,7 @@ export default async function updateNote({
   fields: sides,
   config,
 }: UpdateNoteParameters) {
-  const { database } = await import('@/database')
+  const { database } = await import('@/data')
 
   if (collections && collections.length < 1) {
     throw new TypeError('at least 1 collection is required')

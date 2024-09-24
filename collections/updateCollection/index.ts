@@ -11,7 +11,7 @@ export default async function updateCollection<Name extends string>({
   id,
   name,
 }: Collection<Name>) {
-  const { database } = await import('@/database')
+  const { database } = await import('@/data')
 
   return (
     await database

@@ -6,7 +6,7 @@ import * as mockSchema from './__fixtures__/mock.schema'
  * The actual application schema should not be used for these tests so its
  * implementation and the function that does the migration have been mocked out.
  */
-jest.unstable_mockModule('@/database/schema', () => ({
+jest.unstable_mockModule('@/data/database/schema', () => ({
   default: { ...mockSchema },
 }))
 jest.unstable_mockModule('drizzle-orm/better-sqlite3/migrator', () => ({

@@ -1,4 +1,4 @@
-import { createdAt } from '@/database/utils'
+import { createdAt } from '@/data/database/utils'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 export const note = sqliteTable('note', {

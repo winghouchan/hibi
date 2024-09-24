@@ -22,7 +22,7 @@ export default async function createNote({
   fields: sides,
   config,
 }: CreateNoteParameters) {
-  const { database } = await import('@/database')
+  const { database } = await import('@/data')
 
   if (collections.length < 1) {
     throw new TypeError('at least 1 collection is required')

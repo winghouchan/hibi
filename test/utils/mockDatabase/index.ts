@@ -71,14 +71,14 @@ export default async function mockDatabase() {
   )
   jest.unstable_mockModule('expo-sqlite', () => expoSqliteMock)
 
-  // Import `@/database` here because module registry has been reset and dependencies are now mocked
+  // Import `@/data` here because module registry has been reset and dependencies are now mocked
   const { database, nativeDatabase } = (await import(
-    '@/database'
+    '@/data'
     // Casting is necessary because the database mock, from Better SQLite 3, is
     // now returned which has a different structure from Expo SQLite.
   )) as unknown as DatabaseModuleMock
 
-  migrate(database, { migrationsFolder: './database/migrations' })
+  migrate(database, { migrationsFolder: './data/database/migrations' })
 
   return {
     database,

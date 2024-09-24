@@ -1,13 +1,15 @@
-import { useDatabaseBrowser, useDatabaseMigrations } from '@/database'
+import { DataProvider, useDatabaseBrowser, useDatabaseMigrations } from '@/data'
 import { Stack } from 'expo-router'
+import { DevToolsBubble } from 'react-native-react-query-devtools'
 
 export default function Layout() {
   useDatabaseBrowser()
   useDatabaseMigrations()
 
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
+    <DataProvider>
+      <Stack />
+      {process.env.NODE_ENV === 'development' && <DevToolsBubble />}
+    </DataProvider>
   )
 }

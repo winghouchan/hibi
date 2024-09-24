@@ -1,12 +1,12 @@
 /**
  * The schema is used by Drizzle to build relational queries and provide type
- * annotations. The schema is imported directly from `@/database/schema` as
- * opposed to the index of `@/database` to prevent the set up of the actual
+ * annotations. The schema is imported directly from `@/data/database/schema`
+ * as opposed to the index of `@/data` to prevent the set up of the actual
  * database which is imported into the index file (for re-exporting).
  *
  * @see {@link https://orm.drizzle.team/docs/rqb | Drizzle Documentation}
  */
-import schema from '@/database/schema'
+import schema from '@/data/database/schema'
 import { jest } from '@jest/globals'
 import { drizzle as drizzleBetterSqlite3 } from 'drizzle-orm/better-sqlite3'
 

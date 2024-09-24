@@ -35,7 +35,7 @@ Example:
 
 ```typescript
 // fn.ts
-import { database } from '@/database'
+import { database } from '@/data'
 
 export default async function fn(/* ... */) {
   return await database.insert(/* ... */).values(/* ... */)

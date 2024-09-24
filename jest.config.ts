@@ -9,7 +9,7 @@ const config: JestConfigWithTsJest = {
    *
    * @see {@link https://kulshekhar.github.io/ts-jest/docs/guides/esm-support/ | ts-jest Documentation}
    */
-  extensionsToTreatAsEsm: ['.ts'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
@@ -18,6 +18,7 @@ const config: JestConfigWithTsJest = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
+        babelConfig: true,
         useESM: true,
       },
     ],

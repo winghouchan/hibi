@@ -1,15 +1,16 @@
 import { jest } from '@jest/globals'
 import Database, { SqliteError } from 'better-sqlite3'
-import mockDatabase from '.'
 
 /**
  * The actual application schema should not be used for these tests so its
  * implementation and the function that does the migration have been mocked out.
  */
-jest.mock('@/database/schema', () => ({}))
-jest.mock('drizzle-orm/better-sqlite3/migrator', () => ({
+jest.unstable_mockModule('@/data/database/schema', () => ({ default: {} }))
+jest.unstable_mockModule('drizzle-orm/better-sqlite3/migrator', () => ({
   migrate: jest.fn(),
 }))
+
+const { default: mockDatabase } = await import('.')
 
 test('`mockDatabase()` opens an in-memory database', async () => {
   const { nativeDatabase, resetDatabaseMock } = await mockDatabase()

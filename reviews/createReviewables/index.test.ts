@@ -18,7 +18,7 @@ async function setupNote({
 }: {
   fields: ReturnType<typeof generateFieldMocks>
 }) {
-  const { database } = await import('@/database')
+  const { database } = await import('@/data')
 
   return await database.transaction(async (transaction) => {
     const [insertedNote] = await transaction

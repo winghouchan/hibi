@@ -1,4 +1,4 @@
-import { database } from '@/database'
+import { database } from '@/data'
 import { and, count, desc, eq } from 'drizzle-orm'
 import {
   fsrs,

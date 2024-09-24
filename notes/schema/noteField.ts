@@ -1,4 +1,4 @@
-import { createdAt } from '@/database/utils'
+import { createdAt } from '@/data/database/utils'
 import { blob, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { note } from './note'
 
