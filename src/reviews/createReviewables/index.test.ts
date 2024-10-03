@@ -1,6 +1,6 @@
 import { schema } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 
 function generateFieldMocks(length: number) {
   return Array.from({ length }, () => {

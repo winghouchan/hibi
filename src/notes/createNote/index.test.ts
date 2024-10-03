@@ -1,5 +1,5 @@
 import { collection } from '@/collections/schema'
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import hashNoteFieldValue from '../hashNoteFieldValue'
 import createNote from '.'
 

@@ -1,6 +1,6 @@
-import * as drizzleOrmExpoSqliteMock from '@/__mocks__/drizzle-orm/expo-sqlite'
-import * as expoSqliteMock from '@/__mocks__/expo-sqlite'
 import { jest } from '@jest/globals'
+import * as drizzleOrmExpoSqliteMock from '__mocks__/drizzle-orm/expo-sqlite'
+import * as expoSqliteMock from '__mocks__/expo-sqlite'
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 
 /**
@@ -78,7 +78,7 @@ export default async function mockDatabase() {
     // now returned which has a different structure from Expo SQLite.
   )) as unknown as DatabaseModuleMock
 
-  migrate(database, { migrationsFolder: './data/database/migrations' })
+  migrate(database, { migrationsFolder: 'src/data/database/migrations' })
 
   return {
     database,

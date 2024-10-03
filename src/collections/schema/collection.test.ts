@@ -1,4 +1,4 @@
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { collection } from './collection'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>

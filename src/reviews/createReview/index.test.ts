@@ -1,4 +1,4 @@
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { desc } from 'drizzle-orm'
 import {
   createEmptyCard,

@@ -1,4 +1,4 @@
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import hashNoteFieldValue from '../hashNoteFieldValue'
 import { note } from './note'
 import { noteField } from './noteField'

@@ -1,6 +1,6 @@
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { note, noteField } from '@/notes/schema'
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { reviewable, reviewableField } from './reviewable'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>

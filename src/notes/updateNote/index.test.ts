@@ -1,5 +1,5 @@
 import { collection, collectionToNote } from '@/collections/schema'
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { eq } from 'drizzle-orm'
 import createNote from '../createNote'
 import { note } from '../schema'

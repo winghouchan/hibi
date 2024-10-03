@@ -1,4 +1,4 @@
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { note } from './note'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>

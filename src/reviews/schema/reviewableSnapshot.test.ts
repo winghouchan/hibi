@@ -1,5 +1,5 @@
 import { note } from '@/notes/schema'
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { review } from './review'
 import { reviewable } from './reviewable'
 import { reviewableSnapshot } from './reviewableSnapshot'

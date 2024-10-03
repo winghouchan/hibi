@@ -10,8 +10,10 @@ const config: JestConfigWithTsJest = {
    * @see {@link https://kulshekhar.github.io/ts-jest/docs/guides/esm-support/ | ts-jest Documentation}
    */
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  moduleDirectories: ['node_modules', '<rootDir>'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
+    '@/(.*)': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['./test/setup.ts'],
   transform: {

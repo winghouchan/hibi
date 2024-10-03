@@ -1,4 +1,4 @@
-import { mockDatabase } from '@/test/utils'
+import { mockDatabase } from 'test/utils'
 import { collection } from '../schema'
 import createCollection from '.'
 
