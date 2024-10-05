@@ -1,0 +1,17 @@
+diff --git a/node_modules/expo-sqlite/android/build.gradle b/node_modules/expo-sqlite/android/build.gradle
+index a43cfac..6533f02 100644
+--- a/node_modules/expo-sqlite/android/build.gradle
++++ b/node_modules/expo-sqlite/android/build.gradle
+@@ -76,6 +76,12 @@ android {
+   buildFeatures {
+     prefab true
+   }
++  packagingOptions {
++    excludes += [
++      "**/libc++_shared.so",
++      "**/libfbjni.so",
++     ]
++  }
+ }
+ 
+ dependencies {

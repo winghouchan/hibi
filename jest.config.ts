@@ -16,6 +16,7 @@ const config: JestConfigWithTsJest = {
     '@/(.*)': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['./test/setup.ts'],
+  testPathIgnorePatterns: ['e2e'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
