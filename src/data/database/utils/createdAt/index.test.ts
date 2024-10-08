@@ -21,11 +21,11 @@ const integer = jest.fn(() => ({
   notNull,
 }))
 
-jest.unstable_mockModule('drizzle-orm/sqlite-core', () => ({
+jest.doMock('drizzle-orm/sqlite-core', () => ({
   integer,
 }))
 
-const { default: createdAt } = await import('.')
+const { default: createdAt } = require('.') // `await import('.')` cannot be used because Jest does not support top-level `await`
 
 describe('createdAt', () => {
   afterEach(() => {

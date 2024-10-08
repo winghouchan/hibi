@@ -122,7 +122,7 @@ test('...', () => {
 To improve the ease of creating a database mock, a utility function called [`mockDatabase`](./index.ts) has been created. It does the following:
 
 1. Resets the Jest module registry (`jest.resetModules()`).
-2. Enables the mocks (`jest.unstable_mockModule(...)`).
+2. Enables the mocks (`jest.doMock(...)`).
 3. Runs database migrations.
 4. Returns the mocked versions of `database`, `nativeDatabase` and a function (`resetDatabaseMock`) that closes the database connection.
 

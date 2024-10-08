@@ -1,3 +1,4 @@
+import { database } from '@/data'
 import { eq } from 'drizzle-orm'
 import { collection } from '../schema/collection'
 
@@ -11,8 +12,6 @@ export default async function updateCollection<Name extends string>({
   id,
   name,
 }: Collection<Name>) {
-  const { database } = await import('@/data')
-
   return (
     await database
       .update(collection)

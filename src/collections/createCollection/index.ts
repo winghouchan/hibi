@@ -1,3 +1,4 @@
+import { database } from '@/data'
 import { collection } from '../schema/collection'
 
 export interface Collection<Name extends string = string>
@@ -8,8 +9,6 @@ export interface Collection<Name extends string = string>
 export default async function createCollection<Name extends string>({
   name,
 }: Collection<Name>) {
-  const { database } = await import('@/data')
-
   const [result] = await database
     .insert(collection)
     .values({ name })

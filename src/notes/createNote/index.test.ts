@@ -1,7 +1,6 @@
 import { collection } from '@/collections/schema'
 import { mockDatabase } from 'test/utils'
 import hashNoteFieldValue from '../hashNoteFieldValue'
-import createNote from '.'
 
 describe('createNote', () => {
   test.each([
@@ -112,6 +111,7 @@ describe('createNote', () => {
     },
   ])('$name', async ({ input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
+    const { default: createNote } = await import('.')
 
     const output = await createNote(input).catch((error) => error)
     const databaseState = await database.query.note.findMany({
@@ -1099,6 +1099,7 @@ describe('createNote', () => {
       },
     ])('$name', async ({ input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
+      const { default: createNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })

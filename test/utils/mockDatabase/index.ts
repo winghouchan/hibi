@@ -65,11 +65,11 @@ export type DatabaseModuleMock = {
  */
 export default async function mockDatabase() {
   jest.resetModules()
-  jest.unstable_mockModule(
-    'drizzle-orm/expo-sqlite',
-    () => drizzleOrmExpoSqliteMock,
-  )
-  jest.unstable_mockModule('expo-sqlite', () => expoSqliteMock)
+  jest.doMock('drizzle-orm/expo-sqlite', () => ({
+    __esModule: true,
+    ...drizzleOrmExpoSqliteMock,
+  }))
+  jest.doMock('expo-sqlite', () => ({ __esModule: true, ...expoSqliteMock }))
 
   // Import `@/data` here because module registry has been reset and dependencies are now mocked
   const { database, nativeDatabase } = (await import(

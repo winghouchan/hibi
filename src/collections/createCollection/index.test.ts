@@ -1,6 +1,5 @@
 import { mockDatabase } from 'test/utils'
 import { collection } from '../schema'
-import createCollection from '.'
 
 describe('createCollection', () => {
   test.each([
@@ -58,6 +57,7 @@ describe('createCollection', () => {
     },
   ])('$name', async ({ fixture, input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
+    const { default: createCollection } = await import('.')
 
     if (fixture) {
       await database.insert(collection).values(fixture)

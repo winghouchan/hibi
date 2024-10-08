@@ -1,14 +1,14 @@
-import { schema as collectionSchema } from '@/collections'
-import { schema as noteSchema } from '@/notes'
-import { schema as reviewSchema } from '@/reviews'
+import * as collectionSchema from '@/collections/schema'
+import * as noteSchema from '@/notes/schema'
+import * as reviewSchema from '@/reviews/schema'
 
 /**
  * Database schema. Import and spread individual schemas into the object below.
  * Example:
  *
  * ```
- * import { schema as featureASchema } from '@/featureA'
- * import { schema as featureBSchema } from '@/featureB'
+ * import * as featureASchema from '@/featureA/schema'
+ * import * as featureBSchema from '@/featureB/schema'
  *
  * const schema = {
  *   ...featureASchema,

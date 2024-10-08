@@ -1,6 +1,6 @@
 import { mockDatabase } from 'test/utils'
 import { collection } from '../schema'
-import updateCollection, { Collection } from '.'
+import { Collection } from '.'
 
 describe('updateCollection', () => {
   test.each([
@@ -77,6 +77,7 @@ describe('updateCollection', () => {
     },
   ])('$name', async ({ fixture, input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
+    const { default: updateCollection } = await import('.')
     const fixtureData =
       fixture && (await database.insert(collection).values(fixture).returning())
     const collectionToUpdate = fixtureData?.[0]

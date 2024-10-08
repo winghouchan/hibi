@@ -1,4 +1,5 @@
 import { collection, collectionToNote } from '@/collections/schema'
+import { database } from '@/data'
 import { createReviewables } from '@/reviews'
 import { reviewable, reviewableField } from '@/reviews/schema'
 import { and, eq, inArray, notInArray } from 'drizzle-orm'
@@ -31,8 +32,6 @@ export default async function updateNote({
   fields: sides,
   config,
 }: UpdateNoteParameters) {
-  const { database } = await import('@/data')
-
   if (collections && collections.length < 1) {
     throw new TypeError('at least 1 collection is required')
   }

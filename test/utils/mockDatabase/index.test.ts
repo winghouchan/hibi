@@ -1,31 +1,39 @@
 import { jest } from '@jest/globals'
 import Database, { SqliteError } from 'better-sqlite3'
+import type MockDatabaseFn from '.'
 
 /**
  * The actual application schema should not be used for these tests so its
  * implementation and the function that does the migration have been mocked out.
  */
-jest.unstable_mockModule('@/data/database/schema', () => ({ default: {} }))
-jest.unstable_mockModule('drizzle-orm/better-sqlite3/migrator', () => ({
+jest.doMock('@/data/database/schema', () => ({ default: {} }))
+jest.doMock('drizzle-orm/better-sqlite3/migrator', () => ({
   migrate: jest.fn(),
 }))
 
-const { default: mockDatabase } = await import('.')
+let mockDatabase: typeof MockDatabaseFn,
+  nativeDatabase: Awaited<ReturnType<typeof MockDatabaseFn>>['nativeDatabase'],
+  resetDatabaseMock: Awaited<
+    ReturnType<typeof MockDatabaseFn>
+  >['resetDatabaseMock']
+
+beforeEach(async () => {
+  ;({ default: mockDatabase } = await import('.'))
+  ;({ nativeDatabase, resetDatabaseMock } = await mockDatabase())
+})
+
+afterEach(() => {
+  resetDatabaseMock()
+})
 
 test('`mockDatabase()` opens an in-memory database', async () => {
-  const { nativeDatabase, resetDatabaseMock } = await mockDatabase()
-
   expect(nativeDatabase).toBeInstanceOf(Database)
   expect(nativeDatabase.name).toBe(':memory:')
   expect(nativeDatabase.open).toBeTrue()
   expect(nativeDatabase.memory).toBeTrue()
-
-  resetDatabaseMock()
 })
 
 test('`resetDatabaseMock()` closes the mocked database', async () => {
-  const { nativeDatabase, resetDatabaseMock } = await mockDatabase()
-
   resetDatabaseMock()
 
   expect(nativeDatabase.open).toBeFalse()
@@ -37,8 +45,6 @@ test('`resetDatabaseMock()` closes the mocked database', async () => {
 })
 
 test('`mockDatabase()` after `resetDatabaseMock()` creates an isolated database', async () => {
-  let { nativeDatabase, resetDatabaseMock } = await mockDatabase()
-
   function createTableMock() {
     return nativeDatabase
       .prepare(`CREATE TABLE mock_table (mock_column INTEGER PRIMARY KEY)`)

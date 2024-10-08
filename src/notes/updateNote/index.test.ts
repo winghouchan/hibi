@@ -1,9 +1,7 @@
 import { collection, collectionToNote } from '@/collections/schema'
-import { mockDatabase } from 'test/utils'
 import { eq } from 'drizzle-orm'
-import createNote from '../createNote'
+import { mockDatabase } from 'test/utils'
 import { note } from '../schema'
-import updateNote from '.'
 
 describe('updateNote', () => {
   test.each([
@@ -85,6 +83,8 @@ describe('updateNote', () => {
     },
   ])('$name', async ({ input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
+    const { default: createNote } = await import('../createNote')
+    const { default: updateNote } = await import('.')
     const [{ collectionId }] = await database
       .insert(collection)
       .values({ name: 'Collection Name' })
@@ -169,6 +169,7 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
+      const { default: updateNote } = await import('.')
       const collections = await database
         .insert(collection)
         .values(fixture.collections.map((name) => ({ name })))
@@ -3030,6 +3031,8 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
+      const { default: createNote } = await import('../createNote')
+      const { default: updateNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })
@@ -3464,6 +3467,8 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
+      const { default: createNote } = await import('../createNote')
+      const { default: updateNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })
@@ -3904,6 +3909,8 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
+      const { default: createNote } = await import('../createNote')
+      const { default: updateNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })
