@@ -27,12 +27,13 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.test.{js,jsx,ts,tsx}'],
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
       plugins: ['jest', 'jest-extended'],
       extends: [
         'plugin:jest/recommended',
         'plugin:jest/style',
         'plugin:jest-extended/all',
+        'plugin:testing-library/react',
       ],
     },
   ],
