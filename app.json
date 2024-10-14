@@ -28,7 +28,12 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["@config-plugins/detox", "expo-font", "expo-router"],
+    "plugins": [
+      "@config-plugins/detox",
+      "expo-font",
+      "expo-localization",
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": true
     }

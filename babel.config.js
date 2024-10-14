@@ -15,6 +15,13 @@ module.exports = function (api) {
        */
       ['inline-import', { extensions: ['.sql'] }],
 
+      /**
+       * Enables transformation of JS objects and JSX elements into ICU MessageFormat messages
+       *
+       * @see {@link https://lingui.dev/ref/macro}
+       */
+      'macros',
+
       ...(api.env('test')
         ? // Additionally apply the following configuration when `NODE_ENV` is `'test'`
           [
@@ -25,6 +32,19 @@ module.exports = function (api) {
              * @see {@link https://www.npmjs.com/package/babel-plugin-dynamic-import-node}
              */
             ['dynamic-import-node', { noInterop: true }],
+
+            /**
+             * Enables the usage of the `require.context` function
+             *
+             * The `require.context` function enables the behaviour of dynamically
+             * importing from a path determined at runtime (`await import(variable)`).
+             * It is used because Metro bundler has no support for the ESM syntax.
+             * To get `require.context` working in Jest tests, this Babel plugin
+             * is required.
+             *
+             * @see {@link https://github.com/facebook/metro/issues/52}
+             */
+            ['require-context-hook'],
           ]
         : []),
     ],

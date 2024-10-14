@@ -1,9 +1,10 @@
-import { Text, View } from 'react-native'
+import { Trans } from '@lingui/macro'
+import { View } from 'react-native'
 
 export default function App() {
   return (
     <View>
-      <Text>Hibi</Text>
+      <Trans>Hibi</Trans>
     </View>
   )
 }

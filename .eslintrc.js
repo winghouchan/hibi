@@ -36,5 +36,20 @@ module.exports = {
         'plugin:testing-library/react',
       ],
     },
+    {
+      files: ['src/**/!(*.spec|*.test).{js,jsx,ts,tsx}'],
+      plugins: ['lingui'],
+      rules: {
+        'lingui/no-unlocalized-strings': [
+          'error',
+          { ignoreFunction: ['Error', 'TypeError'] },
+        ],
+        'lingui/t-call-in-function': 'error',
+        'lingui/no-single-variables-to-translate': 'error',
+        'lingui/no-expression-in-message': 'error',
+        'lingui/no-single-tag-to-translate': 'error',
+        'lingui/no-trans-inside-trans': 'error',
+      },
+    },
   ],
 }
