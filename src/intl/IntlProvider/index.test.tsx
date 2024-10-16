@@ -207,197 +207,99 @@ describe('<IntlProvider />', () => {
     mockLocalePreference([])
   })
 
-  describe('on initial render', () => {
-    it('uses the default locale', async () => {
-      await jest.isolateModulesAsync(async () => {
-        mockLocalizedMessages({
+  test.each([
+    {
+      name: 'on initial render, uses the default locale',
+      fixture: {
+        messages: {
           [unexpectedLocaleMock.data.languageTag]:
             unexpectedLocaleMock.messages,
           [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-        })
+        },
+      },
+      expected: defaultLocaleMock.messages[messageKeyMock],
+    },
+    {
+      name: 'when a single locale preference is returned and the locale preference is supported, uses the preferred locale',
+      fixture: {
+        messages: {
+          [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
+          [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
+        },
+        preference: [expectedLocaleMock.data],
+      },
+      expected: expectedLocaleMock.messages[messageKeyMock],
+    },
+    {
+      name: 'when a single locale preference is returned and the locale preference is not supported, uses the default locale',
+      fixture: {
+        messages: {
+          [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
+        },
+        preference: [unsupportedLocaleMock.data],
+      },
+      expected: defaultLocaleMock.messages[messageKeyMock],
+    },
+    {
+      name: 'when multiple locale preferences are returned and the supported locale is the first in the list of locale preferences, uses the preferred locale',
+      fixture: {
+        messages: {
+          [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
+          [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
+        },
+        preference: [expectedLocaleMock.data, unsupportedLocaleMock.data],
+      },
+      expected: expectedLocaleMock.messages[messageKeyMock],
+    },
+    {
+      name: 'when multiple locale preferences are returned and the supported locale is not the first in the list of locale preferences, uses the first supported preferred locale',
+      fixture: {
+        messages: {
+          [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
+          [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
+        },
+        preference: [unsupportedLocaleMock.data, expectedLocaleMock.data],
+      },
+      expected: expectedLocaleMock.messages[messageKeyMock],
+    },
+    {
+      name: 'when multiple locale preferences are returned and there are multiple supported locales, uses the first supported preferred locale',
+      fixture: {
+        messages: {
+          [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
+          [supportedLocaleMock.data.languageTag]: supportedLocaleMock.messages,
+          [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
+        },
+        preference: [expectedLocaleMock.data, supportedLocaleMock.data],
+      },
+      expected: expectedLocaleMock.messages[messageKeyMock],
+    },
+    {
+      name: 'when multiple locale preferences are returned and no locale preferences are supported, uses the default locale',
+      fixture: {
+        messages: {
+          [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
+        },
+        preference: [unsupportedLocaleMock.data, unsupportedLocaleMock.data],
+      },
+      expected: defaultLocaleMock.messages[messageKeyMock],
+    },
+  ])('$name', async ({ fixture, expected }) => {
+    await jest.isolateModulesAsync(async () => {
+      mockLocalizedMessages(fixture.messages)
 
-        const { Trans } = await import('@lingui/react')
-        const { default: IntlProvider } = await import('.')
+      fixture.preference && mockLocalePreference(fixture.preference)
 
-        render(
-          <IntlProvider>
-            <Trans id={messageKeyMock} />
-          </IntlProvider>,
-        )
+      const { Trans } = await import('@lingui/react')
+      const { default: IntlProvider } = await import('.')
 
-        expect(
-          screen.getByText(defaultLocaleMock.messages[messageKeyMock]),
-        ).toBeOnTheScreen()
-      })
-    })
-  })
+      render(
+        <IntlProvider>
+          <Trans id={messageKeyMock} />
+        </IntlProvider>,
+      )
 
-  describe('when a single locale preference is returned', () => {
-    describe('and the locale preference is supported', () => {
-      it('uses the preferred locale', async () => {
-        await jest.isolateModulesAsync(async () => {
-          mockLocalizedMessages({
-            [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
-            [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-          })
-
-          mockLocalePreference([expectedLocaleMock.data])
-
-          const { Trans } = await import('@lingui/react')
-          const { default: IntlProvider } = await import('.')
-
-          render(
-            <IntlProvider>
-              <Trans id={messageKeyMock} />
-            </IntlProvider>,
-          )
-
-          expect(
-            screen.getByText(expectedLocaleMock.messages[messageKeyMock]),
-          ).toBeOnTheScreen()
-        })
-      })
-    })
-
-    describe('and the locale preference is not supported', () => {
-      it('uses the default locale', async () => {
-        await jest.isolateModulesAsync(async () => {
-          mockLocalizedMessages({
-            [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-          })
-
-          mockLocalePreference([unsupportedLocaleMock.data])
-
-          const { Trans } = await import('@lingui/react')
-          const { default: IntlProvider } = await import('.')
-
-          render(
-            <IntlProvider>
-              <Trans id={messageKeyMock} />
-            </IntlProvider>,
-          )
-
-          expect(
-            screen.getByText(defaultLocaleMock.messages[messageKeyMock]),
-          ).toBeOnTheScreen()
-        })
-      })
-    })
-  })
-
-  describe('when multiple locale preferences are returned', () => {
-    describe('and the supported locale is the first in the list of locale preferences', () => {
-      it('uses the preferred locale', async () => {
-        await jest.isolateModulesAsync(async () => {
-          mockLocalizedMessages({
-            [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
-            [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-          })
-
-          mockLocalePreference([
-            expectedLocaleMock.data,
-            unsupportedLocaleMock.data,
-          ])
-
-          const { Trans } = await import('@lingui/react')
-          const { default: IntlProvider } = await import('.')
-
-          render(
-            <IntlProvider>
-              <Trans id={messageKeyMock} />
-            </IntlProvider>,
-          )
-
-          expect(
-            screen.getByText(expectedLocaleMock.messages[messageKeyMock]),
-          ).toBeOnTheScreen()
-        })
-      })
-    })
-
-    describe('and the supported locale is not the first in the list of locale preferences', () => {
-      it('uses the first supported locale', async () => {
-        await jest.isolateModulesAsync(async () => {
-          mockLocalizedMessages({
-            [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
-            [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-          })
-
-          mockLocalePreference([
-            unsupportedLocaleMock.data,
-            expectedLocaleMock.data,
-          ])
-
-          const { Trans } = await import('@lingui/react')
-          const { default: IntlProvider } = await import('.')
-
-          render(
-            <IntlProvider>
-              <Trans id={messageKeyMock} />
-            </IntlProvider>,
-          )
-
-          expect(
-            screen.getByText(expectedLocaleMock.messages[messageKeyMock]),
-          ).toBeOnTheScreen()
-        })
-      })
-    })
-
-    describe('and there are multiple supported locales', () => {
-      it('uses the first supported locale', async () => {
-        await jest.isolateModulesAsync(async () => {
-          mockLocalizedMessages({
-            [expectedLocaleMock.data.languageTag]: expectedLocaleMock.messages,
-            [supportedLocaleMock.data.languageTag]:
-              supportedLocaleMock.messages,
-            [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-          })
-
-          mockLocalePreference([
-            expectedLocaleMock.data,
-            supportedLocaleMock.data,
-          ])
-
-          const { Trans } = await import('@lingui/react')
-          const { default: IntlProvider } = await import('.')
-
-          render(
-            <IntlProvider>
-              <Trans id={messageKeyMock} />
-            </IntlProvider>,
-          )
-
-          expect(
-            screen.getByText(expectedLocaleMock.messages[messageKeyMock]),
-          ).toBeOnTheScreen()
-        })
-      })
-    })
-
-    describe('when no locale preferences are supported', () => {
-      it('uses the default locale', async () => {
-        await jest.isolateModulesAsync(async () => {
-          mockLocalizedMessages({
-            [defaultLocaleMock.data.languageTag]: defaultLocaleMock.messages,
-          })
-
-          const { Trans } = await import('@lingui/react')
-          const { default: IntlProvider } = await import('.')
-
-          mockLocalePreference([unsupportedLocaleMock.data])
-
-          render(
-            <IntlProvider>
-              <Trans id={messageKeyMock} />
-            </IntlProvider>,
-          )
-
-          expect(
-            screen.getByText(defaultLocaleMock.messages[messageKeyMock]),
-          ).toBeOnTheScreen()
-        })
-      })
+      expect(screen.getByText(expected)).toBeOnTheScreen()
     })
   })
 
