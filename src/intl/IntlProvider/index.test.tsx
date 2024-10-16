@@ -136,6 +136,11 @@ describe('<IntlProvider />', () => {
 
   beforeEach(async () => {
     /**
+     * This test suite defines its own mocks of Expo Localization APIs
+     */
+    jest.unmock('expo-localization')
+
+    /**
      * Empty native module mock, required for creating an event emitter mock.
      */
     const nativeModuleMock = {}

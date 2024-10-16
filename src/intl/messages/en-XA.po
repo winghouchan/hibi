@@ -13,6 +13,26 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/app/index.tsx:7
+#: src/home/HomeScreen.tsx:7
 msgid "Hibi"
+msgstr ""
+
+#: src/onboarding/WelcomeScreen/index.tsx:23
+msgid "Something went wrong"
+msgstr ""
+
+#: src/onboarding/WelcomeScreen/index.tsx:43
+msgid "Start"
+msgstr ""
+
+#: src/onboarding/WelcomeScreen/index.tsx:24
+msgid "There was a failure getting your onboarding status"
+msgstr ""
+
+#: src/onboarding/WelcomeScreen/index.tsx:25
+msgid "Try again"
+msgstr ""
+
+#: src/onboarding/WelcomeScreen/index.tsx:38
+msgid "Welcome"
 msgstr ""
