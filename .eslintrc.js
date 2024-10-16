@@ -4,6 +4,7 @@ module.exports = {
     'expo',
     'plugin:import/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
+    'plugin:react-native-a11y/all',
     'prettier',
   ],
   plugins: ['prettier'],
@@ -23,7 +24,19 @@ module.exports = {
         ],
       },
     ],
+
     'prettier/prettier': 'error',
+
+    /**
+     * Disable the requirement for accessibility hints.
+     *
+     * Accessibility hints are only needed when the accessibility label by itself
+     * does not provide enough context.
+     *
+     * @see {@link https://reactnative.dev/docs/accessibility#accessibilityhint | React Native documentation on the `accessibilityHint` prop}
+     * @see {@link https://github.com/FormidableLabs/eslint-plugin-react-native-a11y/blob/b945d94a440f75f103bc4bc81ed494682b501ee0/docs/rules/has-accessibility-hint.md | eslint-plugin-react-native-a11y documentation on the `has-accessibility-hint` rule}
+     */
+    'react-native-a11y/has-accessibility-hint': 'off',
   },
   overrides: [
     {
