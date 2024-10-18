@@ -10,3 +10,7 @@ export const Link = jest.fn((props) => <ExpoRouter.Link {...props} />)
 export const Redirect = jest.fn((props) => <ExpoRouter.Redirect {...props} />)
 
 export const Tabs = jest.fn((props) => <ExpoRouter.Tabs {...props} />)
+
+export const router = ExpoRouter.router
+
+export const useNavigation = jest.fn(ExpoRouter.useNavigation)

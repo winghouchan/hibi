@@ -1,5 +1,1 @@
-import { View } from 'react-native'
-
-export default function OnboardingCollection() {
-  return <View />
-}
+export { CreateCollectionScreen as default } from '@/onboarding'

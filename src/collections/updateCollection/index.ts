@@ -1,22 +1,2 @@
-import { database } from '@/data'
-import { eq } from 'drizzle-orm'
-import { collection } from '../schema/collection'
-
-export interface Collection<Name extends string = string>
-  extends Omit<typeof collection.$inferInsert, 'createdAt'> {
-  id: number
-  name: Name extends '' ? never : Name
-}
-
-export default async function updateCollection<Name extends string>({
-  id,
-  name,
-}: Collection<Name>) {
-  return (
-    await database
-      .update(collection)
-      .set({ name })
-      .where(eq(collection.id, id))
-      .returning()
-  )[0]
-}
+export { default as updateCollection } from './updateCollection'
+export { default as updateCollectionMutation } from './updateCollectionMutation'
