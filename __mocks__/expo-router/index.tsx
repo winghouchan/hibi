@@ -14,3 +14,5 @@ export const Tabs = jest.fn((props) => <ExpoRouter.Tabs {...props} />)
 export const router = ExpoRouter.router
 
 export const useNavigation = jest.fn(ExpoRouter.useNavigation)
+
+export const useRouter = jest.fn(ExpoRouter.useRouter)

@@ -6,7 +6,7 @@ describe('Onboarding', () => {
       await device.launchApp({ delete: true })
     })
 
-    test('the onboarding journey can be started', async () => {
+    test('the onboarding journey can be completed', async () => {
       await expect(element(by.id('onboarding.welcome.screen'))).toBeVisible()
 
       await element(by.id('onboarding.welcome.cta.button')).tap()
@@ -19,7 +19,21 @@ describe('Onboarding', () => {
       await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
       await element(by.id('onboarding.notes.new-note.button')).tap()
-      await expect(element(by.id('onboarding.new-note.screen'))).toBeVisible()
+      await expect(
+        element(by.id('onboarding.note-editor.screen')),
+      ).toBeVisible()
+
+      await element(
+        by.id('onboarding.note-editor.side-0.field-0.input'),
+      ).typeText('Front 1')
+      await element(
+        by.id('onboarding.note-editor.side-1.field-0.input'),
+      ).typeText('Back 1')
+      await element(by.id('onboarding.note-editor.cta.button')).tap()
+      await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+      await element(by.id('onboarding.notes.cta.button')).tap()
+      await expect(element(by.id('home.screen'))).toBeVisible()
     })
   })
 
