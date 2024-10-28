@@ -83,7 +83,7 @@ describe('updateNote', () => {
     },
   ])('$name', async ({ input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: createNote } = await import('../createNote')
+    const { createNote } = await import('../createNote')
     const { default: updateNote } = await import('.')
     const [{ collectionId }] = await database
       .insert(collection)
@@ -3031,7 +3031,7 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: createNote } = await import('../createNote')
+      const { createNote } = await import('../createNote')
       const { default: updateNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)
@@ -3467,7 +3467,7 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: createNote } = await import('../createNote')
+      const { createNote } = await import('../createNote')
       const { default: updateNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)
@@ -3909,7 +3909,7 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: createNote } = await import('../createNote')
+      const { createNote } = await import('../createNote')
       const { default: updateNote } = await import('.')
       const [{ collectionId }] = await database
         .insert(collection)

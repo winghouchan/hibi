@@ -1,2 +1,2 @@
-export { default as createNote } from './createNote'
+export * from './createNote'
 export * as schema from './schema'

@@ -13,12 +13,17 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/onboarding/CreateNotesScreen/index.tsx:69
+msgid "Add another note"
+msgstr "Add another note"
+
 #: src/onboarding/CreateCollectionScreen/index.tsx:123
 msgid "Back"
 msgstr "Back"
 
 #: src/onboarding/CreateCollectionScreen/index.tsx:79
 #: src/onboarding/CreateCollectionScreen/index.tsx:111
+#: src/onboarding/CreateNotesScreen/index.tsx:50
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -34,12 +39,21 @@ msgstr "Create collection"
 msgid "Enter a collection name"
 msgstr "Enter a collection name"
 
+#: src/onboarding/CreateNotesScreen/index.tsx:76
+msgid "Finish"
+msgstr "Finish"
+
 #: src/home/HomeScreen.tsx:7
 msgid "Hibi"
 msgstr "Hibi"
 
+#: src/onboarding/CreateNotesScreen/index.tsx:84
+msgid "New note"
+msgstr "New note"
+
 #: src/onboarding/CreateCollectionScreen/index.tsx:65
 #: src/onboarding/CreateCollectionScreen/index.tsx:99
+#: src/onboarding/CreateNotesScreen/index.tsx:38
 #: src/onboarding/WelcomeScreen/index.tsx:23
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -53,6 +67,7 @@ msgid "Submitting"
 msgstr "Submitting"
 
 #: src/onboarding/CreateCollectionScreen/index.tsx:100
+#: src/onboarding/CreateNotesScreen/index.tsx:39
 msgid "There was a failure getting your onboarding collection"
 msgstr "There was a failure getting your onboarding collection"
 
@@ -70,6 +85,7 @@ msgstr "There was an error updating the collection"
 
 #: src/onboarding/CreateCollectionScreen/index.tsx:71
 #: src/onboarding/CreateCollectionScreen/index.tsx:103
+#: src/onboarding/CreateNotesScreen/index.tsx:42
 #: src/onboarding/WelcomeScreen/index.tsx:25
 msgid "Try again"
 msgstr "Try again"

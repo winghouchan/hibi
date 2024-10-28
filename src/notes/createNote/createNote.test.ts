@@ -111,7 +111,7 @@ describe('createNote', () => {
     },
   ])('$name', async ({ input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: createNote } = await import('.')
+    const { default: createNote } = await import('./createNote')
 
     const output = await createNote(input).catch((error) => error)
     const databaseState = await database.query.note.findMany({
@@ -1099,7 +1099,7 @@ describe('createNote', () => {
       },
     ])('$name', async ({ input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: createNote } = await import('.')
+      const { default: createNote } = await import('./createNote')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })

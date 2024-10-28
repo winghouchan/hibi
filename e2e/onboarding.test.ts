@@ -17,6 +17,9 @@ describe('Onboarding', () => {
       )
       await element(by.id('onboarding.collection.cta.button')).tap()
       await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+      await element(by.id('onboarding.notes.new-note.button')).tap()
+      await expect(element(by.id('onboarding.new-note.screen'))).toBeVisible()
     })
   })
 
