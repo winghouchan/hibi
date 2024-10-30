@@ -84,7 +84,7 @@ describe('updateNote', () => {
   ])('$name', async ({ input, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
     const { createNote } = await import('../createNote')
-    const { default: updateNote } = await import('.')
+    const { default: updateNote } = await import('./updateNote')
     const [{ collectionId }] = await database
       .insert(collection)
       .values({ name: 'Collection Name' })
@@ -169,7 +169,7 @@ describe('updateNote', () => {
       },
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: updateNote } = await import('.')
+      const { default: updateNote } = await import('./updateNote')
       const collections = await database
         .insert(collection)
         .values(fixture.collections.map((name) => ({ name })))
@@ -3032,7 +3032,7 @@ describe('updateNote', () => {
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
       const { createNote } = await import('../createNote')
-      const { default: updateNote } = await import('.')
+      const { default: updateNote } = await import('./updateNote')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })
@@ -3468,7 +3468,7 @@ describe('updateNote', () => {
     ])('$name', async ({ fixture, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
       const { createNote } = await import('../createNote')
-      const { default: updateNote } = await import('.')
+      const { default: updateNote } = await import('./updateNote')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })
@@ -3910,7 +3910,7 @@ describe('updateNote', () => {
     ])('$name', async ({ fixture, input, expected }) => {
       const { database, resetDatabaseMock } = await mockDatabase()
       const { createNote } = await import('../createNote')
-      const { default: updateNote } = await import('.')
+      const { default: updateNote } = await import('./updateNote')
       const [{ collectionId }] = await database
         .insert(collection)
         .values({ name: 'Collection Name' })

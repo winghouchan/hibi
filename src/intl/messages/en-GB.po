@@ -17,11 +17,11 @@ msgstr ""
 msgid "Add another note"
 msgstr "Add another note"
 
-#: src/onboarding/NoteEditor/index.tsx:112
+#: src/onboarding/NoteEditor/index.tsx:183
 msgid "Add field"
 msgstr "Add field"
 
-#: src/onboarding/NoteEditor/index.tsx:123
+#: src/onboarding/NoteEditor/index.tsx:194
 msgid "Add note"
 msgstr "Add note"
 
@@ -32,7 +32,8 @@ msgstr "Back"
 #: src/onboarding/CreateCollectionScreen/index.tsx:79
 #: src/onboarding/CreateCollectionScreen/index.tsx:111
 #: src/onboarding/CreateNotesScreen/index.tsx:50
-#: src/onboarding/NoteEditor/index.tsx:62
+#: src/onboarding/NoteEditor/index.tsx:85
+#: src/onboarding/NoteEditor/index.tsx:111
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -48,11 +49,11 @@ msgstr "Create collection"
 msgid "Enter a collection name"
 msgstr "Enter a collection name"
 
-#: src/onboarding/NoteEditor/index.tsx:93
+#: src/onboarding/NoteEditor/index.tsx:164
 msgid "Enter field data for side {0} field {1}"
 msgstr "Enter field data for side {0} field {1}"
 
-#: src/onboarding/NoteEditor/index.tsx:96
+#: src/onboarding/NoteEditor/index.tsx:167
 msgid "Field data for field side {0} {1}"
 msgstr "Field data for field side {0} {1}"
 
@@ -68,14 +69,19 @@ msgstr "Hibi"
 msgid "New note"
 msgstr "New note"
 
-#: src/onboarding/NoteEditor/index.tsx:87
+#: src/onboarding/NoteEditor/index.tsx:125
+msgid "OK"
+msgstr "OK"
+
+#: src/onboarding/NoteEditor/index.tsx:158
 msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
 #: src/onboarding/CreateCollectionScreen/index.tsx:65
 #: src/onboarding/CreateCollectionScreen/index.tsx:99
 #: src/onboarding/CreateNotesScreen/index.tsx:38
-#: src/onboarding/NoteEditor/index.tsx:50
+#: src/onboarding/NoteEditor/index.tsx:73
+#: src/onboarding/NoteEditor/index.tsx:99
 #: src/onboarding/WelcomeScreen/index.tsx:23
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -88,9 +94,17 @@ msgstr "Start"
 msgid "Submitting"
 msgstr "Submitting"
 
+#: src/onboarding/NoteEditor/index.tsx:123
+msgid "The note doesn't exist"
+msgstr "The note doesn't exist"
+
+#: src/onboarding/NoteEditor/index.tsx:100
+msgid "There was a failure getting the note"
+msgstr "There was a failure getting the note"
+
 #: src/onboarding/CreateCollectionScreen/index.tsx:100
 #: src/onboarding/CreateNotesScreen/index.tsx:39
-#: src/onboarding/NoteEditor/index.tsx:51
+#: src/onboarding/NoteEditor/index.tsx:74
 msgid "There was a failure getting your onboarding collection"
 msgstr "There was a failure getting your onboarding collection"
 
@@ -109,7 +123,8 @@ msgstr "There was an error updating the collection"
 #: src/onboarding/CreateCollectionScreen/index.tsx:71
 #: src/onboarding/CreateCollectionScreen/index.tsx:103
 #: src/onboarding/CreateNotesScreen/index.tsx:42
-#: src/onboarding/NoteEditor/index.tsx:54
+#: src/onboarding/NoteEditor/index.tsx:77
+#: src/onboarding/NoteEditor/index.tsx:103
 #: src/onboarding/WelcomeScreen/index.tsx:25
 msgid "Try again"
 msgstr "Try again"
@@ -117,6 +132,10 @@ msgstr "Try again"
 #: src/onboarding/CreateCollectionScreen/index.tsx:148
 msgid "Update collection"
 msgstr "Update collection"
+
+#: src/onboarding/NoteEditor/index.tsx:194
+msgid "Update note"
+msgstr "Update note"
 
 #: src/onboarding/WelcomeScreen/index.tsx:38
 msgid "Welcome"
