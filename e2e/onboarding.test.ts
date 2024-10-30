@@ -198,5 +198,41 @@ describe('Onboarding', () => {
         await expect(element(by.id('home.screen'))).toBeVisible()
       })
     })
+
+    describe('and the app is opened at the collection creation step', () => {
+      test('the user is redirected to the home screen', async () => {
+        await device.launchApp({
+          delete: true,
+          url: 'hibi://onboarding/collection',
+          launchArgs: { databaseFixture: 'onboarding/complete' },
+        })
+
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
+
+    describe('and the app is opened at the note creation step', () => {
+      test('the user is redirected to the home screen', async () => {
+        await device.launchApp({
+          delete: true,
+          url: 'hibi://onboarding/notes',
+          launchArgs: { databaseFixture: 'onboarding/complete' },
+        })
+
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
+
+    describe('and the app is opened in the note editor', () => {
+      test('the user is redirected to the home screen', async () => {
+        await device.launchApp({
+          delete: true,
+          url: 'hibi://onboarding/notes/new',
+          launchArgs: { databaseFixture: 'onboarding/complete' },
+        })
+
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
   })
 })
