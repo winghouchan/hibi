@@ -1,52 +1,202 @@
 import { by, device, element, expect } from 'detox'
 
 describe('Onboarding', () => {
-  describe('when incomplete', () => {
-    beforeAll(async () => {
-      await device.launchApp({ delete: true })
+  describe('when not started', () => {
+    describe('and the app is opened at the index', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({ delete: true })
+
+        await expect(element(by.id('onboarding.welcome.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.welcome.cta.button')).tap()
+        await expect(
+          element(by.id('onboarding.collection.screen')),
+        ).toBeVisible()
+
+        await element(by.id('onboarding.collection.name.input')).typeText(
+          'Collection Name',
+        )
+        await element(by.id('onboarding.collection.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.new-note.button')).tap()
+        await expect(
+          element(by.id('onboarding.note-editor.screen')),
+        ).toBeVisible()
+
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
     })
 
-    test('the onboarding journey can be completed', async () => {
-      await expect(element(by.id('onboarding.welcome.screen'))).toBeVisible()
+    describe('and the app is opened at the collection creation step', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({
+          delete: true,
+          url: 'hibi://onboarding/collection',
+        })
 
-      await element(by.id('onboarding.welcome.cta.button')).tap()
-      await expect(element(by.id('onboarding.collection.screen'))).toBeVisible()
+        await expect(
+          element(by.id('onboarding.collection.screen')),
+        ).toBeVisible()
 
-      await element(by.id('onboarding.collection.name.input')).typeText(
-        'Collection Name',
-      )
-      await element(by.id('onboarding.collection.cta.button')).tap()
-      await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+        await element(by.id('onboarding.collection.name.input')).typeText(
+          'Collection Name',
+        )
+        await element(by.id('onboarding.collection.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
-      await element(by.id('onboarding.notes.new-note.button')).tap()
-      await expect(
-        element(by.id('onboarding.note-editor.screen')),
-      ).toBeVisible()
+        await element(by.id('onboarding.notes.new-note.button')).tap()
+        await expect(
+          element(by.id('onboarding.note-editor.screen')),
+        ).toBeVisible()
 
-      await element(
-        by.id('onboarding.note-editor.side-0.field-0.input'),
-      ).typeText('Front 1')
-      await element(
-        by.id('onboarding.note-editor.side-1.field-0.input'),
-      ).typeText('Back 1')
-      await element(by.id('onboarding.note-editor.cta.button')).tap()
-      await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
-      await element(by.id('onboarding.notes.cta.button')).tap()
-      await expect(element(by.id('home.screen'))).toBeVisible()
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
+
+    describe('and the app is opened at the notes creation step', () => {
+      test('the user is redirected to the welcome screen', async () => {
+        await device.launchApp({
+          delete: true,
+          url: 'hibi://onboarding/notes',
+        })
+
+        await expect(element(by.id('onboarding.welcome.screen'))).toBeVisible()
+      })
+    })
+  })
+
+  describe('when a collection has been created', () => {
+    describe('and the app is opened at the index', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'onboarding/collection-created' },
+        })
+
+        await expect(element(by.id('onboarding.welcome.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.welcome.cta.button')).tap()
+        await expect(
+          element(by.id('onboarding.collection.screen')),
+        ).toBeVisible()
+
+        await element(by.id('onboarding.collection.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.new-note.button')).tap()
+        await expect(
+          element(by.id('onboarding.note-editor.screen')),
+        ).toBeVisible()
+
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
+
+    describe('and the app is opened at the collection creation step', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'onboarding/collection-created' },
+          url: 'hibi://onboarding/collection',
+        })
+
+        await expect(
+          element(by.id('onboarding.collection.screen')),
+        ).toBeVisible()
+
+        await element(by.id('onboarding.collection.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.new-note.button')).tap()
+        await expect(
+          element(by.id('onboarding.note-editor.screen')),
+        ).toBeVisible()
+
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
+
+    describe('and the app is opened at the notes creation step', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'onboarding/collection-created' },
+          url: 'hibi://onboarding/notes',
+        })
+
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.new-note.button')).tap()
+        await expect(
+          element(by.id('onboarding.note-editor.screen')),
+        ).toBeVisible()
+
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
     })
   })
 
   describe('when complete', () => {
-    beforeAll(async () => {
-      await device.launchApp({
-        delete: true,
-        launchArgs: { databaseFixture: 'onboarding/complete' },
-      })
-    })
+    describe('and the app is opened at the index', () => {
+      test('shows the home screen', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'onboarding/complete' },
+        })
 
-    test('on app open, shows the home screen', async () => {
-      await expect(element(by.id('home.screen'))).toBeVisible()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
     })
   })
 })
