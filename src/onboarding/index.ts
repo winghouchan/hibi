@@ -1,6 +1,8 @@
 export { default as CreateCollectionScreen } from './CreateCollectionScreen'
 export { default as CreateNotesScreen } from './CreateNotesScreen'
+export { default as IndexScreen } from './IndexScreen'
 export { isOnboardingCompleteQuery } from './isOnboardingComplete'
 export { default as OnboardingLayout } from './Layout'
 export { default as NoteEditor } from './NoteEditor'
+export { onboardingCollectionQuery } from './onboardingCollection'
 export { default as WelcomeScreen } from './WelcomeScreen'
