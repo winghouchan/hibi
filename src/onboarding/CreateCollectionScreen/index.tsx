@@ -7,7 +7,6 @@ import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, useNavigation } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
-import { useEffect } from 'react'
 import { Alert, Pressable, TextInput, View } from 'react-native'
 import { onboardingCollectionQuery } from '../onboardingCollection'
 
@@ -15,12 +14,7 @@ export default function CreateCollectionScreen() {
   const { i18n } = useLingui()
   const navigation = useNavigation()
   const queryClient = useQueryClient()
-  const {
-    data: collection,
-    isFetching,
-    error,
-    refetch: refetchOnboardingCollection,
-  } = useQuery(onboardingCollectionQuery)
+  const { data: collection } = useQuery(onboardingCollectionQuery)
   const { mutateAsync: createCollection } = useMutation(
     createCollectionMutation,
   )
@@ -91,31 +85,6 @@ export default function CreateCollectionScreen() {
       // Errors handled by `submit`'s error handler
     }
   }
-
-  useEffect(() => {
-    if (!isFetching && error) {
-      // @todo Handle error
-      Alert.alert(
-        i18n.t(msg`Something went wrong`),
-        i18n.t(msg`There was a failure getting your onboarding collection`),
-        [
-          {
-            text: i18n.t(msg`Try again`),
-            style: 'default',
-            isPreferred: true,
-            onPress: () => {
-              refetchOnboardingCollection()
-            },
-          },
-          {
-            text: i18n.t(msg`Cancel`),
-            style: 'cancel',
-          },
-        ],
-      )
-      console.error(error)
-    }
-  }, [error, i18n, isFetching, refetchOnboardingCollection])
 
   return (
     <View testID="onboarding.collection.screen">

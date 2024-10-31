@@ -1,20 +1,12 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/macro'
 import { type NavigationProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
-import { useEffect } from 'react'
-import { Alert, Pressable, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { onboardingCollectionQuery } from '../onboardingCollection'
 
 export default function CreateNotesScreen() {
-  const { i18n } = useLingui()
-  const {
-    data: collection,
-    error,
-    isFetching,
-    refetch: refetchOnboardingCollection,
-  } = useQuery(onboardingCollectionQuery)
+  const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
   const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()
 
   const completeOnboarding = () => {
@@ -30,31 +22,6 @@ export default function CreateNotesScreen() {
       ],
     })
   }
-
-  useEffect(() => {
-    if (!isFetching && error) {
-      // @todo Handle error
-      Alert.alert(
-        i18n.t(msg`Something went wrong`),
-        i18n.t(msg`There was a failure getting your onboarding collection`),
-        [
-          {
-            text: i18n.t(msg`Try again`),
-            style: 'default',
-            isPreferred: true,
-            onPress: () => {
-              refetchOnboardingCollection()
-            },
-          },
-          {
-            text: i18n.t(msg`Cancel`),
-            style: 'cancel',
-          },
-        ],
-      )
-      console.error(error)
-    }
-  }, [error, i18n, isFetching, refetchOnboardingCollection])
 
   return collection && !isFetching ? (
     <View testID="onboarding.notes.screen">

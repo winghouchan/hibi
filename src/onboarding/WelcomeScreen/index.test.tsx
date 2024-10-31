@@ -1,4 +1,4 @@
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
@@ -85,9 +85,7 @@ describe('<WelcomeScreen />', () => {
 
       render(<WelcomeScreen />, { wrapper: mockAppRoot() })
 
-      await waitFor(() => {
-        expect(alertSpy).toHaveBeenCalledOnce()
-      })
+      await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
     })
   })
 })

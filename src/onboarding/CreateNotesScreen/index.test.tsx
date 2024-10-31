@@ -258,9 +258,7 @@ describe('<CreateNotesScreen />', () => {
         },
       )
 
-      await waitFor(async () => {
-        expect(alertSpy).toHaveBeenCalledOnce()
-      })
+      await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
     })
   })
 })

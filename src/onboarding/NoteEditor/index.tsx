@@ -13,18 +13,12 @@ export default function NoteEditor() {
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
   const queryClient = useQueryClient()
   const router = useRouter()
-  const {
-    data: collection,
-    error: collectionError,
-    isFetching: isFetchingCollection,
-    refetch: refetchCollection,
-  } = useQuery(onboardingCollectionQuery)
-  const {
-    data: note,
-    error: noteError,
-    isFetching: isFetchingNote,
-    refetch: refetchNote,
-  } = useQuery(noteQuery(Number(noteId)))
+  const { data: collection, isFetching: isFetchingCollection } = useQuery(
+    onboardingCollectionQuery,
+  )
+  const { data: note, isFetching: isFetchingNote } = useQuery(
+    noteQuery(Number(noteId)),
+  )
   const { mutateAsync: createNote } = useMutation(createNoteMutation)
   const { mutateAsync: updateNote } = useMutation(updateNoteMutation)
 
@@ -67,58 +61,6 @@ export default function NoteEditor() {
   }
 
   useEffect(() => {
-    if (!isFetchingCollection && collectionError) {
-      // @todo Handle error
-      Alert.alert(
-        i18n.t(msg`Something went wrong`),
-        i18n.t(msg`There was a failure getting your onboarding collection`),
-        [
-          {
-            text: i18n.t(msg`Try again`),
-            style: 'default',
-            isPreferred: true,
-            onPress: () => {
-              refetchCollection()
-            },
-          },
-          {
-            text: i18n.t(msg`Cancel`),
-            style: 'cancel',
-            onPress: () => {
-              router.back()
-            },
-          },
-        ],
-      )
-      console.error(collectionError)
-    }
-
-    if (!isFetchingNote && noteError) {
-      // @todo Handle error
-      Alert.alert(
-        i18n.t(msg`Something went wrong`),
-        i18n.t(msg`There was a failure getting the note`),
-        [
-          {
-            text: i18n.t(msg`Try again`),
-            style: 'default',
-            isPreferred: true,
-            onPress: () => {
-              refetchNote()
-            },
-          },
-          {
-            text: i18n.t(msg`Cancel`),
-            style: 'cancel',
-            onPress: () => {
-              router.back()
-            },
-          },
-        ],
-      )
-      console.error(collectionError)
-    }
-
     if (!isFetchingNote && note === null) {
       Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
         {
@@ -130,17 +72,7 @@ export default function NoteEditor() {
         },
       ])
     }
-  }, [
-    collectionError,
-    i18n,
-    isFetchingCollection,
-    isFetchingNote,
-    note,
-    noteError,
-    refetchCollection,
-    refetchNote,
-    router,
-  ])
+  }, [i18n, isFetchingNote, note, router])
 
   return collection && !isFetchingCollection ? (
     <View testID="onboarding.note-editor.screen">
