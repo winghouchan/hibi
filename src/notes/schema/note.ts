@@ -2,7 +2,7 @@ import { createdAt } from '@/data/database/utils'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 export const note = sqliteTable('note', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: integer().primaryKey({ autoIncrement: true }),
 
   /**
    * Determines if the note's prompt/answer fields can be reversed so that the

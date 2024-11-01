@@ -7,11 +7,11 @@ import { collection } from './collection'
 export const collectionToNote = sqliteTable(
   'collection_notes',
   {
-    collection: integer('collection')
+    collection: integer()
       .notNull()
       .references(() => collection.id),
 
-    note: integer('note')
+    note: integer()
       .notNull()
       .references(() => note.id),
 

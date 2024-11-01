@@ -104,7 +104,7 @@ describe('`collection` table', () => {
     it('cannot be an empty string', async () => {
       await expect(insertCollection({ name: '' })).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed: name'),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
     })

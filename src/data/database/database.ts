@@ -25,7 +25,10 @@ export const nativeDatabase = openDatabaseSync(DATABASE_NAME)
  *
  * @see {@link https://orm.drizzle.team | Drizzle Documentation}
  */
-const database = drizzle(nativeDatabase, { schema })
+const database = drizzle(nativeDatabase, {
+  casing: 'snake_case',
+  schema,
+})
 
 loadDatabaseFixture()
 

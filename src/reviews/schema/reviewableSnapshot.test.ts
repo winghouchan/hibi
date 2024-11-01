@@ -179,9 +179,7 @@ describe('`reviewable_snapshot` table', () => {
         insertReviewableSnapshot({ ...reviewableSnapshotMock, difficulty: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'CHECK constraint failed: difficulty',
-          ),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
       await expect(
@@ -270,9 +268,7 @@ describe('`reviewable_snapshot` table', () => {
         insertReviewableSnapshot({ ...reviewableSnapshotMock, stability: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'CHECK constraint failed: stability',
-          ),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
       await expect(
@@ -308,7 +304,7 @@ describe('`reviewable_snapshot` table', () => {
         await insertReviewableSnapshot({ ...reviewableSnapshotMock, state })
 
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed: state'),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(insertReviewableSnapshotWithState(-1)).rejects.toEqual(

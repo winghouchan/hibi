@@ -77,7 +77,7 @@ describe('updateNote', () => {
       input: { id: 1, fields: [[{ value: '' }], [{ value: 'Back 1' }]] },
       expected: {
         output: expect.objectContaining({
-          message: 'CHECK constraint failed: length(`value`) > 0',
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       },
     },

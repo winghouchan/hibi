@@ -103,9 +103,7 @@ describe('createNote', () => {
       expected: {
         databaseState: [],
         output: expect.objectContaining({
-          message: expect.stringContaining(
-            'CHECK constraint failed: length(`value`) > 0',
-          ),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       },
     },

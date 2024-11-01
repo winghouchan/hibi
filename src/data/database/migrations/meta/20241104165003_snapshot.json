@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8db868dc-f4c8-446f-afb6-5902d6de13b1",
+  "id": "a651bbd5-6ee5-4fc2-a67e-a46161fae503",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "collection": {
@@ -33,7 +33,13 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "collection_name_not_empty_string": {
+          "name": "collection_name_not_empty_string",
+          "value": "\"collection\".\"name\" != ''"
+        }
+      }
     },
     "collection_notes": {
       "name": "collection_notes",
@@ -88,7 +94,8 @@
           "name": "collection_notes_collection_note_pk"
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "note": {
       "name": "note",
@@ -128,7 +135,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "note_field": {
       "name": "note_field",
@@ -205,7 +213,29 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "note_field_value_not_empty": {
+          "name": "note_field_value_not_empty",
+          "value": "length(\"note_field\".\"value\") > 0"
+        },
+        "note_field_hash_length": {
+          "name": "note_field_hash_length",
+          "value": "length(\"note_field\".\"hash\") = 44"
+        },
+        "note_field_side_is_valid": {
+          "name": "note_field_side_is_valid",
+          "value": "\"note_field\".\"side\" IN (0, 1)"
+        },
+        "note_field_position_is_not_negative": {
+          "name": "note_field_position_is_not_negative",
+          "value": "\"note_field\".\"position\" >= 0"
+        },
+        "note_field_archived_is_boolean": {
+          "name": "note_field_archived_is_boolean",
+          "value": "\"note_field\".\"is_archived\" IN (true, false)"
+        }
+      }
     },
     "review": {
       "name": "review",
@@ -295,7 +325,37 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "review_rating_is_valid": {
+          "name": "review_rating_is_valid",
+          "value": "\"review\".\"rating\" IN (0, 1, 2, 3, 4)"
+        },
+        "review_duration_greater_than_zero": {
+          "name": "review_duration_greater_than_zero",
+          "value": "\"review\".\"duration\" > 0"
+        },
+        "review_is_due_fuzzed_is_boolean": {
+          "name": "review_is_due_fuzzed_is_boolean",
+          "value": "\"review\".\"is_due_fuzzed\" IN (true, false)"
+        },
+        "review_is_learning_enabled_is_boolean": {
+          "name": "review_is_learning_enabled_is_boolean",
+          "value": "\"review\".\"is_learning_enabled\" IN (true, false)"
+        },
+        "review_max_interval_greater_than_zero": {
+          "name": "review_max_interval_greater_than_zero",
+          "value": "\"review\".\"max_interval\" > 0"
+        },
+        "review_retention_in_range": {
+          "name": "review_retention_in_range",
+          "value": "\"review\".\"retention\" >= 0 AND \"review\".\"retention\" <= 100"
+        },
+        "review_weights_is_valid": {
+          "name": "review_weights_is_valid",
+          "value": "json_array_length(\"review\".\"weights\") >= 19"
+        }
+      }
     },
     "reviewable": {
       "name": "reviewable",
@@ -344,7 +404,13 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "reviewable_archived_is_boolean": {
+          "name": "reviewable_archived_is_boolean",
+          "value": "\"reviewable\".\"is_archived\" IN (true, false)"
+        }
+      }
     },
     "reviewable_field": {
       "name": "reviewable_field",
@@ -408,7 +474,13 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "reviewable_field_side_is_valid": {
+          "name": "reviewable_field_side_is_valid",
+          "value": "\"reviewable_field\".\"side\" IN (0, 1)"
+        }
+      }
     },
     "reviewable_snapshot": {
       "name": "reviewable_snapshot",
@@ -493,9 +565,24 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "reviewable_snapshot_difficulty_greater_than_zero": {
+          "name": "reviewable_snapshot_difficulty_greater_than_zero",
+          "value": "\"reviewable_snapshot\".\"difficulty\" > 0"
+        },
+        "reviewable_snapshot_stability_greater_than_zero": {
+          "name": "reviewable_snapshot_stability_greater_than_zero",
+          "value": "\"reviewable_snapshot\".\"stability\" > 0"
+        },
+        "reviewable_snapshot_state_is_valid": {
+          "name": "reviewable_snapshot_state_is_valid",
+          "value": "\"reviewable_snapshot\".\"state\" IN (0, 1, 2, 3)"
+        }
+      }
     }
   },
+  "views": {},
   "enums": {},
   "_meta": {
     "schemas": {},

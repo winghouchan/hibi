@@ -1293,6 +1293,11 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@drizzle-team/brocli@^0.10.2":
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/@drizzle-team/brocli/-/brocli-0.10.2.tgz#9757c006a43daaa6f45512e6cf5fabed36fb9da7"
+  integrity sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
@@ -5503,19 +5508,20 @@ dotenv@^16.4.4, dotenv@~16.4.5:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
   integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
-drizzle-kit@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.23.0.tgz#4ac8b4034a75091569666242e99df7bafd590148"
-  integrity sha512-w9jE97z193dd4jzAyj4Uv2SOh8Ydue70Ki6W0awy4bGM1aPXan6zD6Yv+nNTA6oGgNTDl2MJFxutjHG4fden5g==
+drizzle-kit@~0.27.0:
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.27.0.tgz#6fab6a7f2286ef4390416dbd7b0f1997d5fb4656"
+  integrity sha512-vJJCPvKGLFcmOFBELKqcRng3Fc6qTOaKNAqetLEoysD7HjlSlJOWwM54FJlhpqA+cZcIdsL8r9/7v9JIFfs3MA==
   dependencies:
+    "@drizzle-team/brocli" "^0.10.2"
     "@esbuild-kit/esm-loader" "^2.5.5"
     esbuild "^0.19.7"
     esbuild-register "^3.5.0"
 
-drizzle-orm@^0.32.1:
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/drizzle-orm/-/drizzle-orm-0.32.1.tgz#4e28c22d7f2a60aef3f0837c0a06aa7b3378b082"
-  integrity sha512-Wq1J+lL8PzwR5K3a1FfoWsbs8powjr3pGA4+5+2ueN1VTLDNFYEolUyUWFtqy8DVRvYbL2n7sXZkgVmK9dQkng==
+drizzle-orm@~0.36.0:
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/drizzle-orm/-/drizzle-orm-0.36.0.tgz#5bbaaf97a50b2967c16658cdb5aa22a293ddbb5d"
+  integrity sha512-6BETYPdKSR7cDHC0ZfqZk2VrKJ8n/Rfd3ajFPsAbc69gi87nwZ6oBA2wUGMELHA0tQE4kUKN0Ds00LUZQ6Z69A==
 
 dtrace-provider@~0.8:
   version "0.8.8"

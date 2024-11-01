@@ -352,7 +352,7 @@ describe('`reviewable_field` table', () => {
   describe('`side` column', () => {
     it('is either 0 or 1', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed: side'),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(

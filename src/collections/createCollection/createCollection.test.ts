@@ -9,7 +9,7 @@ describe('createCollection', () => {
       expected: {
         databaseState: [],
         output: expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed: name'),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       },
     },

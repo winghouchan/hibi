@@ -8,6 +8,8 @@
  */
 import schema from '@/data/database/schema'
 import { jest } from '@jest/globals'
+import { Database } from 'better-sqlite3'
+import { DrizzleConfig } from 'drizzle-orm'
 import { drizzle as drizzleBetterSqlite3 } from 'drizzle-orm/better-sqlite3'
 
 /**
@@ -18,7 +20,6 @@ import { drizzle as drizzleBetterSqlite3 } from 'drizzle-orm/better-sqlite3'
  * @see {@link https://github.com/drizzle-team/drizzle-orm/tree/main/drizzle-orm/src/better-sqlite3 | Drizzle Better SQLite 3 Driver Source Code}
  * @see {@link https://github.com/drizzle-team/drizzle-orm/tree/main/drizzle-orm/src/expo-sqlite | Drizzle Expo SQLite Driver Source Code}
  */
-export const drizzle = jest.fn(
-  (...[database, config]: Parameters<typeof drizzleBetterSqlite3>) =>
-    drizzleBetterSqlite3(database, { ...config, schema }),
+export const drizzle = jest.fn((database: Database, config: DrizzleConfig) =>
+  drizzleBetterSqlite3(database, { ...config, schema }),
 )

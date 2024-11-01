@@ -130,7 +130,7 @@ describe('`review` table', () => {
   describe('`rating` column', () => {
     it('is a valid rating', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed: rating'),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(insertReview({ ...reviewMock, rating: -1 })).rejects.toEqual(
@@ -168,7 +168,7 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, duration: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed: duration'),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
       await expect(insertReview({ ...reviewMock, duration: 1 })).toResolve()
@@ -314,9 +314,7 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, maxInterval: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'CHECK constraint failed: max_interval',
-          ),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
       await expect(insertReview({ ...reviewMock, maxInterval: 1 })).toResolve()
@@ -341,7 +339,7 @@ describe('`review` table', () => {
   describe('`retention` column', () => {
     it('is a value between 0 and 100 (inclusive)', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed: retention'),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(
@@ -381,9 +379,7 @@ describe('`review` table', () => {
         await insertReview({ ...reviewMock, weights })
 
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'CHECK constraint failed: json_array_length(`weights`) >= 19',
-        ),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(insertReviewWithWeights('string')).rejects.toEqual(

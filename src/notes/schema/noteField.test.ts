@@ -174,9 +174,7 @@ describe('`note_field` table', () => {
         insertNoteField({ ...generateNoteFieldMock(), value: '' }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'CHECK constraint failed: length(`value`) > 0',
-          ),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
     })
@@ -189,9 +187,7 @@ describe('`note_field` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'CHECK constraint failed: length(`value`) > 0',
-          ),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
     })
@@ -200,9 +196,7 @@ describe('`note_field` table', () => {
   describe('`hash` column', () => {
     it('is a string with length 44', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'CHECK constraint failed: length(`hash`) = 44',
-        ),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(
@@ -247,7 +241,7 @@ describe('`note_field` table', () => {
   describe('`side` column', () => {
     it('is either 0 and 1', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed: side'),
+        message: expect.stringContaining('CHECK constraint failed'),
       })
 
       await expect(
@@ -287,7 +281,7 @@ describe('`note_field` table', () => {
         insertNoteField({ ...generateNoteFieldMock(), position: -1 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed: position'),
+          message: expect.stringContaining('CHECK constraint failed'),
         }),
       )
       await expect(
