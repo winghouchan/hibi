@@ -1,5 +1,7 @@
 import { createCollection } from '@/collections'
+import { database } from '@/data'
 import { createNote } from '@/notes'
+import { user } from '@/user/schema'
 
 async function fixture() {
   const { id } = await createCollection({
@@ -14,6 +16,8 @@ async function fixture() {
       separable: false,
     },
   })
+
+  await database.insert(user).values({ onboarded: true })
 }
 
 fixture()

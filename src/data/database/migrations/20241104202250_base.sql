@@ -94,3 +94,9 @@ CREATE TABLE `reviewable_snapshot` (
 	CONSTRAINT "reviewable_snapshot_stability_greater_than_zero" CHECK("reviewable_snapshot"."stability" > 0),
 	CONSTRAINT "reviewable_snapshot_state_is_valid" CHECK("reviewable_snapshot"."state" IN (0, 1, 2, 3))
 );
+--> statement-breakpoint
+CREATE TABLE `user` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`created_at` integer DEFAULT (unixepoch('now', 'subsec') * 1000) NOT NULL,
+	`is_onboarded` integer DEFAULT false NOT NULL
+);

@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/onboarding/CreateNotesScreen/index.tsx:36
+#: src/onboarding/CreateNotesScreen/index.tsx:67
 msgid "Add another note"
 msgstr "Add another note"
 
@@ -31,6 +31,7 @@ msgstr "Back"
 
 #: src/data/DataProvider/index.tsx:36
 #: src/onboarding/CreateCollectionScreen/index.tsx:73
+#: src/onboarding/CreateNotesScreen/index.tsx:47
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -54,7 +55,7 @@ msgstr "Enter field data for side {0} field {1}"
 msgid "Field data for field side {0} {1}"
 msgstr "Field data for field side {0} {1}"
 
-#: src/onboarding/CreateNotesScreen/index.tsx:43
+#: src/onboarding/CreateNotesScreen/index.tsx:74
 msgid "Finish"
 msgstr "Finish"
 
@@ -62,7 +63,7 @@ msgstr "Finish"
 msgid "Hibi"
 msgstr "Hibi"
 
-#: src/onboarding/CreateNotesScreen/index.tsx:51
+#: src/onboarding/CreateNotesScreen/index.tsx:82
 msgid "New note"
 msgstr "New note"
 
@@ -76,6 +77,7 @@ msgstr "Side {sideIndex}"
 
 #: src/data/DataProvider/index.tsx:24
 #: src/onboarding/CreateCollectionScreen/index.tsx:59
+#: src/onboarding/CreateNotesScreen/index.tsx:35
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -91,6 +93,10 @@ msgstr "Submitting"
 msgid "The note doesn't exist"
 msgstr "The note doesn't exist"
 
+#: src/onboarding/CreateNotesScreen/index.tsx:36
+msgid "There was an error completing onboarding"
+msgstr "There was an error completing onboarding"
+
 #: src/onboarding/CreateCollectionScreen/index.tsx:62
 msgid "There was an error creating the collection"
 msgstr "There was an error creating the collection"
@@ -101,6 +107,7 @@ msgstr "There was an error updating the collection"
 
 #: src/data/DataProvider/index.tsx:28
 #: src/onboarding/CreateCollectionScreen/index.tsx:65
+#: src/onboarding/CreateNotesScreen/index.tsx:39
 msgid "Try again"
 msgstr "Try again"
 

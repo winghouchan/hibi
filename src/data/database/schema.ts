@@ -1,6 +1,7 @@
 import * as collectionSchema from '@/collections/schema'
 import * as noteSchema from '@/notes/schema'
 import * as reviewSchema from '@/reviews/schema'
+import * as userSchema from '@/user/schema'
 
 /**
  * Database schema. Import and spread individual schemas into the object below.
@@ -20,6 +21,7 @@ const schema = {
   ...collectionSchema,
   ...noteSchema,
   ...reviewSchema,
+  ...userSchema,
 } satisfies Record<string, unknown>
 
 export default schema

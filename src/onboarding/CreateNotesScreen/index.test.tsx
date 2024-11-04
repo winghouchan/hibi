@@ -3,9 +3,11 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
+import { completeOnboarding } from '../completeOnboarding'
 import { onboardingCollectionQuery } from '../onboardingCollection'
 import CreateNotesScreen from '.'
 
+jest.mock('@/onboarding/completeOnboarding/completeOnboarding')
 jest.mock('@/onboarding/onboardingCollection/getOnboardingCollection')
 
 const onboardingCollectionMock =
@@ -256,6 +258,67 @@ describe('<CreateNotesScreen />', () => {
           wrapper: mockAppRoot(),
         },
       )
+
+      await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
+    })
+  })
+
+  describe('when there is an error completing onboarding', () => {
+    test('the user is alerted', async () => {
+      const user = userEvent.setup()
+      const alertSpy = jest.spyOn(Alert, 'alert')
+
+      ;(
+        completeOnboarding as jest.MockedFunction<typeof completeOnboarding>
+      ).mockRejectedValue(new Error('Mock Error'))
+
+      onboardingCollectionMock.mockResolvedValue({
+        id: 1,
+        name: 'Collection Name',
+        createdAt: new Date(),
+        notes: [
+          {
+            id: 1,
+            createdAt: new Date(),
+            fields: [
+              {
+                id: 1,
+                createdAt: new Date(),
+                note: 1,
+                value: 'Front 1',
+                hash: hashNoteFieldValue('Front 1'),
+                side: 0,
+                position: 0,
+                archived: false,
+              },
+              {
+                id: 2,
+                createdAt: new Date(),
+                note: 1,
+                value: 'Back 1',
+                hash: hashNoteFieldValue('Back 1'),
+                side: 1,
+                position: 0,
+                archived: false,
+              },
+            ],
+            reversible: false,
+            separable: false,
+          },
+        ],
+      })
+
+      renderRouter(
+        {
+          'onboarding/notes': CreateNotesScreen,
+        },
+        {
+          initialUrl: 'onboarding/notes',
+          wrapper: mockAppRoot(),
+        },
+      )
+
+      await user.press(await screen.findByRole('button', { name: 'Finish' }))
 
       await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
     })
