@@ -1,5 +1,5 @@
-import { createdAt } from '@/data/database/utils'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { createdAt } from '@/data/database/utils'
 
 export const note = sqliteTable('note', {
   id: integer().primaryKey({ autoIncrement: true }),

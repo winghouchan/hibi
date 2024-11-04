@@ -1,6 +1,6 @@
-import { createdAt } from '@/data/database/utils'
 import { sql } from 'drizzle-orm'
 import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { createdAt } from '@/data/database/utils'
 
 export const collection = sqliteTable(
   'collection',

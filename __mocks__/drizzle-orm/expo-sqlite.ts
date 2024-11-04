@@ -6,11 +6,11 @@
  *
  * @see {@link https://orm.drizzle.team/docs/rqb | Drizzle Documentation}
  */
-import schema from '@/data/database/schema'
 import { jest } from '@jest/globals'
 import { Database } from 'better-sqlite3'
 import { DrizzleConfig } from 'drizzle-orm'
 import { drizzle as drizzleBetterSqlite3 } from 'drizzle-orm/better-sqlite3'
+import schema from '@/data/database/schema'
 
 /**
  * Mock of Drizzle's driver for Expo SQLite. As Expo's SQLite database has been

@@ -1,7 +1,7 @@
-import { isOnboardingCompleteQuery } from '@/onboarding'
 import { useQuery } from '@tanstack/react-query'
 import { SplashScreen } from 'expo-router'
 import { useEffect } from 'react'
+import { isOnboardingCompleteQuery } from '@/onboarding'
 
 SplashScreen.preventAutoHideAsync()
 

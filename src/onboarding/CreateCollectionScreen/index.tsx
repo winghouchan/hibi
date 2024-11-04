@@ -1,14 +1,14 @@
-import {
-  createCollectionMutation,
-  updateCollectionMutation,
-} from '@/collections'
-import { log } from '@/telemetry'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, useNavigation } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
 import { Alert, Pressable, TextInput, View } from 'react-native'
+import {
+  createCollectionMutation,
+  updateCollectionMutation,
+} from '@/collections'
+import { log } from '@/telemetry'
 import { onboardingCollectionQuery } from '../onboardingCollection'
 
 export default function CreateCollectionScreen() {

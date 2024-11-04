@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
+import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 import * as drizzleOrmExpoSqliteMock from '__mocks__/drizzle-orm/expo-sqlite'
 import * as expoSqliteMock from '__mocks__/expo-sqlite'
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 
 /**
  * Provides types for the database APIs when mocking the Expo SQLite database

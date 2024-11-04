@@ -17,7 +17,8 @@ module.exports = {
           caseInsensitive: true,
         },
         groups: [
-          ['builtin', 'external', 'internal'],
+          ['builtin', 'external'],
+          'internal',
           'parent',
           'sibling',
           'index',

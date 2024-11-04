@@ -1,6 +1,6 @@
+import { eq } from 'drizzle-orm'
 import { database } from '@/data'
 import { user } from '@/user/schema'
-import { eq } from 'drizzle-orm'
 
 export default async function completeOnboarding() {
   return database.transaction((transaction) => {

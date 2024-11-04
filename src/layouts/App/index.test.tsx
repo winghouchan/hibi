@@ -1,6 +1,6 @@
-import { isOnboardingCompleteQuery } from '@/onboarding'
 import { screen } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
+import { isOnboardingCompleteQuery } from '@/onboarding'
 import { mockAppRoot } from 'test/utils'
 import AppLayout from '.'
 

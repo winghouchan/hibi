@@ -1,5 +1,5 @@
-import { note, noteField } from '@/notes/schema'
 import { relations } from 'drizzle-orm'
+import { note, noteField } from '@/notes/schema'
 import { review } from './review'
 import { reviewable, reviewableField } from './reviewable'
 import { reviewableSnapshot } from './reviewableSnapshot'

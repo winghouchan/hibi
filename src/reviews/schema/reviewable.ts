@@ -1,8 +1,8 @@
+import { sql } from 'drizzle-orm'
+import { check, integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 import { note } from '@/notes/schema/note'
 import { noteField } from '@/notes/schema/noteField'
-import { sql } from 'drizzle-orm'
-import { check, integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 export const reviewable = sqliteTable(
   'reviewable',

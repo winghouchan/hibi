@@ -1,5 +1,5 @@
-import { database } from '@/data'
 import { eq } from 'drizzle-orm'
+import { database } from '@/data'
 import { collection } from '../schema/collection'
 
 export interface Collection<Name extends string = string>

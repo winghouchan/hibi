@@ -1,6 +1,6 @@
+import { relations } from 'drizzle-orm'
 import { collectionToNote } from '@/collections/schema/relations'
 import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
-import { relations } from 'drizzle-orm'
 import { note } from './note'
 import { noteField } from './noteField'
 

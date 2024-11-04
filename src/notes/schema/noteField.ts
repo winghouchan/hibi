@@ -1,4 +1,3 @@
-import { createdAt } from '@/data/database/utils'
 import { sql } from 'drizzle-orm'
 import {
   blob,
@@ -7,6 +6,7 @@ import {
   sqliteTable,
   text,
 } from 'drizzle-orm/sqlite-core'
+import { createdAt } from '@/data/database/utils'
 import { note } from './note'
 
 export const noteField = sqliteTable(

@@ -1,8 +1,8 @@
-import { DataProvider, useDatabaseBrowser, useDatabaseMigrations } from '@/data'
-import { IntlProvider } from '@/intl'
 import { Stack } from 'expo-router'
 import { useState } from 'react'
 import { DevToolsBubble } from 'react-native-react-query-devtools'
+import { DataProvider, useDatabaseBrowser, useDatabaseMigrations } from '@/data'
+import { IntlProvider } from '@/intl'
 import SplashScreen from './SplashScreen'
 
 export default function RootLayout() {

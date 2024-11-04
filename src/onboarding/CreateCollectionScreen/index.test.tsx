@@ -1,7 +1,7 @@
-import { createCollection } from '@/collections'
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import { createCollection } from '@/collections'
 import { mockAppRoot } from 'test/utils'
 import { onboardingCollectionQuery } from '../onboardingCollection'
 import CreateCollectionScreen from '.'

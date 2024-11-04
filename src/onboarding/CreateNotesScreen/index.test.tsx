@@ -1,7 +1,7 @@
-import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockAppRoot } from 'test/utils'
 import { completeOnboarding } from '../completeOnboarding'
 import { onboardingCollectionQuery } from '../onboardingCollection'

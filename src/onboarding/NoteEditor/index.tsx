@@ -1,5 +1,3 @@
-import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
-import { log } from '@/telemetry'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -7,6 +5,8 @@ import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
 import { FieldArray, Formik, type FormikConfig } from 'formik'
 import { useEffect } from 'react'
 import { Alert, Pressable, TextInput, View } from 'react-native'
+import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
+import { log } from '@/telemetry'
 import { onboardingCollectionQuery } from '../onboardingCollection'
 
 export default function NoteEditor() {

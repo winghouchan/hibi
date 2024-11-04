@@ -1,6 +1,6 @@
-import { createdAt } from '@/data/database/utils'
 import { sql } from 'drizzle-orm'
 import { check, integer, real, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { createdAt } from '@/data/database/utils'
 import { review } from './review'
 import { reviewable } from './reviewable'
 

@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite'
-import { loadDatabaseFixture } from 'e2e/utils'
 import { openDatabaseSync } from 'expo-sqlite'
+import { loadDatabaseFixture } from 'e2e/utils'
 import schema from './schema'
 
 /**

@@ -1,4 +1,3 @@
-import { log } from '@/telemetry'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import {
@@ -10,6 +9,7 @@ import {
 } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Alert } from 'react-native'
+import { log } from '@/telemetry'
 
 interface DataProviderProps
   extends Pick<QueryClientProviderProps, 'children'> {}
