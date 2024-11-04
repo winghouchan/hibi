@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { render, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
@@ -53,6 +53,8 @@ describe('<WelcomeScreen />', () => {
     })
 
     test('pressing the button to start onboarding navigates to the first onboarding screen', async () => {
+      const user = userEvent.setup()
+
       mockOnboardedState(false)
 
       renderRouter(
@@ -65,7 +67,7 @@ describe('<WelcomeScreen />', () => {
         },
       )
 
-      fireEvent.press(
+      await user.press(
         await screen.findByTestId('onboarding.welcome.cta.button'),
       )
 

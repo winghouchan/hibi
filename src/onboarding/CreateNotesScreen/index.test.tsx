@@ -1,10 +1,5 @@
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
-import {
-  fireEvent,
-  screen,
-  userEvent,
-  waitFor,
-} from '@testing-library/react-native'
+import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
@@ -42,6 +37,8 @@ describe('<CreateNotesScreen />', () => {
   describe('when there is 1 collection', () => {
     describe('with 0 notes', () => {
       test('pressing the button to add a note opens the note editor', async () => {
+        const user = userEvent.setup()
+
         onboardingCollectionMock.mockResolvedValue({
           id: 1,
           name: 'Collection Name',
@@ -68,7 +65,7 @@ describe('<CreateNotesScreen />', () => {
           screen.queryByRole('button', { name: 'Finish' }),
         ).not.toBeOnTheScreen()
 
-        fireEvent.press(newNoteButton)
+        await user.press(newNoteButton)
 
         expect(screen).toHavePathname('/onboarding/notes/new')
       })
@@ -128,6 +125,8 @@ describe('<CreateNotesScreen />', () => {
       })
 
       test('pressing a note opens the note editor', async () => {
+        const user = userEvent.setup()
+
         onboardingCollectionMock.mockResolvedValue({
           id: 1,
           name: 'Collection Name',
@@ -175,7 +174,7 @@ describe('<CreateNotesScreen />', () => {
           },
         )
 
-        fireEvent.press(
+        await user.press(
           await screen.findByRole('link', { name: /Front 1.*Back 1/s }),
         )
 
