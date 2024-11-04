@@ -1,3 +1,4 @@
+import { log } from '@/telemetry'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { type NavigationProp } from '@react-navigation/native'
@@ -50,7 +51,7 @@ export default function CreateNotesScreen() {
         ],
       )
 
-      console.error(error)
+      log.error(error)
     }
   }
 

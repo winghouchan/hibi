@@ -2,6 +2,7 @@ import {
   createCollectionMutation,
   updateCollectionMutation,
 } from '@/collections'
+import { log } from '@/telemetry'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -75,7 +76,7 @@ export default function CreateCollectionScreen() {
             },
           ],
         )
-        console.error(error)
+        log.error(error)
       },
     }
 

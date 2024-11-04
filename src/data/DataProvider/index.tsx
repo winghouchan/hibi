@@ -1,3 +1,4 @@
+import { log } from '@/telemetry'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import {
@@ -39,7 +40,7 @@ export default function DataProvider({ children }: DataProviderProps) {
               ],
             )
 
-            console.error(error)
+            log.error(error)
           },
         }),
 
