@@ -9,7 +9,7 @@ import {
   updateCollectionMutation,
 } from '@/collections'
 import { log } from '@/telemetry'
-import { onboardingCollectionQuery } from '../../onboardingCollection'
+import { onboardingCollectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
   const { i18n } = useLingui()

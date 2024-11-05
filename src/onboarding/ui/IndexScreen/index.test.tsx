@@ -1,10 +1,12 @@
 import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../../onboardingCollection'
+import { onboardingCollectionQuery } from '../../operations'
 import Index from '.'
 
-jest.mock('@/onboarding/onboardingCollection/getOnboardingCollection')
+jest.mock(
+  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
+)
 
 const onboardingCollectionMock =
   onboardingCollectionQuery.queryFn as jest.MockedFunction<

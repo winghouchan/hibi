@@ -3,11 +3,13 @@ import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { createCollection } from '@/collections'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../../onboardingCollection'
+import { onboardingCollectionQuery } from '../../operations'
 import CollectionScreen from '.'
 
 jest.mock('@/collections/createCollection/createCollection')
-jest.mock('@/onboarding/onboardingCollection/getOnboardingCollection')
+jest.mock(
+  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
+)
 
 const createCollectionMock = createCollection as jest.MockedFunction<
   typeof createCollection

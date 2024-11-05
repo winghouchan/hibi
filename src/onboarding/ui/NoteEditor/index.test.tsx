@@ -5,12 +5,14 @@ import { Alert } from 'react-native'
 import { getNote } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../../onboardingCollection'
+import { onboardingCollectionQuery } from '../../operations'
 import NoteEditor from '.'
 
 jest.mock('@/notes/createNote/createNote')
 jest.mock('@/notes/getNote/getNote')
-jest.mock('@/onboarding/onboardingCollection/getOnboardingCollection')
+jest.mock(
+  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
+)
 jest.mock('expo-linking')
 
 const backMock = jest.fn()

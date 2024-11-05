@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Redirect } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { isOnboardingCompleteQuery } from '../../isOnboardingComplete'
+import { isOnboardingCompleteQuery } from '../../operations'
 
 export default function WelcomeScreen() {
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)

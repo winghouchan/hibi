@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Redirect, Stack } from 'expo-router'
-import { isOnboardingCompleteQuery } from '../../isOnboardingComplete'
+import { isOnboardingCompleteQuery } from '../../operations'
 
 export default function OnboardingLayout() {
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)

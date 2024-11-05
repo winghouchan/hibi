@@ -4,7 +4,7 @@ import { isOnboardingCompleteQuery } from '@/onboarding'
 import { mockAppRoot } from 'test/utils'
 import AppLayout from '.'
 
-jest.mock('@/onboarding/isOnboardingComplete')
+jest.mock('@/onboarding/operations/isOnboardingComplete')
 
 function mockOnboardedState(onboarded: boolean) {
   ;(

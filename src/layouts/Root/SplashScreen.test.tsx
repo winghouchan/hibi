@@ -2,7 +2,9 @@ import { render, waitFor } from '@testing-library/react-native'
 
 describe('<Splash />', () => {
   beforeEach(async () => {
-    jest.doMock('@/onboarding/isOnboardingComplete/isOnboardingComplete')
+    jest.doMock(
+      '@/onboarding/operations/isOnboardingComplete/isOnboardingComplete',
+    )
 
     /**
      * Work around React error saying:
