@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Redirect } from 'expo-router'
-import { onboardingCollectionQuery } from '../onboardingCollection'
+import { onboardingCollectionQuery } from '../../onboardingCollection'
 
 export default function Index() {
   const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)

@@ -5,8 +5,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { Alert, Pressable, View } from 'react-native'
 import { log } from '@/telemetry'
-import { completeOnboardingMutation } from '../completeOnboarding'
-import { onboardingCollectionQuery } from '../onboardingCollection'
+import { completeOnboardingMutation } from '../../completeOnboarding'
+import { onboardingCollectionQuery } from '../../onboardingCollection'
 
 export default function CreateNotesScreen() {
   const { i18n } = useLingui()

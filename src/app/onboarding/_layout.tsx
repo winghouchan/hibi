@@ -1,1 +1,1 @@
-export { OnboardingLayout as default } from '@/onboarding'
+export { Layout as default } from '@/onboarding'

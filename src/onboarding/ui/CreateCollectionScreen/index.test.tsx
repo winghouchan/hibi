@@ -3,7 +3,7 @@ import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { createCollection } from '@/collections'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../onboardingCollection'
+import { onboardingCollectionQuery } from '../../onboardingCollection'
 import CreateCollectionScreen from '.'
 
 jest.mock('@/collections/createCollection/createCollection')

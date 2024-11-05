@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import { Alert, Pressable, TextInput, View } from 'react-native'
 import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
 import { log } from '@/telemetry'
-import { onboardingCollectionQuery } from '../onboardingCollection'
+import { onboardingCollectionQuery } from '../../onboardingCollection'
 
 export default function NoteEditor() {
   const { i18n } = useLingui()

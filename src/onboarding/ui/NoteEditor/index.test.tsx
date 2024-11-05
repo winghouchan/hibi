@@ -5,7 +5,7 @@ import { Alert } from 'react-native'
 import { getNote } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../onboardingCollection'
+import { onboardingCollectionQuery } from '../../onboardingCollection'
 import NoteEditor from '.'
 
 jest.mock('@/notes/createNote/createNote')

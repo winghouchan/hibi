@@ -2,7 +2,7 @@ import { render, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
-import { isOnboardingCompleteQuery } from '../isOnboardingComplete'
+import { isOnboardingCompleteQuery } from '../../isOnboardingComplete'
 import WelcomeScreen from '.'
 
 jest.mock('@/onboarding/isOnboardingComplete')
