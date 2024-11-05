@@ -4,7 +4,7 @@ import { Alert } from 'react-native'
 import { createCollection } from '@/collections'
 import { mockAppRoot } from 'test/utils'
 import { onboardingCollectionQuery } from '../../onboardingCollection'
-import CreateCollectionScreen from '.'
+import CollectionScreen from '.'
 
 jest.mock('@/collections/createCollection/createCollection')
 jest.mock('@/onboarding/onboardingCollection/getOnboardingCollection')
@@ -18,7 +18,7 @@ const onboardingCollectionMock =
     Exclude<typeof onboardingCollectionQuery.queryFn, symbol | undefined>
   >
 
-describe('<CreateCollectionScreen />', () => {
+describe('<CollectionScreen />', () => {
   describe('when the user has not created a collection during onboarding before', () => {
     test('and inputs the correct information then submits the form, the form submits successfully', async () => {
       const user = userEvent.setup()
@@ -34,7 +34,7 @@ describe('<CreateCollectionScreen />', () => {
 
       renderRouter(
         {
-          'onboarding/collection': CreateCollectionScreen,
+          'onboarding/collection': CollectionScreen,
           'onboarding/notes': () => null,
         },
         {
@@ -62,7 +62,7 @@ describe('<CreateCollectionScreen />', () => {
 
       renderRouter(
         {
-          'onboarding/collection': CreateCollectionScreen,
+          'onboarding/collection': CollectionScreen,
         },
         {
           initialUrl: 'onboarding/collection',
@@ -93,7 +93,7 @@ describe('<CreateCollectionScreen />', () => {
 
       renderRouter(
         {
-          'onboarding/collection': CreateCollectionScreen,
+          'onboarding/collection': CollectionScreen,
         },
         {
           initialUrl: 'onboarding/collection',
@@ -118,7 +118,7 @@ describe('<CreateCollectionScreen />', () => {
 
       renderRouter(
         {
-          'onboarding/collection': CreateCollectionScreen,
+          'onboarding/collection': CollectionScreen,
         },
         {
           initialUrl: 'onboarding/collection',

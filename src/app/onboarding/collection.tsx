@@ -1,1 +1,1 @@
-export { CreateCollectionScreen as default } from '@/onboarding'
+export { CollectionScreen as default } from '@/onboarding'

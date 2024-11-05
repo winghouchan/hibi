@@ -11,7 +11,7 @@ import {
 import { log } from '@/telemetry'
 import { onboardingCollectionQuery } from '../../onboardingCollection'
 
-export default function CreateCollectionScreen() {
+export default function CollectionScreen() {
   const { i18n } = useLingui()
   const navigation = useNavigation()
   const queryClient = useQueryClient()
