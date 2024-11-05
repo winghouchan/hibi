@@ -1,6 +1,6 @@
 export { default as CollectionScreen } from './CollectionScreen'
-export { default as CreateNotesScreen } from './CreateNotesScreen'
 export { default as IndexScreen } from './IndexScreen'
 export { default as Layout } from './Layout'
 export { default as NoteEditor } from './NoteEditor'
+export { default as NotesScreen } from './NotesScreen'
 export { default as WelcomeScreen } from './WelcomeScreen'

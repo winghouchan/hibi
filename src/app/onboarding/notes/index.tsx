@@ -1,1 +1,1 @@
-export { CreateNotesScreen as default } from '@/onboarding'
+export { NotesScreen as default } from '@/onboarding'

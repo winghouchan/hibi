@@ -8,7 +8,7 @@ import { log } from '@/telemetry'
 import { completeOnboardingMutation } from '../../completeOnboarding'
 import { onboardingCollectionQuery } from '../../onboardingCollection'
 
-export default function CreateNotesScreen() {
+export default function NotesScreen() {
   const { i18n } = useLingui()
   const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
   const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()

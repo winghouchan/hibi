@@ -5,7 +5,7 @@ import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockAppRoot } from 'test/utils'
 import { completeOnboarding } from '../../completeOnboarding'
 import { onboardingCollectionQuery } from '../../onboardingCollection'
-import CreateNotesScreen from '.'
+import NotesScreen from '.'
 
 jest.mock('@/onboarding/completeOnboarding/completeOnboarding')
 jest.mock('@/onboarding/onboardingCollection/getOnboardingCollection')
@@ -15,14 +15,14 @@ const onboardingCollectionMock =
     Exclude<typeof onboardingCollectionQuery.queryFn, symbol | undefined>
   >
 
-describe('<CreateNotesScreen />', () => {
+describe('<NotesScreen />', () => {
   describe('when there are 0 collections', () => {
     test('redirects to the welcome screen', async () => {
       onboardingCollectionMock.mockResolvedValue(null)
 
       renderRouter(
         {
-          'onboarding/notes': CreateNotesScreen,
+          'onboarding/notes': NotesScreen,
         },
         {
           initialUrl: 'onboarding/notes',
@@ -50,7 +50,7 @@ describe('<CreateNotesScreen />', () => {
 
         renderRouter(
           {
-            'onboarding/notes': CreateNotesScreen,
+            'onboarding/notes': NotesScreen,
             'onboarding/notes/new': () => null,
           },
           {
@@ -113,7 +113,7 @@ describe('<CreateNotesScreen />', () => {
 
         renderRouter(
           {
-            'onboarding/notes': CreateNotesScreen,
+            'onboarding/notes': NotesScreen,
           },
           {
             initialUrl: 'onboarding/notes',
@@ -167,7 +167,7 @@ describe('<CreateNotesScreen />', () => {
 
         renderRouter(
           {
-            'onboarding/notes': CreateNotesScreen,
+            'onboarding/notes': NotesScreen,
             'onboarding/notes/edit/[id]': () => null,
           },
           {
@@ -226,7 +226,7 @@ describe('<CreateNotesScreen />', () => {
           {
             '(app)/_layout': () => null,
             '(app)/index': () => null,
-            'onboarding/notes': CreateNotesScreen,
+            'onboarding/notes': NotesScreen,
           },
           {
             initialUrl: 'onboarding/notes',
@@ -251,7 +251,7 @@ describe('<CreateNotesScreen />', () => {
 
       renderRouter(
         {
-          'onboarding/notes': CreateNotesScreen,
+          'onboarding/notes': NotesScreen,
         },
         {
           initialUrl: 'onboarding/notes',
@@ -310,7 +310,7 @@ describe('<CreateNotesScreen />', () => {
 
       renderRouter(
         {
-          'onboarding/notes': CreateNotesScreen,
+          'onboarding/notes': NotesScreen,
         },
         {
           initialUrl: 'onboarding/notes',
