@@ -298,9 +298,15 @@ describe('Onboarding', () => {
         },
       },
       {
-        name: 'and the app is opened in the note editor',
+        name: 'and the app is opened in the new note creator',
         input: {
           url: 'onboarding/notes/new',
+        },
+      },
+      {
+        name: 'and the app is opened in the note editor',
+        input: {
+          url: 'onboarding/notes/edit/1',
         },
       },
     ])('$name', ({ input }) => {
