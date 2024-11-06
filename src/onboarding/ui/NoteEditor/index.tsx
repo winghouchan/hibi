@@ -63,7 +63,7 @@ export default function NoteEditor() {
   }
 
   useEffect(() => {
-    if (!isFetchingNote && note === null) {
+    if (collection && !isFetchingNote && note === null) {
       Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
         {
           text: i18n.t(msg`OK`),
@@ -74,7 +74,7 @@ export default function NoteEditor() {
         },
       ])
     }
-  }, [i18n, isFetchingNote, note, router])
+  }, [collection, i18n, isFetchingNote, note, router])
 
   return collection && !isFetchingCollection ? (
     <View testID="onboarding.note-editor.screen">

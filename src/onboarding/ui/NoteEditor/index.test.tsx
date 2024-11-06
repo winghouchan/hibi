@@ -190,6 +190,29 @@ describe('<NoteEditor />', () => {
         expect(screen).toHavePathname('/')
       })
     })
+
+    describe('and there is a note ID', () => {
+      test('does not show an alert', async () => {
+        const alertSpy = jest.spyOn(Alert, 'alert')
+
+        onboardingCollectionMock.mockResolvedValue(null)
+
+        renderRouter(
+          {
+            'onboarding/notes/edit/[id]': NoteEditor,
+          },
+          {
+            initialUrl: 'onboarding/notes/edit/1',
+            wrapper: mockAppRoot(),
+          },
+        )
+
+        await waitFor(() => {
+          expect(screen).toHavePathname('/')
+        })
+        expect(alertSpy).not.toHaveBeenCalled()
+      })
+    })
   })
 
   describe('when there is an error fetching the onboarding collection', () => {
