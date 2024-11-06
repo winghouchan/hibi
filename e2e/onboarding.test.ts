@@ -272,6 +272,59 @@ describe('Onboarding', () => {
         await expect(element(by.id('home.screen'))).toBeVisible()
       })
     })
+
+    describe('and the app is opened in the new note creator', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'onboarding/collection-created' },
+          url: 'hibi://onboarding/notes/new',
+        })
+
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
+
+    describe('and the app is opened in the note editor', () => {
+      test('the onboarding journey can be completed', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'onboarding/collection-created' },
+          url: 'hibi://onboarding/notes/edit/1',
+        })
+
+        await element(by.text('OK')).tap()
+
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.new-note.button')).tap()
+        await expect(
+          element(by.id('onboarding.note-editor.screen')),
+        ).toBeVisible()
+
+        await element(
+          by.id('onboarding.note-editor.side-0.field-0.input'),
+        ).typeText('Front 1')
+        await element(
+          by.id('onboarding.note-editor.side-1.field-0.input'),
+        ).typeText('Back 1')
+        await element(by.id('onboarding.note-editor.cta.button')).tap()
+        await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
+
+        await element(by.id('onboarding.notes.cta.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+    })
   })
 
   describe('when complete', () => {

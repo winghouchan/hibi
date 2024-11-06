@@ -23,6 +23,8 @@ describe('<OnboardingLayout />', () => {
         {
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
+          'onboarding/notes/new': () => null,
+          'onboarding/notes/edit/[id]': () => null,
           '(app)/index': () => null,
         },
         {
@@ -48,6 +50,8 @@ describe('<OnboardingLayout />', () => {
         {
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
+          'onboarding/notes/new': () => null,
+          'onboarding/notes/edit/[id]': () => null,
           '(app)/index': () => null,
         },
         {
