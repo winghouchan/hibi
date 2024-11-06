@@ -113,11 +113,30 @@ describe('Onboarding', () => {
       })
     })
 
-    describe('and the app is opened at the notes creation step', () => {
+    describe.each([
+      {
+        name: 'and the app is opened at the notes creation step',
+        input: {
+          url: 'onboarding/notes',
+        },
+      },
+      {
+        name: 'and the app is opened in the new note creator',
+        input: {
+          url: 'onboarding/notes/new',
+        },
+      },
+      {
+        name: 'and the app is opened in the note editor',
+        input: {
+          url: 'onboarding/notes/edit/1',
+        },
+      },
+    ])('$name', ({ input }) => {
       test('the user is redirected to the welcome screen', async () => {
         await device.launchApp({
           delete: true,
-          url: 'hibi://onboarding/notes',
+          ...(input?.url && { url: `hibi://${input.url}` }),
         })
 
         await expect(element(by.id('onboarding.welcome.screen'))).toBeVisible()
