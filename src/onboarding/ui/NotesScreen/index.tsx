@@ -3,8 +3,9 @@ import { useLingui } from '@lingui/react'
 import { type NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
-import { Alert, Pressable, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { log } from '@/telemetry'
+import { Button } from '@/ui'
 import {
   completeOnboardingMutation,
   onboardingCollectionQuery,
@@ -69,13 +70,12 @@ export default function NotesScreen() {
           <Link href="/onboarding/notes/new">
             <Trans>Add another note</Trans>
           </Link>
-          <Pressable
-            accessibilityRole="button"
+          <Button
             onPress={() => handleCompleteOnboarding()}
-            testID="onboarding.notes.cta.button"
+            testID="onboarding.notes.cta"
           >
             <Trans>Finish</Trans>
-          </Pressable>
+          </Button>
         </>
       ) : (
         <Link

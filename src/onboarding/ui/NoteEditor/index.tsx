@@ -4,9 +4,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
 import { FieldArray, Formik, type FormikConfig } from 'formik'
 import { useEffect } from 'react'
-import { Alert, Pressable, TextInput, View } from 'react-native'
+import { Alert, TextInput, View } from 'react-native'
 import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
 import { log } from '@/telemetry'
+import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 
 export default function NoteEditor() {
@@ -107,25 +108,23 @@ export default function NoteEditor() {
                         />
                       ))}
                     </View>
-                    <Pressable
-                      accessibilityRole="button"
+                    <Button
                       onPress={() => {
                         push({ value: '' })
                       }}
                     >
                       <Trans>Add field</Trans>
-                    </Pressable>
+                    </Button>
                   </View>
                 )}
               </FieldArray>
             ))}
-            <Pressable
-              accessibilityRole="button"
+            <Button
               onPress={() => handleSubmit()}
-              testID="onboarding.note-editor.cta.button"
+              testID="onboarding.note-editor.cta"
             >
               {values.id ? <Trans>Update note</Trans> : <Trans>Add note</Trans>}
-            </Pressable>
+            </Button>
           </>
         )}
       </Formik>

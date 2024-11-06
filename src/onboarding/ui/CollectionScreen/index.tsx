@@ -3,12 +3,13 @@ import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, useNavigation } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
-import { Alert, Pressable, TextInput, View } from 'react-native'
+import { Alert, TextInput, View } from 'react-native'
 import {
   createCollectionMutation,
   updateCollectionMutation,
 } from '@/collections'
 import { log } from '@/telemetry'
+import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
@@ -89,9 +90,9 @@ export default function CollectionScreen() {
 
   return (
     <View testID="onboarding.collection.screen">
-      <Pressable accessibilityRole="button" onPress={() => navigation.goBack()}>
+      <Button onPress={() => navigation.goBack()}>
         <Trans>Back</Trans>
-      </Pressable>
+      </Button>
       <Trans>What are you learning?</Trans>
       <Formik
         enableReinitialize
@@ -107,9 +108,8 @@ export default function CollectionScreen() {
               placeholder={i18n.t(msg`Collection name`)}
               testID="onboarding.collection.name.input"
             />
-            <Pressable
-              accessibilityRole="button"
-              testID="onboarding.collection.cta.button"
+            <Button
+              testID="onboarding.collection.cta"
               onPress={() => handleSubmit()}
             >
               {isSubmitting ? (
@@ -119,7 +119,7 @@ export default function CollectionScreen() {
               ) : (
                 <Trans>Create collection</Trans>
               )}
-            </Pressable>
+            </Button>
           </>
         )}
       </Formik>
