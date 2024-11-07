@@ -47,8 +47,12 @@ module.exports = {
         'plugin:jest/recommended',
         'plugin:jest/style',
         'plugin:jest-extended/all',
-        'plugin:testing-library/react',
       ],
+    },
+    {
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+      excludedFiles: ['e2e/**'],
+      extends: ['plugin:testing-library/react'],
     },
     {
       files: ['src/**/!(*.spec|*.test).{js,jsx,ts,tsx}'],
