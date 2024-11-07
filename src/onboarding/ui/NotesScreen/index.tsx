@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { type NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
-import { Alert, View } from 'react-native'
+import { Alert, ScrollView } from 'react-native'
 import { log } from '@/telemetry'
 import { Button } from '@/ui'
 import {
@@ -59,7 +59,7 @@ export default function NotesScreen() {
   }
 
   return collection && !isFetching ? (
-    <View testID="onboarding.notes.screen">
+    <ScrollView testID="onboarding.notes.screen">
       {collection.notes.map((note) => (
         <Link key={note.id} href={`/onboarding/notes/edit/${note.id}`}>
           {JSON.stringify(note, null, 2)}
@@ -85,7 +85,7 @@ export default function NotesScreen() {
           <Trans>New note</Trans>
         </Link>
       )}
-    </View>
+    </ScrollView>
   ) : !collection && !isFetching ? (
     <Redirect href="/" />
   ) : null
