@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import type {
   NavigationProp,
   NavigationState,
@@ -11,6 +12,7 @@ import {
   useNavigation,
   usePathname,
 } from 'expo-router'
+import { Button } from '@/ui'
 import { isOnboardingCompleteQuery } from '../../operations'
 
 export default function OnboardingLayout() {
@@ -108,7 +110,20 @@ export default function OnboardingLayout() {
 
   if (isOnboardingComplete === false) {
     return (
-      <Stack>
+      <Stack
+        screenOptions={({ navigation }) => ({
+          headerLeft: ({ canGoBack }) =>
+            canGoBack ? (
+              <Button
+                onPress={() => {
+                  navigation.goBack()
+                }}
+              >
+                <Trans>Back</Trans>
+              </Button>
+            ) : null,
+        })}
+      >
         <Stack.Screen name="notes/new" options={{ presentation: 'modal' }} />
         <Stack.Screen
           name="notes/edit/[id]"

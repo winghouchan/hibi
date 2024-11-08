@@ -1,7 +1,7 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { router, useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
 import { Alert, TextInput, View } from 'react-native'
 import {
@@ -14,7 +14,6 @@ import { onboardingCollectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
   const { i18n } = useLingui()
-  const navigation = useNavigation()
   const queryClient = useQueryClient()
   const { data: collection } = useQuery(onboardingCollectionQuery)
   const { mutateAsync: createCollection } = useMutation(
@@ -90,9 +89,6 @@ export default function CollectionScreen() {
 
   return (
     <View testID="onboarding.collection.screen">
-      <Button onPress={() => navigation.goBack()}>
-        <Trans>Back</Trans>
-      </Button>
       <Trans>What are you learning?</Trans>
       <Formik
         enableReinitialize

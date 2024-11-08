@@ -25,25 +25,25 @@ msgstr "Add field"
 msgid "Add note"
 msgstr "Add note"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:94
+#: src/onboarding/ui/Layout/index.tsx:122
 msgid "Back"
 msgstr "Back"
 
 #: src/data/DataProvider/index.tsx:37
-#: src/onboarding/ui/CollectionScreen/index.tsx:75
+#: src/onboarding/ui/CollectionScreen/index.tsx:74
 #: src/onboarding/ui/NotesScreen/index.tsx:51
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:108
+#: src/onboarding/ui/CollectionScreen/index.tsx:104
 msgid "Collection name"
 msgstr "Collection name"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:120
+#: src/onboarding/ui/CollectionScreen/index.tsx:116
 msgid "Create collection"
 msgstr "Create collection"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:105
+#: src/onboarding/ui/CollectionScreen/index.tsx:101
 msgid "Enter a collection name"
 msgstr "Enter a collection name"
 
@@ -76,7 +76,7 @@ msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
 #: src/data/DataProvider/index.tsx:25
-#: src/onboarding/ui/CollectionScreen/index.tsx:61
+#: src/onboarding/ui/CollectionScreen/index.tsx:60
 #: src/onboarding/ui/NotesScreen/index.tsx:39
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -85,7 +85,7 @@ msgstr "Something went wrong"
 msgid "Start"
 msgstr "Start"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:116
+#: src/onboarding/ui/CollectionScreen/index.tsx:112
 msgid "Submitting"
 msgstr "Submitting"
 
@@ -97,21 +97,21 @@ msgstr "The note doesn't exist"
 msgid "There was an error completing onboarding"
 msgstr "There was an error completing onboarding"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:64
+#: src/onboarding/ui/CollectionScreen/index.tsx:63
 msgid "There was an error creating the collection"
 msgstr "There was an error creating the collection"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:63
+#: src/onboarding/ui/CollectionScreen/index.tsx:62
 msgid "There was an error updating the collection"
 msgstr "There was an error updating the collection"
 
 #: src/data/DataProvider/index.tsx:29
-#: src/onboarding/ui/CollectionScreen/index.tsx:67
+#: src/onboarding/ui/CollectionScreen/index.tsx:66
 #: src/onboarding/ui/NotesScreen/index.tsx:43
 msgid "Try again"
 msgstr "Try again"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:118
+#: src/onboarding/ui/CollectionScreen/index.tsx:114
 msgid "Update collection"
 msgstr "Update collection"
 
@@ -123,6 +123,6 @@ msgstr "Update note"
 msgid "Welcome"
 msgstr "Welcome"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:96
+#: src/onboarding/ui/CollectionScreen/index.tsx:92
 msgid "What are you learning?"
 msgstr "What are you learning?"
