@@ -57,7 +57,7 @@ msgstr ""
 msgid "Finish"
 msgstr ""
 
-#: src/home/HomeScreen.tsx:7
+#: src/home/HomeScreen.tsx:8
 msgid "Hibi"
 msgstr ""
 
@@ -67,6 +67,10 @@ msgstr ""
 
 #: src/onboarding/ui/NoteEditor/index.tsx:69
 msgid "OK"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/index.tsx:7
+msgid "Review Screen"
 msgstr ""
 
 #: src/onboarding/ui/NoteEditor/index.tsx:92
@@ -79,6 +83,10 @@ msgstr ""
 
 #: src/onboarding/ui/WelcomeScreen/index.tsx:24
 msgid "Start"
+msgstr ""
+
+#: src/home/HomeScreen.tsx:10
+msgid "Start review"
 msgstr ""
 
 #: src/onboarding/ui/CollectionScreen/index.tsx:111

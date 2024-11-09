@@ -57,7 +57,7 @@ msgstr "Field data for field side {0} {1}"
 msgid "Finish"
 msgstr "Finish"
 
-#: src/home/HomeScreen.tsx:7
+#: src/home/HomeScreen.tsx:8
 msgid "Hibi"
 msgstr "Hibi"
 
@@ -68,6 +68,10 @@ msgstr "New note"
 #: src/onboarding/ui/NoteEditor/index.tsx:69
 msgid "OK"
 msgstr "OK"
+
+#: src/reviews/ui/ReviewScreen/index.tsx:7
+msgid "Review Screen"
+msgstr "Review Screen"
 
 #: src/onboarding/ui/NoteEditor/index.tsx:92
 msgid "Side {sideIndex}"
@@ -80,6 +84,10 @@ msgstr "Something went wrong"
 #: src/onboarding/ui/WelcomeScreen/index.tsx:24
 msgid "Start"
 msgstr "Start"
+
+#: src/home/HomeScreen.tsx:10
+msgid "Start review"
+msgstr "Start review"
 
 #: src/onboarding/ui/CollectionScreen/index.tsx:111
 msgid "Submitting"

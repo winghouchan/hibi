@@ -1,15 +1,22 @@
+import type { NavigationProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { Redirect, Tabs } from 'expo-router'
+import { Stack, useFocusEffect, useNavigation } from 'expo-router'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 
 export default function AppLayout() {
+  const navigation = useNavigation<NavigationProp<{ index: undefined }>>()
   const { data: isOnboardingComplete, isFetching } = useQuery(
     isOnboardingCompleteQuery,
   )
 
-  if (!isFetching && isOnboardingComplete === false) {
-    return <Redirect href=".." />
-  }
+  useFocusEffect(() => {
+    if (!isFetching && isOnboardingComplete === false) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'index' }],
+      })
+    }
+  })
 
-  return <Tabs />
+  return <Stack screenOptions={{ headerShown: false }} />
 }
