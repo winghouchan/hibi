@@ -17,11 +17,11 @@ msgstr ""
 msgid "Add another note"
 msgstr "Add another note"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:116
+#: src/onboarding/ui/NoteEditor/index.tsx:114
 msgid "Add field"
 msgstr "Add field"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:126
+#: src/onboarding/ui/NoteEditor/index.tsx:124
 msgid "Add note"
 msgstr "Add note"
 
@@ -29,17 +29,15 @@ msgstr "Add note"
 msgid "Back"
 msgstr "Back"
 
-#: src/data/DataProvider/index.tsx:37
 #: src/onboarding/ui/CollectionScreen/index.tsx:74
-#: src/onboarding/ui/NotesScreen/index.tsx:51
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:104
+#: src/onboarding/ui/CollectionScreen/index.tsx:103
 msgid "Collection name"
 msgstr "Collection name"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:116
+#: src/onboarding/ui/CollectionScreen/index.tsx:115
 msgid "Create collection"
 msgstr "Create collection"
 
@@ -47,11 +45,11 @@ msgstr "Create collection"
 msgid "Enter a collection name"
 msgstr "Enter a collection name"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:98
+#: src/onboarding/ui/NoteEditor/index.tsx:97
 msgid "Enter field data for side {0} field {1}"
 msgstr "Enter field data for side {0} field {1}"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:101
+#: src/onboarding/ui/NoteEditor/index.tsx:102
 msgid "Field data for field side {0} {1}"
 msgstr "Field data for field side {0} {1}"
 
@@ -75,9 +73,7 @@ msgstr "OK"
 msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
-#: src/data/DataProvider/index.tsx:25
 #: src/onboarding/ui/CollectionScreen/index.tsx:60
-#: src/onboarding/ui/NotesScreen/index.tsx:39
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -85,7 +81,7 @@ msgstr "Something went wrong"
 msgid "Start"
 msgstr "Start"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:112
+#: src/onboarding/ui/CollectionScreen/index.tsx:111
 msgid "Submitting"
 msgstr "Submitting"
 
@@ -105,17 +101,15 @@ msgstr "There was an error creating the collection"
 msgid "There was an error updating the collection"
 msgstr "There was an error updating the collection"
 
-#: src/data/DataProvider/index.tsx:29
 #: src/onboarding/ui/CollectionScreen/index.tsx:66
-#: src/onboarding/ui/NotesScreen/index.tsx:43
 msgid "Try again"
 msgstr "Try again"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:114
+#: src/onboarding/ui/CollectionScreen/index.tsx:113
 msgid "Update collection"
 msgstr "Update collection"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:126
+#: src/onboarding/ui/NoteEditor/index.tsx:124
 msgid "Update note"
 msgstr "Update note"
 

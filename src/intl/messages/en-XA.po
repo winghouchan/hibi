@@ -17,11 +17,11 @@ msgstr ""
 msgid "Add another note"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:116
+#: src/onboarding/ui/NoteEditor/index.tsx:114
 msgid "Add field"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:126
+#: src/onboarding/ui/NoteEditor/index.tsx:124
 msgid "Add note"
 msgstr ""
 
@@ -29,17 +29,15 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/data/DataProvider/index.tsx:37
 #: src/onboarding/ui/CollectionScreen/index.tsx:74
-#: src/onboarding/ui/NotesScreen/index.tsx:51
 msgid "Cancel"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:104
+#: src/onboarding/ui/CollectionScreen/index.tsx:103
 msgid "Collection name"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:116
+#: src/onboarding/ui/CollectionScreen/index.tsx:115
 msgid "Create collection"
 msgstr ""
 
@@ -47,11 +45,11 @@ msgstr ""
 msgid "Enter a collection name"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:98
+#: src/onboarding/ui/NoteEditor/index.tsx:97
 msgid "Enter field data for side {0} field {1}"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:101
+#: src/onboarding/ui/NoteEditor/index.tsx:102
 msgid "Field data for field side {0} {1}"
 msgstr ""
 
@@ -75,9 +73,7 @@ msgstr ""
 msgid "Side {sideIndex}"
 msgstr ""
 
-#: src/data/DataProvider/index.tsx:25
 #: src/onboarding/ui/CollectionScreen/index.tsx:60
-#: src/onboarding/ui/NotesScreen/index.tsx:39
 msgid "Something went wrong"
 msgstr ""
 
@@ -85,7 +81,7 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:112
+#: src/onboarding/ui/CollectionScreen/index.tsx:111
 msgid "Submitting"
 msgstr ""
 
@@ -105,17 +101,15 @@ msgstr ""
 msgid "There was an error updating the collection"
 msgstr ""
 
-#: src/data/DataProvider/index.tsx:29
 #: src/onboarding/ui/CollectionScreen/index.tsx:66
-#: src/onboarding/ui/NotesScreen/index.tsx:43
 msgid "Try again"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:114
+#: src/onboarding/ui/CollectionScreen/index.tsx:113
 msgid "Update collection"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:126
+#: src/onboarding/ui/NoteEditor/index.tsx:124
 msgid "Update note"
 msgstr ""
 

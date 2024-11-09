@@ -3,13 +3,13 @@ import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
-import { Alert, TextInput, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import {
   createCollectionMutation,
   updateCollectionMutation,
 } from '@/collections'
 import { log } from '@/telemetry'
-import { Button } from '@/ui'
+import { Button, TextInput } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
@@ -95,14 +95,13 @@ export default function CollectionScreen() {
         initialValues={initialValues}
         onSubmit={onSubmit}
       >
-        {({ handleChange, handleSubmit, isSubmitting, values }) => (
+        {({ handleSubmit, isSubmitting, values }) => (
           <>
             <TextInput
               accessibilityLabel={i18n.t(msg`Enter a collection name`)}
-              value={values.name}
-              onChangeText={handleChange('name')}
+              name="name"
               placeholder={i18n.t(msg`Collection name`)}
-              testID="onboarding.collection.name.input"
+              testID="onboarding.collection.name"
             />
             <Button
               testID="onboarding.collection.cta"

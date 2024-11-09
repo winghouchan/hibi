@@ -4,10 +4,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
 import { FieldArray, Formik, type FormikConfig } from 'formik'
 import { useEffect } from 'react'
-import { Alert, TextInput, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
 import { log } from '@/telemetry'
-import { Button } from '@/ui'
+import { Button, TextInput } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 
 export default function NoteEditor() {
@@ -83,7 +83,7 @@ export default function NoteEditor() {
         initialValues={initialValues}
         onSubmit={onSubmit}
       >
-        {({ handleChange, handleSubmit, values }) => (
+        {({ handleSubmit, values }) => (
           <>
             {values.fields.map((side, sideIndex) => (
               <FieldArray key={sideIndex} name={`fields.${sideIndex}`}>
@@ -93,17 +93,15 @@ export default function NoteEditor() {
                     <View>
                       {side.map((field, fieldIndex) => (
                         <TextInput
-                          key={fieldIndex}
                           accessibilityLabel={i18n.t(
                             msg`Enter field data for side ${sideIndex + 1} field ${fieldIndex + 1}`,
                           )}
+                          key={fieldIndex}
+                          name={`fields.${sideIndex}.${fieldIndex}.value`}
                           placeholder={i18n.t(
                             msg`Field data for field side ${sideIndex + 1} ${fieldIndex + 1}`,
                           )}
-                          onChangeText={handleChange(
-                            `fields.${sideIndex}.${fieldIndex}.value`,
-                          )}
-                          testID={`onboarding.note-editor.side-${sideIndex}.field-${fieldIndex}.input`}
+                          testID={`onboarding.note-editor.side-${sideIndex}.field-${fieldIndex}`}
                           value={field.value as string}
                         />
                       ))}
