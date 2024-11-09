@@ -1,2 +1,2 @@
-export { default as createReviewables } from './createReviewables'
+export * from './operations'
 export * as schema from './schema'

@@ -7,7 +7,7 @@ import {
   State,
 } from 'ts-fsrs'
 import { database } from '@/data'
-import { review, reviewableSnapshot } from '../schema'
+import { review, reviewableSnapshot } from '../../schema'
 
 interface CreateReviewParameters {
   reviewable: number

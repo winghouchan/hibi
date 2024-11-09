@@ -8,7 +8,7 @@ import {
   ReviewLog,
 } from 'ts-fsrs'
 import { mockDatabase } from 'test/utils'
-import { review, reviewableSnapshot } from '../schema'
+import { review, reviewableSnapshot } from '../../schema'
 
 describe('createReview', () => {
   describe('when there have been zero reviews', () => {
