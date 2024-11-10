@@ -23,6 +23,7 @@ describe('<AppLayout />', () => {
         {
           '(app)/_layout': AppLayout,
           '(app)/index': () => null,
+          '(app)/review': () => null,
           index: () => null,
         },
         {
@@ -43,6 +44,7 @@ describe('<AppLayout />', () => {
         {
           '(app)/_layout': AppLayout,
           '(app)/index': () => null,
+          '(app)/review': () => null,
           index: () => null,
         },
         {

@@ -226,7 +226,8 @@ describe('<NotesScreen />', () => {
         renderRouter(
           {
             '(app)/_layout': () => null,
-            '(app)/index': () => null,
+            '(app)/(tabs)/_layout': () => null,
+            '(app)/(tabs)/index': () => null,
             'onboarding/notes': NotesScreen,
           },
           {

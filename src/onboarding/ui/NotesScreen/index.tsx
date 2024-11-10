@@ -28,8 +28,16 @@ export default function NotesScreen() {
         routes: [
           {
             name: '(app)',
-            params: {
-              screen: 'index',
+            state: {
+              index: 0,
+              routes: [
+                {
+                  name: '(tabs)',
+                  params: {
+                    screen: 'index',
+                  },
+                },
+              ],
             },
           },
         ],
