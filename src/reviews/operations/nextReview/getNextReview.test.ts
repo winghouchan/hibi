@@ -1,6 +1,12 @@
 import { add, sub } from 'date-fns'
-import { note } from '@/notes/schema'
-import { review, reviewable, reviewableSnapshot } from '@/reviews/schema'
+import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
+import { note, noteField } from '@/notes/schema'
+import {
+  review,
+  reviewable,
+  reviewableField,
+  reviewableSnapshot,
+} from '@/reviews/schema'
 import { mockDatabase } from 'test/utils'
 
 describe('getNextReview', () => {
@@ -17,11 +23,21 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front' },
+              { side: 1, position: 0, value: 'Back' },
+            ],
             snapshots: [],
           },
         ],
       },
-      expected: expect.objectContaining({ id: 1 }),
+      expected: expect.objectContaining({
+        id: 1,
+        fields: [
+          expect.objectContaining({ value: 'Front' }),
+          expect.objectContaining({ value: 'Back' }),
+        ],
+      }),
     },
     {
       when: 'when there is 1 reviewable with 1 snapshot with a due date in the past',
@@ -30,6 +46,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front' },
+              { side: 1, position: 0, value: 'Back' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -39,7 +59,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 1 }),
+      expected: expect.objectContaining({
+        id: 1,
+        fields: [
+          expect.objectContaining({ value: 'Front' }),
+          expect.objectContaining({ value: 'Back' }),
+        ],
+      }),
     },
     {
       when: 'when there is 1 reviewable with 1 snapshot with a due date in the future',
@@ -48,6 +74,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front' },
+              { side: 1, position: 0, value: 'Back' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 1 }),
@@ -57,7 +87,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 1 }),
+      expected: expect.objectContaining({
+        id: 1,
+        fields: [
+          expect.objectContaining({ value: 'Front' }),
+          expect.objectContaining({ value: 'Back' }),
+        ],
+      }),
     },
     {
       when: 'when there is 1 reviewable with many snapshots with all due dates in the past',
@@ -66,6 +102,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front' },
+              { side: 1, position: 0, value: 'Back' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -79,7 +119,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 1 }),
+      expected: expect.objectContaining({
+        id: 1,
+        fields: [
+          expect.objectContaining({ value: 'Front' }),
+          expect.objectContaining({ value: 'Back' }),
+        ],
+      }),
     },
     {
       when: 'when there is 1 reviewable with many snapshots with all due dates in the future',
@@ -88,6 +134,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front' },
+              { side: 1, position: 0, value: 'Back' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 1 }),
@@ -101,7 +151,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 1 }),
+      expected: expect.objectContaining({
+        id: 1,
+        fields: [
+          expect.objectContaining({ value: 'Front' }),
+          expect.objectContaining({ value: 'Back' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with 1 snapshot with a due date in the past',
@@ -110,6 +166,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -119,6 +179,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 2 }),
@@ -128,7 +192,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with 1 snapshot with some due dates being in the past and some in the future',
@@ -137,6 +207,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 1 }),
@@ -146,6 +220,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -155,7 +233,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with 1 snapshot with a due date in the future',
@@ -164,6 +248,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 2 }),
@@ -173,6 +261,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 1 }),
@@ -182,7 +274,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with many snapshots with all due dates in the past',
@@ -191,6 +289,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -204,6 +306,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 3 }),
@@ -217,7 +323,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with many snapshots with all due dates in the future',
@@ -226,6 +338,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 4 }),
@@ -239,6 +355,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 2 }),
@@ -252,7 +372,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with many snapshots with some due dates in the past and some in the future',
@@ -261,6 +387,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: add(new Date(), { days: 1 }),
@@ -274,6 +404,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -287,7 +421,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables each with many snapshots that have interleaved created and due dates',
@@ -296,6 +436,10 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -309,6 +453,10 @@ describe('getNextReview', () => {
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 2 }),
@@ -322,7 +470,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
     {
       when: 'when there are many reviewables with some having snapshots and some having no snapshots',
@@ -331,10 +485,18 @@ describe('getNextReview', () => {
         reviewables: [
           {
             id: 1,
+            fields: [
+              { side: 0, position: 0, value: 'Front 1' },
+              { side: 1, position: 0, value: 'Back 1' },
+            ],
             snapshots: [],
           },
           {
             id: 2,
+            fields: [
+              { side: 0, position: 0, value: 'Front 2' },
+              { side: 1, position: 0, value: 'Back 2' },
+            ],
             snapshots: [
               {
                 due: sub(new Date(), { days: 1 }),
@@ -344,7 +506,13 @@ describe('getNextReview', () => {
           },
         ],
       },
-      expected: expect.objectContaining({ id: 2 }),
+      expected: expect.objectContaining({
+        id: 2,
+        fields: [
+          expect.objectContaining({ value: 'Front 2' }),
+          expect.objectContaining({ value: 'Back 2' }),
+        ],
+      }),
     },
   ])('$when', ({ then, fixture, expected }) => {
     test(
@@ -361,11 +529,30 @@ describe('getNextReview', () => {
             .returning()
 
           await Promise.all(
-            fixture.reviewables.map(async ({ id, snapshots }) => {
+            fixture.reviewables.map(async ({ id, fields, snapshots }) => {
               const [{ id: reviewableId }] = await database
                 .insert(reviewable)
                 .values({ id, note: noteId })
                 .returning()
+
+              await Promise.all(
+                fields.map(async (field) => {
+                  const [{ id: noteFieldId }] = await database
+                    .insert(noteField)
+                    .values({
+                      note: noteId,
+                      hash: hashNoteFieldValue(field.value),
+                      ...field,
+                    })
+                    .returning()
+
+                  await database.insert(reviewableField).values({
+                    reviewable: reviewableId,
+                    field: noteFieldId,
+                    side: field.side,
+                  })
+                }),
+              )
 
               await Promise.all(
                 snapshots.map(async ({ due, createdAt }) => {

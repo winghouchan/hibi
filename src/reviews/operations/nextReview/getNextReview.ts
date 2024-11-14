@@ -1,6 +1,11 @@
 import { asc, desc, eq, sql } from 'drizzle-orm'
 import { database } from '@/data'
-import { reviewable, reviewableSnapshot } from '@/reviews/schema'
+import { noteField } from '@/notes/schema'
+import {
+  reviewable,
+  reviewableField,
+  reviewableSnapshot,
+} from '@/reviews/schema'
 
 export default async function getNextReview() {
   /**
@@ -43,12 +48,22 @@ export default async function getNextReview() {
   /**
    * Reviewables joined against their latest snapshots
    */
-  const [result] = await database
+  const [nextReviewable] = await database
     .select()
     .from(reviewable)
     .leftJoin(latestSnapshot, eq(reviewable.id, latestSnapshot.reviewable))
     .orderBy(sql`${asc(latestSnapshot.due)} nulls last`)
     .limit(1)
 
-  return result?.reviewable ?? null
+  const fields = nextReviewable
+    ? await database
+        .select({
+          value: noteField.value,
+        })
+        .from(reviewableField)
+        .where(eq(reviewableField.reviewable, nextReviewable.reviewable.id))
+        .innerJoin(noteField, eq(reviewableField.field, noteField.id))
+    : []
+
+  return nextReviewable ? { id: nextReviewable.reviewable.id, fields } : null
 }
