@@ -616,4 +616,85 @@ describe('getNextReview', () => {
       })
     },
   )
+
+  describe('when the note field side and reviewable field side differ', () => {
+    it('returns the fields with the reviewable side, ordered by the reviewable field side and note field position ascending', async () => {
+      const { database, resetDatabaseMock } = await mockDatabase()
+      const { default: getNextReview } = await import('./getNextReview')
+
+      const fixture = {
+        reviewable: {
+          fields: [{ side: 1 }, { side: 1 }, { side: 0 }, { side: 0 }],
+        },
+        note: {
+          fields: [
+            { side: 0, position: 0, value: 'A' },
+            { side: 0, position: 1, value: 'B' },
+            { side: 1, position: 0, value: 'C' },
+            { side: 1, position: 1, value: 'D' },
+          ],
+        },
+      }
+
+      const [{ id: noteId }] = await database
+        .insert(note)
+        .values({}) // The values are not significant to the test
+        .returning()
+
+      const [{ id: reviewableId }] = await database
+        .insert(reviewable)
+        .values({ note: noteId })
+        .returning()
+
+      const noteFields = await database
+        .insert(noteField)
+        .values(
+          fixture.note.fields.map((field) => ({
+            hash: hashNoteFieldValue(field.value),
+            note: noteId,
+            ...field,
+          })),
+        )
+        .returning()
+
+      await database.insert(reviewableField).values(
+        fixture.reviewable.fields.map((field, index) => ({
+          reviewable: reviewableId,
+          field: noteFields[index].id,
+          ...field,
+        })),
+      )
+
+      const output = await getNextReview()
+
+      expect(output).toEqual(
+        expect.objectContaining({
+          fields: [
+            expect.objectContaining({
+              side: 0,
+              position: 0,
+              value: 'C',
+            }),
+            expect.objectContaining({
+              side: 0,
+              position: 1,
+              value: 'D',
+            }),
+            expect.objectContaining({
+              side: 1,
+              position: 0,
+              value: 'A',
+            }),
+            expect.objectContaining({
+              side: 1,
+              position: 1,
+              value: 'B',
+            }),
+          ],
+        }),
+      )
+
+      resetDatabaseMock()
+    })
+  })
 })

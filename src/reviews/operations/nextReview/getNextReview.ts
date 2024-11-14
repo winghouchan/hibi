@@ -67,11 +67,14 @@ export default async function getNextReview(options?: Options) {
   const fields = nextReviewable
     ? await database
         .select({
+          side: reviewableField.side,
+          position: noteField.position,
           value: noteField.value,
         })
         .from(reviewableField)
         .where(eq(reviewableField.reviewable, nextReviewable.reviewable.id))
         .innerJoin(noteField, eq(reviewableField.field, noteField.id))
+        .orderBy(asc(reviewableField.side), asc(noteField.position))
     : []
 
   return nextReviewable ? { id: nextReviewable.reviewable.id, fields } : null
