@@ -65,16 +65,31 @@ export default async function getNextReview(options?: Options) {
     .limit(1)
 
   const fields = nextReviewable
-    ? await database
-        .select({
-          side: reviewableField.side,
-          position: noteField.position,
-          value: noteField.value,
-        })
-        .from(reviewableField)
-        .where(eq(reviewableField.reviewable, nextReviewable.reviewable.id))
-        .innerJoin(noteField, eq(reviewableField.field, noteField.id))
-        .orderBy(asc(reviewableField.side), asc(noteField.position))
+    ? (
+        await database
+          .select({
+            side: reviewableField.side,
+            position: noteField.position,
+            value: noteField.value,
+          })
+          .from(reviewableField)
+          .where(eq(reviewableField.reviewable, nextReviewable.reviewable.id))
+          .innerJoin(noteField, eq(reviewableField.field, noteField.id))
+          .orderBy(asc(reviewableField.side), asc(noteField.position))
+      ).reduce<
+        (Pick<typeof reviewableField.$inferSelect, 'side'> &
+          Pick<typeof noteField.$inferSelect, 'position' | 'value'>)[][]
+      >((state, field) => {
+        const newState = [...state]
+
+        if (newState[field.side]) {
+          newState[field.side].push(field)
+        } else {
+          newState[field.side] = [field]
+        }
+
+        return newState
+      }, [])
     : []
 
   return nextReviewable ? { id: nextReviewable.reviewable.id, fields } : null

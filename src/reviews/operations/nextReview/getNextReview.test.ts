@@ -39,8 +39,8 @@ describe('getNextReview', () => {
             : expect.objectContaining({
                 id: 1,
                 fields: [
-                  expect.objectContaining({ value: 'Front' }),
-                  expect.objectContaining({ value: 'Back' }),
+                  [expect.objectContaining({ value: 'Front' })],
+                  [expect.objectContaining({ value: 'Back' })],
                 ],
               }),
         },
@@ -67,8 +67,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 1,
             fields: [
-              expect.objectContaining({ value: 'Front' }),
-              expect.objectContaining({ value: 'Back' }),
+              [expect.objectContaining({ value: 'Front' })],
+              [expect.objectContaining({ value: 'Back' })],
             ],
           }),
         },
@@ -97,8 +97,8 @@ describe('getNextReview', () => {
             : expect.objectContaining({
                 id: 1,
                 fields: [
-                  expect.objectContaining({ value: 'Front' }),
-                  expect.objectContaining({ value: 'Back' }),
+                  [expect.objectContaining({ value: 'Front' })],
+                  [expect.objectContaining({ value: 'Back' })],
                 ],
               }),
         },
@@ -129,8 +129,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 1,
             fields: [
-              expect.objectContaining({ value: 'Front' }),
-              expect.objectContaining({ value: 'Back' }),
+              [expect.objectContaining({ value: 'Front' })],
+              [expect.objectContaining({ value: 'Back' })],
             ],
           }),
         },
@@ -163,8 +163,8 @@ describe('getNextReview', () => {
             : expect.objectContaining({
                 id: 1,
                 fields: [
-                  expect.objectContaining({ value: 'Front' }),
-                  expect.objectContaining({ value: 'Back' }),
+                  [expect.objectContaining({ value: 'Front' })],
+                  [expect.objectContaining({ value: 'Back' })],
                 ],
               }),
         },
@@ -204,8 +204,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 2,
             fields: [
-              expect.objectContaining({ value: 'Front 2' }),
-              expect.objectContaining({ value: 'Back 2' }),
+              [expect.objectContaining({ value: 'Front 2' })],
+              [expect.objectContaining({ value: 'Back 2' })],
             ],
           }),
         },
@@ -245,8 +245,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 2,
             fields: [
-              expect.objectContaining({ value: 'Front 2' }),
-              expect.objectContaining({ value: 'Back 2' }),
+              [expect.objectContaining({ value: 'Front 2' })],
+              [expect.objectContaining({ value: 'Back 2' })],
             ],
           }),
         },
@@ -290,8 +290,8 @@ describe('getNextReview', () => {
             : expect.objectContaining({
                 id: 2,
                 fields: [
-                  expect.objectContaining({ value: 'Front 2' }),
-                  expect.objectContaining({ value: 'Back 2' }),
+                  [expect.objectContaining({ value: 'Front 2' })],
+                  [expect.objectContaining({ value: 'Back 2' })],
                 ],
               }),
         },
@@ -339,8 +339,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 2,
             fields: [
-              expect.objectContaining({ value: 'Front 2' }),
-              expect.objectContaining({ value: 'Back 2' }),
+              [expect.objectContaining({ value: 'Front 2' })],
+              [expect.objectContaining({ value: 'Back 2' })],
             ],
           }),
         },
@@ -392,8 +392,8 @@ describe('getNextReview', () => {
             : expect.objectContaining({
                 id: 2,
                 fields: [
-                  expect.objectContaining({ value: 'Front 2' }),
-                  expect.objectContaining({ value: 'Back 2' }),
+                  [expect.objectContaining({ value: 'Front 2' })],
+                  [expect.objectContaining({ value: 'Back 2' })],
                 ],
               }),
         },
@@ -441,8 +441,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 2,
             fields: [
-              expect.objectContaining({ value: 'Front 2' }),
-              expect.objectContaining({ value: 'Back 2' }),
+              [expect.objectContaining({ value: 'Front 2' })],
+              [expect.objectContaining({ value: 'Back 2' })],
             ],
           }),
         },
@@ -490,8 +490,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 2,
             fields: [
-              expect.objectContaining({ value: 'Front 2' }),
-              expect.objectContaining({ value: 'Back 2' }),
+              [expect.objectContaining({ value: 'Front 2' })],
+              [expect.objectContaining({ value: 'Back 2' })],
             ],
           }),
         },
@@ -526,8 +526,8 @@ describe('getNextReview', () => {
           expected: expect.objectContaining({
             id: 2,
             fields: [
-              expect.objectContaining({ value: 'Front 2' }),
-              expect.objectContaining({ value: 'Back 2' }),
+              [expect.objectContaining({ value: 'Front 2' })],
+              [expect.objectContaining({ value: 'Back 2' })],
             ],
           }),
         },
@@ -670,26 +670,30 @@ describe('getNextReview', () => {
       expect(output).toEqual(
         expect.objectContaining({
           fields: [
-            expect.objectContaining({
-              side: 0,
-              position: 0,
-              value: 'C',
-            }),
-            expect.objectContaining({
-              side: 0,
-              position: 1,
-              value: 'D',
-            }),
-            expect.objectContaining({
-              side: 1,
-              position: 0,
-              value: 'A',
-            }),
-            expect.objectContaining({
-              side: 1,
-              position: 1,
-              value: 'B',
-            }),
+            [
+              expect.objectContaining({
+                side: 0,
+                position: 0,
+                value: 'C',
+              }),
+              expect.objectContaining({
+                side: 0,
+                position: 1,
+                value: 'D',
+              }),
+            ],
+            [
+              expect.objectContaining({
+                side: 1,
+                position: 0,
+                value: 'A',
+              }),
+              expect.objectContaining({
+                side: 1,
+                position: 1,
+                value: 'B',
+              }),
+            ],
           ],
         }),
       )
