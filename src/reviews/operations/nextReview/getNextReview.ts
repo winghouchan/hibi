@@ -1,4 +1,4 @@
-import { asc, desc, eq, sql } from 'drizzle-orm'
+import { asc, desc, eq, lt, sql } from 'drizzle-orm'
 import { database } from '@/data'
 import { noteField } from '@/notes/schema'
 import {
@@ -7,7 +7,11 @@ import {
   reviewableSnapshot,
 } from '@/reviews/schema'
 
-export default async function getNextReview() {
+interface Options {
+  onlyDue?: boolean
+}
+
+export default async function getNextReview(options?: Options) {
   /**
    * Partitions by reviewable ordered by created dates descending
    */
@@ -52,6 +56,11 @@ export default async function getNextReview() {
     .select()
     .from(reviewable)
     .leftJoin(latestSnapshot, eq(reviewable.id, latestSnapshot.reviewable))
+    .where(
+      options?.onlyDue
+        ? lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`)
+        : undefined,
+    )
     .orderBy(sql`${asc(latestSnapshot.due)} nulls last`)
     .limit(1)
 
