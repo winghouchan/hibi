@@ -42,5 +42,9 @@ export const reviewableSnapshotRelations = relations(
       fields: [reviewableSnapshot.review],
       references: [review.id],
     }),
+    reviewable: one(reviewable, {
+      fields: [reviewableSnapshot.reviewable],
+      references: [reviewable.id],
+    }),
   }),
 )
