@@ -7,6 +7,7 @@ module.exports = {
     'plugin:react-native-a11y/all',
     'prettier',
   ],
+  ignorePatterns: ['*.lock', '*.json'],
   plugins: ['prettier'],
   rules: {
     'import/order': [
