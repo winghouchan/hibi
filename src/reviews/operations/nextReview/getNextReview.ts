@@ -1,4 +1,4 @@
-import { asc, desc, eq, lt, sql } from 'drizzle-orm'
+import { asc, desc, eq, isNull, lt, sql } from 'drizzle-orm'
 import { database } from '@/data'
 import { noteField } from '@/notes/schema'
 import {
@@ -61,7 +61,16 @@ export default async function getNextReview(options?: Options) {
         ? lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`)
         : undefined,
     )
-    .orderBy(sql`${asc(latestSnapshot.due)} nulls last`)
+    .orderBy(
+      sql`
+        case
+          when ${lt(latestSnapshot.due, sql`unixepoch('now', 'subsec') * 1000`)} then 0
+          when ${isNull(latestSnapshot.due)} then 1
+          else 2
+        end
+      `,
+      asc(latestSnapshot.due),
+    )
     .limit(1)
 
   const fields = nextReviewable

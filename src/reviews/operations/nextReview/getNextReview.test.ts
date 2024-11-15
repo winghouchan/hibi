@@ -496,7 +496,7 @@ describe('getNextReview', () => {
           }),
         },
         {
-          when: 'there are many reviewables with some having snapshots and some having no snapshots',
+          when: 'there are many reviewables with some having snapshots with due dates in the past and some having no snapshots',
           then: 'returns the reviewable where their latest snapshot has the oldest due date',
           fixture: {
             reviewables: [
@@ -528,6 +528,95 @@ describe('getNextReview', () => {
             fields: [
               [expect.objectContaining({ value: 'Front 2' })],
               [expect.objectContaining({ value: 'Back 2' })],
+            ],
+          }),
+        },
+        {
+          when: 'there are many reviewables with some having snapshots with due dates in the future and some having no snapshots',
+          then: options.onlyDue
+            ? 'returns `null`'
+            : 'returns the reviewable with no snapshot',
+          fixture: {
+            reviewables: [
+              {
+                id: 1,
+                fields: [
+                  { side: 0, position: 0, value: 'Front 1' },
+                  { side: 1, position: 0, value: 'Back 1' },
+                ],
+                snapshots: [],
+              },
+              {
+                id: 2,
+                fields: [
+                  { side: 0, position: 0, value: 'Front 2' },
+                  { side: 1, position: 0, value: 'Back 2' },
+                ],
+                snapshots: [
+                  {
+                    due: add(new Date(), { days: 1 }),
+                    createdAt: sub(new Date(), { days: 2 }),
+                  },
+                ],
+              },
+            ],
+          },
+          expected: options.onlyDue
+            ? null
+            : expect.objectContaining({
+                id: 1,
+                fields: [
+                  [expect.objectContaining({ value: 'Front 1' })],
+                  [expect.objectContaining({ value: 'Back 1' })],
+                ],
+              }),
+        },
+        {
+          when: 'there are many reviewables with some having snapshots with due dates in the past, some with due dates in the future and some having no snapshots',
+          then: 'returns the reviewable where their latest snapshot has the oldest due date',
+          fixture: {
+            reviewables: [
+              {
+                id: 1,
+                fields: [
+                  { side: 0, position: 0, value: 'Front 1' },
+                  { side: 1, position: 0, value: 'Back 1' },
+                ],
+                snapshots: [],
+              },
+              {
+                id: 2,
+                fields: [
+                  { side: 0, position: 0, value: 'Front 2' },
+                  { side: 1, position: 0, value: 'Back 2' },
+                ],
+                snapshots: [
+                  {
+                    due: add(new Date(), { days: 1 }),
+                    createdAt: sub(new Date(), { days: 2 }),
+                  },
+                ],
+              },
+              {
+                id: 3,
+                fields: [
+                  { side: 0, position: 0, value: 'Front 3' },
+                  { side: 1, position: 0, value: 'Back 3' },
+                ],
+                snapshots: [
+                  {
+                    due: sub(new Date(), { days: 1 }),
+                    createdAt: sub(new Date(), { days: 2 }),
+                  },
+                ],
+              },
+            ],
+          },
+          expected: expect.objectContaining({
+            id: 3,
+            fields: [
+              [expect.objectContaining({ value: 'Front 3' })],
+              [expect.objectContaining({ value: 'Back 3' })],
             ],
           }),
         },
