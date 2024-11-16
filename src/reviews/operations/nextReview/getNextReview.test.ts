@@ -21,7 +21,7 @@ describe('getNextReview', () => {
         },
         {
           when: 'there is 1 reviewable with no snapshots',
-          then: options.onlyDue ? 'returns `null`' : 'returns the reviewable',
+          then: 'returns the reviewable',
           fixture: {
             reviewables: [
               {
@@ -34,15 +34,13 @@ describe('getNextReview', () => {
               },
             ],
           },
-          expected: options.onlyDue
-            ? null
-            : expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front' })],
-                  [expect.objectContaining({ value: 'Back' })],
-                ],
-              }),
+          expected: expect.objectContaining({
+            id: 1,
+            fields: [
+              [expect.objectContaining({ value: 'Front' })],
+              [expect.objectContaining({ value: 'Back' })],
+            ],
+          }),
         },
         {
           when: 'there is 1 reviewable with 1 snapshot with a due date in the past',
@@ -533,9 +531,7 @@ describe('getNextReview', () => {
         },
         {
           when: 'there are many reviewables with some having snapshots with due dates in the future and some having no snapshots',
-          then: options.onlyDue
-            ? 'returns `null`'
-            : 'returns the reviewable with no snapshot',
+          then: 'returns the reviewable with no snapshot',
           fixture: {
             reviewables: [
               {
@@ -561,15 +557,13 @@ describe('getNextReview', () => {
               },
             ],
           },
-          expected: options.onlyDue
-            ? null
-            : expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 1' })],
-                  [expect.objectContaining({ value: 'Back 1' })],
-                ],
-              }),
+          expected: expect.objectContaining({
+            id: 1,
+            fields: [
+              [expect.objectContaining({ value: 'Front 1' })],
+              [expect.objectContaining({ value: 'Back 1' })],
+            ],
+          }),
         },
         {
           when: 'there are many reviewables with some having snapshots with due dates in the past, some with due dates in the future and some having no snapshots',

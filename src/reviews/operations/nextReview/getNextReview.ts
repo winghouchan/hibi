@@ -1,4 +1,4 @@
-import { asc, desc, eq, isNull, lt, sql } from 'drizzle-orm'
+import { asc, desc, eq, isNull, lt, or, sql } from 'drizzle-orm'
 import { database } from '@/data'
 import { noteField } from '@/notes/schema'
 import {
@@ -58,7 +58,10 @@ export default async function getNextReview(options?: Options) {
     .leftJoin(latestSnapshot, eq(reviewable.id, latestSnapshot.reviewable))
     .where(
       options?.onlyDue
-        ? lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`)
+        ? or(
+            lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`),
+            isNull(latestSnapshot.due),
+          )
         : undefined,
     )
     .orderBy(
