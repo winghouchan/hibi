@@ -29,7 +29,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/onboarding/ui/NotesScreen/index.tsx:59
+#: src/reviews/ui/ReviewScreen/Review.tsx:46
 msgid "Cancel"
 msgstr ""
 
@@ -39,6 +39,10 @@ msgstr ""
 
 #: src/onboarding/ui/CollectionScreen/index.tsx:115
 msgid "Create collection"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:87
+msgid "Easy"
 msgstr ""
 
 #: src/onboarding/ui/CollectionScreen/index.tsx:101
@@ -53,8 +57,24 @@ msgstr ""
 msgid "Field data for field side {0} {1}"
 msgstr ""
 
-#: src/onboarding/ui/NotesScreen/index.tsx:85
+#: src/reviews/ui/ReviewScreen/ReviewFinished.tsx:13
 msgid "Finish"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/ReviewFinished.tsx:11
+msgid "Finished"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:69
+msgid "Forgot"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:81
+msgid "Good"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:75
+msgid "Hard"
 msgstr ""
 
 #: src/home/HomeScreen.tsx:8
@@ -69,15 +89,19 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: src/reviews/ui/ReviewScreen/index.tsx:7
+#: src/reviews/ui/ReviewScreen/index.tsx:43
 msgid "Review Screen"
+msgstr ""
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:60
+msgid "Show answer"
 msgstr ""
 
 #: src/onboarding/ui/NoteEditor/index.tsx:92
 msgid "Side {sideIndex}"
 msgstr ""
 
-#: src/onboarding/ui/NotesScreen/index.tsx:47
+#: src/reviews/ui/ReviewScreen/Review.tsx:34
 msgid "Something went wrong"
 msgstr ""
 
@@ -105,11 +129,15 @@ msgstr ""
 msgid "There was an error creating the collection"
 msgstr ""
 
+#: src/reviews/ui/ReviewScreen/Review.tsx:35
+msgid "There was an error submitting your review"
+msgstr ""
+
 #: src/onboarding/ui/CollectionScreen/index.tsx:62
 msgid "There was an error updating the collection"
 msgstr ""
 
-#: src/onboarding/ui/NotesScreen/index.tsx:51
+#: src/reviews/ui/ReviewScreen/Review.tsx:38
 msgid "Try again"
 msgstr ""
 

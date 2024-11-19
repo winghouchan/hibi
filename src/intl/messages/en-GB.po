@@ -29,7 +29,7 @@ msgstr "Add note"
 msgid "Back"
 msgstr "Back"
 
-#: src/onboarding/ui/NotesScreen/index.tsx:59
+#: src/reviews/ui/ReviewScreen/Review.tsx:46
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -40,6 +40,10 @@ msgstr "Collection name"
 #: src/onboarding/ui/CollectionScreen/index.tsx:115
 msgid "Create collection"
 msgstr "Create collection"
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:87
+msgid "Easy"
+msgstr "Easy"
 
 #: src/onboarding/ui/CollectionScreen/index.tsx:101
 msgid "Enter a collection name"
@@ -53,9 +57,25 @@ msgstr "Enter field data for side {0} field {1}"
 msgid "Field data for field side {0} {1}"
 msgstr "Field data for field side {0} {1}"
 
-#: src/onboarding/ui/NotesScreen/index.tsx:85
+#: src/reviews/ui/ReviewScreen/ReviewFinished.tsx:13
 msgid "Finish"
 msgstr "Finish"
+
+#: src/reviews/ui/ReviewScreen/ReviewFinished.tsx:11
+msgid "Finished"
+msgstr "Finished"
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:69
+msgid "Forgot"
+msgstr "Forgot"
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:81
+msgid "Good"
+msgstr "Good"
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:75
+msgid "Hard"
+msgstr "Hard"
 
 #: src/home/HomeScreen.tsx:8
 msgid "Hibi"
@@ -69,15 +89,19 @@ msgstr "New note"
 msgid "OK"
 msgstr "OK"
 
-#: src/reviews/ui/ReviewScreen/index.tsx:7
+#: src/reviews/ui/ReviewScreen/index.tsx:43
 msgid "Review Screen"
 msgstr "Review Screen"
+
+#: src/reviews/ui/ReviewScreen/Review.tsx:60
+msgid "Show answer"
+msgstr "Show answer"
 
 #: src/onboarding/ui/NoteEditor/index.tsx:92
 msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
-#: src/onboarding/ui/NotesScreen/index.tsx:47
+#: src/reviews/ui/ReviewScreen/Review.tsx:34
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -105,11 +129,15 @@ msgstr "There was an error completing onboarding"
 msgid "There was an error creating the collection"
 msgstr "There was an error creating the collection"
 
+#: src/reviews/ui/ReviewScreen/Review.tsx:35
+msgid "There was an error submitting your review"
+msgstr "There was an error submitting your review"
+
 #: src/onboarding/ui/CollectionScreen/index.tsx:62
 msgid "There was an error updating the collection"
 msgstr "There was an error updating the collection"
 
-#: src/onboarding/ui/NotesScreen/index.tsx:51
+#: src/reviews/ui/ReviewScreen/Review.tsx:38
 msgid "Try again"
 msgstr "Try again"
 

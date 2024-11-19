@@ -31,7 +31,7 @@ describe('createReview', () => {
         const { database, resetDatabaseMock } = await mockDatabase()
         const { createCollection } = await import('@/collections')
         const { createNote } = await import('@/notes')
-        const { default: createReview } = await import('.')
+        const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
           name: 'Collection Mock',
         })
@@ -160,7 +160,7 @@ describe('createReview', () => {
         const { database, resetDatabaseMock } = await mockDatabase()
         const { createCollection } = await import('@/collections')
         const { createNote } = await import('@/notes')
-        const { default: createReview } = await import('.')
+        const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
           name: 'Collection Mock',
         })
@@ -331,7 +331,7 @@ describe('createReview', () => {
         const { database, resetDatabaseMock } = await mockDatabase()
         const { createCollection } = await import('@/collections')
         const { createNote } = await import('@/notes')
-        const { default: createReview } = await import('.')
+        const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
           name: 'Collection Mock',
         })
