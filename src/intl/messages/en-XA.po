@@ -89,7 +89,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: src/reviews/ui/ReviewScreen/index.tsx:43
+#: src/reviews/ui/ReviewScreen/index.tsx:29
 msgid "Review Screen"
 msgstr ""
 
