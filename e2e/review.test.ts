@@ -3,7 +3,7 @@ import { by, element, expect } from 'detox'
 describe('Review', () => {
   describe('when onboarding has been completed', () => {
     describe('and there are new reviewables', () => {
-      test('can be finished', async () => {
+      test('a review can be completed via starting from the home screen', async () => {
         await device.launchApp({
           delete: true,
           launchArgs: { databaseFixture: 'review' },
@@ -19,6 +19,29 @@ describe('Review', () => {
         await expect(element(by.id('review.finished.screen'))).toBeVisible()
 
         await element(by.id('review.finish.button')).tap()
+        await expect(element(by.id('home.screen'))).toBeVisible()
+      })
+
+      test('a review can be completed via starting from a deep link navigation', async () => {
+        await device.launchApp({
+          delete: true,
+          launchArgs: { databaseFixture: 'review' },
+          url: 'hibi://review',
+        })
+
+        await expect(element(by.id('review.screen'))).toBeVisible()
+
+        await element(by.id('review.show-answer.button')).tap()
+        await element(by.id('review.rate.easy.button')).tap()
+        await expect(element(by.id('review.finished.screen'))).toBeVisible()
+
+        await element(by.id('review.finish.button')).tap()
+
+        /**
+         * @todo: Fix this test failure. It is  failing because the splash
+         * screen is not getting hidden, even though `SplashScreen.hideAsync`
+         * is called. See `src/layouts/Root/SplashScreen`.
+         */
         await expect(element(by.id('home.screen'))).toBeVisible()
       })
     })
