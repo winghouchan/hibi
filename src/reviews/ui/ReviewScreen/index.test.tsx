@@ -1,10 +1,6 @@
-import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
-} from '@testing-library/react-native'
+import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { useRouter } from 'expo-router'
+import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { createReview, getNextReview } from '@/reviews/operations'
 import { mockAppRoot } from 'test/utils'
@@ -166,7 +162,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReview(inputs[0].reviewable)
 
-    render(<ReviewScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      { '(app)/review': ReviewScreen },
+      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
+    )
 
     for (let index = 0; index < inputs.length; index++) {
       expect(
@@ -206,7 +205,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReviewError(new Error('Mock Error'))
 
-    render(<ReviewScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      { '(app)/review': ReviewScreen },
+      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
+    )
 
     await waitFor(async () => expect(alertSpy).toHaveBeenCalledOnce())
   })
@@ -228,7 +230,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReview(input.reviewable)
 
-    render(<ReviewScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      { '(app)/review': ReviewScreen },
+      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
+    )
 
     await screen.findByText(/Front/)
 
@@ -259,7 +264,10 @@ describe('<ReviewScreen />', () => {
     mockNextReview(input.reviewable)
     mockCreateReviewError(new Error('Mock Error'))
 
-    render(<ReviewScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      { '(app)/review': ReviewScreen },
+      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
+    )
 
     await screen.findByText(/Front/)
 
