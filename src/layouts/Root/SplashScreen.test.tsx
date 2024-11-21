@@ -1,11 +1,10 @@
 import { render, waitFor } from '@testing-library/react-native'
 
 describe('<Splash />', () => {
-  beforeEach(async () => {
-    jest.doMock(
-      '@/onboarding/operations/isOnboardingComplete/isOnboardingComplete',
-    )
+  let mockOnboardedState: (onboarded: boolean) => void,
+    mockOnboardedStateError: (error: Error) => void
 
+  beforeEach(async () => {
     /**
      * Work around React error saying:
      *
@@ -31,25 +30,31 @@ describe('<Splash />', () => {
      * imports to React.
      */
     jest.doMock('react', () => jest.requireActual('react'))
+
+    jest.doMock(
+      '@/onboarding/operations/isOnboardingComplete/isOnboardingComplete',
+    )
+
+    const isOnboardingComplete = (await import('@/onboarding'))
+      .isOnboardingComplete as jest.MockedFunction<
+      (typeof import('@/onboarding'))['isOnboardingComplete']
+    >
+
+    mockOnboardedState = (onboarded: boolean) =>
+      isOnboardingComplete.mockResolvedValueOnce(onboarded)
+
+    mockOnboardedStateError = (error: Error) =>
+      isOnboardingComplete.mockRejectedValueOnce(error)
   })
 
   describe('when dependencies are ready', () => {
     it('hides the splash screen', async () => {
-      const { isOnboardingCompleteQuery } = await import('@/onboarding')
-
       await jest.isolateModulesAsync(async () => {
         const { SplashScreen } = await import('expo-router')
         const { mockAppRoot } = await import('test/utils')
         const { default: Splash } = await import('./SplashScreen')
 
-        ;(
-          isOnboardingCompleteQuery.queryFn as jest.MockedFunction<
-            Exclude<
-              typeof isOnboardingCompleteQuery.queryFn,
-              symbol | undefined
-            >
-          >
-        ).mockResolvedValue(true)
+        mockOnboardedState(true)
 
         const { rerender } = render(<Splash ready={false} />, {
           wrapper: mockAppRoot(),
@@ -69,21 +74,12 @@ describe('<Splash />', () => {
 
   describe('when a data dependency errors', () => {
     it('does not hide the splash screen', async () => {
-      const { isOnboardingCompleteQuery } = await import('@/onboarding')
-
       await jest.isolateModulesAsync(async () => {
         const { SplashScreen } = await import('expo-router')
         const { mockAppRoot } = await import('test/utils')
         const { default: Splash } = await import('./SplashScreen')
 
-        ;(
-          isOnboardingCompleteQuery.queryFn as jest.MockedFunction<
-            Exclude<
-              typeof isOnboardingCompleteQuery.queryFn,
-              symbol | undefined
-            >
-          >
-        ).mockRejectedValue(new Error('Mock Error'))
+        mockOnboardedStateError(new Error('Mock Error'))
 
         const { rerender } = render(<Splash ready={false} />, {
           wrapper: mockAppRoot(),
