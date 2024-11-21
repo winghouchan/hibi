@@ -11,6 +11,7 @@ import NoteEditor from '.'
 jest.mock('expo-linking')
 jest.mock('@/notes/createNote/createNote')
 jest.mock('@/notes/getNote/getNote')
+jest.mock('@/notes/updateNote/updateNote')
 jest.mock(
   '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
 )
@@ -95,10 +96,18 @@ describe('<NoteEditor />', () => {
     })
 
     describe('and there is a note ID', () => {
-      test('the form is pre-populated with the note', async () => {
+      test('the form is pre-populated with the note and can be updated', async () => {
+        const user = userEvent.setup()
         const input = {
-          note: {
-            fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+          existing: {
+            note: {
+              fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+            },
+          },
+          new: {
+            note: {
+              fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
+            },
           },
         } as const
 
@@ -114,11 +123,13 @@ describe('<NoteEditor />', () => {
           fields: [
             [
               {
-                value: input.note.fields[0][0].value,
+                value: input.existing.note.fields[0][0].value,
                 id: 1,
                 createdAt: new Date(),
                 note: 1,
-                hash: hashNoteFieldValue(input.note.fields[0][0].value),
+                hash: hashNoteFieldValue(
+                  input.existing.note.fields[0][0].value,
+                ),
                 side: 0,
                 position: 0,
                 archived: false,
@@ -126,11 +137,13 @@ describe('<NoteEditor />', () => {
             ],
             [
               {
-                value: input.note.fields[1][0].value,
+                value: input.existing.note.fields[1][0].value,
                 id: 2,
                 createdAt: new Date(),
                 note: 1,
-                hash: hashNoteFieldValue(input.note.fields[1][0].value),
+                hash: hashNoteFieldValue(
+                  input.existing.note.fields[1][0].value,
+                ),
                 side: 1,
                 position: 0,
                 archived: false,
@@ -153,11 +166,29 @@ describe('<NoteEditor />', () => {
         )
 
         expect(
-          await screen.findByDisplayValue(input.note.fields[0][0].value),
+          await screen.findByDisplayValue(
+            input.existing.note.fields[0][0].value,
+          ),
         ).toBeOnTheScreen()
         expect(
-          await screen.findByDisplayValue(input.note.fields[1][0].value),
+          await screen.findByDisplayValue(
+            input.existing.note.fields[1][0].value,
+          ),
         ).toBeOnTheScreen()
+
+        await user.type(
+          screen.getByDisplayValue(input.existing.note.fields[0][0].value),
+          input.new.note.fields[0][0].value,
+        )
+        await user.type(
+          screen.getByDisplayValue(input.existing.note.fields[1][0].value),
+          input.new.note.fields[1][0].value,
+        )
+        await user.press(
+          await screen.findByRole('button', { name: 'Update note' }),
+        )
+
+        expect(backMock).toHaveBeenCalled()
       })
     })
 
