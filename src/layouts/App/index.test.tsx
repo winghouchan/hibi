@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react-native'
+import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { mockAppRoot } from 'test/utils'
@@ -32,12 +32,19 @@ describe('<AppLayout />', () => {
         },
       )
 
-      expect(screen).toHavePathname('/')
+      await waitFor(() => {
+        expect(screen).toHaveRouterState(
+          expect.objectContaining({
+            index: 0,
+            routes: [expect.objectContaining({ name: 'index' })],
+          }),
+        )
+      })
     })
   })
 
   describe('when onboarding has been completed', () => {
-    it('does not redirect to the welcome screen', () => {
+    it('does not redirect to the welcome screen', async () => {
       mockOnboardedState(true)
 
       renderRouter(
@@ -53,7 +60,20 @@ describe('<AppLayout />', () => {
         },
       )
 
-      expect(screen).toHavePathname('/')
+      await waitFor(() => {
+        expect(screen).toHaveRouterState(
+          expect.objectContaining({
+            routes: [
+              expect.objectContaining({
+                name: '(app)',
+                state: expect.objectContaining({
+                  routes: [expect.objectContaining({ name: 'index' })],
+                }),
+              }),
+            ],
+          }),
+        )
+      })
     })
   })
 })
