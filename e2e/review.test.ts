@@ -36,12 +36,6 @@ describe('Review', () => {
         await expect(element(by.id('review.finished.screen'))).toBeVisible()
 
         await element(by.id('review.finish.button')).tap()
-
-        /**
-         * @todo: Fix this test failure. It is  failing because the splash
-         * screen is not getting hidden, even though `SplashScreen.hideAsync`
-         * is called. See `src/layouts/Root/SplashScreen`.
-         */
         await expect(element(by.id('home.screen'))).toBeVisible()
       })
     })

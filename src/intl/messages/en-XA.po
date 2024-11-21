@@ -25,7 +25,7 @@ msgstr ""
 msgid "Add note"
 msgstr ""
 
-#: src/layouts/App/index.tsx:35
+#: src/layouts/App/index.tsx:36
 msgid "Back"
 msgstr ""
 

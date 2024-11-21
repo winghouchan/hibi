@@ -20,25 +20,29 @@ export default function AppLayout() {
     }
   })
 
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="review"
-        options={({ navigation }) => ({
-          headerLeft: ({ canGoBack }) =>
-            canGoBack ? (
-              <Button
-                onPress={() => {
-                  navigation.goBack()
-                }}
-              >
-                <Trans>Back</Trans>
-              </Button>
-            ) : null,
-          headerShown: true,
-          presentation: 'fullScreenModal',
-        })}
-      />
-    </Stack>
-  )
+  if (!isFetching && isOnboardingComplete) {
+    return (
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen
+          name="review"
+          options={({ navigation }) => ({
+            headerLeft: ({ canGoBack }) =>
+              canGoBack ? (
+                <Button
+                  onPress={() => {
+                    navigation.goBack()
+                  }}
+                >
+                  <Trans>Back</Trans>
+                </Button>
+              ) : null,
+            headerShown: true,
+            presentation: 'fullScreenModal',
+          })}
+        />
+      </Stack>
+    )
+  }
+
+  return null
 }
