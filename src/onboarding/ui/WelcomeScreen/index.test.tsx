@@ -2,18 +2,22 @@ import { render, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
-import { isOnboardingCompleteQuery } from '../../operations'
+import { isOnboardingComplete } from '../../operations'
 import WelcomeScreen from '.'
 
 jest.mock('@/onboarding/operations/isOnboardingComplete')
 jest.mock('expo-router')
 
+const isOnboardingCompleteMock = isOnboardingComplete as jest.MockedFunction<
+  typeof isOnboardingComplete
+>
+
 function mockOnboardedState(onboarded: boolean) {
-  ;(
-    isOnboardingCompleteQuery.queryFn as jest.MockedFunction<
-      Exclude<typeof isOnboardingCompleteQuery.queryFn, symbol | undefined>
-    >
-  ).mockResolvedValue(onboarded)
+  isOnboardingCompleteMock.mockResolvedValueOnce(onboarded)
+}
+
+function mockOnboardedStateError(error: Error) {
+  isOnboardingCompleteMock.mockRejectedValueOnce(error)
 }
 
 describe('<WelcomeScreen />', () => {
@@ -79,11 +83,7 @@ describe('<WelcomeScreen />', () => {
     it('alerts the user', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      ;(
-        isOnboardingCompleteQuery.queryFn as jest.MockedFunction<
-          Exclude<typeof isOnboardingCompleteQuery.queryFn, symbol | undefined>
-        >
-      ).mockRejectedValue(new Error('Mock Error'))
+      mockOnboardedStateError(new Error('Mock Error'))
 
       render(<WelcomeScreen />, { wrapper: mockAppRoot() })
 
