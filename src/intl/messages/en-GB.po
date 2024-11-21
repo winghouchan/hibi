@@ -29,7 +29,7 @@ msgstr "Add note"
 msgid "Back"
 msgstr "Back"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:56
+#: src/reviews/ui/ReviewScreen/Review.tsx:61
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -41,7 +41,7 @@ msgstr "Collection name"
 msgid "Create collection"
 msgstr "Create collection"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:97
+#: src/reviews/ui/ReviewScreen/Review.tsx:102
 msgid "Easy"
 msgstr "Easy"
 
@@ -65,15 +65,15 @@ msgstr "Finish"
 msgid "Finished"
 msgstr "Finished"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:79
+#: src/reviews/ui/ReviewScreen/Review.tsx:84
 msgid "Forgot"
 msgstr "Forgot"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:91
+#: src/reviews/ui/ReviewScreen/Review.tsx:96
 msgid "Good"
 msgstr "Good"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:85
+#: src/reviews/ui/ReviewScreen/Review.tsx:90
 msgid "Hard"
 msgstr "Hard"
 
@@ -93,7 +93,7 @@ msgstr "OK"
 msgid "Review Screen"
 msgstr "Review Screen"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:70
+#: src/reviews/ui/ReviewScreen/Review.tsx:75
 msgid "Show answer"
 msgstr "Show answer"
 
@@ -101,7 +101,7 @@ msgstr "Show answer"
 msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:44
+#: src/reviews/ui/ReviewScreen/Review.tsx:49
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -133,7 +133,7 @@ msgstr "There was an error creating the collection"
 msgid "There was an error creating the note"
 msgstr "There was an error creating the note"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:45
+#: src/reviews/ui/ReviewScreen/Review.tsx:50
 msgid "There was an error submitting your review"
 msgstr "There was an error submitting your review"
 
@@ -145,7 +145,7 @@ msgstr "There was an error updating the collection"
 msgid "There was an error updating the note"
 msgstr "There was an error updating the note"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:48
+#: src/reviews/ui/ReviewScreen/Review.tsx:53
 msgid "Try again"
 msgstr "Try again"
 

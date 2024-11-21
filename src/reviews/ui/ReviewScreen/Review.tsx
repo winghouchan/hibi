@@ -1,8 +1,7 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation } from '@tanstack/react-query'
-import { differenceInMilliseconds } from 'date-fns'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Alert, Text, View } from 'react-native'
 import { Grade, Rating } from 'ts-fsrs'
 import { createReviewMutation, getNextReview } from '@/reviews/operations'
@@ -18,25 +17,31 @@ export default function Review({ id, fields, onReview }: Props) {
   const { i18n } = useLingui()
   const { mutateAsync: review } = useMutation(createReviewMutation)
   const [side, setSide] = useState(0)
-  const [startTime] = useState(new Date())
-  const [finishTime, setFinishTime] = useState<Date>()
+  const duration = useRef<number>(0)
+  const interval = useRef<ReturnType<typeof setInterval>>()
+
+  useEffect(() => {
+    interval.current = setInterval(() => {
+      duration.current += 1
+    }, 1)
+
+    return () => {
+      clearInterval(interval.current)
+    }
+  }, [])
 
   const showAnswer = () => {
     setSide(1)
-    setFinishTime(new Date())
+    clearInterval(interval.current)
   }
 
   const createReviewHandler = (rating: Grade) =>
     async function handleReview() {
       try {
-        if (finishTime === undefined) {
-          throw new Error('No review finish time')
-        }
-
         await review({
           reviewable: id,
           rating,
-          duration: differenceInMilliseconds(finishTime, startTime),
+          duration: duration.current,
         })
         onReview?.()
       } catch (error) {

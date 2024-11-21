@@ -1,5 +1,6 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { DEFAULT_MIN_PRESS_DURATION } from '@testing-library/react-native/build/user-event/press/press'
+import { addHours } from 'date-fns'
 import { useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
@@ -184,7 +185,7 @@ describe('<ReviewScreen />', () => {
       // Wait for `recallTime` to elapse
       await new Promise((resolve) => {
         setTimeout(resolve, recallTime)
-        jest.runAllTimers()
+        jest.advanceTimersByTime(recallTime)
       })
 
       await user.press(screen.getByRole('button', { name: 'Show answer' }))
@@ -306,5 +307,57 @@ describe('<ReviewScreen />', () => {
     await user.press(screen.getByRole('button', { name: Ratings[1] }))
 
     await waitFor(async () => expect(alertSpy).toHaveBeenCalledOnce())
+  })
+
+  test('when the user changes the time during a review, the review duration should not be affected', async () => {
+    /**
+     * Simulates the amount of time in milliseconds it takes for the user to
+     * recall an answer after seeing the prompt.
+     */
+    const recallTime = 2000
+
+    const user = userEvent.setup()
+
+    const input = {
+      reviewable: {
+        id: 1,
+        fields: [
+          [{ side: 0, position: 0, value: 'Front 1' }],
+          [{ side: 1, position: 0, value: 'Back 1' }],
+        ],
+      },
+      rating: Ratings[1],
+    }
+
+    mockNextReview(input.reviewable)
+
+    renderRouter(
+      { '(app)/review': ReviewScreen },
+      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
+    )
+
+    await screen.findByText(/Front/, { interval: 0 })
+
+    jest.setSystemTime(addHours(new Date(), 1))
+
+    // Wait for `recallTime` to elapse
+    await new Promise((resolve) => {
+      setTimeout(resolve, recallTime)
+      jest.advanceTimersByTime(recallTime)
+    })
+
+    await user.press(screen.getByRole('button', { name: 'Show answer' }))
+
+    mockNextReview(null)
+
+    await user.press(screen.getByRole('button', { name: Ratings[1] }))
+
+    expect(createReview).toHaveBeenCalledWith({
+      reviewable: input.reviewable.id,
+      rating: Ratings[input.rating as keyof typeof Ratings],
+      duration: recallTime + DEFAULT_MIN_PRESS_DURATION,
+    })
+
+    jest.setSystemTime()
   })
 })
