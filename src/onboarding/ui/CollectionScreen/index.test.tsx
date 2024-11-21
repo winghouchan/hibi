@@ -3,7 +3,7 @@ import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { createCollection } from '@/collections'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../../operations'
+import { getOnboardingCollection } from '../../operations'
 import CollectionScreen from '.'
 
 jest.mock('@/collections/createCollection/createCollection')
@@ -14,11 +14,23 @@ jest.mock(
 const createCollectionMock = createCollection as jest.MockedFunction<
   typeof createCollection
 >
+const onboardingCollectionMock = getOnboardingCollection as jest.MockedFunction<
+  typeof getOnboardingCollection
+>
 
-const onboardingCollectionMock =
-  onboardingCollectionQuery.queryFn as jest.MockedFunction<
-    Exclude<typeof onboardingCollectionQuery.queryFn, symbol | undefined>
-  >
+function mockCreateCollectionError(error: Error) {
+  createCollectionMock.mockRejectedValueOnce(error)
+}
+
+function mockOnboardingCollection(
+  mock: Parameters<typeof onboardingCollectionMock.mockResolvedValueOnce>[0],
+) {
+  onboardingCollectionMock.mockResolvedValueOnce(mock)
+}
+
+function mockOnboardingCollectionError(error: Error) {
+  onboardingCollectionMock.mockRejectedValueOnce(error)
+}
 
 describe('<CollectionScreen />', () => {
   describe('when the user has not created a collection during onboarding before', () => {
@@ -27,12 +39,6 @@ describe('<CollectionScreen />', () => {
       const input = {
         collectionName: 'Collection Name',
       }
-
-      createCollectionMock.mockResolvedValue({
-        id: 1,
-        name: input.collectionName,
-        createdAt: new Date(),
-      })
 
       renderRouter(
         {
@@ -60,7 +66,7 @@ describe('<CollectionScreen />', () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
       const user = userEvent.setup()
 
-      createCollectionMock.mockRejectedValue(new Error('Mock Error'))
+      mockCreateCollectionError(new Error('Mock Error'))
 
       renderRouter(
         {
@@ -86,7 +92,7 @@ describe('<CollectionScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      onboardingCollectionMock.mockResolvedValue({
+      mockOnboardingCollection({
         id: 1,
         name: input.collectionName,
         createdAt: new Date(),
@@ -116,7 +122,7 @@ describe('<CollectionScreen />', () => {
     test('the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      onboardingCollectionMock.mockRejectedValue(new Error('Mock Error'))
+      mockOnboardingCollectionError(new Error('Mock Error'))
 
       renderRouter(
         {
