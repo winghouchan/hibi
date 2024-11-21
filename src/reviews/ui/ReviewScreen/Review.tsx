@@ -19,14 +19,24 @@ export default function Review({ id, fields, onReview }: Props) {
   const { mutateAsync: review } = useMutation(createReviewMutation)
   const [side, setSide] = useState(0)
   const [startTime] = useState(new Date())
+  const [finishTime, setFinishTime] = useState<Date>()
+
+  const showAnswer = () => {
+    setSide(1)
+    setFinishTime(new Date())
+  }
 
   const createReviewHandler = (rating: Grade) =>
     async function handleReview() {
       try {
+        if (finishTime === undefined) {
+          throw new Error('No review finish time')
+        }
+
         await review({
           reviewable: id,
           rating,
-          duration: differenceInMilliseconds(new Date(), startTime),
+          duration: differenceInMilliseconds(finishTime, startTime),
         })
         onReview?.()
       } catch (error) {
@@ -56,7 +66,7 @@ export default function Review({ id, fields, onReview }: Props) {
     <View style={{ height: '100%', width: '100%' }}>
       <Text>{JSON.stringify(fields[side], null, 2)}</Text>
       {side === 0 && (
-        <Button onPress={() => setSide(1)} testID="review.show-answer">
+        <Button onPress={showAnswer} testID="review.show-answer">
           <Trans>Show answer</Trans>
         </Button>
       )}

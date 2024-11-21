@@ -1,4 +1,5 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { DEFAULT_MIN_PRESS_DURATION } from '@testing-library/react-native/build/user-event/press/press'
 import { useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
@@ -158,6 +159,12 @@ describe('<ReviewScreen />', () => {
       ],
     },
   ])('$name', async ({ inputs }) => {
+    /**
+     * Simulates the amount of time in milliseconds it takes for the user to
+     * recall an answer after seeing the prompt.
+     */
+    const recallTime = 2000
+
     const user = userEvent.setup()
 
     mockNextReview(inputs[0].reviewable)
@@ -169,8 +176,16 @@ describe('<ReviewScreen />', () => {
 
     for (let index = 0; index < inputs.length; index++) {
       expect(
-        await screen.findByText(new RegExp(`Front ${index + 1}`)),
+        await screen.findByText(new RegExp(`Front ${index + 1}`), {
+          interval: 0,
+        }),
       ).toBeOnTheScreen()
+
+      // Wait for `recallTime` to elapse
+      await new Promise((resolve) => {
+        setTimeout(resolve, recallTime)
+        jest.runAllTimers()
+      })
 
       await user.press(screen.getByRole('button', { name: 'Show answer' }))
 
@@ -189,7 +204,23 @@ describe('<ReviewScreen />', () => {
       expect(createReview).toHaveBeenCalledWith({
         reviewable: inputs[index].reviewable.id,
         rating: Ratings[inputs[index].rating as keyof typeof Ratings],
-        duration: expect.any(Number),
+
+        /**
+         * The duration is the total amount of time to:
+         *
+         * - Recall the answer for the prompt. It is represented by `recallTime`.
+         * - Press the button to show the answer. It is represented by the variable
+         *   `DEFAULT_MIN_PRESS_DURATION` from `@testing-library/react-native`. By
+         *   default it is 130 ms to match the time set by React Native's source.
+         *   See: https://github.com/facebook/react-native/blob/50e38cc9f1e6713228a91ad50f426c4f65e65e1a/packages/react-native/Libraries/Pressability/Pressability.js#L264
+         *
+         * Also important is the time taken to asynchronously query for elements
+         * using `findBy*` (if any). By default, queries occur at 50 ms intervals
+         * (see: https://callstack.github.io/react-native-testing-library/cookbook/basics/async-tests#findby-queries)
+         * Setting `interval` in the options argument to `findBy*` to `0` means
+         * the time to query doesn't need to be accounted for below.
+         */
+        duration: recallTime + DEFAULT_MIN_PRESS_DURATION,
       })
     }
 
