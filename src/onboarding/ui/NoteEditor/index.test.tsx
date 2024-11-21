@@ -5,15 +5,15 @@ import { Alert } from 'react-native'
 import { getNote } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../../operations'
+import { getOnboardingCollection } from '../../operations'
 import NoteEditor from '.'
 
+jest.mock('expo-linking')
 jest.mock('@/notes/createNote/createNote')
 jest.mock('@/notes/getNote/getNote')
 jest.mock(
   '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
 )
-jest.mock('expo-linking')
 
 const backMock = jest.fn()
 
@@ -31,10 +31,29 @@ const backMock = jest.fn()
 
 const onboardingNoteMock = getNote as jest.MockedFunction<typeof getNote>
 
-const onboardingCollectionMock =
-  onboardingCollectionQuery.queryFn as jest.MockedFunction<
-    Exclude<typeof onboardingCollectionQuery.queryFn, symbol | undefined>
-  >
+const onboardingCollectionMock = getOnboardingCollection as jest.MockedFunction<
+  typeof getOnboardingCollection
+>
+
+function mockOnboardingNote(
+  mock: Parameters<typeof onboardingNoteMock.mockRejectedValueOnce>[0],
+) {
+  onboardingNoteMock.mockResolvedValueOnce(mock)
+}
+
+function mockOnboardingNoteError(error: Error) {
+  onboardingNoteMock.mockRejectedValueOnce(error)
+}
+
+function mockOnboardingCollection(
+  mock: Parameters<typeof onboardingCollectionMock.mockResolvedValueOnce>[0],
+) {
+  onboardingCollectionMock.mockResolvedValueOnce(mock)
+}
+
+function mockOnboardingCollectionError(error: Error) {
+  onboardingCollectionMock.mockRejectedValueOnce(error)
+}
 
 describe('<NoteEditor />', () => {
   describe('when there is an onboarding collection', () => {
@@ -42,7 +61,7 @@ describe('<NoteEditor />', () => {
       test('a new note can be created', async () => {
         const user = userEvent.setup()
 
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
@@ -83,14 +102,14 @@ describe('<NoteEditor />', () => {
           },
         } as const
 
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
           notes: [],
         })
 
-        onboardingNoteMock.mockResolvedValue({
+        mockOnboardingNote({
           id: 1,
           fields: [
             [
@@ -146,14 +165,14 @@ describe('<NoteEditor />', () => {
       test('the user is alerted', async () => {
         const alertSpy = jest.spyOn(Alert, 'alert')
 
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
           notes: [],
         })
 
-        onboardingNoteMock.mockResolvedValue(null)
+        mockOnboardingNote(null)
 
         renderRouter(
           {
@@ -174,7 +193,7 @@ describe('<NoteEditor />', () => {
 
   describe('when there is no onboarding collection', () => {
     test('redirects to the welcome screen', async () => {
-      onboardingCollectionMock.mockResolvedValue(null)
+      mockOnboardingCollection(null)
 
       renderRouter(
         {
@@ -195,7 +214,7 @@ describe('<NoteEditor />', () => {
       test('does not show an alert', async () => {
         const alertSpy = jest.spyOn(Alert, 'alert')
 
-        onboardingCollectionMock.mockResolvedValue(null)
+        mockOnboardingCollection(null)
 
         renderRouter(
           {
@@ -219,7 +238,7 @@ describe('<NoteEditor />', () => {
     test('the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      onboardingCollectionMock.mockRejectedValue(new Error('Mock Error'))
+      mockOnboardingCollectionError(new Error('Mock Error'))
 
       renderRouter(
         {
@@ -241,14 +260,14 @@ describe('<NoteEditor />', () => {
     test('the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      onboardingCollectionMock.mockResolvedValue({
+      mockOnboardingCollection({
         id: 1,
         name: 'Collection Name',
         createdAt: new Date(),
         notes: [],
       })
 
-      onboardingNoteMock.mockRejectedValue(new Error('Mock Error'))
+      mockOnboardingNoteError(new Error('Mock Error'))
 
       renderRouter(
         {
