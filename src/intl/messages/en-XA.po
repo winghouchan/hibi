@@ -17,11 +17,11 @@ msgstr ""
 msgid "Add another note"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:114
+#: src/onboarding/ui/NoteEditor/index.tsx:144
 msgid "Add field"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:124
+#: src/onboarding/ui/NoteEditor/index.tsx:154
 msgid "Add note"
 msgstr ""
 
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:46
+#: src/onboarding/ui/NoteEditor/index.tsx:79
 msgid "Cancel"
 msgstr ""
 
@@ -49,11 +49,11 @@ msgstr ""
 msgid "Enter a collection name"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:97
+#: src/onboarding/ui/NoteEditor/index.tsx:127
 msgid "Enter field data for side {0} field {1}"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:102
+#: src/onboarding/ui/NoteEditor/index.tsx:132
 msgid "Field data for field side {0} {1}"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "New note"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:69
+#: src/onboarding/ui/NoteEditor/index.tsx:99
 msgid "OK"
 msgstr ""
 
@@ -97,11 +97,11 @@ msgstr ""
 msgid "Show answer"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:92
+#: src/onboarding/ui/NoteEditor/index.tsx:122
 msgid "Side {sideIndex}"
 msgstr ""
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:34
+#: src/onboarding/ui/NoteEditor/index.tsx:65
 msgid "Something went wrong"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 msgid "Submitting"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:67
+#: src/onboarding/ui/NoteEditor/index.tsx:97
 msgid "The note doesn't exist"
 msgstr ""
 
@@ -129,6 +129,10 @@ msgstr ""
 msgid "There was an error creating the collection"
 msgstr ""
 
+#: src/onboarding/ui/NoteEditor/index.tsx:68
+msgid "There was an error creating the note"
+msgstr ""
+
 #: src/reviews/ui/ReviewScreen/Review.tsx:35
 msgid "There was an error submitting your review"
 msgstr ""
@@ -137,7 +141,11 @@ msgstr ""
 msgid "There was an error updating the collection"
 msgstr ""
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:38
+#: src/onboarding/ui/NoteEditor/index.tsx:67
+msgid "There was an error updating the note"
+msgstr ""
+
+#: src/onboarding/ui/NoteEditor/index.tsx:71
 msgid "Try again"
 msgstr ""
 
@@ -145,7 +153,7 @@ msgstr ""
 msgid "Update collection"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:124
+#: src/onboarding/ui/NoteEditor/index.tsx:154
 msgid "Update note"
 msgstr ""
 

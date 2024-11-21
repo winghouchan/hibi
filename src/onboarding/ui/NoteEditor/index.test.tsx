@@ -2,7 +2,7 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
-import { getNote } from '@/notes'
+import { createNote, getNote, updateNote } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockAppRoot } from 'test/utils'
 import { getOnboardingCollection } from '../../operations'
@@ -36,6 +36,10 @@ const onboardingCollectionMock = getOnboardingCollection as jest.MockedFunction<
   typeof getOnboardingCollection
 >
 
+const createNoteMock = createNote as jest.MockedFunction<typeof createNote>
+
+const updateNoteMock = updateNote as jest.MockedFunction<typeof updateNote>
+
 function mockOnboardingNote(
   mock: Parameters<typeof onboardingNoteMock.mockRejectedValueOnce>[0],
 ) {
@@ -54,6 +58,14 @@ function mockOnboardingCollection(
 
 function mockOnboardingCollectionError(error: Error) {
   onboardingCollectionMock.mockRejectedValueOnce(error)
+}
+
+function mockCreateNoteError(error: Error) {
+  createNoteMock.mockRejectedValueOnce(error)
+}
+
+function mockUpdateNoteError(error: Error) {
+  updateNoteMock.mockRejectedValueOnce(error)
 }
 
 describe('<NoteEditor />', () => {
@@ -92,6 +104,44 @@ describe('<NoteEditor />', () => {
         )
 
         expect(backMock).toHaveBeenCalled()
+      })
+
+      test('the user is alerted when there is an error creating the note', async () => {
+        const user = userEvent.setup()
+        const alertSpy = jest.spyOn(Alert, 'alert')
+
+        mockOnboardingCollection({
+          id: 1,
+          name: 'Collection Name',
+          createdAt: new Date(),
+          notes: [],
+        })
+
+        mockCreateNoteError(new Error('Mock Error'))
+
+        renderRouter(
+          {
+            'onboarding/notes/new': NoteEditor,
+          },
+          {
+            initialUrl: 'onboarding/notes/new',
+            wrapper: mockAppRoot(),
+          },
+        )
+
+        await user.type(
+          await screen.findByLabelText('Enter field data for side 1 field 1'),
+          'Front 1',
+        )
+        await user.type(
+          await screen.findByLabelText('Enter field data for side 2 field 1'),
+          'Back 1',
+        )
+        await user.press(
+          await screen.findByRole('button', { name: 'Add note' }),
+        )
+
+        expect(alertSpy).toHaveBeenCalledOnce()
       })
     })
 
@@ -189,6 +239,96 @@ describe('<NoteEditor />', () => {
         )
 
         expect(backMock).toHaveBeenCalled()
+      })
+
+      test('the user is alerted when there is an error updating the note', async () => {
+        const alertSpy = jest.spyOn(Alert, 'alert')
+        const user = userEvent.setup()
+        const input = {
+          existing: {
+            note: {
+              fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+            },
+          },
+          new: {
+            note: {
+              fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
+            },
+          },
+        } as const
+
+        mockOnboardingCollection({
+          id: 1,
+          name: 'Collection Name',
+          createdAt: new Date(),
+          notes: [],
+        })
+
+        mockOnboardingNote({
+          id: 1,
+          fields: [
+            [
+              {
+                value: input.existing.note.fields[0][0].value,
+                id: 1,
+                createdAt: new Date(),
+                note: 1,
+                hash: hashNoteFieldValue(
+                  input.existing.note.fields[0][0].value,
+                ),
+                side: 0,
+                position: 0,
+                archived: false,
+              },
+            ],
+            [
+              {
+                value: input.existing.note.fields[1][0].value,
+                id: 2,
+                createdAt: new Date(),
+                note: 1,
+                hash: hashNoteFieldValue(
+                  input.existing.note.fields[1][0].value,
+                ),
+                side: 1,
+                position: 0,
+                archived: false,
+              },
+            ],
+          ],
+          reversible: false,
+          separable: false,
+          createdAt: new Date(),
+        })
+
+        mockUpdateNoteError(new Error('Mock Error'))
+
+        renderRouter(
+          {
+            'onboarding/notes/edit/[id]': NoteEditor,
+          },
+          {
+            initialUrl: 'onboarding/notes/edit/1',
+            wrapper: mockAppRoot(),
+          },
+        )
+
+        expect(
+          await screen.findByDisplayValue(
+            input.existing.note.fields[0][0].value,
+          ),
+        ).toBeOnTheScreen()
+        expect(
+          await screen.findByDisplayValue(
+            input.existing.note.fields[1][0].value,
+          ),
+        ).toBeOnTheScreen()
+
+        await user.press(
+          await screen.findByRole('button', { name: 'Update note' }),
+        )
+
+        expect(alertSpy).toHaveBeenCalledOnce()
       })
     })
 

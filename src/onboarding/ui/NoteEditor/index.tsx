@@ -51,14 +51,44 @@ export default function NoteEditor() {
       typeof values
     >
 
+    const handlers: Parameters<typeof submit>[1] = {
+      async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: onboardingCollectionQuery.queryKey,
+        })
+
+        router.back()
+      },
+      onError(error) {
+        // @todo Handle error
+        Alert.alert(
+          i18n.t(msg`Something went wrong`),
+          doesNoteExist
+            ? i18n.t(msg`There was an error updating the note`)
+            : i18n.t(msg`There was an error creating the note`),
+          [
+            {
+              text: i18n.t(msg`Try again`),
+              style: 'default',
+              isPreferred: true,
+              onPress: async () => {
+                await submit(values, handlers)
+              },
+            },
+            {
+              text: i18n.t(msg`Cancel`),
+              style: 'cancel',
+            },
+          ],
+        )
+        log.error(error)
+      },
+    }
+
     try {
-      await submit(values)
-      queryClient.invalidateQueries({
-        queryKey: onboardingCollectionQuery.queryKey,
-      })
-      router.back()
-    } catch (error) {
-      log.error(error)
+      await submit(values, handlers)
+    } catch {
+      // Errors handled by `submit`'s error handler
     }
   }
 
