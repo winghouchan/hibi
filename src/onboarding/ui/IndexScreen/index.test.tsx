@@ -40,7 +40,7 @@ describe('<IndexScreen />', () => {
     })
   })
 
-  describe('when does not collection exist', () => {
+  describe('when a collection does not exist', () => {
     it('redirects to the welcome screen', async () => {
       onboardingCollectionMock.mockResolvedValue(null)
 
