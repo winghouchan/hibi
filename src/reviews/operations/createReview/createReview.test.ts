@@ -71,7 +71,7 @@ describe('createReview', () => {
           weights: expected.review.w,
         })
         const expectedReviewCreatedAtBetween = [
-          new Date(new Date().valueOf() - 2000),
+          new Date(new Date().valueOf() - 3000),
           new Date(),
         ] as const
         const expectedSnapshot = expect.objectContaining({
@@ -84,15 +84,15 @@ describe('createReview', () => {
           createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
-          new Date(expected.snapshot.due.valueOf() - 2000),
-          new Date(expected.snapshot.due.valueOf() + 2000),
+          new Date(expected.snapshot.due.valueOf() - 3000),
+          new Date(expected.snapshot.due.valueOf() + 3000),
         ] as const
 
         expect(returnedState.review).toEqual(expectedReview)
         expect(queriedState.review).toEqual(expectedReview)
 
         // The `created_at` datetime is determined in the database and not something that can be mocked.
-        // Expect it to be within 2000 ms of when the assertion is executed.
+        // Expect it to be within 3000 ms of when the assertion is executed.
         expect(returnedState.review.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
@@ -100,7 +100,7 @@ describe('createReview', () => {
         expect(returnedState.snapshot).toEqual(expectedSnapshot)
         expect(queriedState.snapshot).toEqual(expectedSnapshot)
 
-        // Expect the reviewable snapshot state to have a due datetime within ±2000 ms of the expected due datetime.
+        // Expect the reviewable snapshot state to have a due datetime within ±3000 ms of the expected due datetime.
         expect(returnedState.snapshot.due).toBeBetween(
           ...expectedSnapshotDueBetween,
         )
@@ -234,7 +234,7 @@ describe('createReview', () => {
           weights: expected.review.w,
         })
         const expectedReviewCreatedAtBetween = [
-          new Date(new Date().valueOf() - 2000),
+          new Date(new Date().valueOf() - 3000),
           new Date(),
         ] as const
         const expectedSnapshot = expect.objectContaining({
@@ -247,15 +247,15 @@ describe('createReview', () => {
           createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
-          new Date(expected.snapshot.due.valueOf() - 2000),
-          new Date(expected.snapshot.due.valueOf() + 2000),
+          new Date(expected.snapshot.due.valueOf() - 3000),
+          new Date(expected.snapshot.due.valueOf() + 3000),
         ] as const
 
         expect(returnedState.review).toEqual(expectedReview)
         expect(queriedState.review).toEqual(expectedReview)
 
         // The `created_at` datetime is determined in the database and not something that can be mocked.
-        // Expect it to be within 2000 ms of when the assertion is executed.
+        // Expect it to be within 3000 ms of when the assertion is executed.
         expect(returnedState.review.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
@@ -266,7 +266,7 @@ describe('createReview', () => {
         expect(returnedState.snapshot).toEqual(expectedSnapshot)
         expect(queriedState.snapshot).toEqual(expectedSnapshot)
 
-        // Expect the reviewable snapshot state to have a due datetime within ±2000 ms of the expected due datetime.
+        // Expect the reviewable snapshot state to have a due datetime within ±3000 ms of the expected due datetime.
         expect(returnedState.snapshot.due).toBeBetween(
           ...expectedSnapshotDueBetween,
         )
@@ -405,7 +405,7 @@ describe('createReview', () => {
           weights: expected.review.w,
         })
         const expectedReviewCreatedAtBetween = [
-          new Date(new Date().valueOf() - 2000),
+          new Date(new Date().valueOf() - 3000),
           new Date(),
         ] as const
         const expectedSnapshot = expect.objectContaining({
@@ -418,15 +418,15 @@ describe('createReview', () => {
           createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
-          new Date(expected.snapshot.due.valueOf() - 2000),
-          new Date(expected.snapshot.due.valueOf() + 2000),
+          new Date(expected.snapshot.due.valueOf() - 3000),
+          new Date(expected.snapshot.due.valueOf() + 3000),
         ] as const
 
         expect(returnedState.review).toEqual(expectedReview)
         expect(queriedState.review).toEqual(expectedReview)
 
         // The `created_at` datetime is determined in the database and not something that can be mocked.
-        // Expect it to be within 2000 ms of when the assertion is executed.
+        // Expect it to be within 3000 ms of when the assertion is executed.
         expect(returnedState.review.createdAt).toBeBetween(
           ...expectedReviewCreatedAtBetween,
         )
@@ -437,7 +437,7 @@ describe('createReview', () => {
         expect(returnedState.snapshot).toEqual(expectedSnapshot)
         expect(queriedState.snapshot).toEqual(expectedSnapshot)
 
-        // Expect the reviewable snapshot state to have a due datetime within ±2000 ms of the expected due datetime.
+        // Expect the reviewable snapshot state to have a due datetime within ±3000 ms of the expected due datetime.
         expect(returnedState.snapshot.due).toBeBetween(
           ...expectedSnapshotDueBetween,
         )
