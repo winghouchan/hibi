@@ -1,4 +1,4 @@
-import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { act, screen, userEvent, waitFor } from '@testing-library/react-native'
 import { DEFAULT_MIN_PRESS_DURATION } from '@testing-library/react-native/build/user-event/press/press'
 import { addHours } from 'date-fns'
 import { useRouter } from 'expo-router'
@@ -182,10 +182,12 @@ describe('<ReviewScreen />', () => {
         }),
       ).toBeOnTheScreen()
 
-      // Wait for `recallTime` to elapse
-      await new Promise((resolve) => {
-        setTimeout(resolve, recallTime)
-        jest.advanceTimersByTime(recallTime)
+      await act(async () => {
+        // Wait for `recallTime` to elapse
+        await new Promise((resolve) => {
+          setTimeout(resolve, recallTime)
+          jest.advanceTimersByTime(recallTime)
+        })
       })
 
       await user.press(screen.getByRole('button', { name: 'Show answer' }))
@@ -340,10 +342,12 @@ describe('<ReviewScreen />', () => {
 
     jest.setSystemTime(addHours(new Date(), 1))
 
-    // Wait for `recallTime` to elapse
-    await new Promise((resolve) => {
-      setTimeout(resolve, recallTime)
-      jest.advanceTimersByTime(recallTime)
+    await act(async () => {
+      // Wait for `recallTime` to elapse
+      await new Promise((resolve) => {
+        setTimeout(resolve, recallTime)
+        jest.advanceTimersByTime(recallTime)
+      })
     })
 
     await user.press(screen.getByRole('button', { name: 'Show answer' }))

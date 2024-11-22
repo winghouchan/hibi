@@ -1,12 +1,13 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation } from '@tanstack/react-query'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Alert, Text, View } from 'react-native'
 import { Grade, Rating } from 'ts-fsrs'
 import { createReviewMutation, getNextReview } from '@/reviews/operations'
 import { log } from '@/telemetry'
 import { Button } from '@/ui'
+import useTimer from './useTimer'
 
 interface Props
   extends Exclude<Awaited<ReturnType<typeof getNextReview>>, null> {
@@ -17,22 +18,11 @@ export default function Review({ id, fields, onReview }: Props) {
   const { i18n } = useLingui()
   const { mutateAsync: review } = useMutation(createReviewMutation)
   const [side, setSide] = useState(0)
-  const duration = useRef<number>(0)
-  const interval = useRef<ReturnType<typeof setInterval>>()
-
-  useEffect(() => {
-    interval.current = setInterval(() => {
-      duration.current += 1
-    }, 1)
-
-    return () => {
-      clearInterval(interval.current)
-    }
-  }, [])
+  const { duration, stop } = useTimer({ start: true })
 
   const showAnswer = () => {
     setSide(1)
-    clearInterval(interval.current)
+    stop()
   }
 
   const createReviewHandler = (rating: Grade) =>
@@ -41,7 +31,7 @@ export default function Review({ id, fields, onReview }: Props) {
         await review({
           reviewable: id,
           rating,
-          duration: duration.current,
+          duration,
         })
         onReview?.()
       } catch (error) {
