@@ -1,24 +1,16 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
-import { updateCollection } from '@/collections'
-import { mockCreateCollectionError } from '@/collections/test'
+import {
+  mockCreateCollectionError,
+  mockUpdateCollectionError,
+} from '@/collections/test'
 import {
   mockOnboardingCollection,
   mockOnboardingCollectionError,
 } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import CollectionScreen from '.'
-
-jest.mock('@/collections/operations/updateCollection/updateCollection')
-
-const updateCollectionMock = updateCollection as jest.MockedFunction<
-  typeof updateCollection
->
-
-function mockUpdateCollectionError(error: Error) {
-  updateCollectionMock.mockRejectedValueOnce(error)
-}
 
 describe('<CollectionScreen />', () => {
   describe('when the user has not created a collection during onboarding before', () => {
