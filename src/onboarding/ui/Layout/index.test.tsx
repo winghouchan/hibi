@@ -1,23 +1,9 @@
 import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import { isOnboardingComplete } from '../../operations'
 import OnboardingLayout from '.'
-
-jest.mock('@/onboarding/operations/isOnboardingComplete')
-
-const isOnboardingCompleteMock = isOnboardingComplete as jest.MockedFunction<
-  typeof isOnboardingComplete
->
-
-function mockOnboardedState(onboarded: boolean) {
-  isOnboardingCompleteMock.mockResolvedValueOnce(onboarded)
-}
-
-function mockOnboardedStateError(error: Error) {
-  isOnboardingCompleteMock.mockRejectedValueOnce(error)
-}
 
 describe('<OnboardingLayout />', () => {
   describe('when onboarding is complete', () => {

@@ -31,20 +31,10 @@ describe('<Splash />', () => {
      */
     jest.doMock('react', () => jest.requireActual('react'))
 
-    jest.doMock(
-      '@/onboarding/operations/isOnboardingComplete/isOnboardingComplete',
-    )
-
-    const isOnboardingComplete = (await import('@/onboarding'))
-      .isOnboardingComplete as jest.MockedFunction<
-      (typeof import('@/onboarding'))['isOnboardingComplete']
-    >
-
-    mockOnboardedState = (onboarded: boolean) =>
-      isOnboardingComplete.mockResolvedValueOnce(onboarded)
-
-    mockOnboardedStateError = (error: Error) =>
-      isOnboardingComplete.mockRejectedValueOnce(error)
+    // prettier-ignore - Stop removing preceding empty line
+    ;({ mockOnboardedState, mockOnboardedStateError } = await import(
+      '@/onboarding/test'
+    ))
   })
 
   describe('when dependencies are ready', () => {
