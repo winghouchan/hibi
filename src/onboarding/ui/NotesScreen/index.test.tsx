@@ -3,18 +3,12 @@ import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import {
+  mockCompleteOnboardingError,
   mockOnboardingCollection,
   mockOnboardingCollectionError,
 } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import { completeOnboarding } from '../../operations'
 import NotesScreen from '.'
-
-jest.mock('@/onboarding/operations/completeOnboarding/completeOnboarding')
-
-const completeOnboardingMock = completeOnboarding as jest.MockedFunction<
-  typeof completeOnboarding
->
 
 describe('<NotesScreen />', () => {
   describe('when there are 0 collections', () => {
@@ -270,7 +264,7 @@ describe('<NotesScreen />', () => {
       const user = userEvent.setup()
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      completeOnboardingMock.mockRejectedValue(new Error('Mock Error'))
+      mockCompleteOnboardingError(new Error('Mock Error'))
 
       mockOnboardingCollection({
         id: 1,
