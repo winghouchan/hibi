@@ -1,5 +1,5 @@
 import { database } from '@/data'
-import { collection } from '../schema/collection'
+import { collection } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>
   extends Omit<typeof collection.$inferInsert, 'id' | 'createdAt'> {

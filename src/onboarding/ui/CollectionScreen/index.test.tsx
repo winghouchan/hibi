@@ -9,8 +9,8 @@ import {
 import { mockAppRoot } from 'test/utils'
 import CollectionScreen from '.'
 
-jest.mock('@/collections/createCollection/createCollection')
-jest.mock('@/collections/updateCollection/updateCollection')
+jest.mock('@/collections/operations/createCollection/createCollection')
+jest.mock('@/collections/operations/updateCollection/updateCollection')
 
 const createCollectionMock = createCollection as jest.MockedFunction<
   typeof createCollection
