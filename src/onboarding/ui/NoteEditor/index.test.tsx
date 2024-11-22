@@ -4,17 +4,17 @@ import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { createNote, getNote, updateNote } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
+import {
+  mockOnboardingCollection,
+  mockOnboardingCollectionError,
+} from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import { getOnboardingCollection } from '../../operations'
 import NoteEditor from '.'
 
 jest.mock('expo-linking')
 jest.mock('@/notes/createNote/createNote')
 jest.mock('@/notes/getNote/getNote')
 jest.mock('@/notes/updateNote/updateNote')
-jest.mock(
-  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
-)
 
 const backMock = jest.fn()
 
@@ -32,10 +32,6 @@ const backMock = jest.fn()
 
 const onboardingNoteMock = getNote as jest.MockedFunction<typeof getNote>
 
-const onboardingCollectionMock = getOnboardingCollection as jest.MockedFunction<
-  typeof getOnboardingCollection
->
-
 const createNoteMock = createNote as jest.MockedFunction<typeof createNote>
 
 const updateNoteMock = updateNote as jest.MockedFunction<typeof updateNote>
@@ -48,16 +44,6 @@ function mockOnboardingNote(
 
 function mockOnboardingNoteError(error: Error) {
   onboardingNoteMock.mockRejectedValueOnce(error)
-}
-
-function mockOnboardingCollection(
-  mock: Parameters<typeof onboardingCollectionMock.mockResolvedValueOnce>[0],
-) {
-  onboardingCollectionMock.mockResolvedValueOnce(mock)
-}
-
-function mockOnboardingCollectionError(error: Error) {
-  onboardingCollectionMock.mockRejectedValueOnce(error)
 }
 
 function mockCreateNoteError(error: Error) {

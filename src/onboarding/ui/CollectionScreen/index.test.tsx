@@ -2,24 +2,21 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { createCollection, updateCollection } from '@/collections'
+import {
+  mockOnboardingCollection,
+  mockOnboardingCollectionError,
+} from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import { getOnboardingCollection } from '../../operations'
 import CollectionScreen from '.'
 
 jest.mock('@/collections/createCollection/createCollection')
 jest.mock('@/collections/updateCollection/updateCollection')
-jest.mock(
-  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
-)
 
 const createCollectionMock = createCollection as jest.MockedFunction<
   typeof createCollection
 >
 const updateCollectionMock = updateCollection as jest.MockedFunction<
   typeof updateCollection
->
-const onboardingCollectionMock = getOnboardingCollection as jest.MockedFunction<
-  typeof getOnboardingCollection
 >
 
 function mockCreateCollectionError(error: Error) {
@@ -28,16 +25,6 @@ function mockCreateCollectionError(error: Error) {
 
 function mockUpdateCollectionError(error: Error) {
   updateCollectionMock.mockRejectedValueOnce(error)
-}
-
-function mockOnboardingCollection(
-  mock: Parameters<typeof onboardingCollectionMock.mockResolvedValueOnce>[0],
-) {
-  onboardingCollectionMock.mockResolvedValueOnce(mock)
-}
-
-function mockOnboardingCollectionError(error: Error) {
-  onboardingCollectionMock.mockRejectedValueOnce(error)
 }
 
 describe('<CollectionScreen />', () => {

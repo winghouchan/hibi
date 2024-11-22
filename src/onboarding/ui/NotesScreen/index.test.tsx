@@ -2,18 +2,15 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
+import {
+  mockOnboardingCollection,
+  mockOnboardingCollectionError,
+} from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import { completeOnboarding, getOnboardingCollection } from '../../operations'
+import { completeOnboarding } from '../../operations'
 import NotesScreen from '.'
 
 jest.mock('@/onboarding/operations/completeOnboarding/completeOnboarding')
-jest.mock(
-  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
-)
-
-const onboardingCollectionMock = getOnboardingCollection as jest.MockedFunction<
-  typeof getOnboardingCollection
->
 
 const completeOnboardingMock = completeOnboarding as jest.MockedFunction<
   typeof completeOnboarding
@@ -22,7 +19,7 @@ const completeOnboardingMock = completeOnboarding as jest.MockedFunction<
 describe('<NotesScreen />', () => {
   describe('when there are 0 collections', () => {
     test('redirects to the welcome screen', async () => {
-      onboardingCollectionMock.mockResolvedValue(null)
+      mockOnboardingCollection(null)
 
       renderRouter(
         {
@@ -45,7 +42,7 @@ describe('<NotesScreen />', () => {
       test('pressing the button to add a note opens the note editor', async () => {
         const user = userEvent.setup()
 
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
@@ -79,7 +76,7 @@ describe('<NotesScreen />', () => {
 
     describe('with at least 1 note', () => {
       test('shows the notes', async () => {
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
@@ -133,7 +130,7 @@ describe('<NotesScreen />', () => {
       test('pressing a note opens the note editor', async () => {
         const user = userEvent.setup()
 
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
@@ -190,7 +187,7 @@ describe('<NotesScreen />', () => {
       test('pressing the button to complete onboarding navigates to the home screen', async () => {
         const user = userEvent.setup()
 
-        onboardingCollectionMock.mockResolvedValue({
+        mockOnboardingCollection({
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
@@ -252,7 +249,7 @@ describe('<NotesScreen />', () => {
     test('the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      onboardingCollectionMock.mockRejectedValue(new Error('Mock Error'))
+      mockOnboardingCollectionError(new Error('Mock Error'))
 
       renderRouter(
         {
@@ -275,7 +272,7 @@ describe('<NotesScreen />', () => {
 
       completeOnboardingMock.mockRejectedValue(new Error('Mock Error'))
 
-      onboardingCollectionMock.mockResolvedValue({
+      mockOnboardingCollection({
         id: 1,
         name: 'Collection Name',
         createdAt: new Date(),

@@ -1,22 +1,13 @@
 import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
+import { mockOnboardingCollection } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import { onboardingCollectionQuery } from '../../operations'
 import Index from '.'
-
-jest.mock(
-  '@/onboarding/operations/onboardingCollection/getOnboardingCollection',
-)
-
-const onboardingCollectionMock =
-  onboardingCollectionQuery.queryFn as jest.MockedFunction<
-    Exclude<typeof onboardingCollectionQuery.queryFn, symbol | undefined>
-  >
 
 describe('<IndexScreen />', () => {
   describe('when a collection exists', () => {
     it('redirects to the onboarding note creation screen', async () => {
-      onboardingCollectionMock.mockResolvedValue({
+      mockOnboardingCollection({
         id: 1,
         name: 'Collection Name',
         createdAt: new Date(),
@@ -42,7 +33,7 @@ describe('<IndexScreen />', () => {
 
   describe('when a collection does not exist', () => {
     it('redirects to the welcome screen', async () => {
-      onboardingCollectionMock.mockResolvedValue(null)
+      mockOnboardingCollection(null)
 
       renderRouter(
         {
