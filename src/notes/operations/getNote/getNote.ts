@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { database } from '@/data'
-import { note } from '../schema'
+import { note } from '../../schema'
 
 export default async function getNote(id: number) {
   const result = await database.query.note.findFirst({

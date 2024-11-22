@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { collection, collectionToNote } from '@/collections/schema'
 import { mockDatabase } from 'test/utils'
-import { note } from '../schema'
+import { note } from '../../schema'
 
 describe('updateNote', () => {
   test.each([

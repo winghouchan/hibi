@@ -6,8 +6,8 @@ import { collection, collectionToNote } from '@/collections/schema'
 import { database } from '@/data'
 import { createReviewables } from '@/reviews'
 import { reviewable, reviewableField } from '@/reviews/schema'
-import hashNoteFieldValue from '../hashNoteFieldValue'
-import { note, noteField } from '../schema'
+import hashNoteFieldValue from '../../hashNoteFieldValue'
+import { note, noteField } from '../../schema'
 
 interface Field
   extends Omit<

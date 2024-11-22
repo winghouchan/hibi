@@ -12,9 +12,9 @@ import { mockAppRoot } from 'test/utils'
 import NoteEditor from '.'
 
 jest.mock('expo-linking')
-jest.mock('@/notes/createNote/createNote')
-jest.mock('@/notes/getNote/getNote')
-jest.mock('@/notes/updateNote/updateNote')
+jest.mock('@/notes/operations/createNote/createNote')
+jest.mock('@/notes/operations/getNote/getNote')
+jest.mock('@/notes/operations/updateNote/updateNote')
 
 const backMock = jest.fn()
 
