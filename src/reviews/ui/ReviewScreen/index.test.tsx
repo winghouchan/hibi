@@ -4,30 +4,16 @@ import { addHours } from 'date-fns'
 import { useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
-import { createReview, getNextReview } from '@/reviews/operations'
+import { createReview } from '@/reviews/operations/createReview'
+import {
+  mockCreateReviewError,
+  mockNextReview,
+  mockNextReviewError,
+} from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import ReviewScreen from '.'
 
 jest.mock('@/reviews/operations/createReview/createReview')
-jest.mock('@/reviews/operations/nextReview/getNextReview')
-
-function mockNextReview(value: Awaited<ReturnType<typeof getNextReview>>) {
-  ;(
-    getNextReview as jest.MockedFunction<typeof getNextReview>
-  ).mockResolvedValueOnce(value)
-}
-
-function mockNextReviewError(error: Error) {
-  ;(
-    getNextReview as jest.MockedFunction<typeof getNextReview>
-  ).mockRejectedValue(error)
-}
-
-function mockCreateReviewError(error: Error) {
-  ;(createReview as jest.MockedFunction<typeof createReview>).mockRejectedValue(
-    error,
-  )
-}
 
 const routerMock = {
   back: jest.fn(),
