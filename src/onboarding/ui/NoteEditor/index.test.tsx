@@ -2,8 +2,13 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
-import { createNote, getNote, updateNote } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
+import {
+  mockCreateNoteError,
+  mockGetNote,
+  mockGetNoteError,
+  mockUpdateNoteError,
+} from '@/notes/test'
 import {
   mockOnboardingCollection,
   mockOnboardingCollectionError,
@@ -12,9 +17,6 @@ import { mockAppRoot } from 'test/utils'
 import NoteEditor from '.'
 
 jest.mock('expo-linking')
-jest.mock('@/notes/operations/createNote/createNote')
-jest.mock('@/notes/operations/getNote/getNote')
-jest.mock('@/notes/operations/updateNote/updateNote')
 
 const backMock = jest.fn()
 
@@ -29,30 +31,6 @@ const backMock = jest.fn()
   canDismiss: jest.fn(),
   setParams: jest.fn(),
 })
-
-const onboardingNoteMock = getNote as jest.MockedFunction<typeof getNote>
-
-const createNoteMock = createNote as jest.MockedFunction<typeof createNote>
-
-const updateNoteMock = updateNote as jest.MockedFunction<typeof updateNote>
-
-function mockOnboardingNote(
-  mock: Parameters<typeof onboardingNoteMock.mockRejectedValueOnce>[0],
-) {
-  onboardingNoteMock.mockResolvedValueOnce(mock)
-}
-
-function mockOnboardingNoteError(error: Error) {
-  onboardingNoteMock.mockRejectedValueOnce(error)
-}
-
-function mockCreateNoteError(error: Error) {
-  createNoteMock.mockRejectedValueOnce(error)
-}
-
-function mockUpdateNoteError(error: Error) {
-  updateNoteMock.mockRejectedValueOnce(error)
-}
 
 describe('<NoteEditor />', () => {
   describe('when there is an onboarding collection', () => {
@@ -154,7 +132,7 @@ describe('<NoteEditor />', () => {
           notes: [],
         })
 
-        mockOnboardingNote({
+        mockGetNote({
           id: 1,
           fields: [
             [
@@ -250,7 +228,7 @@ describe('<NoteEditor />', () => {
           notes: [],
         })
 
-        mockOnboardingNote({
+        mockGetNote({
           id: 1,
           fields: [
             [
@@ -329,7 +307,7 @@ describe('<NoteEditor />', () => {
           notes: [],
         })
 
-        mockOnboardingNote(null)
+        mockGetNote(null)
 
         renderRouter(
           {
@@ -424,7 +402,7 @@ describe('<NoteEditor />', () => {
         notes: [],
       })
 
-      mockOnboardingNoteError(new Error('Mock Error'))
+      mockGetNoteError(new Error('Mock Error'))
 
       renderRouter(
         {
