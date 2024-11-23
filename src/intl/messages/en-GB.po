@@ -25,7 +25,7 @@ msgstr "Add field"
 msgid "Add note"
 msgstr "Add note"
 
-#: src/layouts/App/index.tsx:36
+#: src/onboarding/ui/Layout/index.tsx:149
 msgid "Back"
 msgstr "Back"
 

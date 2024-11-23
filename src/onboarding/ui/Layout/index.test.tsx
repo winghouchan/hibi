@@ -1,7 +1,11 @@
 import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
-import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
+import {
+  mockOnboardedState,
+  mockOnboardedStateError,
+  mockOnboardingCollectionError,
+} from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import OnboardingLayout from '.'
 
@@ -74,6 +78,30 @@ describe('<OnboardingLayout />', () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
       mockOnboardedStateError(new Error('Mock Error'))
+
+      renderRouter(
+        {
+          'onboarding/_layout': OnboardingLayout,
+          'onboarding/index': () => null,
+        },
+        {
+          initialUrl: 'onboarding',
+          wrapper: mockAppRoot(),
+        },
+      )
+
+      await waitFor(() => {
+        expect(alertSpy).toHaveBeenCalledOnce()
+      })
+    })
+  })
+
+  describe('when there is an error fetching the onboarding collection', () => {
+    test('the user is alerted', async () => {
+      const alertSpy = jest.spyOn(Alert, 'alert')
+
+      mockOnboardedState(true)
+      mockOnboardingCollectionError(new Error('Mock Error'))
 
       renderRouter(
         {
