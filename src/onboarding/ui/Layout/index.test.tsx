@@ -20,7 +20,7 @@ describe('<OnboardingLayout />', () => {
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
           'onboarding/notes/edit/[id]': () => null,
-          '(app)/index': () => null,
+          '(app)/(tabs)/index': () => null,
         },
         {
           initialUrl: 'onboarding',
@@ -31,7 +31,7 @@ describe('<OnboardingLayout />', () => {
       await waitFor(() => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
-            routes: [expect.objectContaining({ name: '(app)/index' })],
+            routes: [expect.objectContaining({ name: '(app)/(tabs)/index' })],
           }),
         )
       })
@@ -48,7 +48,7 @@ describe('<OnboardingLayout />', () => {
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
           'onboarding/notes/edit/[id]': () => null,
-          '(app)/index': () => null,
+          '(app)/(tabs)/index': () => null,
         },
         {
           initialUrl: 'onboarding',

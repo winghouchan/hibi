@@ -15,7 +15,7 @@ describe('<WelcomeScreen />', () => {
       renderRouter(
         {
           index: WelcomeScreen,
-          '(app)/index': () => null,
+          '(app)/(tabs)/index': () => null,
         },
         {
           wrapper: mockAppRoot(),
@@ -25,7 +25,7 @@ describe('<WelcomeScreen />', () => {
       await waitFor(() => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
-            routes: [expect.objectContaining({ name: '(app)/index' })],
+            routes: [expect.objectContaining({ name: '(app)/(tabs)/index' })],
           }),
         )
       })

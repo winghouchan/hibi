@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals'
 import { Messages } from '@lingui/core'
 import { act, render, screen } from '@testing-library/react-native'
+import { EventEmitter } from 'expo'
 import { type Locale } from 'expo-localization'
-import { EventEmitter } from 'expo-modules-core'
 
 /**
  * Mock of the key for the localized message
@@ -53,18 +53,20 @@ function createLocaleMock<LanguageTag extends string>(
   )[0] as LanguageTag extends `${infer LanguageCode}-${string}`
     ? LanguageCode
     : never
-  const regionCode = languageTag.split('-').slice(1).join('-')
+  const maybeRegionCode = languageTag.split('-').slice(1).join('-')
+  const regionCode = (
+    maybeRegionCode !== '' ? maybeRegionCode : null
+  ) as LanguageTag extends `${string}-${infer RegionCode}` ? RegionCode : null
 
   return {
     data: {
       ...localeDataMock,
+      languageRegionCode: regionCode,
+      languageCurrencyCode: localeDataMock.currencyCode,
+      languageCurrencySymbol: localeDataMock.currencySymbol,
       languageTag,
       languageCode,
-      regionCode: (regionCode !== ''
-        ? regionCode
-        : null) as LanguageTag extends `${string}-${infer RegionCode}`
-        ? RegionCode
-        : null,
+      regionCode,
     } satisfies Locale,
     messages: {
       [messageKeyMock]: languageTag,
@@ -132,7 +134,7 @@ describe('<IntlProvider />', () => {
    * @see {@link https://github.com/expo/expo/tree/main/packages/jest-expo | Source of Expo's Jest preset}
    * @see {@link https://github.com/expo/expo/blob/a6e478e0b5383561aded9c7596ddbe7cd530fd03/packages/jest-expo/src/preset/setup.js#L247-L248 | Source of mock definition}
    */
-  let eventEmitterMock: EventEmitter
+  let eventEmitterMock: InstanceType<typeof EventEmitter>
 
   beforeEach(async () => {
     /**
@@ -140,12 +142,7 @@ describe('<IntlProvider />', () => {
      */
     jest.unmock('expo-localization')
 
-    /**
-     * Empty native module mock, required for creating an event emitter mock.
-     */
-    const nativeModuleMock = {}
-
-    eventEmitterMock = new EventEmitter(nativeModuleMock)
+    eventEmitterMock = new EventEmitter()
 
     /**
      * Work around React error saying:

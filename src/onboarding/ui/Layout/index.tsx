@@ -132,7 +132,7 @@ export default function OnboardingLayout() {
   useFocusEffect(onFocus)
 
   if (isOnboardingComplete) {
-    return <Redirect href="/(app)" />
+    return <Redirect href="/(app)/(tabs)" />
   }
 
   if (isOnboardingComplete === false) {

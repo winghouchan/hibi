@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
 
   if (isOnboardingComplete) {
-    return <Redirect href="/(app)" />
+    return <Redirect href="/(app)/(tabs)" />
   }
 
   return (

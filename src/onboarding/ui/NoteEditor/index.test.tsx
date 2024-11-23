@@ -22,13 +22,15 @@ const backMock = jest.fn()
 
 ;(useRouter as jest.MockedFunction<typeof useRouter>).mockReturnValue({
   back: backMock,
+  canDismiss: jest.fn(),
   canGoBack: jest.fn(),
-  push: jest.fn(),
-  navigate: jest.fn(),
-  replace: jest.fn(),
   dismiss: jest.fn(),
   dismissAll: jest.fn(),
-  canDismiss: jest.fn(),
+  dismissTo: jest.fn(),
+  navigate: jest.fn(),
+  push: jest.fn(),
+  reload: jest.fn(),
+  replace: jest.fn(),
   setParams: jest.fn(),
 })
 

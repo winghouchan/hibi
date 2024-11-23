@@ -1,8 +1,8 @@
 diff --git a/node_modules/expo-sqlite/android/build.gradle b/node_modules/expo-sqlite/android/build.gradle
-index a43cfac..6533f02 100644
+index 810ebe7..326b75e 100644
 --- a/node_modules/expo-sqlite/android/build.gradle
 +++ b/node_modules/expo-sqlite/android/build.gradle
-@@ -76,6 +76,12 @@ android {
+@@ -73,6 +73,12 @@ android {
    buildFeatures {
      prefab true
    }

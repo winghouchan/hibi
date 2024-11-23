@@ -21,8 +21,10 @@ const routerMock = {
   canGoBack: jest.fn(),
   dismiss: jest.fn(),
   dismissAll: jest.fn(),
+  dismissTo: jest.fn(),
   navigate: jest.fn(),
   push: jest.fn(),
+  reload: jest.fn(),
   replace: jest.fn(),
   setParams: jest.fn(),
 }
