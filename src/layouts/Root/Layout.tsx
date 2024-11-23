@@ -1,15 +1,22 @@
 import { Stack } from 'expo-router'
 import { useState } from 'react'
 import { DevToolsBubble } from 'react-native-react-query-devtools'
-import { DataProvider, useDatabaseBrowser, useDatabaseMigrations } from '@/data'
+import {
+  DataProvider,
+  useDatabaseBrowser,
+  useDatabaseFixture,
+  useDatabaseMigrations,
+} from '@/data'
 import { IntlProvider } from '@/intl'
 import SplashScreen from './SplashScreen'
 
 export default function RootLayout() {
-  const [ready, setReady] = useState(false)
+  const [navigatorReady, setNavigatorReady] = useState(false)
+  const { success: databaseReady } = useDatabaseMigrations() // @todo: Handle migration error
+  const ready = navigatorReady && databaseReady
 
   useDatabaseBrowser()
-  useDatabaseMigrations()
+  useDatabaseFixture({ databaseReady })
 
   return (
     <IntlProvider>
@@ -17,7 +24,7 @@ export default function RootLayout() {
         <Stack
           screenListeners={{
             transitionEnd: () => {
-              setReady(true)
+              setNavigatorReady(true)
             },
           }}
           screenOptions={{

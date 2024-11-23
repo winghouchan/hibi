@@ -1,6 +1,5 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite'
 import { openDatabaseSync } from 'expo-sqlite'
-import { loadDatabaseFixture } from 'e2e/utils'
 import schema from './schema'
 
 /**
@@ -29,7 +28,5 @@ const database = drizzle(nativeDatabase, {
   casing: 'snake_case',
   schema,
 })
-
-loadDatabaseFixture()
 
 export default database

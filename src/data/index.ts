@@ -1,5 +1,6 @@
 export { database, nativeDatabase, schema } from './database'
 export { default as DataProvider } from './DataProvider'
 export { default as useDatabaseBrowser } from './useDatabaseBrowser'
+export { default as useDatabaseFixture } from './useDatabaseFixture'
 export { default as useDatabaseMigrations } from './useDatabaseMigrations'
 export * as utils from './database/utils'
