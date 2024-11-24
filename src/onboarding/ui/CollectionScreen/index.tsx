@@ -99,6 +99,7 @@ export default function CollectionScreen() {
           <>
             <TextInput
               accessibilityLabel={i18n.t(msg`Enter a collection name`)}
+              autoFocus
               name="name"
               placeholder={i18n.t(msg`Collection name`)}
               testID="onboarding.collection.name"

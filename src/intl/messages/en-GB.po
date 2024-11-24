@@ -29,15 +29,15 @@ msgstr "Add note"
 msgid "Back"
 msgstr "Back"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:51
+#: src/onboarding/ui/CollectionScreen/index.tsx:74
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:103
+#: src/onboarding/ui/CollectionScreen/index.tsx:104
 msgid "Collection name"
 msgstr "Collection name"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:115
+#: src/onboarding/ui/CollectionScreen/index.tsx:116
 msgid "Create collection"
 msgstr "Create collection"
 
@@ -101,7 +101,7 @@ msgstr "Show answer"
 msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:39
+#: src/onboarding/ui/CollectionScreen/index.tsx:60
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -113,7 +113,7 @@ msgstr "Start"
 msgid "Start review"
 msgstr "Start review"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:111
+#: src/onboarding/ui/CollectionScreen/index.tsx:112
 msgid "Submitting"
 msgstr "Submitting"
 
@@ -145,11 +145,11 @@ msgstr "There was an error updating the collection"
 msgid "There was an error updating the note"
 msgstr "There was an error updating the note"
 
-#: src/reviews/ui/ReviewScreen/Review.tsx:43
+#: src/onboarding/ui/CollectionScreen/index.tsx:66
 msgid "Try again"
 msgstr "Try again"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:113
+#: src/onboarding/ui/CollectionScreen/index.tsx:114
 msgid "Update collection"
 msgstr "Update collection"
 
