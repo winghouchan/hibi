@@ -33,11 +33,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:104
+#: src/onboarding/ui/CollectionScreen/index.tsx:105
 msgid "Collection name"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:116
+#: src/onboarding/ui/CollectionScreen/index.tsx:117
 msgid "Create collection"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Start review"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:112
+#: src/onboarding/ui/CollectionScreen/index.tsx:113
 msgid "Submitting"
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:114
+#: src/onboarding/ui/CollectionScreen/index.tsx:115
 msgid "Update collection"
 msgstr ""
 

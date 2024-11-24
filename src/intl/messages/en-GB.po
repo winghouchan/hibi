@@ -33,11 +33,11 @@ msgstr "Back"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:104
+#: src/onboarding/ui/CollectionScreen/index.tsx:105
 msgid "Collection name"
 msgstr "Collection name"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:116
+#: src/onboarding/ui/CollectionScreen/index.tsx:117
 msgid "Create collection"
 msgstr "Create collection"
 
@@ -113,7 +113,7 @@ msgstr "Start"
 msgid "Start review"
 msgstr "Start review"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:112
+#: src/onboarding/ui/CollectionScreen/index.tsx:113
 msgid "Submitting"
 msgstr "Submitting"
 
@@ -149,7 +149,7 @@ msgstr "There was an error updating the note"
 msgid "Try again"
 msgstr "Try again"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:114
+#: src/onboarding/ui/CollectionScreen/index.tsx:115
 msgid "Update collection"
 msgstr "Update collection"
 

@@ -101,6 +101,7 @@ export default function CollectionScreen() {
               accessibilityLabel={i18n.t(msg`Enter a collection name`)}
               autoFocus
               name="name"
+              onSubmitEditing={() => handleSubmit()}
               placeholder={i18n.t(msg`Collection name`)}
               testID="onboarding.collection.name"
             />

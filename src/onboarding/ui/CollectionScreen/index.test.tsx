@@ -14,7 +14,7 @@ import CollectionScreen from '.'
 
 describe('<CollectionScreen />', () => {
   describe('when the user has not created a collection during onboarding before', () => {
-    test('and inputs the correct information then submits the form, the form submits successfully', async () => {
+    test('and inputs the correct information then submits the form by pressing the button, the form submits successfully', async () => {
       const user = userEvent.setup()
       const input = {
         collectionName: 'Collection Name',
@@ -37,6 +37,32 @@ describe('<CollectionScreen />', () => {
       )
       await user.press(
         screen.getByRole('button', { name: 'Create collection' }),
+      )
+
+      expect(screen).toHavePathname('/onboarding/notes')
+    })
+
+    test('and inputs the correct information then submits the form by pressing enter on the keyboard, the form submits successfully', async () => {
+      const user = userEvent.setup()
+      const input = {
+        collectionName: 'Collection Name',
+      }
+
+      renderRouter(
+        {
+          'onboarding/collection': CollectionScreen,
+          'onboarding/notes': () => null,
+        },
+        {
+          initialUrl: 'onboarding/collection',
+          wrapper: mockAppRoot(),
+        },
+      )
+
+      await user.type(
+        screen.getByLabelText('Enter a collection name'),
+        input.collectionName,
+        { submitEditing: true },
       )
 
       expect(screen).toHavePathname('/onboarding/notes')
