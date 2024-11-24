@@ -6,7 +6,6 @@ import type {
 } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Redirect, Stack, useFocusEffect, useNavigation } from 'expo-router'
-import { useCallback } from 'react'
 import { Button } from '@/ui'
 import {
   isOnboardingCompleteQuery,
@@ -23,7 +22,7 @@ export default function OnboardingLayout() {
     }>
   >()
 
-  const onFocus = useCallback(() => {
+  const onFocus = () => {
     const state = navigation.getState()
 
     /**
@@ -127,7 +126,7 @@ export default function OnboardingLayout() {
         }
       }
     }
-  }, [isOnboardingComplete, navigation, onboardingCollection])
+  }
 
   useFocusEffect(onFocus)
 
