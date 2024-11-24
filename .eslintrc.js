@@ -8,7 +8,7 @@ module.exports = {
     'prettier',
   ],
   ignorePatterns: ['*.lock', '*.json', '*.patch', '*.po'],
-  plugins: ['prettier'],
+  plugins: ['eslint-plugin-react-compiler', 'prettier'],
   rules: {
     'import/order': [
       'error',
@@ -28,6 +28,8 @@ module.exports = {
     ],
 
     'prettier/prettier': 'error',
+
+    'react-compiler/react-compiler': 'error',
 
     /**
      * Disable the requirement for accessibility hints.
