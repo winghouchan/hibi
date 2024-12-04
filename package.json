@@ -3,11 +3,12 @@
   "main": "index.js",
   "version": "0.1.0",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --scheme co.hibi.app.dev",
+    "start:test": "NODE_ENV=test expo start --scheme co.hibi.app.test",
     "start:prod": "expo start --minify --no-dev",
     "start:prod:analyze-bundle": "EXPO_UNSTABLE_ATLAS=true yarn start:prod",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo run:android --variant developmentDebug",
+    "ios": "expo run:ios --configuration Development-Debug",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
@@ -30,6 +31,7 @@
     "drizzle-orm": "~0.36.2",
     "expo": "~52.0.11",
     "expo-constants": "~17.0.3",
+    "expo-dev-client": "~5.0.4",
     "expo-drizzle-studio-plugin": "~0.1.0",
     "expo-font": "~13.0.1",
     "expo-linking": "~7.0.3",
@@ -103,7 +105,8 @@
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
     "type-fest": "^4.26.0",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "xmlbuilder": "^15.1.1"
   },
   "private": true
 }

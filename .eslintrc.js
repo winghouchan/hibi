@@ -8,6 +8,9 @@ module.exports = {
     'prettier',
   ],
   ignorePatterns: ['*.lock', '*.json', '*.patch', '*.po'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+  },
   plugins: ['eslint-plugin-react-compiler', 'prettier'],
   rules: {
     'import/order': [

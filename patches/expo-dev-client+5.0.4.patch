@@ -1,0 +1,18 @@
+diff --git a/node_modules/expo-dev-client/android/build.gradle b/node_modules/expo-dev-client/android/build.gradle
+index ec36687..b5b47e2 100644
+--- a/node_modules/expo-dev-client/android/build.gradle
++++ b/node_modules/expo-dev-client/android/build.gradle
+@@ -35,6 +35,13 @@ android {
+     buildConfig true
+     viewBinding true
+   }
++
++  packagingOptions {
++    merges += [
++      'META-INF/LICENSE.md',
++      'META-INF/LICENSE-notice.md'
++     ]
++  }
+ }
+ 
+ dependencies {

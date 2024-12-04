@@ -1,0 +1,97 @@
+import { ExpoConfig } from 'expo/config'
+
+const name = 'Hibi'
+const identifier = 'co.hibi.app'
+
+const nameByEnvironment = {
+  development: `${name} (Dev)`,
+  test: `${name} (Test)`,
+  production: name,
+}
+
+const identifierByEnvironment = {
+  development: `${identifier}.dev`,
+  test: `${identifier}.test`,
+  production: identifier,
+}
+
+export default {
+  name: nameByEnvironment.production,
+  slug: 'hibi',
+  version: '0.1.0',
+  orientation: 'portrait',
+  icon: './assets/images/icon.png',
+  scheme: 'hibi',
+  userInterfaceStyle: 'automatic',
+  newArchEnabled: false,
+  developmentClient: {
+    silentLaunch: true,
+  },
+  android: {
+    adaptiveIcon: {
+      foregroundImage: './assets/images/adaptive-icon.png',
+      backgroundColor: '#ffffff',
+    },
+    package: identifierByEnvironment.production,
+  },
+  ios: {
+    supportsTablet: true,
+    bundleIdentifier: identifierByEnvironment.production,
+  },
+  web: {
+    bundler: 'metro',
+    output: 'static',
+    favicon: './assets/images/favicon.png',
+  },
+  plugins: [
+    '@config-plugins/detox',
+    'expo-font',
+    'expo-localization',
+    'expo-router',
+    [
+      'expo-dev-client',
+      {
+        addGeneratedScheme: false,
+      },
+    ],
+    [
+      'expo-splash-screen',
+      {
+        image: './assets/images/splash.png',
+        resizeMode: 'contain',
+        backgroundColor: '#ffffff',
+      },
+    ],
+    [
+      './plugins/withAppVariants',
+      {
+        development: {
+          android: {
+            applicationId: identifierByEnvironment.development,
+            appName: nameByEnvironment.development,
+          },
+          ios: {
+            bundleIdentifier: identifierByEnvironment.development,
+            displayName: nameByEnvironment.development,
+          },
+        },
+        test: {
+          developmentClient: false,
+          android: {
+            applicationId: identifierByEnvironment.test,
+            appName: nameByEnvironment.test,
+            productFlavorName: 'endToEndTest',
+          },
+          ios: {
+            bundleIdentifier: identifierByEnvironment.test,
+            displayName: nameByEnvironment.test,
+          },
+        },
+      },
+    ],
+  ],
+  experiments: {
+    reactCompiler: true,
+    typedRoutes: true,
+  },
+} satisfies ExpoConfig
