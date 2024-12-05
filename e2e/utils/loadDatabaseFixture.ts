@@ -5,14 +5,17 @@ export default async function loadDatabaseFixture() {
     process.env.EXPO_PUBLIC_E2E &&
     Constants.executionEnvironment !== ExecutionEnvironment.StoreClient
   ) {
-    await import('react-native-launch-arguments').then(
-      ({ LaunchArguments }) => {
-        const launchArgs = LaunchArguments.value<{ databaseFixture: string }>()
+    const { LaunchArguments } = await import('react-native-launch-arguments')
+    const { databaseFixture } = LaunchArguments.value<{
+      databaseFixture?: string
+    }>()
 
-        if (launchArgs.databaseFixture) {
-          require.context('../fixtures')(`./${launchArgs.databaseFixture}.ts`)
-        }
-      },
-    )
+    if (databaseFixture) {
+      const { default: fixture } = require.context('../fixtures')(
+        `./${databaseFixture}.ts`,
+      )
+
+      await fixture()
+    }
   }
 }

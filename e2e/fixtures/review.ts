@@ -20,4 +20,4 @@ async function fixture() {
   await database.insert(user).values({ onboarded: true })
 }
 
-fixture()
+export default fixture

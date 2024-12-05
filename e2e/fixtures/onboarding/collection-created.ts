@@ -6,4 +6,4 @@ async function fixture() {
   })
 }
 
-fixture()
+export default fixture
