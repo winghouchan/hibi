@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { StrictMode, useState } from 'react'
+import { useState } from 'react'
 import { DevToolsBubble } from 'react-native-react-query-devtools'
 import {
   DataProvider,
@@ -19,23 +19,21 @@ export default function RootLayout() {
   useDatabaseFixture({ databaseReady })
 
   return (
-    <StrictMode>
-      <IntlProvider>
-        <DataProvider>
-          <Stack
-            screenListeners={{
-              transitionEnd: () => {
-                setNavigatorReady(true)
-              },
-            }}
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
-          <SplashScreen ready={ready} />
-          {process.env.NODE_ENV === 'development' && <DevToolsBubble />}
-        </DataProvider>
-      </IntlProvider>
-    </StrictMode>
+    <IntlProvider>
+      <DataProvider>
+        <Stack
+          screenListeners={{
+            transitionEnd: () => {
+              setNavigatorReady(true)
+            },
+          }}
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
+        <SplashScreen ready={ready} />
+        {process.env.NODE_ENV === 'development' && <DevToolsBubble />}
+      </DataProvider>
+    </IntlProvider>
   )
 }
