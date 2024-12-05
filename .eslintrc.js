@@ -66,7 +66,16 @@ module.exports = {
       rules: {
         'lingui/no-unlocalized-strings': [
           'error',
-          { ignoreFunction: ['Error', 'TypeError'] },
+          {
+            ignoreFunction: [
+              'Error',
+              'log.debug',
+              'log.error',
+              'log.info',
+              'log.warn',
+              'TypeError',
+            ],
+          },
         ],
         'lingui/t-call-in-function': 'error',
         'lingui/no-single-variables-to-translate': 'error',
