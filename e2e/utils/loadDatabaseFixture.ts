@@ -1,4 +1,5 @@
 import Constants, { ExecutionEnvironment } from 'expo-constants'
+import { log } from '@/telemetry'
 
 export default async function loadDatabaseFixture() {
   if (
@@ -11,11 +12,17 @@ export default async function loadDatabaseFixture() {
     }>()
 
     if (databaseFixture) {
-      const { default: fixture } = require.context('../fixtures')(
-        `./${databaseFixture}.ts`,
-      )
+      try {
+        log.info('Loading database fixture', { fixture: databaseFixture })
 
-      await fixture()
+        const { default: fixture } = require.context('../fixtures')(
+          `./${databaseFixture}.ts`,
+        )
+
+        await fixture()
+      } catch (error) {
+        log.error('Loading database fixture failed:', error)
+      }
     }
   }
 }
