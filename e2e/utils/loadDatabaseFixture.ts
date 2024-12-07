@@ -20,6 +20,8 @@ export default async function loadDatabaseFixture() {
         )
 
         await fixture()
+
+        log.info('Loaded database fixture', { fixture: databaseFixture })
       } catch (error) {
         log.error('Loading database fixture failed:', error)
       }

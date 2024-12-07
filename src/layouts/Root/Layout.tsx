@@ -1,5 +1,4 @@
-import { Stack } from 'expo-router'
-import { useState } from 'react'
+import { SplashScreen } from 'expo-router'
 import { DevToolsBubble } from 'react-native-react-query-devtools'
 import {
   DataProvider,
@@ -8,30 +7,20 @@ import {
   useDatabaseMigrations,
 } from '@/data'
 import { IntlProvider } from '@/intl'
-import SplashScreen from './SplashScreen'
+import Navigator from './Navigator'
+
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const [navigatorReady, setNavigatorReady] = useState(false)
   const { success: databaseReady } = useDatabaseMigrations() // @todo: Handle migration error
-  const ready = navigatorReady && databaseReady
+  const loadedDatabaseFixture = useDatabaseFixture({ databaseReady }) // @todo: Handle load database fixture error
 
   useDatabaseBrowser()
-  useDatabaseFixture({ databaseReady })
 
   return (
     <IntlProvider>
       <DataProvider>
-        <Stack
-          screenListeners={{
-            transitionEnd: () => {
-              setNavigatorReady(true)
-            },
-          }}
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
-        <SplashScreen ready={ready} />
+        {databaseReady && loadedDatabaseFixture && <Navigator />}
         {process.env.NODE_ENV === 'development' && <DevToolsBubble />}
       </DataProvider>
     </IntlProvider>
