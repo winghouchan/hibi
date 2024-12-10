@@ -1,14 +1,17 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useHeaderHeight } from '@react-navigation/elements'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
-import { FieldArray, Formik, type FormikConfig } from 'formik'
-import { useEffect } from 'react'
-import { Alert, View } from 'react-native'
+import { useFormik, type FormikConfig } from 'formik'
+import { ComponentProps, useCallback, useEffect } from 'react'
+import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
 import { log } from '@/telemetry'
-import { Button, TextInput } from '@/ui'
+import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
+import Editor from './Editor'
 
 export default function NoteEditor() {
   const { i18n } = useLingui()
@@ -23,6 +26,8 @@ export default function NoteEditor() {
   )
   const { mutateAsync: createNote } = useMutation(createNoteMutation)
   const { mutateAsync: updateNote } = useMutation(updateNoteMutation)
+  const headerHeight = useHeaderHeight()
+  const safeAreaInset = useSafeAreaInsets()
 
   const initialValues = {
     id: noteId,
@@ -92,6 +97,34 @@ export default function NoteEditor() {
     }
   }
 
+  const { handleSubmit, setFieldValue, values } = useFormik({
+    enableReinitialize: true,
+    initialValues,
+    onSubmit,
+  })
+
+  /**
+   * Handles changes from the editor
+   *
+   * This function needs to be memoized (using `useCallback`) otherwise it
+   * causes an infinite re-render as it seems the reference to `setFieldValue`
+   * is not stable.
+   */
+  const onChange = useCallback<
+    Exclude<ComponentProps<typeof Editor>['onChange'], undefined>
+  >(
+    (name: string, value) => {
+      value?.content &&
+        setFieldValue(
+          name,
+          value.content?.map(({ content }) => ({
+            value: content?.[0].text ?? '',
+          })),
+        )
+    },
+    [setFieldValue],
+  )
+
   useEffect(() => {
     if (collection && !isFetchingNote && note === null) {
       Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
@@ -107,56 +140,37 @@ export default function NoteEditor() {
   }, [collection, i18n, isFetchingNote, note, router])
 
   return collection && !isFetchingCollection ? (
-    <View testID="onboarding.note-editor.screen">
-      <Formik
-        enableReinitialize
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-      >
-        {({ handleSubmit, values }) => (
-          <>
-            {values.fields.map((side, sideIndex) => (
-              <FieldArray key={sideIndex} name={`fields.${sideIndex}`}>
-                {({ push }) => (
-                  <View>
-                    <Trans>Side {sideIndex}</Trans>
-                    <View>
-                      {side.map((field, fieldIndex) => (
-                        <TextInput
-                          accessibilityLabel={i18n.t(
-                            msg`Enter field data for side ${sideIndex + 1} field ${fieldIndex + 1}`,
-                          )}
-                          key={fieldIndex}
-                          name={`fields.${sideIndex}.${fieldIndex}.value`}
-                          placeholder={i18n.t(
-                            msg`Field data for field side ${sideIndex + 1} ${fieldIndex + 1}`,
-                          )}
-                          testID={`onboarding.note-editor.side-${sideIndex}.field-${fieldIndex}`}
-                          value={field.value as string}
-                        />
-                      ))}
-                    </View>
-                    <Button
-                      onPress={() => {
-                        push({ value: '' })
-                      }}
-                    >
-                      <Trans>Add field</Trans>
-                    </Button>
-                  </View>
-                )}
-              </FieldArray>
-            ))}
-            <Button
-              onPress={() => handleSubmit()}
-              testID="onboarding.note-editor.cta"
-            >
-              {values.id ? <Trans>Update note</Trans> : <Trans>Add note</Trans>}
-            </Button>
-          </>
-        )}
-      </Formik>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={safeAreaInset.top + headerHeight + 10}
+      style={{ backgroundColor: 'white', flex: 1 }}
+    >
+      <View testID="onboarding.note-editor.screen" style={{ flex: 1 }}>
+        {values.fields.map((side, index) => (
+          <Editor
+            autofocus={index === 0}
+            initialContent={{
+              type: 'doc',
+              content: side.map((field) => ({
+                type: 'paragraph',
+                content: [{ type: 'text', text: field.value }],
+              })),
+            }}
+            key={index}
+            name={`fields.${index}`}
+            onChange={onChange}
+            placeholder={index === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
+            testID={`onboarding.note-editor.side-${index}`}
+          />
+        ))}
+        <Button
+          onPress={() => handleSubmit()}
+          testID="onboarding.note-editor.cta"
+        >
+          {values.id ? <Trans>Update note</Trans> : <Trans>Add note</Trans>}
+        </Button>
+      </View>
+    </KeyboardAvoidingView>
   ) : !collection && !isFetchingCollection ? (
     <Redirect href="/" />
   ) : null

@@ -58,11 +58,15 @@ describe('<NoteEditor />', () => {
         )
 
         await user.type(
-          await screen.findByLabelText('Enter field data for side 1 field 1'),
+          await screen.findByTestId(
+            'onboarding.note-editor.side-0.editor.input',
+          ),
           'Front 1',
         )
         await user.type(
-          await screen.findByLabelText('Enter field data for side 2 field 1'),
+          await screen.findByTestId(
+            'onboarding.note-editor.side-1.editor.input',
+          ),
           'Back 1',
         )
         await user.press(
@@ -96,11 +100,15 @@ describe('<NoteEditor />', () => {
         )
 
         await user.type(
-          await screen.findByLabelText('Enter field data for side 1 field 1'),
+          await screen.findByTestId(
+            'onboarding.note-editor.side-0.editor.input',
+          ),
           'Front 1',
         )
         await user.type(
-          await screen.findByLabelText('Enter field data for side 2 field 1'),
+          await screen.findByTestId(
+            'onboarding.note-editor.side-1.editor.input',
+          ),
           'Back 1',
         )
         await user.press(

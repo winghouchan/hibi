@@ -1,4 +1,4 @@
-import { by, device, element, expect, waitFor } from 'detox'
+import { by, device, element, expect, waitFor, web } from 'detox'
 
 describe('Onboarding', () => {
   describe('when not started', () => {
@@ -24,12 +24,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -63,12 +67,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -99,12 +107,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -167,12 +179,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -196,12 +212,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -230,12 +250,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -259,12 +283,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -281,12 +309,16 @@ describe('Onboarding', () => {
           url: 'hibi://onboarding/notes/new',
         })
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -312,12 +344,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 
@@ -412,12 +448,16 @@ describe('Onboarding', () => {
           element(by.id('onboarding.note-editor.screen')),
         ).toBeVisible()
 
-        await element(
-          by.id('onboarding.note-editor.side-0.field-0.input'),
-        ).typeText('Front 1')
-        await element(
-          by.id('onboarding.note-editor.side-1.field-0.input'),
-        ).typeText('Back 1')
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-0.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-0.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Front 1', true)
+        device.getPlatform() === 'android' &&
+          (await element(by.id('onboarding.note-editor.side-1.editor')).tap())
+        await web(by.id('onboarding.note-editor.side-1.editor'))
+          .element(by.web.className('tiptap'))
+          .typeText('Back 1', true)
         await element(by.id('onboarding.note-editor.cta.button')).tap()
         await expect(element(by.id('onboarding.notes.screen'))).toBeVisible()
 

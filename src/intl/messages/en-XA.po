@@ -21,15 +21,15 @@ msgstr ""
 msgid "Add field"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:154
+#: src/onboarding/ui/NoteEditor/index.tsx:174
 msgid "Add note"
 msgstr ""
 
-#: src/onboarding/ui/Layout/index.tsx:148
+#: src/onboarding/ui/NoteEditor/index.tsx:166
 msgid "Back"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:74
+#: src/onboarding/ui/NoteEditor/index.tsx:84
 msgid "Cancel"
 msgstr ""
 
@@ -69,6 +69,10 @@ msgstr ""
 msgid "Forgot"
 msgstr ""
 
+#: src/onboarding/ui/NoteEditor/index.tsx:166
+msgid "Front"
+msgstr ""
+
 #: src/reviews/ui/ReviewScreen/Review.tsx:86
 msgid "Good"
 msgstr ""
@@ -85,7 +89,7 @@ msgstr ""
 msgid "New note"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:99
+#: src/onboarding/ui/NoteEditor/index.tsx:132
 msgid "OK"
 msgstr ""
 
@@ -101,7 +105,7 @@ msgstr ""
 msgid "Side {sideIndex}"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:60
+#: src/onboarding/ui/NoteEditor/index.tsx:70
 msgid "Something went wrong"
 msgstr ""
 
@@ -117,7 +121,7 @@ msgstr ""
 msgid "Submitting"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:97
+#: src/onboarding/ui/NoteEditor/index.tsx:130
 msgid "The note doesn't exist"
 msgstr ""
 
@@ -129,7 +133,7 @@ msgstr ""
 msgid "There was an error creating the collection"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:68
+#: src/onboarding/ui/NoteEditor/index.tsx:73
 msgid "There was an error creating the note"
 msgstr ""
 
@@ -141,11 +145,11 @@ msgstr ""
 msgid "There was an error updating the collection"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:67
+#: src/onboarding/ui/NoteEditor/index.tsx:72
 msgid "There was an error updating the note"
 msgstr ""
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:66
+#: src/onboarding/ui/NoteEditor/index.tsx:76
 msgid "Try again"
 msgstr ""
 
@@ -153,7 +157,7 @@ msgstr ""
 msgid "Update collection"
 msgstr ""
 
-#: src/onboarding/ui/NoteEditor/index.tsx:154
+#: src/onboarding/ui/NoteEditor/index.tsx:174
 msgid "Update note"
 msgstr ""
 

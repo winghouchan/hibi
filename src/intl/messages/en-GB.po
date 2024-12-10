@@ -21,15 +21,15 @@ msgstr "Add another note"
 msgid "Add field"
 msgstr "Add field"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:154
+#: src/onboarding/ui/NoteEditor/index.tsx:174
 msgid "Add note"
 msgstr "Add note"
 
-#: src/onboarding/ui/Layout/index.tsx:148
+#: src/onboarding/ui/NoteEditor/index.tsx:166
 msgid "Back"
 msgstr "Back"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:74
+#: src/onboarding/ui/NoteEditor/index.tsx:84
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -69,6 +69,10 @@ msgstr "Finished"
 msgid "Forgot"
 msgstr "Forgot"
 
+#: src/onboarding/ui/NoteEditor/index.tsx:166
+msgid "Front"
+msgstr "Front"
+
 #: src/reviews/ui/ReviewScreen/Review.tsx:86
 msgid "Good"
 msgstr "Good"
@@ -85,7 +89,7 @@ msgstr "Hibi"
 msgid "New note"
 msgstr "New note"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:99
+#: src/onboarding/ui/NoteEditor/index.tsx:132
 msgid "OK"
 msgstr "OK"
 
@@ -101,7 +105,7 @@ msgstr "Show answer"
 msgid "Side {sideIndex}"
 msgstr "Side {sideIndex}"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:60
+#: src/onboarding/ui/NoteEditor/index.tsx:70
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -117,7 +121,7 @@ msgstr "Start review"
 msgid "Submitting"
 msgstr "Submitting"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:97
+#: src/onboarding/ui/NoteEditor/index.tsx:130
 msgid "The note doesn't exist"
 msgstr "The note doesn't exist"
 
@@ -129,7 +133,7 @@ msgstr "There was an error completing onboarding"
 msgid "There was an error creating the collection"
 msgstr "There was an error creating the collection"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:68
+#: src/onboarding/ui/NoteEditor/index.tsx:73
 msgid "There was an error creating the note"
 msgstr "There was an error creating the note"
 
@@ -141,11 +145,11 @@ msgstr "There was an error submitting your review"
 msgid "There was an error updating the collection"
 msgstr "There was an error updating the collection"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:67
+#: src/onboarding/ui/NoteEditor/index.tsx:72
 msgid "There was an error updating the note"
 msgstr "There was an error updating the note"
 
-#: src/onboarding/ui/CollectionScreen/index.tsx:66
+#: src/onboarding/ui/NoteEditor/index.tsx:76
 msgid "Try again"
 msgstr "Try again"
 
@@ -153,7 +157,7 @@ msgstr "Try again"
 msgid "Update collection"
 msgstr "Update collection"
 
-#: src/onboarding/ui/NoteEditor/index.tsx:154
+#: src/onboarding/ui/NoteEditor/index.tsx:174
 msgid "Update note"
 msgstr "Update note"
 
