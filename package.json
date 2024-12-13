@@ -14,7 +14,7 @@
     "lint": "expo lint",
     "postinstall": "husky && patch-package",
     "database:migrations:generate": "drizzle-kit generate",
-    "intl:extract": "lingui extract",
+    "intl:extract:template": "lingui extract-template",
     "intl:compile": "lingui compile --typescript"
   },
   "dependencies": {

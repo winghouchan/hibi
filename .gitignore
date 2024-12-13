@@ -18,8 +18,12 @@ web-build/
 /android
 /ios
 
+# Ignore localization template file
+# See https://github.com/lingui/js-lingui/blob/9ffef7734497bd3c17575e02d86c572f45b3b931/website/docs/ref/cli.md?plain=1#L138
+/src/intl/messages/*.pot
+
 # Ignore compiled localization files
-# See https://lingui.dev/ref/cli#compile
+# See https://github.com/lingui/js-lingui/blob/9ffef7734497bd3c17575e02d86c572f45b3b931/website/docs/ref/cli.md?plain=1#L178
 /src/intl/messages/*.ts
 !/src/intl/messages/index.ts
 
