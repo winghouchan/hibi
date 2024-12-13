@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@10play/tentap-editor": "^0.5.24",
-    "@config-plugins/detox": "^8.0.0",
+    "@config-plugins/detox": "^9.0.0",
     "@expo/vector-icons": "^14.0.3",
     "@formatjs/intl-locale": "^4.0.0",
     "@formatjs/intl-localematcher": "^0.5.4",
