@@ -1,0 +1,12 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: review.finished.screen
+
+- tapOn:
+    id: review.finish.button
+
+- assertVisible:
+    id: home.screen

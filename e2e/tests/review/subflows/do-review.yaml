@@ -1,0 +1,12 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: review.screen
+
+- tapOn:
+    id: review.show-answer.button
+
+- tapOn:
+    id: review.rate.easy.button

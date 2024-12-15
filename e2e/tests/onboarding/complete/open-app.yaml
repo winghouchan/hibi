@@ -1,0 +1,10 @@
+name: Onboarding > when complete > and the app is opened at the index > the home screen is shown
+appId: ${appId}
+---
+- launchApp:
+    clearState: true
+    arguments:
+      databaseFixture: onboarding/complete
+
+- assertVisible:
+    id: home.screen

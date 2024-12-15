@@ -1,0 +1,13 @@
+name: Review > when there are new reviewables > a review can be completed via starting from the home screen
+appId: ${appId}
+---
+- launchApp:
+    clearState: true
+    arguments:
+      databaseFixture: review
+
+- runFlow: ../subflows/start-review.yaml
+
+- runFlow: ../subflows/do-review.yaml
+
+- runFlow: ../subflows/finish-review.yaml

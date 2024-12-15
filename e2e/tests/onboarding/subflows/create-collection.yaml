@@ -1,0 +1,11 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: onboarding.collection.screen
+
+- inputText: Collection Name
+
+- tapOn:
+    id: onboarding.collection.cta.button

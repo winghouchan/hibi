@@ -1,0 +1,13 @@
+name: Onboarding > when a note has been created > and the app is opened at the index > the onboarding journey can be completed
+appId: ${appId}
+---
+- launchApp:
+    clearState: true
+    arguments:
+      databaseFixture: onboarding/note-created
+
+- runFlow: ../subflows/acknowledge-welcome.yaml
+
+- runFlow: ../subflows/update-collection.yaml
+
+- runFlow: ../subflows/finish-onboarding.yaml

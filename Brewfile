@@ -1,2 +1,2 @@
-tap "wix/brew"
-brew "applesimutils"
+tap "mobile-dev-inc/tap"
+brew "maestro"

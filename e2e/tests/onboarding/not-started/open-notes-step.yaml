@@ -1,0 +1,10 @@
+name: Onboarding > when not started > and the app is opened in the new note creator > the user is redirected to the welcome screen
+appId: ${appId}
+---
+- clearState
+
+- openLink:
+    link: hibi://onboarding/notes
+
+- assertVisible:
+    id: onboarding.welcome.screen

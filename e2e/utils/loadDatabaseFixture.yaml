@@ -1,0 +1,20 @@
+name: Load database fixture
+appId: ${appId}
+tags:
+  - subflow
+---
+# Maestro cannot open a deep link and pass launch arguments to the app which is
+# needed for loading database fixtures and testing deep links. This workaround
+# launches the app with the launch argument for loading a database fixture then
+# closes the app to so that the deep link can be tested. See this GitHub issue:
+# https://github.com/mobile-dev-inc/maestro/issues/2192
+
+- launchApp:
+    clearState: true
+    arguments:
+      databaseFixture: ${databaseFixture}
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- stopApp

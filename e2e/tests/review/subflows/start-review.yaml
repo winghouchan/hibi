@@ -1,0 +1,9 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: home.screen
+
+- tapOn:
+    id: home.screen.cta.button

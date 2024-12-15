@@ -1,0 +1,16 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: onboarding.notes.screen
+
+- scrollUntilVisible:
+    element:
+      id: onboarding.notes.cta.button
+
+- tapOn:
+    id: onboarding.notes.cta.button
+
+- assertVisible:
+    id: home.screen

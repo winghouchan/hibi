@@ -1,0 +1,14 @@
+name: Onboarding > when a collection has been created > and the app is opened in the new note creator > the onboarding journey can be completed
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../utils/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/collection-created
+
+- openLink:
+    link: hibi://onboarding/notes/new
+
+- runFlow: ../subflows/create-note.yaml
+
+- runFlow: ../subflows/finish-onboarding.yaml

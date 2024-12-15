@@ -1,0 +1,9 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: onboarding.welcome.screen
+
+- tapOn:
+    id: onboarding.welcome.cta.button

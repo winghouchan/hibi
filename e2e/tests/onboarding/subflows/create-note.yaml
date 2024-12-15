@@ -1,0 +1,16 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: onboarding.note-editor.screen
+
+- inputText: Front 1
+
+- tapOn:
+    id: onboarding.note-editor.side-1.editor
+
+- inputText: Back 1
+
+- tapOn:
+    id: onboarding.note-editor.cta.button

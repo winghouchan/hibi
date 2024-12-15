@@ -1,0 +1,15 @@
+name: Onboarding > when not started > and the app is opened at the collection creation step > the onboarding journey can be completed
+appId: ${appId}
+---
+- clearState
+
+- openLink:
+    link: hibi://onboarding/collection
+
+- runFlow: ../subflows/create-collection.yaml
+
+- runFlow: ../subflows/open-note-creator.yaml
+
+- runFlow: ../subflows/create-note.yaml
+
+- runFlow: ../subflows/finish-onboarding.yaml

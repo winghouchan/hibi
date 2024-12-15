@@ -44,7 +44,6 @@ export default {
     favicon: './assets/images/favicon.png',
   },
   plugins: [
-    '@config-plugins/detox',
     'expo-font',
     'expo-localization',
     'expo-router',
