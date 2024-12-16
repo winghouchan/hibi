@@ -17,7 +17,10 @@ export default function ReviewScreen() {
   const { data, fetchNextPage } = useInfiniteQuery(query)
 
   const onNewPage = () => {
-    data?.pages.length && pagerViewRef.current?.setPage(data.pages.length - 1)
+    // Set the current page of the pager view to the last page after it has rendered
+    setTimeout(() => {
+      data?.pages.length && pagerViewRef.current?.setPage(data.pages.length - 1)
+    }, 0)
   }
 
   const onReview = async () => {

@@ -23,7 +23,7 @@ export default {
   icon: './assets/images/icon.png',
   scheme: 'hibi',
   userInterfaceStyle: 'automatic',
-  newArchEnabled: false,
+  newArchEnabled: true,
   developmentClient: {
     silentLaunch: true,
   },

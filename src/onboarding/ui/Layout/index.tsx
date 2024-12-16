@@ -23,109 +23,115 @@ export default function OnboardingLayout() {
   >()
 
   const onFocus = () => {
-    const state = navigation.getState()
-
     /**
-     * Pathname of the current screen
-     *
-     * It is pulled from the navigation state as the `usePathname` from
-     * `expo-router` sometimes returns `/onboarding` which is (assumed to be)
-     * from the parent navigator.
+     * `setTimeout` fixes issue where `navigation.reset` has no effect when the
+     * new architecture is enabled. The cause and resolution is not fully understood.
      */
-    const pathname = state.routes[0].state?.routes[0].path || ''
+    setTimeout(() => {
+      const state = navigation.getState()
 
-    /**
-     * Did the navigation occur via a deep link?
-     *
-     * The navigation into the onboarding journey occurred via a deep link if
-     * the first item in the history has the name `onboarding` as opposed to
-     * `index` which represents the welcome screen.
-     */
-    const isDeepLink = state.routes[0].name === 'onboarding'
-
-    if (isDeepLink && isOnboardingComplete === false) {
       /**
-       * New route history state.
+       * Pathname of the current screen
        *
-       * The first item is the welcome screen.
+       * It is pulled from the navigation state as the `usePathname` from
+       * `expo-router` sometimes returns `/onboarding` which is (assumed to be)
+       * from the parent navigator.
        */
-      const routes: PartialRoute<
-        Route<'index' | 'onboarding', object | undefined>
-      >[] = [{ name: 'index' }]
+      const pathname = state.routes[0].state?.routes[0].path || ''
 
-      if (pathname === 'onboarding/collection') {
-        routes.push({
-          name: 'onboarding',
-          state: {
-            index: 0,
-            routes: [{ name: 'collection' }],
-          },
-        })
+      /**
+       * Did the navigation occur via a deep link?
+       *
+       * The navigation into the onboarding journey occurred via a deep link if
+       * the first item in the history has the name `onboarding` as opposed to
+       * `index` which represents the welcome screen.
+       */
+      const isDeepLink = state.routes[0].name === 'onboarding'
 
-        navigation.reset({ index: 1, routes })
-      } else if (onboardingCollection === null) {
+      if (isDeepLink && isOnboardingComplete === false) {
         /**
-         * All subsequent routes require an onboarding collection to exist.
-         * This block handles the case where the onboarding collection does not
-         * exist, sending the user to the welcome screen.
+         * New route history state.
+         *
+         * The first item is the welcome screen.
          */
+        const routes: PartialRoute<
+          Route<'index' | 'onboarding', object | undefined>
+        >[] = [{ name: 'index' }]
 
-        navigation.reset({ index: 0, routes })
-      } else if (onboardingCollection) {
-        /**
-         * All subsequent routes require an onboarding collection to exist.
-         * This block handles the case where the onboarding collection does
-         * exist, updating the route history to allow for back navigation.
-         */
-
-        if (pathname === 'onboarding/notes') {
+        if (pathname === 'onboarding/collection') {
           routes.push({
             name: 'onboarding',
             state: {
-              index: 1,
-              routes: [{ name: 'collection' }, { name: 'notes/index' }],
+              index: 0,
+              routes: [{ name: 'collection' }],
             },
           })
 
           navigation.reset({ index: 1, routes })
-        }
+        } else if (onboardingCollection === null) {
+          /**
+           * All subsequent routes require an onboarding collection to exist.
+           * This block handles the case where the onboarding collection does not
+           * exist, sending the user to the welcome screen.
+           */
 
-        if (pathname === 'onboarding/notes/new') {
-          routes.push({
-            name: 'onboarding',
-            state: {
-              index: 2,
-              routes: [
-                { name: 'collection' },
-                { name: 'notes/index' },
-                { name: 'notes/new' },
-              ],
-            },
-          })
+          navigation.reset({ index: 0, routes })
+        } else if (onboardingCollection) {
+          /**
+           * All subsequent routes require an onboarding collection to exist.
+           * This block handles the case where the onboarding collection does
+           * exist, updating the route history to allow for back navigation.
+           */
 
-          navigation.reset({ index: 1, routes })
-        }
+          if (pathname === 'onboarding/notes') {
+            routes.push({
+              name: 'onboarding',
+              state: {
+                index: 1,
+                routes: [{ name: 'collection' }, { name: 'notes/index' }],
+              },
+            })
 
-        if (pathname.startsWith('onboarding/notes/edit')) {
-          routes.push({
-            name: 'onboarding',
-            state: {
-              index: 2,
-              routes: [
-                { name: 'collection' },
-                { name: 'notes/index' },
-                {
-                  name: 'notes/edit/[id]',
-                  params: state.routes[0].state?.routes[0].params,
-                },
-              ],
-            },
-          })
+            navigation.reset({ index: 1, routes })
+          }
 
-          navigation.reset({ index: 1, routes })
+          if (pathname === 'onboarding/notes/new') {
+            routes.push({
+              name: 'onboarding',
+              state: {
+                index: 2,
+                routes: [
+                  { name: 'collection' },
+                  { name: 'notes/index' },
+                  { name: 'notes/new' },
+                ],
+              },
+            })
+
+            navigation.reset({ index: 1, routes })
+          }
+
+          if (pathname.startsWith('onboarding/notes/edit')) {
+            routes.push({
+              name: 'onboarding',
+              state: {
+                index: 2,
+                routes: [
+                  { name: 'collection' },
+                  { name: 'notes/index' },
+                  {
+                    name: 'notes/edit/[id]',
+                    params: state.routes[0].state?.routes[0].params,
+                  },
+                ],
+              },
+            })
+
+            navigation.reset({ index: 1, routes })
+          }
         }
       }
-    }
+    }, 0)
   }
 
   useFocusEffect(onFocus)
