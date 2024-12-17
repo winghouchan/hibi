@@ -30,7 +30,7 @@ export default function NoteEditor() {
   const safeAreaInset = useSafeAreaInsets()
 
   const initialValues = {
-    id: noteId,
+    id: noteId && Number(noteId),
     collections: collection?.id ? [collection.id] : [],
     fields: note ? note.fields : [[{ value: '' }], [{ value: '' }]],
     config: {
@@ -151,10 +151,22 @@ export default function NoteEditor() {
             autofocus={index === 0}
             initialContent={{
               type: 'doc',
-              content: side.map((field) => ({
-                type: 'paragraph',
-                content: [{ type: 'text', text: field.value }],
-              })),
+              content: side.reduce<
+                ComponentProps<typeof Editor>['initialContent'][]
+              >(
+                (accumulator, field) =>
+                  // @todo: Handle other types of fields
+                  typeof field.value === 'string'
+                    ? [
+                        ...accumulator,
+                        {
+                          type: 'paragraph',
+                          content: [{ type: 'text', text: field.value }],
+                        },
+                      ]
+                    : accumulator,
+                [],
+              ),
             }}
             key={index}
             name={`fields.${index}`}

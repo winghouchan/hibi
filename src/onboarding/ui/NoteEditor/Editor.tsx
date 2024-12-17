@@ -31,13 +31,14 @@ interface Content {
   text?: string
 }
 
-interface Props
+export interface Props
   extends Pick<ComponentProps<typeof RichText>, 'testID'>,
     Pick<
       Exclude<Parameters<typeof useEditorBridge>[0], undefined>,
-      'autofocus' | 'initialContent'
+      'autofocus'
     > {
   name: string
+  initialContent: Content
   onChange?: (name: string, content?: Content) => void
   placeholder?: string
 }

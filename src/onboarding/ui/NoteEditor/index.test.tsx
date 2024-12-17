@@ -16,7 +16,11 @@ import {
 import { mockAppRoot } from 'test/utils'
 import NoteEditor from '.'
 
+// eslint-disable-next-line import/order -- These must be imported after they have been mocked
+import { createNote, updateNote } from '@/notes/operations'
+
 jest.mock('expo-linking')
+jest.mock('./Editor')
 
 const backMock = jest.fn()
 
@@ -87,6 +91,7 @@ describe('<NoteEditor />', () => {
         )
 
         expect(backMock).toHaveBeenCalled()
+        expect(createNote).toHaveBeenCalledExactlyOnceWith(input.note)
       })
 
       test('the user is alerted when there is an error creating the note', async () => {
@@ -225,6 +230,11 @@ describe('<NoteEditor />', () => {
         )
 
         expect(backMock).toHaveBeenCalled()
+        expect(updateNote).toHaveBeenCalledExactlyOnceWith({
+          collections: [fixture.collection.id],
+          ...fixture.note,
+          ...input.note,
+        })
       })
 
       test('the user is alerted when there is an error updating the note', async () => {
