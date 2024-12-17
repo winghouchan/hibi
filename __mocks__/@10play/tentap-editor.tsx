@@ -17,8 +17,12 @@ export const useEditorBridge = jest.fn(({ initialContent }) => ({
 
 export const useEditorContent = jest.fn()
 
+export const CodeBridge = {
+  configureCSS: jest.fn(),
+}
+
 export const PlaceholderBridge = {
   configureExtension: jest.fn(),
 }
 
-export const TenTapStartKit = [PlaceholderBridge]
+export const TenTapStartKit = [CodeBridge, PlaceholderBridge]
