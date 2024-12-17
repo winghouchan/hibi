@@ -55,8 +55,8 @@ describe('<NoteEditor />', () => {
             collections: [fixture.collection.id],
             fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
             config: {
-              reversible: false,
-              separable: false,
+              reversible: true,
+              separable: true,
             },
           },
         }
@@ -85,6 +85,12 @@ describe('<NoteEditor />', () => {
             'onboarding.note-editor.side-1.editor.input',
           ),
           input.note.fields[1][0].value,
+        )
+        await user.press(
+          await screen.findByRole('switch', { name: 'Reversible' }),
+        )
+        await user.press(
+          await screen.findByRole('switch', { name: 'Separable' }),
         )
         await user.press(
           await screen.findByRole('button', { name: 'Add note' }),
@@ -167,6 +173,10 @@ describe('<NoteEditor />', () => {
         const input = {
           note: {
             fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
+            config: {
+              reversible: true,
+              separable: true,
+            },
           },
         } as const
 
@@ -225,6 +235,12 @@ describe('<NoteEditor />', () => {
         await user.type(frontEditor, input.note.fields[0][0].value)
         await user.clear(backEditor)
         await user.type(backEditor, input.note.fields[1][0].value)
+        await user.press(
+          await screen.findByRole('switch', { name: 'Reversible' }),
+        )
+        await user.press(
+          await screen.findByRole('switch', { name: 'Separable' }),
+        )
         await user.press(
           await screen.findByRole('button', { name: 'Update note' }),
         )

@@ -13,4 +13,10 @@ tags:
 - inputText: Back 1
 
 - tapOn:
+    id: onboarding.note-editor.reversible.switch
+
+- tapOn:
+    id: onboarding.note-editor.separable.switch
+
+- tapOn:
     id: onboarding.note-editor.cta.button

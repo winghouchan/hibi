@@ -9,7 +9,7 @@ import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
 import { log } from '@/telemetry'
-import { Button } from '@/ui'
+import { Button, Switch } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 import Editor from './Editor'
 
@@ -175,6 +175,22 @@ export default function NoteEditor() {
             testID={`onboarding.note-editor.side-${index}`}
           />
         ))}
+        <Switch
+          label={i18n.t(msg`Reversible`)}
+          onValueChange={(value) => {
+            setFieldValue('config.reversible', value)
+          }}
+          testID="onboarding.note-editor.reversible"
+          value={values.config.reversible}
+        />
+        <Switch
+          label={i18n.t(msg`Separable`)}
+          onValueChange={(value) => {
+            setFieldValue('config.separable', value)
+          }}
+          testID="onboarding.note-editor.separable"
+          value={values.config.separable}
+        />
         <Button
           onPress={() => handleSubmit()}
           testID="onboarding.note-editor.cta"
