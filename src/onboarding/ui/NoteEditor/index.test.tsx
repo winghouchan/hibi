@@ -38,14 +38,27 @@ describe('<NoteEditor />', () => {
   describe('when there is an onboarding collection', () => {
     describe('and there is no note ID', () => {
       test('a new note can be created', async () => {
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+            notes: [],
+          },
+        }
+        const input = {
+          note: {
+            collections: [fixture.collection.id],
+            fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+            config: {
+              reversible: false,
+              separable: false,
+            },
+          },
+        }
         const user = userEvent.setup()
 
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
-          notes: [],
-        })
+        mockOnboardingCollection(fixture.collection)
 
         renderRouter(
           {
@@ -61,13 +74,13 @@ describe('<NoteEditor />', () => {
           await screen.findByTestId(
             'onboarding.note-editor.side-0.editor.input',
           ),
-          'Front 1',
+          input.note.fields[0][0].value,
         )
         await user.type(
           await screen.findByTestId(
             'onboarding.note-editor.side-1.editor.input',
           ),
-          'Back 1',
+          input.note.fields[1][0].value,
         )
         await user.press(
           await screen.findByRole('button', { name: 'Add note' }),
@@ -77,15 +90,23 @@ describe('<NoteEditor />', () => {
       })
 
       test('the user is alerted when there is an error creating the note', async () => {
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+            notes: [],
+          },
+        }
+        const input = {
+          note: {
+            fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+          },
+        }
         const user = userEvent.setup()
         const alertSpy = jest.spyOn(Alert, 'alert')
 
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
-          notes: [],
-        })
+        mockOnboardingCollection(fixture.collection)
 
         mockCreateNoteError(new Error('Mock Error'))
 
@@ -103,13 +124,13 @@ describe('<NoteEditor />', () => {
           await screen.findByTestId(
             'onboarding.note-editor.side-0.editor.input',
           ),
-          'Front 1',
+          input.note.fields[0][0].value,
         )
         await user.type(
           await screen.findByTestId(
             'onboarding.note-editor.side-1.editor.input',
           ),
-          'Back 1',
+          input.note.fields[1][0].value,
         )
         await user.press(
           await screen.findByRole('button', { name: 'Add note' }),
@@ -121,39 +142,41 @@ describe('<NoteEditor />', () => {
 
     describe('and there is a note ID', () => {
       test('the form is pre-populated with the note and can be updated', async () => {
-        const user = userEvent.setup()
-        const input = {
-          existing: {
-            note: {
-              fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+            notes: [],
+          },
+          note: {
+            id: 1,
+            fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+            config: {
+              reversible: false,
+              separable: false,
             },
           },
-          new: {
-            note: {
-              fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
-            },
+        }
+        const user = userEvent.setup()
+        const input = {
+          note: {
+            fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
           },
         } as const
 
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
-          notes: [],
-        })
+        mockOnboardingCollection(fixture.collection)
 
         mockGetNote({
-          id: 1,
+          id: fixture.note.id,
           fields: [
             [
               {
-                value: input.existing.note.fields[0][0].value,
+                value: fixture.note.fields[0][0].value,
                 id: 1,
                 createdAt: new Date(),
                 note: 1,
-                hash: hashNoteFieldValue(
-                  input.existing.note.fields[0][0].value,
-                ),
+                hash: hashNoteFieldValue(fixture.note.fields[0][0].value),
                 side: 0,
                 position: 0,
                 archived: false,
@@ -161,22 +184,19 @@ describe('<NoteEditor />', () => {
             ],
             [
               {
-                value: input.existing.note.fields[1][0].value,
+                value: fixture.note.fields[1][0].value,
                 id: 2,
                 createdAt: new Date(),
                 note: 1,
-                hash: hashNoteFieldValue(
-                  input.existing.note.fields[1][0].value,
-                ),
+                hash: hashNoteFieldValue(fixture.note.fields[1][0].value),
                 side: 1,
                 position: 0,
                 archived: false,
               },
             ],
           ],
-          reversible: false,
-          separable: false,
           createdAt: new Date(),
+          ...fixture.note.config,
         })
 
         renderRouter(
@@ -189,25 +209,17 @@ describe('<NoteEditor />', () => {
           },
         )
 
-        expect(
-          await screen.findByDisplayValue(
-            input.existing.note.fields[0][0].value,
-          ),
-        ).toBeOnTheScreen()
-        expect(
-          await screen.findByDisplayValue(
-            input.existing.note.fields[1][0].value,
-          ),
-        ).toBeOnTheScreen()
+        const frontEditor = await screen.findByDisplayValue(
+          fixture.note.fields[0][0].value,
+        )
+        const backEditor = await screen.findByDisplayValue(
+          fixture.note.fields[1][0].value,
+        )
 
-        await user.type(
-          screen.getByDisplayValue(input.existing.note.fields[0][0].value),
-          input.new.note.fields[0][0].value,
-        )
-        await user.type(
-          screen.getByDisplayValue(input.existing.note.fields[1][0].value),
-          input.new.note.fields[1][0].value,
-        )
+        await user.clear(frontEditor)
+        await user.type(frontEditor, input.note.fields[0][0].value)
+        await user.clear(backEditor)
+        await user.type(backEditor, input.note.fields[1][0].value)
         await user.press(
           await screen.findByRole('button', { name: 'Update note' }),
         )
@@ -216,40 +228,37 @@ describe('<NoteEditor />', () => {
       })
 
       test('the user is alerted when there is an error updating the note', async () => {
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+            notes: [],
+          },
+          note: {
+            id: 1,
+            fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+            config: {
+              reversible: false,
+              separable: false,
+            },
+          },
+        }
         const alertSpy = jest.spyOn(Alert, 'alert')
         const user = userEvent.setup()
-        const input = {
-          existing: {
-            note: {
-              fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
-            },
-          },
-          new: {
-            note: {
-              fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
-            },
-          },
-        } as const
 
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
-          notes: [],
-        })
+        mockOnboardingCollection(fixture.collection)
 
         mockGetNote({
           id: 1,
           fields: [
             [
               {
-                value: input.existing.note.fields[0][0].value,
+                value: fixture.note.fields[0][0].value,
                 id: 1,
                 createdAt: new Date(),
                 note: 1,
-                hash: hashNoteFieldValue(
-                  input.existing.note.fields[0][0].value,
-                ),
+                hash: hashNoteFieldValue(fixture.note.fields[0][0].value),
                 side: 0,
                 position: 0,
                 archived: false,
@@ -257,13 +266,11 @@ describe('<NoteEditor />', () => {
             ],
             [
               {
-                value: input.existing.note.fields[1][0].value,
+                value: fixture.note.fields[1][0].value,
                 id: 2,
                 createdAt: new Date(),
                 note: 1,
-                hash: hashNoteFieldValue(
-                  input.existing.note.fields[1][0].value,
-                ),
+                hash: hashNoteFieldValue(fixture.note.fields[1][0].value),
                 side: 1,
                 position: 0,
                 archived: false,
@@ -288,14 +295,10 @@ describe('<NoteEditor />', () => {
         )
 
         expect(
-          await screen.findByDisplayValue(
-            input.existing.note.fields[0][0].value,
-          ),
+          await screen.findByDisplayValue(fixture.note.fields[0][0].value),
         ).toBeOnTheScreen()
         expect(
-          await screen.findByDisplayValue(
-            input.existing.note.fields[1][0].value,
-          ),
+          await screen.findByDisplayValue(fixture.note.fields[1][0].value),
         ).toBeOnTheScreen()
 
         await user.press(
