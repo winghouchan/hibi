@@ -2,7 +2,7 @@ import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
+import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useFormik, type FormikConfig } from 'formik'
 import { ComponentProps, useCallback, useEffect } from 'react'
 import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native'
@@ -125,6 +125,12 @@ export default function NoteEditor() {
     [setFieldValue],
   )
 
+  const SubmitButton = () => (
+    <Button onPress={() => handleSubmit()} testID="onboarding.note-editor.cta">
+      {values.id ? <Trans>Update note</Trans> : <Trans>Add note</Trans>}
+    </Button>
+  )
+
   useEffect(() => {
     if (collection && !isFetchingNote && note === null) {
       Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
@@ -140,68 +146,77 @@ export default function NoteEditor() {
   }, [collection, i18n, isFetchingNote, note, router])
 
   return collection && !isFetchingCollection ? (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={headerHeight}
-      style={{ backgroundColor: 'white', flex: 1 }}
-    >
-      <View
-        testID="onboarding.note-editor.screen"
-        style={{ flex: 1, paddingBottom: safeAreaInset.bottom }}
+    <>
+      <Stack.Screen
+        options={{
+          headerRight: () => <SubmitButton />,
+        }}
+      />
+      {
+        /**
+         * The header (and therefore submit button) will not be rendered in the
+         * test environment. As a result, the submit button is rendered here in
+         * the test environment.
+         */
+        process.env.NODE_ENV === 'test' && <SubmitButton />
+      }
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={headerHeight}
+        style={{ backgroundColor: 'white', flex: 1 }}
       >
-        {values.fields.map((side, index) => (
-          <Editor
-            autofocus={index === 0}
-            initialContent={{
-              type: 'doc',
-              content: side.reduce<
-                ComponentProps<typeof Editor>['initialContent'][]
-              >(
-                (accumulator, field) =>
-                  // @todo: Handle other types of fields
-                  typeof field.value === 'string'
-                    ? [
-                        ...accumulator,
-                        {
-                          type: 'paragraph',
-                          content: [{ type: 'text', text: field.value }],
-                        },
-                      ]
-                    : accumulator,
-                [],
-              ),
-            }}
-            key={index}
-            name={`fields.${index}`}
-            onChange={onChange}
-            placeholder={index === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
-            testID={`onboarding.note-editor.side-${index}`}
-          />
-        ))}
-        <Switch
-          label={i18n.t(msg`Reversible`)}
-          onValueChange={(value) => {
-            setFieldValue('config.reversible', value)
-          }}
-          testID="onboarding.note-editor.reversible"
-          value={values.config.reversible}
-        />
-        <Switch
-          label={i18n.t(msg`Separable`)}
-          onValueChange={(value) => {
-            setFieldValue('config.separable', value)
-          }}
-          testID="onboarding.note-editor.separable"
-          value={values.config.separable}
-        />
-        <Button
-          onPress={() => handleSubmit()}
-          testID="onboarding.note-editor.cta"
+        <View
+          testID="onboarding.note-editor.screen"
+          style={{ flex: 1, paddingBottom: safeAreaInset.bottom }}
         >
-          {values.id ? <Trans>Update note</Trans> : <Trans>Add note</Trans>}
-        </Button>
-      </View>
-    </KeyboardAvoidingView>
+          {values.fields.map((side, index) => (
+            <Editor
+              autofocus={index === 0}
+              initialContent={{
+                type: 'doc',
+                content: side.reduce<
+                  ComponentProps<typeof Editor>['initialContent'][]
+                >(
+                  (accumulator, field) =>
+                    // @todo: Handle other types of fields
+                    typeof field.value === 'string'
+                      ? [
+                          ...accumulator,
+                          {
+                            type: 'paragraph',
+                            content: [{ type: 'text', text: field.value }],
+                          },
+                        ]
+                      : accumulator,
+                  [],
+                ),
+              }}
+              key={index}
+              name={`fields.${index}`}
+              onChange={onChange}
+              placeholder={index === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
+              testID={`onboarding.note-editor.side-${index}`}
+            />
+          ))}
+          <Switch
+            label={i18n.t(msg`Reversible`)}
+            onValueChange={(value) => {
+              setFieldValue('config.reversible', value)
+            }}
+            testID="onboarding.note-editor.reversible"
+            value={values.config.reversible}
+          />
+          <Switch
+            label={i18n.t(msg`Separable`)}
+            onValueChange={(value) => {
+              setFieldValue('config.separable', value)
+            }}
+            testID="onboarding.note-editor.separable"
+            value={values.config.separable}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </>
   ) : !collection && !isFetchingCollection ? (
     <Redirect href="/" />
   ) : null

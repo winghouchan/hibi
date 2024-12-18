@@ -1,4 +1,5 @@
-import { Trans } from '@lingui/macro'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import type {
   NavigationProp,
   PartialRoute,
@@ -13,6 +14,7 @@ import {
 } from '../../operations'
 
 export default function OnboardingLayout() {
+  const { i18n } = useLingui()
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
   const { data: onboardingCollection } = useQuery(onboardingCollectionQuery)
   const navigation = useNavigation<
@@ -158,11 +160,37 @@ export default function OnboardingLayout() {
       >
         <Stack.Screen
           name="notes/new"
-          options={{ presentation: 'fullScreenModal' }}
+          options={({ navigation }) => ({
+            headerLeft: ({ canGoBack }) =>
+              canGoBack ? (
+                <Button
+                  onPress={() => {
+                    navigation.goBack()
+                  }}
+                >
+                  <Trans>Close</Trans>
+                </Button>
+              ) : null,
+            presentation: 'fullScreenModal',
+            title: i18n.t(msg`Create note`),
+          })}
         />
         <Stack.Screen
           name="notes/edit/[id]"
-          options={{ presentation: 'fullScreenModal' }}
+          options={({ navigation }) => ({
+            headerLeft: ({ canGoBack }) =>
+              canGoBack ? (
+                <Button
+                  onPress={() => {
+                    navigation.goBack()
+                  }}
+                >
+                  <Trans>Close</Trans>
+                </Button>
+              ) : null,
+            presentation: 'fullScreenModal',
+            title: i18n.t(msg`Edit note`),
+          })}
         />
       </Stack>
     )
