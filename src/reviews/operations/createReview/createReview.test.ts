@@ -84,8 +84,8 @@ describe('createReview', () => {
           createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
-          new Date(expected.snapshot.due.valueOf() - 3000),
-          new Date(expected.snapshot.due.valueOf() + 3000),
+          new Date(expected.snapshot.due.valueOf()),
+          new Date(expected.snapshot.due.valueOf() + 5000),
         ] as const
 
         expect(returnedState.review).toEqual(expectedReview)
@@ -247,8 +247,8 @@ describe('createReview', () => {
           createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
-          new Date(expected.snapshot.due.valueOf() - 3000),
-          new Date(expected.snapshot.due.valueOf() + 3000),
+          new Date(expected.snapshot.due.valueOf()),
+          new Date(expected.snapshot.due.valueOf() + 5000),
         ] as const
 
         expect(returnedState.review).toEqual(expectedReview)
@@ -418,8 +418,8 @@ describe('createReview', () => {
           createdAt: returnedState.review.createdAt,
         })
         const expectedSnapshotDueBetween = [
-          new Date(expected.snapshot.due.valueOf() - 3000),
-          new Date(expected.snapshot.due.valueOf() + 3000),
+          new Date(expected.snapshot.due.valueOf()),
+          new Date(expected.snapshot.due.valueOf() + 5000),
         ] as const
 
         expect(returnedState.review).toEqual(expectedReview)
