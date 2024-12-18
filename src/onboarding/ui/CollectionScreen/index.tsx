@@ -95,15 +95,16 @@ export default function CollectionScreen() {
         initialValues={initialValues}
         onSubmit={onSubmit}
       >
-        {({ handleSubmit, isSubmitting, values }) => (
+        {({ handleChange, handleSubmit, isSubmitting, values }) => (
           <>
             <TextInput
               accessibilityLabel={i18n.t(msg`Enter a collection name`)}
               autoFocus
-              name="name"
+              onChangeText={(value) => handleChange('name')(value)}
               onSubmitEditing={() => handleSubmit()}
               placeholder={i18n.t(msg`Collection name`)}
               testID="onboarding.collection.name"
+              value={values.name}
             />
             <Button
               testID="onboarding.collection.cta"
