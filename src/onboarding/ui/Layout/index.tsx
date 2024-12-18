@@ -156,10 +156,13 @@ export default function OnboardingLayout() {
             ) : null,
         })}
       >
-        <Stack.Screen name="notes/new" options={{ presentation: 'modal' }} />
+        <Stack.Screen
+          name="notes/new"
+          options={{ presentation: 'fullScreenModal' }}
+        />
         <Stack.Screen
           name="notes/edit/[id]"
-          options={{ presentation: 'modal' }}
+          options={{ presentation: 'fullScreenModal' }}
         />
       </Stack>
     )

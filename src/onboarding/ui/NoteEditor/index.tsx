@@ -142,10 +142,13 @@ export default function NoteEditor() {
   return collection && !isFetchingCollection ? (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={safeAreaInset.top + headerHeight + 10}
+      keyboardVerticalOffset={headerHeight}
       style={{ backgroundColor: 'white', flex: 1 }}
     >
-      <View testID="onboarding.note-editor.screen" style={{ flex: 1 }}>
+      <View
+        testID="onboarding.note-editor.screen"
+        style={{ flex: 1, paddingBottom: safeAreaInset.bottom }}
+      >
         {values.fields.map((side, index) => (
           <Editor
             autofocus={index === 0}
