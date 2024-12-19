@@ -29,7 +29,7 @@ export default function ReviewScreen() {
 
   const handleScreenClose = () =>
     navigation.addListener('beforeRemove', () => {
-      queryClient.removeQueries({
+      queryClient.invalidateQueries({
         queryKey: query.queryKey,
         exact: true,
       })
