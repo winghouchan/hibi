@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite'
 import { openDatabaseSync } from 'expo-sqlite'
+import logger from './logger'
 import schema from './schema'
 
 /**
@@ -26,6 +27,7 @@ export const nativeDatabase = openDatabaseSync(DATABASE_NAME)
  */
 const database = drizzle(nativeDatabase, {
   casing: 'snake_case',
+  logger,
   schema,
 })
 
