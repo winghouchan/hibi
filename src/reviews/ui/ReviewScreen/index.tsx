@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 import { View } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { nextReviewQuery } from '@/reviews/operations'
+import NoReviews from './NoReviews'
 import Review from './Review'
 import ReviewFinished from './ReviewFinished'
 
@@ -51,13 +52,22 @@ export default function ReviewScreen() {
           scrollEnabled={false}
           style={{ flex: 1 }}
         >
-          {data?.pages.map((reviewable, index) =>
-            reviewable ? (
-              <Review key={index} {...reviewable} onReview={onReview} />
-            ) : (
-              <ReviewFinished key={index} />
-            ),
-          )}
+          {data?.pages.map((reviewable, index) => {
+            const noReviewsDue = reviewable === null && index === 0
+            const finishedReview = reviewable === null && index > 0
+
+            if (reviewable) {
+              return <Review key={index} {...reviewable} onReview={onReview} />
+            }
+
+            if (noReviewsDue) {
+              return <NoReviews key={index} />
+            }
+
+            if (finishedReview) {
+              return <ReviewFinished key={index} />
+            }
+          })}
         </PagerView>
       )}
     </View>

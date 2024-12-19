@@ -4,7 +4,7 @@ appId: ${appId}
 - launchApp:
     clearState: true
     arguments:
-      databaseFixture: review
+      databaseFixture: review/new-reviewables
 
 - runFlow: ../subflows/start-review.yaml
 

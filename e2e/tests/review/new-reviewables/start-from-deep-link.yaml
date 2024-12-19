@@ -4,7 +4,7 @@ appId: ${appId}
 - runFlow:
     file: ../../../utils/loadDatabaseFixture.yaml
     env:
-      databaseFixture: review
+      databaseFixture: review/new-reviewables
 
 - openLink:
     link: hibi://review

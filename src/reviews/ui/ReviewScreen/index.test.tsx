@@ -41,6 +41,17 @@ enum Ratings {
 )
 
 describe('<ReviewScreen />', () => {
+  test('when there are no reviewables, the user is informed', async () => {
+    mockNextReview(null)
+
+    renderRouter(
+      { '(app)/review': ReviewScreen },
+      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
+    )
+
+    expect(await screen.findByText('No reviews due')).toBeOnTheScreen()
+  })
+
   test.each([
     {
       name: 'when there is one reviewable, it can be reviewed with rating: forgot',

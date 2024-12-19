@@ -1,0 +1,10 @@
+name: Review > when there are no due reviewables > a review cannot be started from the home screen
+appId: ${appId}
+---
+- launchApp:
+    clearState: true
+    arguments:
+      databaseFixture: review/none-due
+
+- assertNotVisible:
+    id: home.screen.cta.button
