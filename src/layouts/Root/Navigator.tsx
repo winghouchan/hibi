@@ -3,6 +3,7 @@ import { SplashScreen, Stack } from 'expo-router'
 import { ComponentProps, useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import { isOnboardingCompleteQuery } from '@/onboarding'
+import { log } from '@/telemetry'
 
 type StackProps = ComponentProps<typeof Stack>
 
@@ -45,7 +46,9 @@ export default function Navigator() {
 
   const hideSplashScreen = () => {
     if (hasCheckedOnboardingState && isNavigatorReady) {
-      SplashScreen.hideAsync()
+      SplashScreen.hideAsync().then(() => {
+        log.info('Splash screen hidden')
+      })
     }
   }
 

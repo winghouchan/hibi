@@ -1,4 +1,5 @@
 import { SplashScreen } from 'expo-router'
+import { LaunchArguments } from 'react-native-launch-arguments'
 import { DevToolsBubble } from 'react-native-react-query-devtools'
 import {
   DataProvider,
@@ -7,7 +8,12 @@ import {
   useDatabaseMigrations,
 } from '@/data'
 import { IntlProvider } from '@/intl'
+import { log } from '@/telemetry'
 import Navigator from './Navigator'
+
+const launchArguments = LaunchArguments.value()
+
+log.info('Opened app', { launchArguments })
 
 SplashScreen.preventAutoHideAsync()
 
