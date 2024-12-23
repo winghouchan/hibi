@@ -2,19 +2,7 @@
 
 ## Background
 
-The app uses [Expo's SQLite database](https://docs.expo.dev/versions/latest/sdk/sqlite/) to persist some data across sessions. However, when running tests against code that interacts with the database, Expo's SQLite database cannot be used because it calls APIs only available on native devices, which the Node.js environment that tests are run in will not have. The following error will be thrown:
-
-> ```
-> TypeError: _ExpoSQLiteNext.default.NativeDatabase is not a constructor
-> ```
-
-The relevant source code from Expo can be found here:
-
-- [TypeScript](https://github.com/expo/expo/blob/sdk-51/packages/expo-sqlite/src/ExpoSQLiteNext.native.ts)
-- [Android](https://github.com/expo/expo/blob/sdk-51/packages/expo-sqlite/android/src/main/java/expo/modules/sqlite/NativeDatabase.kt)
-- [iOS](https://github.com/expo/expo/blob/sdk-51/packages/expo-sqlite/ios/NativeDatabase.swift)
-
-As a result, the database will need to be mocked.
+The app uses an [OP SQLite database](https://ospfranco.notion.site/OP-SQLite-Documentation-a279a52102464d0cb13c3fa230d2f2dc) to persist some data across sessions. However, when running tests against code that interacts with the database, the OP SQLite database cannot be used because it calls APIs only available on native devices, which the Node.js environment that tests are run in will not have. As a result, the database will need to be mocked.
 
 ## Method
 
@@ -22,8 +10,8 @@ As a result, the database will need to be mocked.
 
 The following are mocked:
 
-- The Expo SQLite function that creates/opens the database ([`openDatabaseSync`](https://docs.expo.dev/versions/latest/sdk/sqlite/#sqliteopendatabasesyncdatabasename-options)). The mocked function returns an SQLite database that is runnable in Node.js. [Better SQLite 3](https://github.com/WiseLibs/better-sqlite3) was chosen. See [\<projectRoot\>/\_\_mocks\_\_/expo-sqlite/index.ts](../../../__mocks__/expo-sqlite/index.ts) for the mock implementation.
-- The Drizzle Expo SQLite driver. The mocked driver is the driver for Better SQLite 3. See [\<projectRoot\>/\_\_mocks\_\_/drizzle-orm/expo-sqlite.ts](../../../__mocks__/drizzle-orm/expo-sqlite.ts) for the mock implementation.
+- The OP SQLite function that creates/opens the database ([`open`](https://ospfranco.notion.site/API-1a39b6bb3eb74eb893d640c8c3459362#032e106271f64ada9ccfb4910384c9e9)). The mocked function returns an SQLite database that is runnable in Node.js. [libSQL](https://github.com/tursodatabase/libsql-client-ts/) was chosen. See [\<projectRoot\>/\_\_mocks\_\_/@op-engineering/op-sqlite.ts](../../../__mocks__/@op-engineering/op-sqlite.ts) for the mock implementation.
+- The Drizzle OP SQLite driver. The mocked driver is the driver for libSQL. See [\<projectRoot\>/\_\_mocks\_\_/drizzle-orm/op-sqlite.ts](../../../__mocks__/drizzle-orm/op-sqlite.ts) for the mock implementation.
 
 ### Enabling the mock
 
@@ -44,8 +32,8 @@ export default async function fn(/* ... */) {
 // fn.test.ts
 import fn from './fn'
 
-jest.mock('drizzle-orm/expo-sqlite')
-jest.mock('expo-sqlite')
+jest.mock('drizzle-orm/op-sqlite')
+jest.mock('@op-engineering/op-sqlite')
 
 test('...', async () => {
   expect(await fn(/* ... */)).toBe(/* ... */)
@@ -62,23 +50,23 @@ Whilst [`jest.mock`](https://jestjs.io/docs/jest-object#jestmockmodulename-facto
 import fn from './fn'
 
 test('...', () => {
-  jest.mock('drizzle-orm/expo-sqlite')
-  jest.mock('expo-sqlite')
+  jest.mock('drizzle-orm/op-sqlite')
+  jest.mock('@op-engineering/op-sqlite')
 
   /* ... */
 })
 
 test('...', () => {
-  jest.mock('drizzle-orm/expo-sqlite')
-  jest.mock('expo-sqlite')
+  jest.mock('drizzle-orm/op-sqlite')
+  jest.mock('@op-engineering/op-sqlite')
 
   /* ... */
 })
 
 // is equivalent to this:
 
-jest.mock('drizzle-orm/expo-sqlite')
-jest.mock('expo-sqlite')
+jest.mock('drizzle-orm/op-sqlite')
+jest.mock('@op-engineering/op-sqlite')
 
 import fn from './fn'
 
@@ -96,8 +84,8 @@ Jest provides a function called [`doMock`](https://jestjs.io/docs/jest-object#je
 ```typescript
 test('...', () => {
   jest.resetModules()
-  jest.doMock('drizzle-orm/expo-sqlite')
-  jest.doMock('expo-sqlite')
+  jest.doMock('drizzle-orm/op-sqlite')
+  jest.doMock('@op-engineering/op-sqlite')
 
   const fn = require('./fn').default
 
@@ -106,8 +94,8 @@ test('...', () => {
 
 test('...', () => {
   jest.resetModules()
-  jest.doMock('drizzle-orm/expo-sqlite')
-  jest.doMock('expo-sqlite')
+  jest.doMock('drizzle-orm/op-sqlite')
+  jest.doMock('@op-engineering/op-sqlite')
 
   const fn = require('./fn').default
 

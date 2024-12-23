@@ -35,17 +35,16 @@ export default async function createNote({
     throw new TypeError('every side requires at least 1 field')
   }
 
-  return database.transaction((transaction) => {
-    const [insertedNote] = transaction
+  return await database.transaction(async (transaction) => {
+    const [insertedNote] = await transaction
       .insert(note)
       .values({
         reversible: config.reversible,
         separable: config.separable,
       })
       .returning()
-      .all()
 
-    const insertedFields = transaction
+    const insertedFields = await transaction
       .insert(noteField)
       .values(
         sides.reduce<(typeof noteField.$inferInsert)[]>(
@@ -63,52 +62,46 @@ export default async function createNote({
         ),
       )
       .returning()
-      .all()
 
-    transaction
-      .insert(collectionToNote)
-      .values(
-        collections.map((collection) => ({
-          collection,
-          note: insertedNote.id,
-        })),
-      )
-      .run()
+    await transaction.insert(collectionToNote).values(
+      collections.map((collection) => ({
+        collection,
+        note: insertedNote.id,
+      })),
+    )
 
-    const noteCollections = transaction.query.collection
-      .findMany({
-        where: inArray(collection.id, collections),
-      })
-      .sync()
-
-    const reviewables = createReviewables({
-      note: { id: insertedNote.id, fields: insertedFields },
-      config,
-    }).map(({ note: noteId, fields }) => {
-      const [insertedReviewable] = transaction
-        .insert(reviewable)
-        .values({ note: noteId })
-        .returning()
-        .all()
-
-      const insertedReviewableFields = transaction
-        .insert(reviewableField)
-        .values(
-          fields.map(({ field, side }) => ({
-            reviewable: insertedReviewable.id,
-            field,
-            side,
-          })),
-        )
-        .returning()
-        .all()
-
-      return {
-        ...insertedReviewable,
-        fields: insertedReviewableFields,
-        reviews: [],
-      }
+    const noteCollections = await transaction.query.collection.findMany({
+      where: inArray(collection.id, collections),
     })
+
+    const reviewables = await Promise.all(
+      createReviewables({
+        note: { id: insertedNote.id, fields: insertedFields },
+        config,
+      }).map(async ({ note: noteId, fields }) => {
+        const [insertedReviewable] = await transaction
+          .insert(reviewable)
+          .values({ note: noteId })
+          .returning()
+
+        const insertedReviewableFields = await transaction
+          .insert(reviewableField)
+          .values(
+            fields.map(({ field, side }) => ({
+              reviewable: insertedReviewable.id,
+              field,
+              side,
+            })),
+          )
+          .returning()
+
+        return {
+          ...insertedReviewable,
+          fields: insertedReviewableFields,
+          reviews: [],
+        }
+      }),
+    )
 
     return {
       ...insertedNote,

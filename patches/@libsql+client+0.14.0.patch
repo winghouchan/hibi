@@ -1,0 +1,34 @@
+diff --git a/node_modules/@libsql/client/lib-cjs/sqlite3.js b/node_modules/@libsql/client/lib-cjs/sqlite3.js
+index f479612..5bb7f4d 100644
+--- a/node_modules/@libsql/client/lib-cjs/sqlite3.js
++++ b/node_modules/@libsql/client/lib-cjs/sqlite3.js
+@@ -145,7 +145,11 @@ class Sqlite3Client {
+     async transaction(mode = "write") {
+         const db = this.#getDb();
+         executeStmt(db, (0, util_1.transactionModeToBegin)(mode), this.#intMode);
+-        this.#db = null; // A new connection will be lazily created on next use
++
++        if (!this.#path.includes(":memory:")) {
++            this.#db = null; // A new connection will be lazily created on next use
++        }
++
+         return new Sqlite3Transaction(db, this.#intMode);
+     }
+     async executeMultiple(sql) {
+diff --git a/node_modules/@libsql/client/lib-esm/sqlite3.js b/node_modules/@libsql/client/lib-esm/sqlite3.js
+index 8aa7047..22b6781 100644
+--- a/node_modules/@libsql/client/lib-esm/sqlite3.js
++++ b/node_modules/@libsql/client/lib-esm/sqlite3.js
+@@ -123,7 +123,11 @@ export class Sqlite3Client {
+     async transaction(mode = "write") {
+         const db = this.#getDb();
+         executeStmt(db, transactionModeToBegin(mode), this.#intMode);
+-        this.#db = null; // A new connection will be lazily created on next use
++
++        if (!this.#path.includes(":memory:")) {
++            this.#db = null; // A new connection will be lazily created on next use
++        }
++
+         return new Sqlite3Transaction(db, this.#intMode);
+     }
+     async executeMultiple(sql) {

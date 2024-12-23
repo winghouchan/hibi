@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
+import { migrate } from 'drizzle-orm/libsql/migrator'
 import * as mockSchema from './__fixtures__/mock.schema'
 import type MockDatabaseFn from '.'
 
@@ -18,7 +18,7 @@ beforeEach(async () => {
   jest.doMock('@/data/database/schema', () => ({
     default: { ...mockSchema },
   }))
-  jest.doMock('drizzle-orm/better-sqlite3/migrator', () => ({
+  jest.doMock('drizzle-orm/libsql/migrator', () => ({
     migrate: jest.fn((...[database]: Parameters<typeof migrate>) =>
       migrate(database, {
         migrationsFolder: './test/utils/mockDatabase/__fixtures__/migrations',
@@ -36,8 +36,10 @@ afterEach(() => {
 
 test('migrations successfully run in database mock', async () => {
   expect(
-    nativeDatabase
-      .prepare(`SELECT name FROM sqlite_master WHERE type = 'table'`)
-      .all(),
+    (
+      await nativeDatabase.execute(
+        `SELECT name FROM sqlite_master WHERE type = 'table'`,
+      )
+    ).rows,
   ).toEqual([{ name: '__drizzle_migrations' }, { name: 'mock' }])
 })

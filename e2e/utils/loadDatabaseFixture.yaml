@@ -14,12 +14,11 @@ tags:
     arguments:
       databaseFixture: ${databaseFixture}
 
-# Wait for database migrations and the test fixture to be applied. It works by
-# checking for the visibility of text as text will be visible after the splash
-# screen is hidden; and the splash screen is hidden after database migrations
-# and the test fixture are applied. "Downloading" is excluded from the allowed
-# text because it is shown in development builds while the JavaScript bundle is
-# being downloaded from the development server.
+# The following commands wait for the splash screen (and in development builds,
+# the bundle downloading message) to be hidden. The hiding of the splash screen
+# indicates the test fixture has been applied successfully.
+- waitForAnimationToEnd:
+    timeout: 5000
 - extendedWaitUntil:
     notVisible:
       text: Downloading

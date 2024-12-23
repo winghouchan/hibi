@@ -3,15 +3,18 @@ import { database } from '@/data'
 import { user } from '@/user/schema'
 
 export default async function completeOnboarding() {
-  return database.transaction((transaction) => {
+  return await database.transaction(async (transaction) => {
     const { id: userId } =
-      transaction.query.user.findFirst({ columns: { id: true } }).sync() ?? {}
+      (await transaction.query.user.findFirst({ columns: { id: true } })) ?? {}
 
     if (userId === undefined) {
-      return transaction.insert(user).values({ onboarded: true }).returning()
+      return await transaction
+        .insert(user)
+        .values({ onboarded: true })
+        .returning()
     }
 
-    return transaction
+    return await transaction
       .update(user)
       .set({ onboarded: true })
       .where(eq(user.id, userId))

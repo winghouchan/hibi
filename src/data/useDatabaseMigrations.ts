@@ -1,4 +1,4 @@
-import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
+import { useMigrations } from 'drizzle-orm/op-sqlite/migrator'
 import { useLayoutEffect } from 'react'
 import { log } from '@/telemetry'
 import { database, migrations } from './database'

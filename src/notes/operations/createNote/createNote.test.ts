@@ -92,7 +92,6 @@ describe('createNote', () => {
         }),
       },
     },
-
     {
       name: 'when a field value is an empty string, throws an error and does not alter the database state',
       input: {

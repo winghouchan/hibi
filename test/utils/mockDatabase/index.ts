@@ -1,59 +1,66 @@
 import { jest } from '@jest/globals'
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
-import * as drizzleOrmExpoSqliteMock from '__mocks__/drizzle-orm/expo-sqlite'
-import * as expoSqliteMock from '__mocks__/expo-sqlite'
+import { migrate } from 'drizzle-orm/libsql/migrator'
+import * as opSqliteMock from '__mocks__/@op-engineering/op-sqlite'
+import * as drizzleOrmOpSqliteMock from '__mocks__/drizzle-orm/op-sqlite'
 
 /**
- * Provides types for the database APIs when mocking the Expo SQLite database
- * with the Better SQLite 3 database in Node.js. They can be used to cast the
- * types of variables holding references to the database wrapped with Drizzle
- * ORM (`database`) or the underlying database (`nativeDatabase`). Casting may
- * be necessary because the interfaces between Expo SQLite and Better SQLite 3
- * are not exactly the same.
+ * Provides types for the database APIs when mocking the OP SQLite database with
+ * the libSQL database in Node.js. It can be used to cast the types of variables
+ * holding references to the database wrapped with Drizzle ORM (`database`) or
+ * the underlying database (`nativeDatabase`). Casting may be necessary because
+ * the interfaces between OP SQLite and libSQL are not exactly the same.
  */
 export type DatabaseModuleMock = {
   /**
    * The type for the database mock connected to the object-relational mapping
-   * library (Drizzle). There are slight differences in the types for Expo SQLite
-   * and Better SQLite 3 so this type can be used for casting.
+   * library (Drizzle). There are slight differences in the types for OP SQLite
+   * and libSQL so this type can be used for casting.
    *
-   * Drizzle provides an abstraction over Expo SQLite's `runAsync` and `runSync`
-   * functions and Better SQLite 3's `run` function with a function called `run`.
-   * The `run` function from Drizzle will have different return types, depending
-   * on the underlying database used.
+   * One example is Drizzle providing an abstraction over OP SQLite's and libSQL's
+   * `execute` functions with a function called `run`. The `run` function from
+   * Drizzle will have different return types, depending on the underlying
+   * database used.
    *
-   * Expo SQLite's `run*` function(s) return the following type:
+   * OP SQLite's `execute` function returns the following type:
    * ```
-   * {
-   *   changes: number
-   *   lastInsertRowId: number
-   * }
-   * ```
-   *
-   * While Better SQLite 3's `run` function returns the following type:
-   * ```
-   * {
-   *   changes: number
-   *   lastInsertRowId: number | bigint
-   * }
+   * Promise<{
+   *   columnNames?: string[]
+   *   insertId?: number
+   *   metadata?: ColumnMetadata[]
+   *   rawRows?: Scalar[][]
+   *   res?: any[]
+   *   rows: Record<string, Scalar>[]
+   *   rowsAffected: number
+   * }>
    * ```
    *
-   * @see {@link https://github.com/DefinitelyTyped/DefinitelyTyped/blob/aeddb679ec7112375941d277fcbc3ecac85e2f2d/types/better-sqlite3/index.d.ts#L103-L106 | Better SQLite 3 Type Definitions}
-   * @see {@link https://docs.expo.dev/versions/latest/sdk/sqlite/#sqliterunresult | Expo Documentation}
+   * While libSQL's `execute` function returns the following type:
+   * ```
+   * Promise<{
+   *   columns: string[]
+   *   columnTypes: string[]
+   *   lastInsertRowid: bigint | undefined
+   *   rows: Row[]
+   *   rowsAffected: number
+   * }>
+   * ```
+   *
+   * @see {@link https://github.com/tursodatabase/libsql-client-ts/ | libSQL's Source}
+   * @see {@link https://github.com/OP-Engineering/op-sqlite | OP SQLite's Source}
    */
-  database: ReturnType<typeof drizzleOrmExpoSqliteMock.drizzle>
+  database: ReturnType<typeof drizzleOrmOpSqliteMock.drizzle>
 
   /**
-   * The type for the underlying database when Expo SQLite is mocked with Better
-   * SQLite 3 for running in Node.js.
+   * The type for the underlying database when OP SQLite is mocked with libSQL
+   * for running in Node.js.
    *
-   * Expo SQLite and Better SQLite 3 have different properties and methods so this
-   * type can be used for casting.
+   * OP SQLite and libSQL have different properties and methods so this type can
+   * be used for casting.
    *
-   * @see {@link https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/better-sqlite3/index.d.ts | Better SQLite 3 Type Definitions}
-   * @see {@link https://docs.expo.dev/versions/latest/sdk/sqlite | Expo Documentation}
+   * @see {@link https://github.com/tursodatabase/libsql-client-ts/ | libSQL's Source}
+   * @see {@link https://github.com/OP-Engineering/op-sqlite | OP SQLite's Source}
    */
-  nativeDatabase: ReturnType<typeof expoSqliteMock.openDatabaseSync>
+  nativeDatabase: ReturnType<typeof opSqliteMock.open>
 }
 
 /**
@@ -65,20 +72,23 @@ export type DatabaseModuleMock = {
  */
 export default async function mockDatabase() {
   jest.resetModules()
-  jest.doMock('drizzle-orm/expo-sqlite', () => ({
+  jest.doMock('drizzle-orm/op-sqlite', () => ({
     __esModule: true,
-    ...drizzleOrmExpoSqliteMock,
+    ...drizzleOrmOpSqliteMock,
   }))
-  jest.doMock('expo-sqlite', () => ({ __esModule: true, ...expoSqliteMock }))
+  jest.doMock('@op-engineering/op-sqlite', () => ({
+    __esModule: true,
+    ...opSqliteMock,
+  }))
 
   // Import `@/data` here because module registry has been reset and dependencies are now mocked
   const { database, nativeDatabase } = (await import(
     '@/data'
-    // Casting is necessary because the database mock, from Better SQLite 3, is
-    // now returned which has a different structure from Expo SQLite.
+    // Casting is necessary because the database mock, from libSQL, is now
+    // returned which has a different structure from OP SQLite.
   )) as unknown as DatabaseModuleMock
 
-  migrate(database, { migrationsFolder: 'src/data/database/migrations' })
+  await migrate(database, { migrationsFolder: 'src/data/database/migrations' })
 
   return {
     database,

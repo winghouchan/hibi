@@ -46,16 +46,14 @@ export default async function updateNote({
     }
   }
 
-  return database.transaction((transaction) => {
-    const currentConfig = transaction.query.note
-      .findFirst({
-        where: eq(note.id, id),
-        columns: {
-          reversible: true,
-          separable: true,
-        },
-      })
-      .sync()
+  return await database.transaction(async (transaction) => {
+    const currentConfig = await transaction.query.note.findFirst({
+      where: eq(note.id, id),
+      columns: {
+        reversible: true,
+        separable: true,
+      },
+    })
 
     if (!currentConfig) {
       throw new Error(`Note ${id} not found`)
@@ -70,7 +68,7 @@ export default async function updateNote({
       newConfig.reversible !== currentConfig?.reversible ||
       newConfig.separable !== currentConfig.separable
     ) {
-      transaction
+      await transaction
         .update(note)
         .set({
           reversible: newConfig.reversible,
@@ -81,7 +79,7 @@ export default async function updateNote({
     }
 
     if (collections && collections.length > 0) {
-      transaction
+      await transaction
         .delete(collectionToNote)
         .where(
           and(
@@ -91,7 +89,7 @@ export default async function updateNote({
         )
         .run()
 
-      transaction
+      await transaction
         .insert(collectionToNote)
         .values(
           collections.map((collectionId) => ({
@@ -104,7 +102,7 @@ export default async function updateNote({
     }
 
     if (sides && sides.length > 0) {
-      const currentFields = transaction
+      const currentFields = await transaction
         .select()
         .from(noteField)
         .where(eq(noteField.note, id))
@@ -152,123 +150,125 @@ export default async function updateNote({
         ]),
       ]
 
-      fieldHashes.map((fieldHash) => {
-        /**
-         * Current positions of the field identifed by the hash of its value
-         */
-        const currentPositions = currentFieldPositionsByHash[fieldHash]
-        /**
-         * New positions of the field identifed by the hash of its value
-         */
-        const newPositions = newFieldPositionsByHash[fieldHash]
+      await Promise.all(
+        fieldHashes.map(async (fieldHash) => {
+          /**
+           * Current positions of the field identifed by the hash of its value
+           */
+          const currentPositions = currentFieldPositionsByHash[fieldHash]
+          /**
+           * New positions of the field identifed by the hash of its value
+           */
+          const newPositions = newFieldPositionsByHash[fieldHash]
 
-        if (!newPositions) {
-          // The field has no positions in the new state, so are archived
-          transaction
-            .update(noteField)
-            .set({ archived: true })
-            .where(and(eq(noteField.note, id), eq(noteField.hash, fieldHash)))
-            .run()
-        } else if (!currentPositions) {
-          // The field had no current positions (i.e. did not exist), so are inserted
-          transaction
-            .insert(noteField)
-            .values(
-              newPositions.map(({ position, side }) => ({
-                note: id,
-                value: sides[side][position].value,
-                hash: fieldHash,
-                position,
-                side,
-              })),
-            )
-            .run()
-        } else {
-          // The field has positions in both the current and new states
-
-          if (currentPositions.length > newPositions.length) {
-            currentPositions.map(({ id, position, side }, index) => {
-              if (index > newPositions.length - 1) {
-                // The field currently exists at an index that does not exist in the new state, so is archived
-                return transaction
-                  .update(noteField)
-                  .set({ archived: true })
-                  .where(eq(noteField.id, id))
-                  .run()
-              }
-
-              if (
-                position !== newPositions[index].position ||
-                side !== newPositions[index].side
-              ) {
-                // The field position is not the same as the position in the new state, so is updated
-                return transaction
-                  .update(noteField)
-                  .set({
-                    archived: false,
-                    position: newPositions[index].position,
-                    side: newPositions[index].side,
-                  })
-                  .where(eq(noteField.id, id))
-                  .run()
-              }
-            })
-          } else {
-            newPositions.map(({ position, side }, index) => {
-              if (index > currentPositions.length - 1) {
-                // The field exists at an index in the new state that does exist in the current state, so is inserted
-                return transaction
-                  .insert(noteField)
-                  .values({
-                    note: id,
-                    value: sides[side][position].value,
-                    hash: fieldHash,
-                    position,
-                    side,
-                  })
-                  .run()
-              }
-
-              // The field is at an index in both the current and new state
-              return transaction
-                .update(noteField)
-                .set({
-                  archived: false,
+          if (!newPositions) {
+            // The field has no positions in the new state, so are archived
+            await transaction
+              .update(noteField)
+              .set({ archived: true })
+              .where(and(eq(noteField.note, id), eq(noteField.hash, fieldHash)))
+              .run()
+          } else if (!currentPositions) {
+            // The field had no current positions (i.e. did not exist), so are inserted
+            await transaction
+              .insert(noteField)
+              .values(
+                newPositions.map(({ position, side }) => ({
+                  note: id,
+                  value: sides[side][position].value,
+                  hash: fieldHash,
                   position,
                   side,
-                })
-                .where(eq(noteField.id, currentPositions[index].id))
-                .run()
-            })
+                })),
+              )
+              .run()
+          } else {
+            // The field has positions in both the current and new states
+
+            if (currentPositions.length > newPositions.length) {
+              await Promise.all(
+                currentPositions.map(async ({ id, position, side }, index) => {
+                  if (index > newPositions.length - 1) {
+                    // The field currently exists at an index that does not exist in the new state, so is archived
+                    return await transaction
+                      .update(noteField)
+                      .set({ archived: true })
+                      .where(eq(noteField.id, id))
+                      .run()
+                  }
+
+                  if (
+                    position !== newPositions[index].position ||
+                    side !== newPositions[index].side
+                  ) {
+                    // The field position is not the same as the position in the new state, so is updated
+                    return await transaction
+                      .update(noteField)
+                      .set({
+                        archived: false,
+                        position: newPositions[index].position,
+                        side: newPositions[index].side,
+                      })
+                      .where(eq(noteField.id, id))
+                      .run()
+                  }
+                }),
+              )
+            } else {
+              await Promise.all(
+                newPositions.map(async ({ position, side }, index) => {
+                  if (index > currentPositions.length - 1) {
+                    // The field exists at an index in the new state that does exist in the current state, so is inserted
+                    return await transaction
+                      .insert(noteField)
+                      .values({
+                        note: id,
+                        value: sides[side][position].value,
+                        hash: fieldHash,
+                        position,
+                        side,
+                      })
+                      .run()
+                  }
+
+                  // The field is at an index in both the current and new state
+                  return await transaction
+                    .update(noteField)
+                    .set({
+                      archived: false,
+                      position,
+                      side,
+                    })
+                    .where(eq(noteField.id, currentPositions[index].id))
+                    .run()
+                }),
+              )
+            }
           }
-        }
-      })
+        }),
+      )
     }
 
     if (config || sides) {
-      const fieldState = transaction.query.noteField
-        .findMany({
-          where: and(eq(noteField.note, id), eq(noteField.archived, false)),
-        })
-        .sync()
+      const fieldState = await transaction.query.noteField.findMany({
+        where: and(eq(noteField.note, id), eq(noteField.archived, false)),
+      })
 
-      const currentReviewables = transaction.query.reviewable
-        .findMany({
-          where: eq(reviewable.note, id),
-          columns: {
-            id: true,
-            archived: true,
-          },
-          with: {
-            fields: {
-              columns: {
-                field: true,
-                side: true,
-              },
+      const currentReviewables = await transaction.query.reviewable.findMany({
+        where: eq(reviewable.note, id),
+        columns: {
+          id: true,
+          archived: true,
+        },
+        with: {
+          fields: {
+            columns: {
+              field: true,
+              side: true,
             },
           },
-        })
-        .sync()
+        },
+      })
 
       const newReviewables = createReviewables({
         config: newConfig,
@@ -319,28 +319,30 @@ export default async function updateNote({
 
       const reviewablesToArchive = currentReviewables
 
-      reviewablesToInsert.map(({ fields }) => {
-        const [insertedReviewable] = transaction
-          .insert(reviewable)
-          .values({
-            note: id,
-          })
-          .returning()
-          .all()
+      await Promise.all(
+        reviewablesToInsert.map(async ({ fields }) => {
+          const [insertedReviewable] = await transaction
+            .insert(reviewable)
+            .values({
+              note: id,
+            })
+            .returning()
+            .all()
 
-        transaction
-          .insert(reviewableField)
-          .values(
-            fields.map(({ field, side }) => ({
-              reviewable: insertedReviewable.id,
-              field,
-              side,
-            })),
-          )
-          .run()
-      })
+          await transaction
+            .insert(reviewableField)
+            .values(
+              fields.map(({ field, side }) => ({
+                reviewable: insertedReviewable.id,
+                field,
+                side,
+              })),
+            )
+            .run()
+        }),
+      )
 
-      transaction
+      await transaction
         .update(reviewable)
         .set({ archived: true })
         .where(
@@ -351,7 +353,7 @@ export default async function updateNote({
         )
         .run()
 
-      transaction
+      await transaction
         .update(reviewable)
         .set({ archived: false })
         .where(
@@ -363,20 +365,18 @@ export default async function updateNote({
         .run()
     }
 
-    const newState = transaction.query.note
-      .findFirst({
-        where: eq(note.id, id),
-        with: {
-          collections: {
-            columns: {},
-            with: { collection: true },
-          },
-          fields: {
-            where: eq(noteField.archived, false),
-          },
+    const newState = await transaction.query.note.findFirst({
+      where: eq(note.id, id),
+      with: {
+        collections: {
+          columns: {},
+          with: { collection: true },
         },
-      })
-      .sync()
+        fields: {
+          where: eq(noteField.archived, false),
+        },
+      },
+    })
 
     return {
       ...newState,

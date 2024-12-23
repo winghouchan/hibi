@@ -1,5 +1,4 @@
 import { jest } from '@jest/globals'
-import Database, { SqliteError } from 'better-sqlite3'
 import type MockDatabaseFn from '.'
 
 /**
@@ -7,7 +6,7 @@ import type MockDatabaseFn from '.'
  * implementation and the function that does the migration have been mocked out.
  */
 jest.doMock('@/data/database/schema', () => ({ default: {} }))
-jest.doMock('drizzle-orm/better-sqlite3/migrator', () => ({
+jest.doMock('drizzle-orm/libsql/migrator', () => ({
   migrate: jest.fn(),
 }))
 
@@ -27,60 +26,53 @@ afterEach(() => {
 })
 
 test('`mockDatabase()` opens an in-memory database', async () => {
-  expect(nativeDatabase).toBeInstanceOf(Database)
-  expect(nativeDatabase.name).toBe(':memory:')
-  expect(nativeDatabase.open).toBeTrue()
-  expect(nativeDatabase.memory).toBeTrue()
+  expect(nativeDatabase).toHaveProperty('closed', false)
+  expect(nativeDatabase).toHaveProperty('protocol', 'file')
 })
 
 test('`resetDatabaseMock()` closes the mocked database', async () => {
   resetDatabaseMock()
 
-  expect(nativeDatabase.open).toBeFalse()
-  expect(() =>
-    nativeDatabase
-      .prepare(`CREATE TABLE mock_table (mock_column INTEGER PRIMARY KEY)`)
-      .run(),
-  ).toThrow(new TypeError('The database connection is not open'))
+  expect(nativeDatabase.closed).toBeTrue()
+
+  await expect(
+    nativeDatabase.execute(
+      `CREATE TABLE mock_table (mock_column INTEGER PRIMARY KEY)`,
+    ),
+  ).rejects.toThrow(new TypeError('CLIENT_CLOSED: The client is closed'))
 })
 
 test('`mockDatabase()` after `resetDatabaseMock()` creates an isolated database', async () => {
-  function createTableMock() {
-    return nativeDatabase
-      .prepare(`CREATE TABLE mock_table (mock_column INTEGER PRIMARY KEY)`)
-      .run()
+  async function createTableMock() {
+    return await nativeDatabase.execute(
+      `CREATE TABLE mock_table (mock_column INTEGER PRIMARY KEY)`,
+    )
   }
 
-  function insertIntoTableMock() {
-    return nativeDatabase
-      .prepare(`INSERT INTO mock_table (mock_column) VALUES (1)`)
-      .run()
+  async function insertIntoTableMock() {
+    return await nativeDatabase.execute(
+      `INSERT INTO mock_table (mock_column) VALUES (1)`,
+    )
   }
 
-  createTableMock()
-  insertIntoTableMock()
+  await createTableMock()
+  await insertIntoTableMock()
 
-  expect(nativeDatabase.prepare(`SELECT * FROM mock_table`).all()).toEqual([
-    { mock_column: 1 },
-  ])
+  expect(
+    (await nativeDatabase.execute(`SELECT * FROM mock_table`)).rows,
+  ).toEqual([{ mock_column: 1 }])
 
   resetDatabaseMock()
 
   // prettier-ignore - Stop removing preceding empty line
   ;({ nativeDatabase, resetDatabaseMock } = await mockDatabase())
 
-  expect(createTableMock).not.toThrow(
-    new SqliteError('table mock_table already exists', 'SQLITE_ERROR'),
-  )
-  expect(insertIntoTableMock).not.toThrow(
-    new SqliteError(
-      'UNIQUE constraint failed: mock_table.mock_column',
-      'SQLITE_ERROR',
-    ),
-  )
-  expect(nativeDatabase.prepare(`SELECT * FROM mock_table`).all()).toEqual([
-    { mock_column: 1 },
-  ])
+  await createTableMock()
+  await insertIntoTableMock()
+
+  expect(
+    (await nativeDatabase.execute(`SELECT * FROM mock_table`)).rows,
+  ).toEqual([{ mock_column: 1 }])
 
   resetDatabaseMock()
 })

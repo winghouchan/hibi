@@ -1,0 +1,113 @@
+diff --git a/node_modules/drizzle-orm/op-sqlite/migrator.js b/node_modules/drizzle-orm/op-sqlite/migrator.js
+index 02354ae..28f71a9 100644
+--- a/node_modules/drizzle-orm/op-sqlite/migrator.js
++++ b/node_modules/drizzle-orm/op-sqlite/migrator.js
+@@ -1,4 +1,4 @@
+-import { useEffect, useReducer } from "react";
++import { useEffect, useReducer, useState } from "react";
+ async function readMigrationFiles({ journal, migrations }) {
+   const migrationQueries = [];
+   for await (const journalEntry of journal.entries) {
+@@ -48,14 +48,34 @@ const useMigrations = (db, migrations) => {
+     }
+   };
+   const [state, dispatch] = useReducer(fetchReducer, initialState);
+-  useEffect(() => {
+-    dispatch({ type: "migrating" });
+-    migrate(db, migrations).then(() => {
++  const [migrationQueue, setMigrationQueue] = useState([])
++
++  const runMigrations = async () => {
++    try {
++      dispatch({ type: 'migrating' })
++      await migrationQueue[0](db, migrations)
+       dispatch({ type: "migrated", payload: true });
+-    }).catch((error) => {
++    } catch (error) {
+       dispatch({ type: "error", payload: error });
+-    });
++    } finally {
++      setMigrationQueue((currentMigrations) => currentMigrations.slice(1))
++    }
++  }
++
++  useEffect(() => {
++    setMigrationQueue((currentMigrations) => [...currentMigrations, migrate])
++
++    return () => {
++      setMigrationQueue((currentMigrations) => currentMigrations.slice(0, -1))
++    }
+   }, []);
++
++  useEffect(() => {
++    if (migrationQueue.length) {
++      runMigrations()
++    }
++  }, [migrationQueue.length])
++
+   return state;
+ };
+ export {
+diff --git a/node_modules/drizzle-orm/op-sqlite/session.js b/node_modules/drizzle-orm/op-sqlite/session.js
+index ff84604..14cf731 100644
+--- a/node_modules/drizzle-orm/op-sqlite/session.js
++++ b/node_modules/drizzle-orm/op-sqlite/session.js
+@@ -27,31 +27,31 @@ class OPSQLiteSession extends SQLiteSession {
+       customResultMapper
+     );
+   }
+-  transaction(transaction, config = {}) {
++  async transaction(transaction, config = {}) {
+     const tx = new OPSQLiteTransaction("async", this.dialect, this, this.schema);
+-    this.run(sql.raw(`begin${config?.behavior ? " " + config.behavior : ""}`));
++    await this.run(sql.raw(`begin${config?.behavior ? " " + config.behavior : ""}`));
+     try {
+-      const result = transaction(tx);
+-      this.run(sql`commit`);
++      const result = await transaction(tx);
++      await await this.run(sql`commit`);
+       return result;
+     } catch (err) {
+-      this.run(sql`rollback`);
++      await this.run(sql`rollback`);
+       throw err;
+     }
+   }
+ }
+ class OPSQLiteTransaction extends SQLiteTransaction {
+   static [entityKind] = "OPSQLiteTransaction";
+-  transaction(transaction) {
++  async transaction(transaction) {
+     const savepointName = `sp${this.nestedIndex}`;
+     const tx = new OPSQLiteTransaction("async", this.dialect, this.session, this.schema, this.nestedIndex + 1);
+-    this.session.run(sql.raw(`savepoint ${savepointName}`));
++    await this.session.run(sql.raw(`savepoint ${savepointName}`));
+     try {
+       const result = transaction(tx);
+-      this.session.run(sql.raw(`release savepoint ${savepointName}`));
++      await this.session.run(sql.raw(`release savepoint ${savepointName}`));
+       return result;
+     } catch (err) {
+-      this.session.run(sql.raw(`rollback to savepoint ${savepointName}`));
++      await this.session.run(sql.raw(`rollback to savepoint ${savepointName}`));
+       throw err;
+     }
+   }
+@@ -69,7 +69,7 @@ class OPSQLitePreparedQuery extends SQLitePreparedQuery {
+   run(placeholderValues) {
+     const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+     this.logger.logQuery(this.query.sql, params);
+-    return this.client.executeAsync(this.query.sql, params);
++    return this.client.execute(this.query.sql, params);
+   }
+   async all(placeholderValues) {
+     const { fields, joinsNotNullableMap, query, logger, customResultMapper, client } = this;
+@@ -105,7 +105,7 @@ class OPSQLitePreparedQuery extends SQLitePreparedQuery {
+   values(placeholderValues) {
+     const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+     this.logger.logQuery(this.query.sql, params);
+-    return this.client.executeRawAsync(this.query.sql, params);
++    return this.client.executeRaw(this.query.sql, params);
+   }
+   /** @internal */
+   isResponseInArrayMode() {

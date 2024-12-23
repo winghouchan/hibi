@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/expo-sqlite'
-import { openDatabaseSync } from 'expo-sqlite'
+import { open } from '@op-engineering/op-sqlite'
+import { drizzle } from 'drizzle-orm/op-sqlite'
 import logger from './logger'
 import schema from './schema'
 
@@ -14,11 +14,13 @@ import schema from './schema'
 const DATABASE_NAME = 'app.db'
 
 /**
- * The underlying database, with APIs from Expo SQLite.
+ * The underlying database, with APIs from OP SQLite.
  *
- * @see {@link https://docs.expo.dev/versions/latest/sdk/sqlite/ | Expo Documentation}
+ * @see {@link https://ospfranco.notion.site/OP-SQLite-Documentation-a279a52102464d0cb13c3fa230d2f2dc | OP SQLite Documentation}
  */
-export const nativeDatabase = openDatabaseSync(DATABASE_NAME)
+export const nativeDatabase = open({
+  name: DATABASE_NAME,
+})
 
 /**
  * The database, connected an object-relational mapping library (Drizzle).
