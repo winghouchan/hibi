@@ -10,6 +10,7 @@
     "build:ios:test": "xcodebuild -workspace ios/Hibi.xcworkspace -scheme Hibi -configuration Test-Debug -sdk iphonesimulator -derivedDataPath ios/build",
     "build:web": "expo start --web",
     "lint": "expo lint && prettier . --check && yarn lint:types",
+    "lint:fix": "eslint --fix && prettier . --write --ignore-unknown",
     "lint:types": "tsc --project tsconfig.json --noEmit",
     "postinstall": "husky && patch-package",
     "run:android": "expo run:android --variant developmentDebug",
