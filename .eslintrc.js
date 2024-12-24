@@ -7,6 +7,7 @@ module.exports = {
     'plugin:react-native-a11y/all',
     'prettier',
   ],
+  ignorePatterns: ['android', 'node_modules', 'ios'],
   parserOptions: {
     ecmaVersion: 'latest',
   },
