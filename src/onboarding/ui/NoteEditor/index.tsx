@@ -169,12 +169,12 @@ export default function NoteEditor() {
           testID="onboarding.note-editor.screen"
           style={{ flex: 1, paddingBottom: safeAreaInset.bottom }}
         >
-          {values.fields.map((side, index) => (
+          {values.fields.map((_, side) => (
             <Editor
-              autofocus={index === 0}
+              autofocus={side === 0}
               initialContent={{
                 type: 'doc',
-                content: side.reduce<
+                content: initialValues.fields[side].reduce<
                   ComponentProps<typeof Editor>['initialContent'][]
                 >(
                   (accumulator, field) =>
@@ -191,11 +191,11 @@ export default function NoteEditor() {
                   [],
                 ),
               }}
-              key={index}
-              name={`fields.${index}`}
+              key={side}
+              name={`fields.${side}`}
               onChange={onChange}
-              placeholder={index === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
-              testID={`onboarding.note-editor.side-${index}`}
+              placeholder={side === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
+              testID={`onboarding.note-editor.side-${side}`}
             />
           ))}
           <Switch
