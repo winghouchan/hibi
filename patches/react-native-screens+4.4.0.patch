@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-screens/android/build.gradle b/node_modules/react-native-screens/android/build.gradle
-index 81c29a7..f1de26e 100644
+index 909ba77..5cb9568 100644
 --- a/node_modules/react-native-screens/android/build.gradle
 +++ b/node_modules/react-native-screens/android/build.gradle
-@@ -123,7 +123,9 @@ android {
+@@ -159,7 +159,9 @@ android {
                  "**/libc++_shared.so",
                  "**/libreact_render*.so",
                  "**/libreactnativejni.so",

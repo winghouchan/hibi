@@ -9,5 +9,5 @@ const fn = getOnboardingCollection as jest.MockedFunction<
 >
 
 export default function mockOnboardingCollectionError(error: Error) {
-  fn.mockRejectedValueOnce(error)
+  return fn.mockRejectedValueOnce(error)
 }

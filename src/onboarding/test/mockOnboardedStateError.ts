@@ -7,5 +7,5 @@ const fn = isOnboardingComplete as jest.MockedFunction<
 >
 
 export default function mockOnboardedState(error: Error) {
-  fn.mockRejectedValueOnce(error)
+  return fn.mockRejectedValueOnce(error)
 }

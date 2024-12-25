@@ -9,5 +9,5 @@ const fn = isOnboardingComplete as jest.MockedFunction<
 export default function mockOnboardedState(
   mock: Parameters<(typeof fn)['mockResolvedValueOnce']>[0],
 ) {
-  fn.mockResolvedValueOnce(mock)
+  return fn.mockResolvedValueOnce(mock)
 }

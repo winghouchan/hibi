@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import {
@@ -12,7 +13,7 @@ import OnboardingLayout from '.'
 describe('<OnboardingLayout />', () => {
   describe('when onboarding is complete', () => {
     it('redirects to the home screen', async () => {
-      mockOnboardedState(true)
+      const onboardedStateMock = mockOnboardedState(true)
 
       renderRouter(
         {
@@ -35,15 +36,18 @@ describe('<OnboardingLayout />', () => {
           }),
         )
       })
+
+      onboardedStateMock.mockReset()
     })
   })
 
   describe('when onboarding is incomplete', () => {
     it('does not redirect to the home screen', async () => {
-      mockOnboardedState(false)
+      const onboardedStateMock = mockOnboardedState(false)
 
       renderRouter(
         {
+          _layout: () => <Stack />,
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
@@ -70,6 +74,8 @@ describe('<OnboardingLayout />', () => {
           }),
         )
       })
+
+      onboardedStateMock.mockReset()
     })
   })
 
@@ -77,7 +83,9 @@ describe('<OnboardingLayout />', () => {
     test('the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      mockOnboardedStateError(new Error('Mock Error'))
+      const onboardedStateErrorMock = mockOnboardedStateError(
+        new Error('Mock Error'),
+      )
 
       renderRouter(
         {
@@ -93,6 +101,8 @@ describe('<OnboardingLayout />', () => {
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledOnce()
       })
+
+      onboardedStateErrorMock.mockReset()
     })
   })
 
@@ -100,13 +110,18 @@ describe('<OnboardingLayout />', () => {
     test('the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
-      mockOnboardedState(true)
-      mockOnboardingCollectionError(new Error('Mock Error'))
+      const onboardedStateMock = mockOnboardedState(true)
+      const onboardingCollectionErrorMock = mockOnboardingCollectionError(
+        new Error('Mock Error'),
+      )
 
       renderRouter(
         {
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
+          'onboarding/notes/new': () => null,
+          'onboarding/notes/edit/[id]': () => null,
+          '(app)/(tabs)/index': () => null,
         },
         {
           initialUrl: 'onboarding',
@@ -117,6 +132,9 @@ describe('<OnboardingLayout />', () => {
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledOnce()
       })
+
+      onboardedStateMock.mockReset()
+      onboardingCollectionErrorMock.mockReset()
     })
   })
 })

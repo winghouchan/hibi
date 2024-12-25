@@ -1,1 +1,7 @@
+export const HeaderBackContext = jest.fn()
+export const HeaderHeightContext = jest.fn()
+export const HeaderShownContext = jest.fn()
+export const SafeAreaProviderCompat = jest.fn()
+export const getDefaultHeaderHeight = jest.fn()
+export const getHeaderTitle = jest.fn()
 export const useHeaderHeight = jest.fn()
