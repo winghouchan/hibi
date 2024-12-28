@@ -1,4 +1,4 @@
-import { database } from '@/data'
+import { database } from '@/data/database'
 
 export default async function isOnboardingComplete() {
   const { onboarded } =

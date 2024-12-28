@@ -1,5 +1,5 @@
 import { asc, desc, eq, isNull, lt, or, sql } from 'drizzle-orm'
-import { database } from '@/data'
+import { database } from '@/data/database'
 import { noteField } from '@/notes/schema'
 import {
   reviewable,

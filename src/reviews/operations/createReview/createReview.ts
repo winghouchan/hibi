@@ -6,7 +6,7 @@ import {
   Rating,
   State,
 } from 'ts-fsrs'
-import { database } from '@/data'
+import { database } from '@/data/database'
 import { review, reviewableSnapshot } from '../../schema'
 
 interface CreateReviewParameters {

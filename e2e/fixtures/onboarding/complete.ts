@@ -1,6 +1,6 @@
-import { createCollection } from '@/collections'
-import { database } from '@/data'
-import { createNote } from '@/notes'
+import { createCollection } from '@/collections/operations/createCollection'
+import { database } from '@/data/database'
+import { createNote } from '@/notes/operations/createNote'
 import { user } from '@/user/schema'
 
 async function fixture() {

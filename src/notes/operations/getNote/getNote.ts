@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm'
-import { database } from '@/data'
+import { database } from '@/data/database'
 import { note } from '../../schema'
 
 export default async function getNote(id: number) {

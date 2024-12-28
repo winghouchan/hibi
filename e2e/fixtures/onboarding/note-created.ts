@@ -1,5 +1,5 @@
-import { createCollection } from '@/collections'
-import { createNote } from '@/notes'
+import { createCollection } from '@/collections/operations/createCollection'
+import { createNote } from '@/notes/operations/createNote'
 
 async function fixture() {
   const { id } = await createCollection({

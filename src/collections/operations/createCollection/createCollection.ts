@@ -1,4 +1,4 @@
-import { database } from '@/data'
+import { database } from '@/data/database'
 import { collection } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>

@@ -23,7 +23,7 @@ Example:
 
 ```typescript
 // fn.ts
-import { database } from '@/data'
+import { database } from '@/data/database'
 
 export default async function fn(/* ... */) {
   return await database.insert(/* ... */).values(/* ... */)

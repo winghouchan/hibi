@@ -1,8 +1,8 @@
 import { Rating } from 'ts-fsrs'
-import { createCollection } from '@/collections'
-import { database } from '@/data'
-import { createNote } from '@/notes'
-import { createReview } from '@/reviews'
+import { createCollection } from '@/collections/operations/createCollection'
+import { database } from '@/data/database'
+import { createNote } from '@/notes/operations/createNote'
+import { createReview } from '@/reviews/operations/createReview'
 import { user } from '@/user/schema'
 
 async function fixture() {

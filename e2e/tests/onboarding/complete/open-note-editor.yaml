@@ -2,7 +2,7 @@ name: Onboarding > when complete > and the app is opened in the note editor > th
 appId: ${appId}
 ---
 - runFlow:
-    file: ../../../utils/loadDatabaseFixture.yaml
+    file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
       databaseFixture: onboarding/complete
 

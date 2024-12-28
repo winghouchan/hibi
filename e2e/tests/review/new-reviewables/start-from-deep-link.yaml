@@ -2,7 +2,7 @@ name: Review > when there are new reviewables > a review can be completed via st
 appId: ${appId}
 ---
 - runFlow:
-    file: ../../../utils/loadDatabaseFixture.yaml
+    file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
       databaseFixture: review/new-reviewables
 

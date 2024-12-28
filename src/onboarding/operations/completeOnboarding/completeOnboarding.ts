@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm'
-import { database } from '@/data'
+import { database } from '@/data/database'
 import { user } from '@/user/schema'
 
 export default async function completeOnboarding() {

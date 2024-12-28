@@ -1,10 +1,12 @@
 name: Onboarding > when complete > and the app is opened at the index > the home screen is shown
 appId: ${appId}
 ---
-- launchApp:
-    clearState: true
-    arguments:
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
       databaseFixture: onboarding/complete
+
+- launchApp
 
 - assertVisible:
     id: home.screen

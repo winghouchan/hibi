@@ -2,7 +2,7 @@ name: Review > when there are no due reviewables > and a review is started from 
 appId: ${appId}
 ---
 - runFlow:
-    file: ../../../utils/loadDatabaseFixture.yaml
+    file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
       databaseFixture: review/none-due
 

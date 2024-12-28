@@ -1,0 +1,11 @@
+name: Load database fixture
+appId: ${appId}
+tags:
+  - subflow
+---
+- clearState
+
+- runScript:
+    file: loadDatabaseFixture.js
+    env:
+      databaseFixture: ${databaseFixture}

@@ -2,7 +2,7 @@ name: Onboarding > when a note has been created > and the app is opened in the n
 appId: ${appId}
 ---
 - runFlow:
-    file: ../../../utils/loadDatabaseFixture.yaml
+    file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
       databaseFixture: onboarding/note-created
 

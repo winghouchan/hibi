@@ -2,7 +2,7 @@ name: Onboarding > when a collection has been created > and the app is opened at
 appId: ${appId}
 ---
 - runFlow:
-    file: ../../../utils/loadDatabaseFixture.yaml
+    file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
       databaseFixture: onboarding/collection-created
 
