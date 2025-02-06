@@ -74,7 +74,7 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "sha.js": "^2.4.11",
-    "sql-formatter": "^15.4.8",
+    "sql-formatter": "^15.4.10",
     "ts-fsrs": "^4.6.1"
   },
   "devDependencies": {
