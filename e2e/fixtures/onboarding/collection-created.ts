@@ -1,4 +1,4 @@
-import { createCollection } from '@/collections'
+import { createCollection } from '@/collections/operations'
 
 async function fixture() {
   await createCollection({

@@ -1,0 +1,9 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- tapOn:
+    id: tab.library.button
+
+- assertVisible:
+    id: library.collection.list.item

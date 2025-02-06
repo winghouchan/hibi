@@ -1,0 +1,11 @@
+name: Library > when there are collections > the list of collections can be viewed
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../subflows/view-collection-list.yaml

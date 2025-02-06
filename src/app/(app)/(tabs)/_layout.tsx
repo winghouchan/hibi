@@ -1,1 +1,1 @@
-export { Tabs as default } from 'expo-router'
+export { TabLayout as default } from '@/layouts'

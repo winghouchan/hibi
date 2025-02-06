@@ -1,0 +1,17 @@
+name: Library > when a collection exists > it can be navigated to via the library
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../subflows/view-collection-list.yaml
+
+- tapOn:
+    text: Collection Name
+
+- assertVisible:
+    id: library.collection.screen

@@ -1,0 +1,13 @@
+name: Library > when there are collections > and the library is navigated to via a deep link > the list of collections can be viewed
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://library
+
+- assertVisible:
+    id: library.collection.list
