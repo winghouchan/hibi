@@ -49,7 +49,7 @@ index 02354ae..28f71a9 100644
  };
  export {
 diff --git a/node_modules/drizzle-orm/op-sqlite/session.js b/node_modules/drizzle-orm/op-sqlite/session.js
-index ff84604..14cf731 100644
+index ff84604..a971d88 100644
 --- a/node_modules/drizzle-orm/op-sqlite/session.js
 +++ b/node_modules/drizzle-orm/op-sqlite/session.js
 @@ -27,31 +27,31 @@ class OPSQLiteSession extends SQLiteSession {
@@ -93,21 +93,3 @@ index ff84604..14cf731 100644
        throw err;
      }
    }
-@@ -69,7 +69,7 @@ class OPSQLitePreparedQuery extends SQLitePreparedQuery {
-   run(placeholderValues) {
-     const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
-     this.logger.logQuery(this.query.sql, params);
--    return this.client.executeAsync(this.query.sql, params);
-+    return this.client.execute(this.query.sql, params);
-   }
-   async all(placeholderValues) {
-     const { fields, joinsNotNullableMap, query, logger, customResultMapper, client } = this;
-@@ -105,7 +105,7 @@ class OPSQLitePreparedQuery extends SQLitePreparedQuery {
-   values(placeholderValues) {
-     const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
-     this.logger.logQuery(this.query.sql, params);
--    return this.client.executeRawAsync(this.query.sql, params);
-+    return this.client.executeRaw(this.query.sql, params);
-   }
-   /** @internal */
-   isResponseInArrayMode() {

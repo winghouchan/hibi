@@ -39,7 +39,7 @@
     "@formatjs/intl-pluralrules": "^5.2.14",
     "@lingui/macro": "^4.11.4",
     "@lingui/react": "^4.11.4",
-    "@op-engineering/op-sqlite": "^11.2.7",
+    "@op-engineering/op-sqlite": "^11.4.4",
     "@tanstack/react-query": "^5.56.2",
     "date-fns": "^4.1.0",
     "drizzle-orm": "~0.36.2",

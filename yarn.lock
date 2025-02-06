@@ -2385,10 +2385,10 @@
   dependencies:
     semver "^7.3.5"
 
-"@op-engineering/op-sqlite@^11.2.7":
-  version "11.2.7"
-  resolved "https://registry.yarnpkg.com/@op-engineering/op-sqlite/-/op-sqlite-11.2.7.tgz#3d78d8ca78d7b68d2410430eefdca81422f0d552"
-  integrity sha512-q+Mt0CZgkZl1gjeKfgRA/0HGOD2sUcO6jWeH8QiqI3ZAU3K4KYXJRYeNw0NjGV04Zo/4kNef2S/tCdVZYvqmSg==
+"@op-engineering/op-sqlite@^11.4.4":
+  version "11.4.4"
+  resolved "https://registry.yarnpkg.com/@op-engineering/op-sqlite/-/op-sqlite-11.4.4.tgz#69993fd1be714b7700ca14b213ae694876f89413"
+  integrity sha512-nxj6/yXC0RQg8r5ZSyAI5txeugdX5UHgrdslERUk2to3SlEonzHlJPkZMlgGeIow18lzyE3YmOOfzHbHmWYJ1Q==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
