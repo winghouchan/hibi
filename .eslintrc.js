@@ -69,6 +69,7 @@ module.exports = {
           {
             ignoreFunction: [
               'Error',
+              'LogBox.ignoreLogs',
               'log.debug',
               'log.error',
               'log.info',

@@ -1,4 +1,6 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { SplashScreen } from 'expo-router'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { DevToolsBubble } from 'react-native-react-query-devtools'
 import { DataProvider, useDatabaseBrowser, useDatabaseMigrations } from '@/data'
 import { IntlProvider } from '@/intl'
@@ -17,8 +19,12 @@ export default function RootLayout() {
   return (
     <IntlProvider>
       <DataProvider>
-        {databaseReady && <Navigator />}
-        {process.env.NODE_ENV === 'development' && <DevToolsBubble />}
+        <GestureHandlerRootView>
+          <BottomSheetModalProvider>
+            {databaseReady && <Navigator />}
+            {process.env.NODE_ENV === 'development' && <DevToolsBubble />}
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
       </DataProvider>
     </IntlProvider>
   )

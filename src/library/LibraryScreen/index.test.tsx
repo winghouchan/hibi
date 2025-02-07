@@ -1,9 +1,5 @@
-import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
-} from '@testing-library/react-native'
+import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockCollections, mockCollectionsError } from '@/collections/test'
 import { mockAppRoot } from 'test/utils'
@@ -55,7 +51,12 @@ describe('<LibraryScreen />', () => {
   ])('$name', async ({ fixture }) => {
     mockCollections(fixture.collections)
 
-    render(<LibraryScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      {
+        index: LibraryScreen,
+      },
+      { wrapper: mockAppRoot() },
+    )
 
     await Promise.all(
       fixture.collections.slice(0, 10).map(async ({ name }) => {
@@ -67,7 +68,12 @@ describe('<LibraryScreen />', () => {
   test('when there are 0 collections, the user is informed', async () => {
     mockCollections([])
 
-    render(<LibraryScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      {
+        index: LibraryScreen,
+      },
+      { wrapper: mockAppRoot() },
+    )
 
     expect(await screen.findByText('No collections')).toBeOnTheScreen()
   })
@@ -77,7 +83,12 @@ describe('<LibraryScreen />', () => {
 
     mockCollectionsError(new Error('Mock Error'))
 
-    render(<LibraryScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      {
+        index: LibraryScreen,
+      },
+      { wrapper: mockAppRoot() },
+    )
 
     await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
   })
@@ -102,7 +113,12 @@ describe('<LibraryScreen />', () => {
 
     mockCollections(fixture.collections)
 
-    render(<LibraryScreen />, { wrapper: mockAppRoot() })
+    renderRouter(
+      {
+        index: LibraryScreen,
+      },
+      { wrapper: mockAppRoot() },
+    )
 
     await Promise.all(
       fixture.collections.slice(0, 10).map(async ({ name }) => {

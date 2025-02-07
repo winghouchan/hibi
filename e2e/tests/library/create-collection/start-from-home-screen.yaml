@@ -1,0 +1,17 @@
+name: Library > the creator menu can be opened
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../subflows/view-collection-list.yaml
+
+- tapOn:
+    id: library.create.menu.button
+
+- assertVisible:
+    id: library.create.menu

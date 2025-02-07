@@ -11,7 +11,7 @@ export const Redirect = jest.fn((props) => <ExpoRouter.Redirect {...props} />)
 
 export const Stack = ExpoRouter.Stack
 
-export const Tabs = jest.fn((props) => <ExpoRouter.Tabs {...props} />)
+export const Tabs = ExpoRouter.Tabs
 
 export const router = ExpoRouter.router
 

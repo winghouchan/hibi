@@ -1,0 +1,15 @@
+diff --git a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetHandleContainer/BottomSheetHandleContainer.tsx b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetHandleContainer/BottomSheetHandleContainer.tsx
+index 691ab71..81a4399 100644
+--- a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetHandleContainer/BottomSheetHandleContainer.tsx
++++ b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetHandleContainer/BottomSheetHandleContainer.tsx
+@@ -112,7 +112,9 @@ function BottomSheetHandleContainerComponent({
+         layout: { height },
+       },
+     }: LayoutChangeEvent) {
+-      handleHeight.value = height;
++      setTimeout(() => {
++        handleHeight.value = height;
++      }, 0);
+ 
+       if (__DEV__) {
+         print({
