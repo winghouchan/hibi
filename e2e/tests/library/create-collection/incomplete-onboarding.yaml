@@ -1,0 +1,10 @@
+name: Library > when onboarding has not been completed > and the user attempts to create a collection > the user is redirected to the welcome screen
+appId: ${appId}
+---
+- clearState
+
+- openLink:
+    link: hibi://collection/new
+
+- assertVisible:
+    id: onboarding.welcome.screen

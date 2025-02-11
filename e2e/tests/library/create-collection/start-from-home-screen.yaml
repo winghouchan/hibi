@@ -1,4 +1,4 @@
-name: Library > the creator menu can be opened
+name: Library > the user can create a new collection via the library
 appId: ${appId}
 ---
 - runFlow:
@@ -15,3 +15,11 @@ appId: ${appId}
 
 - assertVisible:
     id: library.create.menu
+
+- tapOn:
+    id: create.collection.link
+
+- runFlow:
+    file: ../subflows/create-collection.yaml
+    env:
+      collectionName: New Collection Name

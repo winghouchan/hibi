@@ -4,6 +4,7 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { Trans } from '@lingui/macro'
+import { Link } from 'expo-router'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { LogBox } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -20,16 +21,26 @@ LogBox.ignoreLogs([
 ])
 
 export default forwardRef<{
+  close: BottomSheetModal['close']
   open: BottomSheetModal['present']
 }>(function CreateMenu(_, ref) {
   const safeAreaInsets = useSafeAreaInsets()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
+  const close = () => {
+    bottomSheetModalRef.current?.close()
+  }
+
   const open = () => {
     bottomSheetModalRef.current?.present()
   }
 
+  const onLinkPress = () => {
+    close()
+  }
+
   useImperativeHandle(ref, () => ({
+    close,
     open,
   }))
 
@@ -58,7 +69,13 @@ export default forwardRef<{
           paddingRight: safeAreaInsets.right,
         }}
       >
-        <Trans>Collection</Trans>
+        <Link
+          href="/collection/new"
+          onPress={onLinkPress}
+          testID="create.collection.link"
+        >
+          <Trans>Collection</Trans>
+        </Link>
         <Trans>Note</Trans>
       </BottomSheetView>
     </BottomSheetModal>

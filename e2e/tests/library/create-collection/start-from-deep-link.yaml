@@ -1,0 +1,15 @@
+name: Library > the user can create a new collection via a deep link
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://collection/new
+
+- runFlow:
+    file: ../subflows/create-collection.yaml
+    env:
+      collectionName: New Collection Name

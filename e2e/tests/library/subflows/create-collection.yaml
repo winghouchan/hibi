@@ -1,0 +1,20 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: collection.creator.screen
+
+- inputText: ${collectionName}
+
+- tapOn:
+    id: collection.creator.cta.button
+
+- assertVisible:
+    text: ${collectionName}
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    text: ${collectionName}
