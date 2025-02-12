@@ -20,7 +20,7 @@ import NoteEditor from '.'
 import { createNote, updateNote } from '@/notes/operations'
 
 jest.mock('expo-linking')
-jest.mock('./Editor')
+jest.mock('@/notes/ui/NoteEditor')
 
 const backMock = jest.fn()
 

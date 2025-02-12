@@ -7,11 +7,15 @@ import { useFormik, type FormikConfig } from 'formik'
 import { ComponentProps, useCallback, useEffect } from 'react'
 import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { createNoteMutation, noteQuery, updateNoteMutation } from '@/notes'
+import {
+  createNoteMutation,
+  NoteEditor as Editor,
+  noteQuery,
+  updateNoteMutation,
+} from '@/notes'
 import { log } from '@/telemetry'
 import { Button, Switch } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
-import Editor from './Editor'
 
 export default function NoteEditor() {
   const { i18n } = useLingui()

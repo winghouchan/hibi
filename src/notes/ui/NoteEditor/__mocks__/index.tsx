@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TextInput, TextInputProps, View } from 'react-native'
-import { type Props } from '../Editor'
+import { type Props } from '..'
 
 export default function Editor({
   autofocus,
