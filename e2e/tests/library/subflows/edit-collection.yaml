@@ -1,0 +1,22 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: collection.editor.screen
+
+- eraseText
+
+- inputText: ${collectionName}
+
+- tapOn:
+    id: collection.editor.cta.button
+
+- assertVisible:
+    text: ${collectionName}
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    text: ${collectionName}

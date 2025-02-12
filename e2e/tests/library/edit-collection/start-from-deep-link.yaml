@@ -1,0 +1,15 @@
+name: Library > the user can edit an existing collection via a deep link
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://collection/1/edit
+
+- runFlow:
+    file: ../subflows/edit-collection.yaml
+    env:
+      collectionName: New Collection Name

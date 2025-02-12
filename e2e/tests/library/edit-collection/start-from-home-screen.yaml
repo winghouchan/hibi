@@ -1,0 +1,25 @@
+name: Library > the user can edit an existing collection via the library
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../subflows/view-collection-list.yaml
+
+- tapOn:
+    text: Collection Name
+
+- assertVisible:
+    id: library.collection.screen
+
+- tapOn:
+    text: Edit
+
+- runFlow:
+    file: ../subflows/edit-collection.yaml
+    env:
+      collectionName: New Collection Name

@@ -54,7 +54,7 @@ export default function NewCollectionScreen() {
               name: 'collection',
               state: {
                 index: 0,
-                routes: [{ name: '[id]', params: { id } }],
+                routes: [{ name: '[id]/index', params: { id } }],
               },
             },
           ],

@@ -20,7 +20,7 @@ describe('<NewCollectionScreen>', () => {
         '(app)/_layout': () => <Tabs />,
         '(app)/(tabs)/_layout': () => <Stack />,
         '(app)/collection/_layout': () => <Stack />,
-        '(app)/collection/[id]': () => null,
+        '(app)/collection/[id]/index': () => null,
         '(app)/collection/new': NewCollectionScreen,
       },
       {
@@ -49,7 +49,7 @@ describe('<NewCollectionScreen>', () => {
         '(app)/_layout': () => <Tabs />,
         '(app)/(tabs)/_layout': () => <Stack />,
         '(app)/collection/_layout': () => <Stack />,
-        '(app)/collection/[id]': () => null,
+        '(app)/collection/[id]/index': () => null,
         '(app)/collection/new': NewCollectionScreen,
       },
       {
@@ -78,7 +78,7 @@ describe('<NewCollectionScreen>', () => {
         '(app)/_layout': () => <Tabs />,
         '(app)/(tabs)/_layout': () => <Stack />,
         '(app)/collection/_layout': () => <Stack />,
-        '(app)/collection/[id]': () => null,
+        '(app)/collection/[id]/index': () => null,
         '(app)/collection/new': NewCollectionScreen,
       },
       {

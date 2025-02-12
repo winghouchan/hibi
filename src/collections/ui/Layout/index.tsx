@@ -22,6 +22,13 @@ export default function CollectionLayout() {
       })}
     >
       <Stack.Screen
+        name="[id]/edit"
+        options={{
+          presentation: 'fullScreenModal',
+          title: i18n.t(msg`Edit collection`),
+        }}
+      />
+      <Stack.Screen
         name="new"
         options={{
           title: i18n.t(msg`New collection`),

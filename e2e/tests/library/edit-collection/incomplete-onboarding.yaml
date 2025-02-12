@@ -1,0 +1,10 @@
+name: Library > when onboarding has not been completed > and the user attempts to edit a collection > the user is redirected to the welcome screen
+appId: ${appId}
+---
+- clearState
+
+- openLink:
+    link: hibi://collection/1/edit
+
+- assertVisible:
+    id: onboarding.welcome.screen
