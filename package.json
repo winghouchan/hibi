@@ -27,7 +27,7 @@
     "start:production": "expo start --minify --no-dev",
     "start:production:analyze-bundle": "EXPO_UNSTABLE_ATLAS=true yarn start:production",
     "test:watch": "jest --watchAll",
-    "test:end-to-end": "concurrently \"bun ./e2e/fixtures/server.ts\" \"MAESTRO_USE_GRAALJS=true maestro test -e appId=co.hibi.app.test e2e/tests\" --kill-others --raw --success=first",
+    "test:end-to-end": "./scripts/test/end-to-end.sh",
     "android": "yarn run:android",
     "ios": "yarn run:ios"
   },
