@@ -1,0 +1,10 @@
+name: Library > when onboarding has not been completed > and the user attempts to view a note > the user is redirected to the welcome screen
+appId: ${appId}
+---
+- clearState
+
+- openLink:
+    link: hibi://note/1
+
+- assertVisible:
+    id: onboarding.welcome.screen
