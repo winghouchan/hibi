@@ -4,6 +4,7 @@ import getNote from './getNote'
 export default function noteQuery(id?: number) {
   return queryOptions({
     queryKey: ['notes', 'byId', id],
-    queryFn: id ? async () => await getNote(id) : skipToken,
+    queryFn:
+      typeof id === 'undefined' ? skipToken : async () => await getNote(id),
   })
 }
