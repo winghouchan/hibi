@@ -10,6 +10,7 @@ describe('<NoteScreen />', () => {
     const fixture = {
       note: {
         id: 1,
+        collections: [1],
         reversible: false,
         separable: false,
         fields: [],

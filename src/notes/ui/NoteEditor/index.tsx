@@ -1,76 +1,138 @@
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { useHeaderHeight } from '@react-navigation/elements'
+import { type FormikConfig, useFormik } from 'formik'
 import {
-  CodeBridge,
-  TenTapStartKit as DefaultExtensions,
-  PlaceholderBridge,
-  RichText,
-  useEditorBridge,
-  useEditorContent,
-} from '@10play/tentap-editor'
-import { ComponentProps, useEffect } from 'react'
-import { View } from 'react-native'
+  ComponentProps,
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+} from 'react'
+import { KeyboardAvoidingView, Platform } from 'react-native'
+import { RichTextInput, Switch } from '@/ui'
+import { createNote, getNote, updateNote } from '../../operations'
 
-/**
- * Stops the web view over-scrolling
- *
- * On iOS there is a 'bounce' effect when attempting to scroll past the boundary
- * of a scroll area. This behaviour is unwanted for the editor web view. The web
- * view has a `bounces` prop to control this. However, there is a bug where setting
- * its value to `false` has no effect. Setting the `overscroll-behaviour` of the
- * `html` element in the web view works around the issue.
- *
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior | `overscroll-behavior` documentation}
- * @see {@link https://github.com/react-native-webview/react-native-webview/blob/master/docs/Reference.md#bounces | `bounces` documentation}
- * @see {@link https://github.com/react-native-webview/react-native-webview/issues/3555 | GitHub issue for bug with `bounces`}
- */
-// eslint-disable-next-line lingui/no-unlocalized-strings
-const stopWebViewOverScroll = `html { overscroll-behavior: none; }`
-
-interface Content {
-  type: string
-  content?: Content[]
-  text?: string
+interface Ref {
+  submit: () => void
 }
 
-export interface Props
-  extends Pick<ComponentProps<typeof RichText>, 'testID'>,
-    Pick<
-      Exclude<Parameters<typeof useEditorBridge>[0], undefined>,
-      'autofocus'
-    > {
-  name: string
-  initialContent: Content
-  onChange?: (name: string, content?: Content) => void
-  placeholder?: string
+interface Props {
+  value?: Partial<Awaited<ReturnType<typeof getNote>>>
+  onSubmit: <T>(
+    ...args: T extends [{ id: number }]
+      ? Parameters<typeof updateNote>
+      : Parameters<typeof createNote>
+  ) => void
+  testID?: string
 }
 
-export default function Editor({
-  autofocus,
-  initialContent,
-  name,
-  onChange,
-  placeholder,
-  testID,
-}: Props) {
-  const editor = useEditorBridge({
-    bridgeExtensions: [
-      ...DefaultExtensions,
-      CodeBridge.configureCSS(stopWebViewOverScroll),
-      PlaceholderBridge.configureExtension({
-        placeholder,
-      }),
-    ],
-    autofocus,
-    initialContent,
+export default forwardRef<Ref, Props>(function NoteEditor(
+  { value, onSubmit, testID },
+  ref,
+) {
+  const headerHeight = useHeaderHeight()
+  const { i18n } = useLingui()
+
+  const initialValues = {
+    id: value?.id ?? undefined,
+    collections: value?.collections ?? [],
+    fields: value?.fields ?? [[{ value: '' }], [{ value: '' }]],
+    config: {
+      reversible: value?.reversible ?? false,
+      separable: value?.separable ?? false,
+    },
+  }
+
+  const _onSubmit: FormikConfig<typeof initialValues>['onSubmit'] = (
+    values,
+  ) => {
+    return onSubmit(values)
+  }
+
+  const { handleSubmit, setFieldValue, values } = useFormik({
+    enableReinitialize: true,
+    initialValues,
+    onSubmit: _onSubmit,
   })
-  const content = useEditorContent(editor, { type: 'json' }) as Content
 
-  useEffect(() => {
-    onChange?.(name, content)
-  }, [content, name, onChange])
+  /**
+   * Handles changes from the editor
+   *
+   * This function needs to be memoized (using `useCallback`) otherwise it
+   * causes an infinite re-render as it seems the reference to `setFieldValue`
+   * is not stable.
+   */
+  const onChange = useCallback<
+    Exclude<ComponentProps<typeof RichTextInput>['onChange'], undefined>
+  >(
+    (name: string, value) => {
+      value?.content &&
+        setFieldValue(
+          name,
+          value.content?.map(({ content }) => ({
+            value: content?.[0].text ?? '',
+          })),
+        )
+    },
+    [setFieldValue],
+  )
+
+  useImperativeHandle(ref, () => ({
+    submit: handleSubmit,
+  }))
 
   return (
-    <View style={{ flex: 1 }} testID={testID && `${testID}.editor`}>
-      <RichText editor={editor} testID={testID && `${testID}.editor.input`} />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={headerHeight}
+      style={{ backgroundColor: 'white', flex: 1 }}
+      testID={testID && `${testID}.note-editor`}
+    >
+      {values.fields.map((_, side) => (
+        <RichTextInput
+          autofocus={side === 0}
+          initialContent={{
+            type: 'doc',
+            content: initialValues.fields[side].reduce<
+              ComponentProps<typeof RichTextInput>['initialContent'][]
+            >(
+              (accumulator, field) =>
+                // @todo: Handle other types of fields
+                typeof field.value === 'string'
+                  ? [
+                      ...accumulator,
+                      {
+                        type: 'paragraph',
+                        content: [{ type: 'text', text: field.value }],
+                      },
+                    ]
+                  : accumulator,
+              [],
+            ),
+          }}
+          key={side}
+          name={`fields.${side}`}
+          onChange={onChange}
+          placeholder={side === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
+          testID={testID && `${testID}.note-editor.side-${side}`}
+        />
+      ))}
+      <Switch
+        label={i18n.t(msg`Reversible`)}
+        onValueChange={(value) => {
+          setFieldValue('config.reversible', value)
+        }}
+        testID={testID && `${testID}.note-editor.reversible`}
+        value={values.config.reversible}
+      />
+      <Switch
+        label={i18n.t(msg`Separable`)}
+        onValueChange={(value) => {
+          setFieldValue('config.separable', value)
+        }}
+        testID={testID && `${testID}.note-editor.separable`}
+        value={values.config.separable}
+      />
+    </KeyboardAvoidingView>
   )
-}
+})

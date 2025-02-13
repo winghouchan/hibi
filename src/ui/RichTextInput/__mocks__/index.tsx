@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { TextInput, TextInputProps, View } from 'react-native'
 import { type Props } from '..'
 
-export default function Editor({
+export default function RichTextInput({
   autofocus,
   initialContent,
   name,

@@ -20,7 +20,7 @@ import NoteEditor from '.'
 import { createNote, updateNote } from '@/notes/operations'
 
 jest.mock('expo-linking')
-jest.mock('@/notes/ui/NoteEditor')
+jest.mock('@/ui/RichTextInput')
 
 const backMock = jest.fn()
 
@@ -184,6 +184,7 @@ describe('<NoteEditor />', () => {
 
         mockGetNote({
           id: fixture.note.id,
+          collections: [fixture.collection.id],
           fields: [
             [
               {
@@ -276,7 +277,8 @@ describe('<NoteEditor />', () => {
         mockOnboardingCollection(fixture.collection)
 
         mockGetNote({
-          id: 1,
+          id: fixture.note.id,
+          collections: [fixture.collection.id],
           fields: [
             [
               {

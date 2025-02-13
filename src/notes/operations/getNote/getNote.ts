@@ -6,6 +6,11 @@ export default async function getNote(id: number) {
   const result = await database.query.note.findFirst({
     where: eq(note.id, id),
     with: {
+      collections: {
+        columns: {
+          collection: true,
+        },
+      },
       fields: true,
     },
   })
@@ -13,6 +18,7 @@ export default async function getNote(id: number) {
   return result
     ? {
         ...result,
+        collections: result.collections.map(({ collection }) => collection),
         fields: result.fields.reduce<(typeof result.fields)[]>(
           (state, field) => {
             const newState = [...state]
