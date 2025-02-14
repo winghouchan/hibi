@@ -1,0 +1,13 @@
+name: '[Onboarding] When onboarding > and onboarding is complete > and the app is opened at the onboarding root > the home screen is shown'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://onboarding
+
+- assertVisible:
+    id: home.screen

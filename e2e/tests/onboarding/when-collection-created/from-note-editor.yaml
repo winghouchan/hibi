@@ -1,0 +1,19 @@
+name: '[Onboarding] When onboarding > and a collection has been created > and the app is opened in the note editor > the onboarding journey can be completed'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/collection-created
+
+- openLink:
+    link: hibi://onboarding/notes/edit/1
+
+# Acknowledge alert saying note does not exist
+- tapOn: 'OK'
+
+- runFlow: ../__subflows__/open-note-editor.yaml
+
+- runFlow: ../__subflows__/create-note.yaml
+
+- runFlow: ../__subflows__/finish-onboarding.yaml

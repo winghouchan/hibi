@@ -1,0 +1,13 @@
+name: '[Library] When viewing a note > and it exists > it can be viewed via a navigation from a deep link'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://note/1
+
+- assertVisible:
+    id: library.note.screen

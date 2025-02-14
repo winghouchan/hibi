@@ -1,0 +1,12 @@
+name: '[Review] When starting a review > and there are no reviewables due > and the review was started via a navigation from the home screen > the user is informed and can navigate back to the home screen'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: review/none-due
+
+- launchApp
+
+- assertNotVisible:
+    id: home.screen.cta.button

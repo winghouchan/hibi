@@ -1,0 +1,30 @@
+name: '[Library] When editing a note > and it exists > it can be edited via a navigation from the library'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../__subflows__/view-collection-list.yaml
+
+- tapOn:
+    text: Collection Name
+
+- assertVisible:
+    id: library.collection.screen
+
+- tapOn:
+    id: library.collection.note.link
+    index: 0
+
+- tapOn:
+    text: Edit
+
+- runFlow:
+    file: ../__subflows__/edit-note.yaml
+    env:
+      front: New Front 1
+      back: New Back 1

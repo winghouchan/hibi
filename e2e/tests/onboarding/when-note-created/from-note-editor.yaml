@@ -1,0 +1,15 @@
+name: '[Onboarding] When onboarding > and a note has been created > and the app is opened in the note editor > the onboarding journey can be completed'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/note-created
+
+- openLink:
+    link: hibi://onboarding/notes/edit/1
+
+- tapOn:
+    id: onboarding.note-editor.cta.button
+
+- runFlow: ../__subflows__/finish-onboarding.yaml

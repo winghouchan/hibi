@@ -1,0 +1,19 @@
+name: '[Onboarding] When onboarding > and a collection has been created > and the app is opened at the index > the onboarding journey can be completed'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/collection-created
+
+- launchApp
+
+- runFlow: ../__subflows__/acknowledge-welcome.yaml
+
+- runFlow: ../__subflows__/update-collection.yaml
+
+- runFlow: ../__subflows__/open-note-creator.yaml
+
+- runFlow: ../__subflows__/create-note.yaml
+
+- runFlow: ../__subflows__/finish-onboarding.yaml
