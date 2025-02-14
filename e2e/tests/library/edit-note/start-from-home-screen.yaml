@@ -1,0 +1,30 @@
+name: Library > the user can edit an existing note via the library
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../subflows/view-collection-list.yaml
+
+- tapOn:
+    text: Collection Name
+
+- assertVisible:
+    id: library.collection.screen
+
+- tapOn:
+    id: library.collection.note.link
+    index: 0
+
+- tapOn:
+    text: Edit
+
+- runFlow:
+    file: ../subflows/edit-note.yaml
+    env:
+      front: New Front 1
+      back: New Back 1

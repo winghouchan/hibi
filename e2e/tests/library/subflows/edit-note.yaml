@@ -1,0 +1,38 @@
+appId: ${appId}
+tags:
+  - subflow
+---
+- assertVisible:
+    id: note-editor.screen
+
+- tapOn:
+    id: note.note-editor.side-0.editor
+
+- eraseText
+
+- inputText: ${front}
+
+- tapOn:
+    id: note.note-editor.side-1.editor
+
+- eraseText
+
+- inputText: ${back}
+
+- tapOn:
+    id: note.note-editor.reversible.switch
+
+- tapOn:
+    id: note.note-editor.separable.switch
+
+- tapOn:
+    id: note.note-editor.cta.button
+
+- assertVisible:
+    id: library.note.screen
+
+- assertVisible:
+    text: .*${front}.*
+
+- assertVisible:
+    text: .*${back}.*
