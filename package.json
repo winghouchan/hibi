@@ -26,7 +26,7 @@
     "start:test": "NODE_ENV=test expo start --port 8081 --scheme co.hibi.app.test",
     "start:production": "expo start --minify --no-dev",
     "start:production:analyze-bundle": "EXPO_UNSTABLE_ATLAS=true yarn start:production",
-    "test:watch": "jest --watchAll",
+    "test:watch": "NODE_OPTIONS=--disable-warning=DEP0040 jest --watchAll",
     "test:end-to-end": "./scripts/test/end-to-end.sh",
     "android": "yarn run:android",
     "ios": "yarn run:ios"
