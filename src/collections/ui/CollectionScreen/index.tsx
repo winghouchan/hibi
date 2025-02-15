@@ -27,21 +27,21 @@ export default function CollectionScreen() {
     }
   }, [collection, i18n, isFetchingCollection])
 
-  return collection && !isFetchingCollection ? (
-    <>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <Link href={`/collection/${collectionId}/edit`}>
-              <Trans>Edit</Trans>
-            </Link>
-          ),
-        }}
-      />
-      <View style={{ flex: 1 }} testID="library.collection.screen">
-        {collection && (
+  if (collection) {
+    return (
+      <>
+        <Stack.Screen
+          options={{
+            headerRight: () => (
+              <Link href={`/collection/${collectionId}/edit`}>
+                <Trans>Edit</Trans>
+              </Link>
+            ),
+          }}
+        />
+        <View style={{ flex: 1 }} testID="library.collection.screen">
           <ScrollView contentContainerStyle={{ flex: 1 }} style={{ flex: 1 }}>
-            <Text>{collection?.name}</Text>
+            <Text>{collection.name}</Text>
             {collection.notes.map((note) => (
               <Link
                 key={note.id}
@@ -52,8 +52,19 @@ export default function CollectionScreen() {
               </Link>
             ))}
           </ScrollView>
-        )}
-      </View>
-    </>
-  ) : null
+        </View>
+      </>
+    )
+  } else {
+    /**
+     * If the collection is `undefined`, it has not been successfully queried
+     * yet. If the query is still in-progress, it typically takes less than 1
+     * second to complete so no loading state is shown. If the query failed,
+     * an alert is shown by the data provider component.
+     *
+     * If the collection is `null`, it does not exist. An alert is displayed
+     * by the effect hook above.
+     */
+    return null
+  }
 }
