@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
-import { mockCollection } from '../../test'
+import { mockCollection, mockCollectionError } from '../../test'
 import CollectionEditorScreen from '.'
 
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
@@ -87,6 +87,29 @@ describe('<CollectionEditorScreen />', () => {
       },
       {
         initialUrl: 'collection/0/edit',
+        wrapper: mockAppRoot(),
+      },
+    )
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledOnce()
+    })
+  })
+
+  test('when there is an error fetching the collection, an alert is displayed', async () => {
+    const alertSpy = jest.spyOn(Alert, 'alert')
+
+    mockCollectionError(new Error('Mock Error'))
+
+    renderRouter(
+      {
+        '(app)/_layout': () => <Stack />,
+        '(app)/(tabs)/_layout': () => <Stack />,
+        '(app)/collection/_layout': () => <Stack />,
+        '(app)/collection/[id]/edit': CollectionEditorScreen,
+      },
+      {
+        initialUrl: 'collection/1/edit',
         wrapper: mockAppRoot(),
       },
     )
