@@ -3,12 +3,12 @@ tags:
   - subflow
 ---
 - assertVisible:
-    id: collection.creator.screen
+    id: collection.editor.screen
 
 - inputText: ${collectionName}
 
 - tapOn:
-    id: collection.creator.cta.button
+    id: collection.editor.cta.button
 
 - assertVisible:
     text: ${collectionName}
