@@ -1,1 +1,1 @@
-export { CollectionEditor as default } from '@/collections/ui'
+export { CollectionEditorScreen as default } from '@/collections/ui'

@@ -4,7 +4,7 @@ import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockAppRoot } from 'test/utils'
 import { mockCollection } from '../../test'
-import CollectionEditor from '.'
+import CollectionEditorScreen from '.'
 
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { updateCollection } from '../../operations'
@@ -17,8 +17,8 @@ jest.mock('expo-router', () => ({
   },
 }))
 
-describe('<CollectionEditor />', () => {
-  test('when there is a collection ID, the collection can be edited', async () => {
+describe('<CollectionEditorScreen />', () => {
+  test('when the collection exists, the collection can be edited', async () => {
     const user = userEvent.setup()
     const fixture = {
       collection: {
@@ -39,7 +39,7 @@ describe('<CollectionEditor />', () => {
         '(app)/_layout': () => <Stack />,
         '(app)/(tabs)/_layout': () => <Stack />,
         '(app)/collection/_layout': () => <Stack />,
-        '(app)/collection/[id]/edit': CollectionEditor,
+        '(app)/collection/[id]/edit': CollectionEditorScreen,
       },
       {
         initialUrl: `collection/${fixture.collection.id}/edit`,
@@ -70,7 +70,7 @@ describe('<CollectionEditor />', () => {
     })
   })
 
-  test('when the collection does not exist, the user is alerted', async () => {
+  test('when the collection does not exist, an alert is displayed', async () => {
     const alertSpy = jest.spyOn(Alert, 'alert')
     const fixture = {
       collection: null,
@@ -83,7 +83,7 @@ describe('<CollectionEditor />', () => {
         '(app)/_layout': () => <Stack />,
         '(app)/(tabs)/_layout': () => <Stack />,
         '(app)/collection/_layout': () => <Stack />,
-        '(app)/collection/[id]/edit': CollectionEditor,
+        '(app)/collection/[id]/edit': CollectionEditorScreen,
       },
       {
         initialUrl: 'collection/0/edit',
