@@ -118,37 +118,50 @@ export default function EditCollectionScreen() {
     }
   })
 
-  return (
-    <ScrollView testID="collection.editor.screen">
-      <Formik
-        enableReinitialize
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-      >
-        {({ handleChange, handleSubmit, isSubmitting, values }) => (
-          <>
-            <TextInput
-              accessibilityLabel={i18n.t(msg`Enter a collection name`)}
-              autoFocus
-              onChangeText={(value) => handleChange('name')(value)}
-              onSubmitEditing={() => handleSubmit()}
-              placeholder={i18n.t(msg`Collection name`)}
-              testID="onboarding.collection.name"
-              value={values.name}
-            />
-            <Button
-              testID="collection.editor.cta"
-              onPress={() => handleSubmit()}
-            >
-              {isSubmitting ? (
-                <Trans>Submitting</Trans>
-              ) : (
-                <Trans>Update collection</Trans>
-              )}
-            </Button>
-          </>
-        )}
-      </Formik>
-    </ScrollView>
-  )
+  if (collection) {
+    return (
+      <ScrollView testID="collection.editor.screen">
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+        >
+          {({ handleChange, handleSubmit, isSubmitting, values }) => (
+            <>
+              <TextInput
+                accessibilityLabel={i18n.t(msg`Enter a collection name`)}
+                autoFocus
+                onChangeText={(value) => handleChange('name')(value)}
+                onSubmitEditing={() => handleSubmit()}
+                placeholder={i18n.t(msg`Collection name`)}
+                testID="onboarding.collection.name"
+                value={values.name}
+              />
+              <Button
+                testID="collection.editor.cta"
+                onPress={() => handleSubmit()}
+              >
+                {isSubmitting ? (
+                  <Trans>Submitting</Trans>
+                ) : (
+                  <Trans>Update collection</Trans>
+                )}
+              </Button>
+            </>
+          )}
+        </Formik>
+      </ScrollView>
+    )
+  } else {
+    /**
+     * If the collection is `undefined`, it has not been successfully queried
+     * yet. If the query is still in-progress, it typically takes less than 1
+     * second to complete so no loading state is shown. If the query failed,
+     * an alert is shown by the data provider component.
+     *
+     * If the collection is `null`, it does not exist. An alert is displayed
+     * by the effect hook above.
+     */
+    return null
+  }
 }
