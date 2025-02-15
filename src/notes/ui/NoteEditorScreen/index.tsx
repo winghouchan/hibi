@@ -56,21 +56,13 @@ export default function NoteEditorScreen() {
       ? typeof updateNote
       : typeof createNote
 
-    type Values = typeof isUpdating extends true
-      ? Parameters<typeof updateNote>[0]
-      : Parameters<typeof createNote>[0]
-
-    type Handlers = typeof isUpdating extends true
-      ? Parameters<typeof updateNote>[1]
-      : Parameters<typeof createNote>[1]
-
     const action = (isUpdating ? updateNote : createNote) as Action
 
     const errorMessage = isUpdating
       ? i18n.t(msg`There was an error updating the note`)
       : i18n.t(msg`There was an error creating the note`)
 
-    const handlers: Handlers = {
+    const handlers: Parameters<Action>[1] = {
       async onSuccess() {
         await queryClient.invalidateQueries({
           queryKey: isUpdating ? noteQueryOptions.queryKey : [baseQueryKey],
@@ -84,7 +76,7 @@ export default function NoteEditorScreen() {
             style: 'default',
             isPreferred: true,
             onPress: async () => {
-              await action(values as Values, handlers)
+              await action(values as Parameters<Action>[0], handlers)
             },
           },
           {
@@ -97,7 +89,7 @@ export default function NoteEditorScreen() {
     }
 
     try {
-      await action(values as Values, handlers)
+      await action(values as Parameters<Action>[0], handlers)
     } catch {
       // Errors handled in `handlers`
     }
