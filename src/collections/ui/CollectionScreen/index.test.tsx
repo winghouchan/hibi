@@ -1,9 +1,12 @@
 import { screen, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
-import { mockCollection, mockCollectionError } from '@/collections/test'
 import { mockAppRoot } from 'test/utils'
+import { mockCollection, mockCollectionError } from '../../test'
 import CollectionScreen from '.'
+
+jest.unmock('@react-navigation/elements')
 
 describe('<CollectionScreen />', () => {
   describe('when there is a collection ID', () => {
@@ -21,7 +24,10 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
-          'collection/[id]': CollectionScreen,
+          '(app)/_layout': () => <Stack />,
+          '(app)/(tabs)/_layout': () => <Stack />,
+          '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/index': CollectionScreen,
         },
         {
           initialUrl: `/collection/${fixture.collection.id}`,
@@ -46,7 +52,10 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
-          'collection/[id]': CollectionScreen,
+          '(app)/_layout': () => <Stack />,
+          '(app)/(tabs)/_layout': () => <Stack />,
+          '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/index': CollectionScreen,
         },
         {
           initialUrl: '/collection/0',
@@ -66,7 +75,10 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
-          'collection/[id]': CollectionScreen,
+          '(app)/_layout': () => <Stack />,
+          '(app)/(tabs)/_layout': () => <Stack />,
+          '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/index': CollectionScreen,
         },
         {
           initialUrl: '/collection/1',
