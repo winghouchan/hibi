@@ -29,6 +29,43 @@ export default function CollectionEditorScreen() {
     collectionQuery(collectionId),
   )
 
+  const onNonExistentCollection = () => {
+    if (
+      /**
+       * A collection may be non-existent if `collection` is falsy.
+       */
+      !collection &&
+      /**
+       * `collection` may be falsy it is being fetched. As a result, determine
+       * if the collection is non-existent only when it is not being fetched.
+       */
+      !isFetchingCollection &&
+      /**
+       * `collection` may also be falsy if the user is trying to create a
+       * collection as the collection won't exist yet. As a result, determine
+       * if the collection is non-existent only when the user is trying to
+       * update one.
+       */
+      isUpdatingCollection &&
+      /**
+       * If the screen was navigated to via a deep link, the history will be
+       * modified to allow for back navigation. Only alert after this is done
+       * otherwise multiple alerts may be shown which is undesirable.
+       */
+      !isDeepLink
+    ) {
+      Alert.alert(i18n.t(msg`The collection doesn't exist`), '', [
+        {
+          text: i18n.t(msg`OK`),
+          style: 'default',
+          onPress: () => {
+            router.back()
+          },
+        },
+      ])
+    }
+  }
+
   const onSubmit: ComponentProps<typeof CollectionEditorForm>['onSubmit'] = ({
     id,
   }) => {
@@ -63,24 +100,13 @@ export default function CollectionEditorScreen() {
     }
   }
 
-  useEffect(() => {
-    if (
-      !isDeepLink &&
-      isUpdatingCollection &&
-      !collection &&
-      !isFetchingCollection
-    ) {
-      Alert.alert(i18n.t(msg`The collection doesn't exist`), '', [
-        {
-          text: i18n.t(msg`OK`),
-          style: 'default',
-          onPress: () => {
-            router.back()
-          },
-        },
-      ])
-    }
-  }, [collection, i18n, isDeepLink, isFetchingCollection, isUpdatingCollection])
+  useEffect(onNonExistentCollection, [
+    collection,
+    i18n,
+    isDeepLink,
+    isFetchingCollection,
+    isUpdatingCollection,
+  ])
 
   useDeepLinkHandler({
     collection,
