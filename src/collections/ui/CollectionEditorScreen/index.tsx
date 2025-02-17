@@ -1,17 +1,8 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import type {
-  NavigationProp,
-  PartialRoute,
-  Route,
-} from '@react-navigation/native'
+import type { NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  router,
-  useFocusEffect,
-  useLocalSearchParams,
-  useNavigation,
-} from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
 import { useEffect } from 'react'
 import { Alert, ScrollView } from 'react-native'
@@ -22,9 +13,11 @@ import {
   updateCollectionMutation,
 } from '../../operations'
 import baseQueryKey from '../../operations/baseQueryKey'
+import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
 export default function CollectionEditorScreen() {
   const { i18n } = useLingui()
+
   const navigation = useNavigation<
     NavigationProp<{
       '(tabs)': undefined
@@ -32,15 +25,15 @@ export default function CollectionEditorScreen() {
     }>
   >('/(app)')
   const navigationState = navigation.getState()
-  const isDeepLink =
-    navigationState?.routes?.[0]?.state?.routes?.[1]?.name !== 'library/index'
-  const queryClient = useQueryClient()
+  const isDeepLink = checkIsDeepLink(navigationState)
   const localSearchParams = useLocalSearchParams<{ id?: string }>()
   const collectionId =
     typeof localSearchParams.id !== 'undefined'
       ? Number(localSearchParams.id)
       : undefined
-  const isUpdating = typeof collectionId !== 'undefined'
+  const isUpdatingCollection = typeof collectionId !== 'undefined'
+
+  const queryClient = useQueryClient()
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
     collectionQuery(collectionId),
   )
@@ -59,19 +52,21 @@ export default function CollectionEditorScreen() {
   const onSubmit: FormikConfig<typeof initialValues>['onSubmit'] = async (
     values,
   ) => {
-    type Action = typeof isUpdating extends true
+    type Action = typeof isUpdatingCollection extends true
       ? typeof updateCollection
       : typeof createCollection
 
-    const action = (isUpdating ? updateCollection : createCollection) as Action
+    const action = (
+      isUpdatingCollection ? updateCollection : createCollection
+    ) as Action
 
-    const errorMessage = isUpdating
+    const errorMessage = isUpdatingCollection
       ? i18n.t(msg`There was an error updating the collection`)
       : i18n.t(msg`There was an error creating the collection`)
 
     const handlers: Parameters<Action>[1] = {
       async onSuccess({ id }) {
-        if (isUpdating) {
+        if (isUpdatingCollection) {
           await queryClient.invalidateQueries({ queryKey: [baseQueryKey] })
           router.back()
         } else {
@@ -131,7 +126,12 @@ export default function CollectionEditorScreen() {
   }
 
   useEffect(() => {
-    if (!isDeepLink && isUpdating && !collection && !isFetchingCollection) {
+    if (
+      !isDeepLink &&
+      isUpdatingCollection &&
+      !collection &&
+      !isFetchingCollection
+    ) {
       Alert.alert(i18n.t(msg`The collection doesn't exist`), '', [
         {
           text: i18n.t(msg`OK`),
@@ -142,58 +142,15 @@ export default function CollectionEditorScreen() {
         },
       ])
     }
-  }, [collection, i18n, isDeepLink, isFetchingCollection, isUpdating])
+  }, [collection, i18n, isDeepLink, isFetchingCollection, isUpdatingCollection])
 
-  useFocusEffect(() => {
-    if (isDeepLink && collection !== undefined && !isFetchingCollection) {
-      navigation.reset({
-        index: 1,
-        routes: [
-          {
-            name: '(tabs)',
-            state: {
-              index: 1,
-              routes: [{ name: 'index' }, { name: 'library/index' }],
-            },
-          },
-          isUpdating
-            ? {
-                name: 'collection',
-                params: localSearchParams,
-
-                ...(collection
-                  ? {
-                      state: {
-                        index: 1,
-                        routes: [
-                          { name: '[id]/index', params: localSearchParams },
-                          { name: '[id]/edit', params: localSearchParams },
-                        ],
-                      },
-                    }
-                  : {
-                      state: {
-                        index: 0,
-                        routes: [
-                          { name: '[id]/edit', params: localSearchParams },
-                        ],
-                      },
-                    }),
-              }
-            : {
-                name: 'collection',
-                params: localSearchParams,
-                state: {
-                  index: 0,
-                  routes: [{ name: 'new', params: localSearchParams }],
-                },
-              },
-        ] as PartialRoute<Route<'(tabs)', undefined>>[],
-      })
-    }
+  useDeepLinkHandler({
+    collection,
+    isFetchingCollection,
+    isUpdatingCollection,
   })
 
-  if ((isUpdating && collection) || !isUpdating) {
+  if ((isUpdatingCollection && collection) || !isUpdatingCollection) {
     return (
       <ScrollView testID="collection.editor.screen">
         <Formik
@@ -218,7 +175,7 @@ export default function CollectionEditorScreen() {
               >
                 {isSubmitting ? (
                   <Trans>Submitting</Trans>
-                ) : isUpdating ? (
+                ) : isUpdatingCollection ? (
                   <Trans>Update collection</Trans>
                 ) : (
                   <Trans>Create collection</Trans>
