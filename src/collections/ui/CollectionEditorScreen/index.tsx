@@ -1,23 +1,16 @@
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import type { NavigationProp } from '@react-navigation/native'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
-import { Formik, type FormikConfig } from 'formik'
-import { useEffect } from 'react'
+import { ComponentProps, useEffect } from 'react'
 import { Alert, ScrollView } from 'react-native'
-import { Button, TextInput } from '@/ui'
-import {
-  collectionQuery,
-  createCollectionMutation,
-  updateCollectionMutation,
-} from '../../operations'
-import baseQueryKey from '../../operations/baseQueryKey'
+import { collectionQuery } from '../../operations'
+import CollectionEditorForm from './CollectionEditorForm'
 import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
 export default function CollectionEditorScreen() {
   const { i18n } = useLingui()
-
   const navigation = useNavigation<
     NavigationProp<{
       '(tabs)': undefined
@@ -32,96 +25,41 @@ export default function CollectionEditorScreen() {
       ? Number(localSearchParams.id)
       : undefined
   const isUpdatingCollection = typeof collectionId !== 'undefined'
-
-  const queryClient = useQueryClient()
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
     collectionQuery(collectionId),
   )
-  const { mutateAsync: createCollection } = useMutation(
-    createCollectionMutation,
-  )
-  const { mutateAsync: updateCollection } = useMutation(
-    updateCollectionMutation,
-  )
 
-  const initialValues = {
-    id: collectionId,
-    name: collection?.name ?? '',
-  }
-
-  const onSubmit: FormikConfig<typeof initialValues>['onSubmit'] = async (
-    values,
-  ) => {
-    type Action = typeof isUpdatingCollection extends true
-      ? typeof updateCollection
-      : typeof createCollection
-
-    const action = (
-      isUpdatingCollection ? updateCollection : createCollection
-    ) as Action
-
-    const errorMessage = isUpdatingCollection
-      ? i18n.t(msg`There was an error updating the collection`)
-      : i18n.t(msg`There was an error creating the collection`)
-
-    const handlers: Parameters<Action>[1] = {
-      async onSuccess({ id }) {
-        if (isUpdatingCollection) {
-          await queryClient.invalidateQueries({ queryKey: [baseQueryKey] })
-          router.back()
-        } else {
-          await queryClient.invalidateQueries({ queryKey: [baseQueryKey] })
-
-          /**
-           * Navigate to the newly created collection but set the library screen
-           * to be the screen to be navigated to upon a back navigation. Not doing
-           * this means a back navigation would take the user back to this screen
-           * (the collection creation screen) which is undesirable.
-           */
-          navigation.reset({
-            index: 1,
-            routes: [
-              {
-                name: '(tabs)',
-                state: {
-                  index: 1,
-                  routes: [{ name: 'index' }, { name: 'library/index' }],
-                },
-              },
-              {
-                name: 'collection',
-                state: {
-                  index: 0,
-                  routes: [{ name: '[id]/index', params: { id } }],
-                },
-              },
-            ],
-          })
-        }
-      },
-      onError(error) {
-        // @todo Handle error
-        Alert.alert(i18n.t(msg`Something went wrong`), errorMessage, [
+  const onSubmit: ComponentProps<typeof CollectionEditorForm>['onSubmit'] = ({
+    id,
+  }) => {
+    if (isUpdatingCollection) {
+      router.back()
+    } else {
+      /**
+       * Navigate to the newly created collection but set the library screen
+       * to be the screen to be navigated to upon a back navigation. Not doing
+       * this means a back navigation would take the user back to this screen
+       * (the collection creation screen) which is undesirable.
+       */
+      navigation.reset({
+        index: 1,
+        routes: [
           {
-            text: i18n.t(msg`Try again`),
-            style: 'default',
-            isPreferred: true,
-            onPress: async () => {
-              await action(values, handlers)
+            name: '(tabs)',
+            state: {
+              index: 1,
+              routes: [{ name: 'index' }, { name: 'library/index' }],
             },
           },
           {
-            text: i18n.t(msg`Cancel`),
-            style: 'cancel',
+            name: 'collection',
+            state: {
+              index: 0,
+              routes: [{ name: '[id]/index', params: { id } }],
+            },
           },
-        ])
-      },
-    }
-
-    try {
-      await action(values, handlers)
-    } catch {
-      // Errors handled by error handler above
+        ],
+      })
     }
   }
 
@@ -150,40 +88,13 @@ export default function CollectionEditorScreen() {
     isUpdatingCollection,
   })
 
-  if ((isUpdatingCollection && collection) || !isUpdatingCollection) {
+  if (
+    (isUpdatingCollection && collection) ||
+    (!isUpdatingCollection && typeof collection === 'undefined')
+  ) {
     return (
       <ScrollView testID="collection.editor.screen">
-        <Formik
-          enableReinitialize
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-        >
-          {({ handleChange, handleSubmit, isSubmitting, values }) => (
-            <>
-              <TextInput
-                accessibilityLabel={i18n.t(msg`Enter a collection name`)}
-                autoFocus
-                onChangeText={(value) => handleChange('name')(value)}
-                onSubmitEditing={() => handleSubmit()}
-                placeholder={i18n.t(msg`Collection name`)}
-                testID="collection.editor.name"
-                value={values.name}
-              />
-              <Button
-                testID="collection.editor.cta"
-                onPress={() => handleSubmit()}
-              >
-                {isSubmitting ? (
-                  <Trans>Submitting</Trans>
-                ) : isUpdatingCollection ? (
-                  <Trans>Update collection</Trans>
-                ) : (
-                  <Trans>Create collection</Trans>
-                )}
-              </Button>
-            </>
-          )}
-        </Formik>
+        <CollectionEditorForm collection={collection} onSubmit={onSubmit} />
       </ScrollView>
     )
   } else {
