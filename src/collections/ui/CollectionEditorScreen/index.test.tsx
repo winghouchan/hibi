@@ -38,6 +38,7 @@ describe('<CollectionEditorScreen />', () => {
       }
 
       mockCollection(fixture.collection)
+      mockCollection(fixture.collection)
 
       renderRouter(
         {
@@ -51,6 +52,8 @@ describe('<CollectionEditorScreen />', () => {
           wrapper: mockAppRoot(),
         },
       )
+
+      await screen.findByTestId('collection.editor.screen')
 
       expect(
         await screen.findByDisplayValue(fixture.collection.name),
@@ -83,6 +86,7 @@ describe('<CollectionEditorScreen />', () => {
         collection: null,
       }
 
+      mockCollection(fixture.collection)
       mockCollection(fixture.collection)
 
       renderRouter(

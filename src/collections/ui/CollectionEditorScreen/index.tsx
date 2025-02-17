@@ -31,6 +31,9 @@ export default function CollectionEditorScreen() {
       collection: undefined
     }>
   >('/(app)')
+  const navigationState = navigation.getState()
+  const isDeepLink =
+    navigationState?.routes?.[0]?.state?.routes?.[1]?.name !== 'library/index'
   const queryClient = useQueryClient()
   const localSearchParams = useLocalSearchParams<{ id?: string }>()
   const collectionId =
@@ -128,7 +131,7 @@ export default function CollectionEditorScreen() {
   }
 
   useEffect(() => {
-    if (isUpdating && !collection && !isFetchingCollection) {
+    if (!isDeepLink && isUpdating && !collection && !isFetchingCollection) {
       Alert.alert(i18n.t(msg`The collection doesn't exist`), '', [
         {
           text: i18n.t(msg`OK`),
@@ -139,13 +142,12 @@ export default function CollectionEditorScreen() {
         },
       ])
     }
-  }, [collection, i18n, isFetchingCollection, isUpdating])
+  }, [collection, i18n, isDeepLink, isFetchingCollection, isUpdating])
 
   useFocusEffect(() => {
-    const state = navigation.getState()
-
-    if (state?.routes?.[0]?.state?.routes?.[1]?.name !== 'library/index') {
+    if (isDeepLink && collection !== undefined && !isFetchingCollection) {
       navigation.reset({
+        index: 1,
         routes: [
           {
             name: '(tabs)',
@@ -157,20 +159,32 @@ export default function CollectionEditorScreen() {
           isUpdating
             ? {
                 name: 'collection',
-                index: 1,
                 params: localSearchParams,
-                state: {
-                  routes: [
-                    { name: '[id]/index', params: localSearchParams },
-                    { name: '[id]/edit', params: localSearchParams },
-                  ],
-                },
+
+                ...(collection
+                  ? {
+                      state: {
+                        index: 1,
+                        routes: [
+                          { name: '[id]/index', params: localSearchParams },
+                          { name: '[id]/edit', params: localSearchParams },
+                        ],
+                      },
+                    }
+                  : {
+                      state: {
+                        index: 0,
+                        routes: [
+                          { name: '[id]/edit', params: localSearchParams },
+                        ],
+                      },
+                    }),
               }
             : {
                 name: 'collection',
-                index: 0,
                 params: localSearchParams,
                 state: {
+                  index: 0,
                   routes: [{ name: 'new', params: localSearchParams }],
                 },
               },

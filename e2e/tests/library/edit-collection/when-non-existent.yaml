@@ -1,0 +1,19 @@
+name: "[Library] When editing a collection > and it doesn't exist > an alert is shown"
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://collection/0/edit
+
+- assertVisible:
+    text: The collection doesn't exist
+
+- tapOn:
+    text: OK
+
+- assertVisible:
+    id: library.screen
