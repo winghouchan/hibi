@@ -15,7 +15,7 @@ import {
   useNavigation,
 } from 'expo-router'
 import { useEffect } from 'react'
-import { Alert, ScrollView, Text, View } from 'react-native'
+import { Alert, ScrollView, Text } from 'react-native'
 import { collectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
@@ -80,20 +80,18 @@ export default function CollectionScreen() {
             ),
           }}
         />
-        <View style={{ flex: 1 }} testID="library.collection.screen">
-          <ScrollView contentContainerStyle={{ flex: 1 }} style={{ flex: 1 }}>
-            <Text>{collection.name}</Text>
-            {collection.notes.map((note) => (
-              <Link
-                key={note.id}
-                href={`/note/${note.id}`}
-                testID="library.collection.note.link"
-              >
-                {JSON.stringify(note, null, 2)}
-              </Link>
-            ))}
-          </ScrollView>
-        </View>
+        <ScrollView style={{ flex: 1 }} testID="library.collection.screen">
+          <Text>{collection.name}</Text>
+          {collection.notes.map((note) => (
+            <Link
+              key={note.id}
+              href={`/note/${note.id}`}
+              testID="library.collection.note.link"
+            >
+              {JSON.stringify(note, null, 2)}
+            </Link>
+          ))}
+        </ScrollView>
       </>
     )
   } else {
