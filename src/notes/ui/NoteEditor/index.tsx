@@ -4,11 +4,13 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import { type FormikConfig, useFormik } from 'formik'
 import {
   ComponentProps,
+  ComponentRef,
   forwardRef,
   useCallback,
   useImperativeHandle,
+  useRef,
 } from 'react'
-import { KeyboardAvoidingView, Platform } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable } from 'react-native'
 import { RichTextInput, Switch } from '@/ui'
 import { createNote, getNote, updateNote } from '../../operations'
 
@@ -32,6 +34,9 @@ export default forwardRef<Ref, Props>(function NoteEditor(
 ) {
   const headerHeight = useHeaderHeight()
   const { i18n } = useLingui()
+  const richTextInputRefs = useRef<
+    (ComponentRef<typeof RichTextInput> | null)[]
+  >([])
 
   const initialValues = {
     id: value?.id ?? undefined,
@@ -114,25 +119,36 @@ export default forwardRef<Ref, Props>(function NoteEditor(
           name={`fields.${side}`}
           onChange={onChange}
           placeholder={side === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
+          ref={(ref) => {
+            richTextInputRefs.current[side] = ref
+          }}
           testID={testID && `${testID}.note-editor.side-${side}`}
         />
       ))}
-      <Switch
-        label={i18n.t(msg`Reversible`)}
-        onValueChange={(value) => {
-          setFieldValue('config.reversible', value)
+      <Pressable
+        accessibilityRole="button"
+        onStartShouldSetResponderCapture={() => {
+          richTextInputRefs.current?.forEach((ref) => ref?.blur())
+          return false
         }}
-        testID={testID && `${testID}.note-editor.reversible`}
-        value={values.config.reversible}
-      />
-      <Switch
-        label={i18n.t(msg`Separable`)}
-        onValueChange={(value) => {
-          setFieldValue('config.separable', value)
-        }}
-        testID={testID && `${testID}.note-editor.separable`}
-        value={values.config.separable}
-      />
+      >
+        <Switch
+          label={i18n.t(msg`Reversible`)}
+          onValueChange={(value) => {
+            setFieldValue('config.reversible', value)
+          }}
+          testID={testID && `${testID}.note-editor.reversible`}
+          value={values.config.reversible}
+        />
+        <Switch
+          label={i18n.t(msg`Separable`)}
+          onValueChange={(value) => {
+            setFieldValue('config.separable', value)
+          }}
+          testID={testID && `${testID}.note-editor.separable`}
+          value={values.config.separable}
+        />
+      </Pressable>
     </KeyboardAvoidingView>
   )
 })

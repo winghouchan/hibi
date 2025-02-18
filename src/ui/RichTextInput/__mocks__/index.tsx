@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { TextInput, TextInputProps, View } from 'react-native'
-import { type Props } from '..'
+import type { Props, Ref } from '..'
 
-export default function RichTextInput({
-  autofocus,
-  initialContent,
-  name,
-  onChange,
-  testID,
-}: Props) {
+export default forwardRef<Ref, Props>(function RichTextInput(
+  { autofocus, initialContent, name, onChange, testID },
+  _,
+) {
   const [contentInitialized, setContentInitialized] = useState(false)
   const [value, setValue] = useState<string>()
 
@@ -51,4 +48,4 @@ export default function RichTextInput({
       />
     </View>
   )
-}
+})

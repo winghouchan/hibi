@@ -1,12 +1,18 @@
 import {
   CodeBridge,
   TenTapStartKit as DefaultExtensions,
+  type EditorBridge,
   PlaceholderBridge,
   RichText,
   useEditorBridge,
   useEditorContent,
 } from '@10play/tentap-editor'
-import { ComponentProps, useEffect } from 'react'
+import {
+  ComponentProps,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+} from 'react'
 import { View } from 'react-native'
 
 /**
@@ -31,6 +37,10 @@ interface Content {
   text?: string
 }
 
+export interface Ref {
+  blur: EditorBridge['blur']
+}
+
 export interface Props
   extends Pick<ComponentProps<typeof RichText>, 'testID'>,
     Pick<
@@ -43,14 +53,10 @@ export interface Props
   placeholder?: string
 }
 
-export default function RichTextInput({
-  autofocus,
-  initialContent,
-  name,
-  onChange,
-  placeholder,
-  testID,
-}: Props) {
+export default forwardRef<Ref, Props>(function RichTextInput(
+  { autofocus, initialContent, name, onChange, placeholder, testID },
+  ref,
+) {
   const editor = useEditorBridge({
     bridgeExtensions: [
       ...DefaultExtensions,
@@ -68,9 +74,13 @@ export default function RichTextInput({
     onChange?.(name, content)
   }, [content, name, onChange])
 
+  useImperativeHandle(ref, () => ({
+    blur: editor.blur,
+  }))
+
   return (
     <View style={{ flex: 1 }} testID={testID && `${testID}.editor`}>
       <RichText editor={editor} testID={testID && `${testID}.editor.input`} />
     </View>
   )
-}
+})
