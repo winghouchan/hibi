@@ -76,7 +76,9 @@ export default forwardRef<{
         >
           <Trans>Collection</Trans>
         </Link>
-        <Trans>Note</Trans>
+        <Link href="/note/new" onPress={onLinkPress} testID="create.note.link">
+          <Trans>Note</Trans>
+        </Link>
       </BottomSheetView>
     </BottomSheetModal>
   )
