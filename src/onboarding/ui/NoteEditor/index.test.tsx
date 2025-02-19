@@ -2,6 +2,7 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import { mockCollections } from '@/collections/test'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import {
   mockCreateNoteError,
@@ -63,6 +64,7 @@ describe('<NoteEditor />', () => {
         const user = userEvent.setup()
 
         mockOnboardingCollection(fixture.collection)
+        mockCollections([])
 
         renderRouter(
           {
@@ -118,6 +120,7 @@ describe('<NoteEditor />', () => {
         const alertSpy = jest.spyOn(Alert, 'alert')
 
         mockOnboardingCollection(fixture.collection)
+        mockCollections([])
 
         mockCreateNoteError(new Error('Mock Error'))
 
@@ -181,6 +184,7 @@ describe('<NoteEditor />', () => {
         } as const
 
         mockOnboardingCollection(fixture.collection)
+        mockCollections([])
 
         mockGetNote({
           id: fixture.note.id,
@@ -275,6 +279,7 @@ describe('<NoteEditor />', () => {
         const user = userEvent.setup()
 
         mockOnboardingCollection(fixture.collection)
+        mockCollections([])
 
         mockGetNote({
           id: fixture.note.id,
@@ -347,6 +352,7 @@ describe('<NoteEditor />', () => {
           createdAt: new Date(),
           notes: [],
         })
+        mockCollections([])
 
         mockGetNote(null)
 
@@ -442,6 +448,7 @@ describe('<NoteEditor />', () => {
         createdAt: new Date(),
         notes: [],
       })
+      mockCollections([])
 
       mockGetNoteError(new Error('Mock Error'))
 

@@ -1,0 +1,19 @@
+name: '[Library] When creating a note > it can be created via a navigation from a deep link'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- openLink:
+    link: hibi://note/new
+
+- runFlow:
+    file: ../__subflows__/create-note.yaml
+    env:
+      collection: Collection Name
+      front: Front 1
+      back: Back 1
+      reversible: true
+      separable: true

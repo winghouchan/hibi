@@ -13,7 +13,7 @@ function NoCollections() {
 
 export default function LibraryScreen() {
   const createMenuRef = useRef<ComponentRef<typeof CreateMenu>>(null)
-  const { data: collections } = useQuery(collectionsQuery)
+  const { data: collections } = useQuery(collectionsQuery())
 
   return (
     <>

@@ -13,6 +13,7 @@ import {
 import { KeyboardAvoidingView, Platform, Pressable } from 'react-native'
 import { RichTextInput, Switch } from '@/ui'
 import { createNote, getNote, updateNote } from '../../operations'
+import CollectionPicker from './CollectionPicker'
 
 interface Ref {
   submit: () => void
@@ -126,12 +127,19 @@ export default forwardRef<Ref, Props>(function NoteEditor(
         />
       ))}
       <Pressable
+        accessible={false}
         accessibilityRole="button"
         onStartShouldSetResponderCapture={() => {
           richTextInputRefs.current?.forEach((ref) => ref?.blur())
           return false
         }}
       >
+        <CollectionPicker
+          onChange={(value) => {
+            setFieldValue('collections', value)
+          }}
+          value={values.collections}
+        />
         <Switch
           label={i18n.t(msg`Reversible`)}
           onValueChange={(value) => {

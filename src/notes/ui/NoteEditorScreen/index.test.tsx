@@ -2,6 +2,7 @@ import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import { mockCollections } from '@/collections/test'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import {
   mockCreateNote,
@@ -83,6 +84,7 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNote(noteMock)
       mockGetNote(noteMock) // `mockGetNote` is called twice because of navigation reset
+      mockCollections([fixture.collection])
       mockUpdateNote({
         id: fixture.note.id,
         ...input.note.config,
@@ -200,6 +202,8 @@ describe('<NoteEditorScreen />', () => {
         },
       } as const
 
+      mockCollections(fixture.collections)
+      mockCollections(fixture.collections)
       mockCreateNote({
         id: 1,
         collections: fixture.collections,
@@ -231,12 +235,29 @@ describe('<NoteEditorScreen />', () => {
         input.note.fields[1][0].value,
       )
       await user.press(
+        await screen.findByRole('button', {
+          name: 'Select collections',
+        }),
+      )
+      await user.press(
+        await screen.findByRole('button', {
+          name: fixture.collections[0].name,
+        }),
+      )
+      await user.press(
+        await screen.findByRole('button', {
+          name: 'Done',
+        }),
+      )
+      await user.press(
         await screen.findByRole('switch', { name: 'Reversible' }),
       )
       await user.press(await screen.findByRole('switch', { name: 'Separable' }))
       await user.press(await screen.findByRole('button', { name: 'Add note' }))
 
-      expect(createNote).toHaveBeenCalledOnce()
+      expect(createNote).toHaveBeenCalledExactlyOnceWith({
+        ...input.note,
+      })
     })
 
     test('and invalid information is submitted, an alert is displayed', async () => {

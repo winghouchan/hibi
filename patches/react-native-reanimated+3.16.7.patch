@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-reanimated/src/mock.ts b/node_modules/react-native-reanimated/src/mock.ts
+index 3d8e3f8..0d5835e 100644
+--- a/node_modules/react-native-reanimated/src/mock.ts
++++ b/node_modules/react-native-reanimated/src/mock.ts
+@@ -81,7 +81,7 @@ const hook = {
+       },
+     });
+   },
+-  // useReducedMotion: ADD ME IF NEEDED
++  useReducedMotion: NOOP,
+   useAnimatedStyle: IMMEDIATE_CALLBACK_INVOCATION,
+   useAnimatedGestureHandler: NOOP_FACTORY,
+   useAnimatedReaction: NOOP,

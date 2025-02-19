@@ -1,0 +1,26 @@
+name: '[Library] When creating a note > it can be created via a navigation from the library'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../__subflows__/view-collection-list.yaml
+
+- tapOn:
+    id: library.create.menu.button
+
+- tapOn:
+    id: create.note.link
+
+- runFlow:
+    file: ../__subflows__/create-note.yaml
+    env:
+      collection: Collection Name
+      front: Front 1
+      back: Back 1
+      reversible: true
+      separable: true
