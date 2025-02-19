@@ -1,6 +1,10 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import type { NavigationProp } from '@react-navigation/native'
+import type {
+  NavigationProp,
+  PartialRoute,
+  Route,
+} from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, Stack, useLocalSearchParams, useNavigation } from 'expo-router'
 import { ComponentProps, ComponentRef, useEffect, useRef } from 'react'
@@ -20,7 +24,14 @@ import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 export default function NoteEditorScreen() {
   const { i18n } = useLingui()
   const safeAreaInsets = useSafeAreaInsets()
-  const localSearchParams = useLocalSearchParams<{ id?: string }>()
+  const localSearchParams = useLocalSearchParams<{
+    id?: string
+    collections: string
+  }>()
+  const collections =
+    typeof localSearchParams.collections !== 'undefined'
+      ? localSearchParams.collections.split(',').map(Number)
+      : undefined
   const noteId =
     typeof localSearchParams.id !== 'undefined'
       ? Number(localSearchParams.id)
@@ -35,6 +46,7 @@ export default function NoteEditorScreen() {
   const navigation = useNavigation<
     NavigationProp<{
       '(tabs)': undefined
+      collection: undefined
       note: undefined
     }>
   >('/(app)')
@@ -55,7 +67,7 @@ export default function NoteEditorScreen() {
       : i18n.t(msg`There was an error creating the note`)
 
     const handlers: Parameters<Action>[1] = {
-      async onSuccess({ id }) {
+      async onSuccess({ id, collections }) {
         if (isUpdatingNote) {
           await queryClient.invalidateQueries({
             queryKey: noteQueryOptions.queryKey,
@@ -68,29 +80,51 @@ export default function NoteEditorScreen() {
           })
 
           /**
-           * Navigate to the newly created note but set the library screen
-           * to be the screen to be navigated to upon a back navigation. Not doing
-           * this means a back navigation would take the user back to this screen
-           * (the note creation screen) which is undesirable.
+           * Navigate to the newly created note but set the note's collection
+           * screen (if it is in only one collection) or the library screen (if
+           * it is in multiple collections) to be the screen to be navigated to
+           * upon a back navigation. Not doing this means a back navigation
+           * would take the user back to this screen (the note creation screen)
+           * which is undesirable.
            */
+          const routes = [
+            {
+              name: '(tabs)',
+              state: {
+                index: 1,
+                routes: [{ name: 'index' }, { name: 'library/index' }],
+              },
+            },
+            ...(collections.length === 1
+              ? [
+                  {
+                    name: 'collection',
+                    state: {
+                      index: 0,
+                      routes: [
+                        {
+                          name: '[id]/index',
+                          params: { id: collections[0].id },
+                        },
+                      ],
+                    },
+                  },
+                ]
+              : []),
+            {
+              name: 'note',
+              state: {
+                index: 0,
+                routes: [{ name: '[id]/index', params: { id } }],
+              },
+            },
+          ] as PartialRoute<
+            Route<'(tabs)' | 'collection' | 'note', undefined>
+          >[]
+
           navigation.reset({
-            index: 1,
-            routes: [
-              {
-                name: '(tabs)',
-                state: {
-                  index: 1,
-                  routes: [{ name: 'index' }, { name: 'library/index' }],
-                },
-              },
-              {
-                name: 'note',
-                state: {
-                  index: 0,
-                  routes: [{ name: '[id]/index', params: { id } }],
-                },
-              },
-            ],
+            index: routes.length - 1,
+            routes,
           })
         }
       },
@@ -173,7 +207,7 @@ export default function NoteEditorScreen() {
         testID="note-editor.screen"
       >
         <NoteEditor
-          value={note}
+          value={{ collections, ...note }}
           onSubmit={onSubmit}
           ref={noteEditorRef}
           testID="note"

@@ -91,6 +91,17 @@ export default function CollectionScreen() {
               {JSON.stringify(note, null, 2)}
             </Link>
           ))}
+          <Link
+            href={{
+              pathname: '/note/new',
+              params: {
+                collections: [collectionId],
+              },
+            }}
+            testID="collection.add-note.link"
+          >
+            <Trans>Add note</Trans>
+          </Link>
         </ScrollView>
       </>
     )

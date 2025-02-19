@@ -217,6 +217,7 @@ describe('<NoteEditorScreen />', () => {
         {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
+          '(app)/collection/_layout': () => <Stack />,
           '(app)/note/_layout': () => <Stack />,
           '(app)/note/new': NoteEditorScreen,
         },
