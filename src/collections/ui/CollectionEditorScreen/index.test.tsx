@@ -13,13 +13,6 @@ import CollectionEditorScreen from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { updateCollection } from '../../operations'
 
-jest.mock('expo-router', () => ({
-  ...jest.requireActual('expo-router'),
-  router: {
-    back: jest.fn(),
-  },
-}))
-
 describe('<CollectionEditorScreen />', () => {
   describe('when there is a collection ID', () => {
     test('and the collection exists, the collection can be edited', async () => {
