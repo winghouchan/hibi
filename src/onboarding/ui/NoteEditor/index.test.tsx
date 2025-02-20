@@ -1,5 +1,5 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockCollections } from '@/collections/test'
@@ -20,6 +20,7 @@ import NoteEditor from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { createNote, updateNote } from '@/notes/operations'
 
+jest.unmock('@react-navigation/elements')
 jest.mock('expo-linking')
 jest.mock('@/ui/RichTextInput')
 
@@ -68,6 +69,7 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes/new': NoteEditor,
           },
           {
@@ -126,6 +128,7 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes/new': NoteEditor,
           },
           {
@@ -221,6 +224,7 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes/edit/[id]': NoteEditor,
           },
           {
@@ -319,6 +323,7 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes/edit/[id]': NoteEditor,
           },
           {
@@ -358,6 +363,7 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes/edit/[id]': NoteEditor,
           },
           {
@@ -400,6 +406,7 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes/edit/[id]': NoteEditor,
           },
           {
@@ -424,6 +431,7 @@ describe('<NoteEditor />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/notes/new': NoteEditor,
         },
         {
@@ -454,6 +462,7 @@ describe('<NoteEditor />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/notes/edit/[id]': NoteEditor,
         },
         {

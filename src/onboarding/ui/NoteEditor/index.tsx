@@ -122,14 +122,6 @@ export default function NoteEditorScreen() {
           headerRight: () => <SubmitButton />,
         }}
       />
-      {
-        /**
-         * The header (and therefore submit button) will not be rendered in the
-         * test environment. As a result, the submit button is rendered here in
-         * the test environment.
-         */
-        process.env.NODE_ENV === 'test' && <SubmitButton />
-      }
       <View
         style={{
           backgroundColor: 'white',
