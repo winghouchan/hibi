@@ -26,7 +26,7 @@ export default function CollectionEditorScreen() {
       : undefined
   const isUpdatingCollection = typeof collectionId !== 'undefined'
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
-    collectionQuery(collectionId),
+    collectionQuery({ filter: { id: collectionId } }),
   )
 
   const onNonExistentCollection = () => {

@@ -25,7 +25,7 @@ export default function CollectionScreen() {
   const localSearchParams = useLocalSearchParams<{ id: string }>()
   const collectionId = Number(localSearchParams.id)
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
-    collectionQuery(Number(collectionId)),
+    collectionQuery({ filter: { id: collectionId } }),
   )
 
   useEffect(() => {
