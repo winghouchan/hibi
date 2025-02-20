@@ -2,7 +2,7 @@ import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import type { NavigationProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, Stack, useLocalSearchParams, useNavigation } from 'expo-router'
 import { ComponentProps, useEffect } from 'react'
 import { Alert, ScrollView } from 'react-native'
 import { collectionQuery } from '../../operations'
@@ -114,26 +114,32 @@ export default function CollectionEditorScreen() {
     isUpdatingCollection,
   })
 
-  if (
-    (isUpdatingCollection && collection) ||
-    (!isUpdatingCollection && typeof collection === 'undefined')
-  ) {
-    return (
-      <ScrollView testID="collection.editor.screen">
-        <CollectionEditorForm collection={collection} onSubmit={onSubmit} />
-      </ScrollView>
-    )
-  } else {
-    /**
-     * If the `collectionId` is defined and the collection is `undefined`, the
-     * collection has not been successfully queried yet. If the query is still
-     * in-progress, it typically takes less than 1 second to complete so no
-     * loading state is shown. If the query failed, an alert is shown by the
-     * data provider component.
-     *
-     * If the collection is `null`, it does not exist. An alert is displayed
-     * by the effect hook above.
-     */
-    return null
-  }
+  return (
+    <>
+      <Stack.Screen
+        options={{
+          presentation: 'fullScreenModal',
+          title: isUpdatingCollection
+            ? i18n.t(msg`Edit collection`)
+            : i18n.t(msg`New collection`),
+        }}
+      />
+      {(isUpdatingCollection && collection) ||
+      (!isUpdatingCollection && typeof collection === 'undefined') ? (
+        <ScrollView testID="collection.editor.screen">
+          <CollectionEditorForm collection={collection} onSubmit={onSubmit} />
+        </ScrollView>
+      ) : /**
+       * If the `collectionId` is defined and the collection is `undefined`, the
+       * collection has not been successfully queried yet. If the query is still
+       * in-progress, it typically takes less than 1 second to complete so no
+       * loading state is shown. If the query failed, an alert is shown by the
+       * data provider component.
+       *
+       * If the collection is `null`, it does not exist. An alert is displayed
+       * by the effect hook above.
+       */
+      null}
+    </>
+  )
 }
