@@ -20,7 +20,6 @@ import NoteEditor from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { createNote, updateNote } from '@/notes/operations'
 
-jest.mock('expo-linking')
 jest.mock('@/ui/RichTextInput')
 
 const backMock = jest.fn()
@@ -384,6 +383,9 @@ describe('<NoteEditor />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
+          '(app)/_layout': () => <Stack />,
+          'onboarding/_layout': () => <Stack />,
           'onboarding/notes/new': NoteEditor,
         },
         {
@@ -405,6 +407,8 @@ describe('<NoteEditor />', () => {
 
         renderRouter(
           {
+            _layout: () => <Stack />,
+            '(app)/_layout': () => <Stack />,
             'onboarding/_layout': () => <Stack />,
             'onboarding/notes/edit/[id]': NoteEditor,
           },
@@ -430,6 +434,8 @@ describe('<NoteEditor />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
+          '(app)/_layout': () => <Stack />,
           'onboarding/_layout': () => <Stack />,
           'onboarding/notes/new': NoteEditor,
         },
