@@ -6,8 +6,6 @@ import { mockAppRoot } from 'test/utils'
 import { mockCollection, mockCollectionError } from '../../test'
 import CollectionScreen from '.'
 
-jest.unmock('@react-navigation/elements')
-
 describe('<CollectionScreen />', () => {
   describe('when there is a collection ID', () => {
     test('and the collection exists, the collection is displayed', async () => {

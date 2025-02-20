@@ -5,8 +5,6 @@ import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import WelcomeScreen from '.'
 
-jest.mock('expo-router')
-
 describe('<WelcomeScreen />', () => {
   describe('when onboarding has been completed', () => {
     it('redirects to the home screen', async () => {

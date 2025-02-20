@@ -20,7 +20,6 @@ import NoteEditor from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { createNote, updateNote } from '@/notes/operations'
 
-jest.unmock('@react-navigation/elements')
 jest.mock('expo-linking')
 jest.mock('@/ui/RichTextInput')
 

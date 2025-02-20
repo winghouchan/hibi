@@ -17,7 +17,6 @@ import NoteEditorScreen from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { createNote, updateNote } from '@/notes/operations'
 
-jest.unmock('@react-navigation/elements')
 jest.mock('@/ui/RichTextInput')
 
 describe('<NoteEditorScreen />', () => {

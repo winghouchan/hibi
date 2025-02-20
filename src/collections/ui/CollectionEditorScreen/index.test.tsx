@@ -13,7 +13,6 @@ import CollectionEditorScreen from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { updateCollection } from '../../operations'
 
-jest.unmock('@react-navigation/elements')
 jest.mock('expo-router', () => ({
   ...jest.requireActual('expo-router'),
   router: {

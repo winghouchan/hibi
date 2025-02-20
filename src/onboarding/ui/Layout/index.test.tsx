@@ -17,6 +17,7 @@ describe('<OnboardingLayout />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
@@ -48,11 +49,14 @@ describe('<OnboardingLayout />', () => {
       renderRouter(
         {
           _layout: () => <Stack />,
+          index: () => null,
+          '(app)/_layout': () => <Stack />,
+          '(app)/(tabs)/_layout': () => <Stack />,
+          '(app)/(tabs)/index': () => null,
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
-          'onboarding/notes/new': () => null,
           'onboarding/notes/edit/[id]': () => null,
-          '(app)/(tabs)/index': () => null,
+          'onboarding/notes/new': () => null,
         },
         {
           initialUrl: 'onboarding',
@@ -65,10 +69,7 @@ describe('<OnboardingLayout />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: 'onboarding',
-                state: expect.objectContaining({
-                  routes: [expect.objectContaining({ name: 'index' })],
-                }),
+                name: 'index',
               }),
             ],
           }),
@@ -89,6 +90,7 @@ describe('<OnboardingLayout />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
         },
@@ -117,6 +119,7 @@ describe('<OnboardingLayout />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
           'onboarding/_layout': OnboardingLayout,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
