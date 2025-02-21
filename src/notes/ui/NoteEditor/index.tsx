@@ -90,7 +90,9 @@ export default forwardRef<Ref, Props>(function NoteEditor(
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={headerHeight}
+      keyboardVerticalOffset={
+        Platform.OS === 'android' ? headerHeight / 2 : headerHeight
+      }
       style={{ backgroundColor: 'white', flex: 1 }}
       testID={testID && `${testID}.note-editor`}
     >
