@@ -126,7 +126,10 @@ export default function CollectionEditorScreen() {
       />
       {(isUpdatingCollection && collection) ||
       (!isUpdatingCollection && typeof collection === 'undefined') ? (
-        <ScrollView testID="collection.editor.screen">
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          testID="collection.editor.screen"
+        >
           <CollectionEditorForm collection={collection} onSubmit={onSubmit} />
         </ScrollView>
       ) : /**
