@@ -62,6 +62,7 @@ module.exports = {
     },
     {
       files: ['src/**/!(*.spec|*.test).{js,jsx,ts,tsx}'],
+      excludedFiles: ['src/ui/themes/**'],
       plugins: ['lingui'],
       rules: {
         'lingui/no-unlocalized-strings': [

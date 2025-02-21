@@ -22,6 +22,19 @@ module.exports = function (api) {
        */
       'macros',
 
+      ...(api.env((name) => name !== 'test')
+        ? // Only apply the following configuration when `NODE_ENV` is not `'test'`
+          [
+            /**
+             * Allows Unistyles to process components and their style sheets
+             *
+             * @see {@link https://www.unistyl.es/v3/start/how-unistyles-works}
+             * @see {@link https://www.unistyl.es/v3/other/babel-plugin}
+             */
+            'react-native-unistyles/plugin',
+          ]
+        : []),
+
       ...(api.env('test')
         ? // Additionally apply the following configuration when `NODE_ENV` is `'test'`
           [
