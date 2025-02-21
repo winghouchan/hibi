@@ -9,7 +9,14 @@ import {
 import { Trans } from '@lingui/macro'
 import { useQuery } from '@tanstack/react-query'
 import { PropsWithChildren, useRef, useState } from 'react'
-import { Pressable, Text, useWindowDimensions, View } from 'react-native'
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FullWindowOverlay } from 'react-native-screens'
 import { collectionsQuery } from '@/collections'
@@ -25,7 +32,11 @@ function Backdrop(props: BottomSheetBackdropProps) {
 }
 
 function Container({ children }: PropsWithChildren) {
-  return <FullWindowOverlay>{children}</FullWindowOverlay>
+  return Platform.OS === 'ios' ? (
+    <FullWindowOverlay>{children}</FullWindowOverlay>
+  ) : (
+    <View style={StyleSheet.absoluteFill}>{children}</View>
+  )
 }
 
 export default function CollectionPicker({ onChange, value = [] }: Props) {
