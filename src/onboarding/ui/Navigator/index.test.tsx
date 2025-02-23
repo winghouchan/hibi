@@ -8,9 +8,9 @@ import {
   mockOnboardingCollectionError,
 } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import OnboardingLayout from '.'
+import OnboardingNavigator from '.'
 
-describe('<OnboardingLayout />', () => {
+describe('<OnboardingNavigator />', () => {
   describe('when onboarding is complete', () => {
     it('redirects to the home screen', async () => {
       const onboardedStateMock = mockOnboardedState(true)
@@ -18,7 +18,7 @@ describe('<OnboardingLayout />', () => {
       renderRouter(
         {
           _layout: () => <Stack />,
-          'onboarding/_layout': OnboardingLayout,
+          'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
           'onboarding/notes/edit/[id]': () => null,
@@ -53,7 +53,7 @@ describe('<OnboardingLayout />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/(tabs)/index': () => null,
-          'onboarding/_layout': OnboardingLayout,
+          'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
           'onboarding/notes/edit/[id]': () => null,
           'onboarding/notes/new': () => null,
@@ -91,7 +91,7 @@ describe('<OnboardingLayout />', () => {
       renderRouter(
         {
           _layout: () => <Stack />,
-          'onboarding/_layout': OnboardingLayout,
+          'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
         },
         {
@@ -120,7 +120,7 @@ describe('<OnboardingLayout />', () => {
       renderRouter(
         {
           _layout: () => <Stack />,
-          'onboarding/_layout': OnboardingLayout,
+          'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
           'onboarding/notes/edit/[id]': () => null,

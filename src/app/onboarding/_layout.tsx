@@ -1,1 +1,1 @@
-export { Layout as default } from '@/onboarding'
+export { Navigator as default } from '@/onboarding'

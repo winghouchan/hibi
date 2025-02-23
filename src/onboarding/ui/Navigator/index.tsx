@@ -13,7 +13,7 @@ import {
   onboardingCollectionQuery,
 } from '../../operations'
 
-export default function OnboardingLayout() {
+export default function OnboardingNavigator() {
   const { i18n } = useLingui()
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
   const { data: onboardingCollection } = useQuery(onboardingCollectionQuery)
