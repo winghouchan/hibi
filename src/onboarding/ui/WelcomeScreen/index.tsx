@@ -1,9 +1,10 @@
 import { Trans } from '@lingui/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Redirect } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button } from '@/ui'
 import { isOnboardingCompleteQuery } from '../../operations'
+import Layout from '../Layout'
+import style from './style'
 
 export default function WelcomeScreen() {
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
@@ -13,17 +14,21 @@ export default function WelcomeScreen() {
   }
 
   return (
-    <SafeAreaView testID="onboarding.welcome.screen">
-      <Trans>Welcome</Trans>
-      <Link
-        href="/onboarding/collection"
-        testID="onboarding.welcome.cta"
-        asChild
-      >
-        <Button>
-          <Trans>Start</Trans>
-        </Button>
-      </Link>
-    </SafeAreaView>
+    <Layout testID="onboarding.welcome.screen">
+      <Layout.Main style={style.main}>
+        <Trans>Welcome</Trans>
+      </Layout.Main>
+      <Layout.Footer>
+        <Link
+          href="/onboarding/collection"
+          testID="onboarding.welcome.cta"
+          asChild
+        >
+          <Button>
+            <Trans>Start</Trans>
+          </Button>
+        </Link>
+      </Layout.Footer>
+    </Layout>
   )
 }

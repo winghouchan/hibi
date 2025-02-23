@@ -1,4 +1,5 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
@@ -17,7 +18,9 @@ describe('<NotesScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/notes': NotesScreen,
+          index: () => null,
         },
         {
           initialUrl: 'onboarding/notes',
@@ -45,6 +48,7 @@ describe('<NotesScreen />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes': NotesScreen,
             'onboarding/notes/new': () => null,
           },
@@ -108,6 +112,7 @@ describe('<NotesScreen />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes': NotesScreen,
           },
           {
@@ -162,6 +167,7 @@ describe('<NotesScreen />', () => {
 
         renderRouter(
           {
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes': NotesScreen,
             'onboarding/notes/edit/[id]': () => null,
           },
@@ -222,6 +228,7 @@ describe('<NotesScreen />', () => {
             '(app)/_layout': () => null,
             '(app)/(tabs)/_layout': () => null,
             '(app)/(tabs)/index': () => null,
+            'onboarding/_layout': () => <Stack />,
             'onboarding/notes': NotesScreen,
           },
           {
@@ -247,7 +254,9 @@ describe('<NotesScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/notes': NotesScreen,
+          index: () => null,
         },
         {
           initialUrl: 'onboarding/notes',
@@ -304,6 +313,7 @@ describe('<NotesScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/notes': NotesScreen,
         },
         {

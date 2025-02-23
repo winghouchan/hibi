@@ -3,13 +3,14 @@ import { useLingui } from '@lingui/react'
 import { type NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
-import { Alert, ScrollView } from 'react-native'
+import { Alert } from 'react-native'
 import { log } from '@/telemetry'
 import { Button } from '@/ui'
 import {
   completeOnboardingMutation,
   onboardingCollectionQuery,
 } from '../../operations'
+import Layout from '../Layout'
 
 export default function NotesScreen() {
   const { i18n } = useLingui()
@@ -67,33 +68,37 @@ export default function NotesScreen() {
   }
 
   return collection && !isFetching ? (
-    <ScrollView testID="onboarding.notes.screen">
-      {collection.notes.map((note) => (
-        <Link key={note.id} href={`/onboarding/notes/edit/${note.id}`}>
-          {JSON.stringify(note, null, 2)}
-        </Link>
-      ))}
-      {collection.notes.length ? (
-        <>
-          <Link href="/onboarding/notes/new">
-            <Trans>Add another note</Trans>
+    <Layout testID="onboarding.notes.screen">
+      <Layout.Main>
+        {collection.notes.map((note) => (
+          <Link key={note.id} href={`/onboarding/notes/edit/${note.id}`}>
+            {JSON.stringify(note, null, 2)}
           </Link>
-          <Button
-            onPress={() => handleCompleteOnboarding()}
-            testID="onboarding.notes.cta"
+        ))}
+      </Layout.Main>
+      <Layout.Footer>
+        {collection.notes.length ? (
+          <>
+            <Link href="/onboarding/notes/new">
+              <Trans>Add another note</Trans>
+            </Link>
+            <Button
+              onPress={() => handleCompleteOnboarding()}
+              testID="onboarding.notes.cta"
+            >
+              <Trans>Finish</Trans>
+            </Button>
+          </>
+        ) : (
+          <Link
+            href="/onboarding/notes/new"
+            testID="onboarding.notes.new-note.button"
           >
-            <Trans>Finish</Trans>
-          </Button>
-        </>
-      ) : (
-        <Link
-          href="/onboarding/notes/new"
-          testID="onboarding.notes.new-note.button"
-        >
-          <Trans>New note</Trans>
-        </Link>
-      )}
-    </ScrollView>
+            <Trans>New note</Trans>
+          </Link>
+        )}
+      </Layout.Footer>
+    </Layout>
   ) : !collection && !isFetching ? (
     <Redirect href="/" />
   ) : null

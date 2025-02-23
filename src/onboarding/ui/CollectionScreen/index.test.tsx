@@ -1,4 +1,5 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import {
@@ -22,6 +23,7 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/collection': CollectionScreen,
           'onboarding/notes': () => null,
         },
@@ -50,6 +52,7 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/collection': CollectionScreen,
           'onboarding/notes': () => null,
         },
@@ -76,6 +79,7 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/collection': CollectionScreen,
         },
         {
@@ -113,6 +117,7 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/collection': CollectionScreen,
           'onboarding/notes': () => null,
         },
@@ -163,6 +168,7 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/collection': CollectionScreen,
           'onboarding/notes': () => null,
         },
@@ -199,6 +205,7 @@ describe('<CollectionScreen />', () => {
 
       renderRouter(
         {
+          'onboarding/_layout': () => <Stack />,
           'onboarding/collection': CollectionScreen,
         },
         {

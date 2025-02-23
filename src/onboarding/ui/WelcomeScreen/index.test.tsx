@@ -1,4 +1,5 @@
-import { render, userEvent, waitFor } from '@testing-library/react-native'
+import { userEvent, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
@@ -12,6 +13,7 @@ describe('<WelcomeScreen />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
           index: WelcomeScreen,
           '(app)/(tabs)/index': () => null,
         },
@@ -34,7 +36,10 @@ describe('<WelcomeScreen />', () => {
     it('shows a button to start onboarding', async () => {
       mockOnboardedState(false)
 
-      render(<WelcomeScreen />, { wrapper: mockAppRoot() })
+      renderRouter(
+        { _layout: () => <Stack />, index: WelcomeScreen },
+        { wrapper: mockAppRoot() },
+      )
 
       expect(
         await screen.findByTestId('onboarding.welcome.cta.button'),
@@ -48,6 +53,7 @@ describe('<WelcomeScreen />', () => {
 
       renderRouter(
         {
+          _layout: () => <Stack />,
           index: WelcomeScreen,
           'onboarding/collection': () => null,
         },
@@ -70,7 +76,13 @@ describe('<WelcomeScreen />', () => {
 
       mockOnboardedStateError(new Error('Mock Error'))
 
-      render(<WelcomeScreen />, { wrapper: mockAppRoot() })
+      renderRouter(
+        {
+          _layout: () => <Stack />,
+          index: WelcomeScreen,
+        },
+        { wrapper: mockAppRoot() },
+      )
 
       await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
     })

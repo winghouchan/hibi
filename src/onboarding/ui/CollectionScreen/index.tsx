@@ -11,6 +11,7 @@ import {
 import { log } from '@/telemetry'
 import { Button, TextInput } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
+import Layout from '../Layout'
 
 export default function CollectionScreen() {
   const { i18n } = useLingui()
@@ -88,15 +89,15 @@ export default function CollectionScreen() {
   }
 
   return (
-    <View testID="onboarding.collection.screen">
-      <Trans>What are you learning?</Trans>
-      <Formik
-        enableReinitialize
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-      >
-        {({ handleChange, handleSubmit, isSubmitting, values }) => (
-          <>
+    <Formik
+      enableReinitialize
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+    >
+      {({ handleChange, handleSubmit, isSubmitting, values }) => (
+        <Layout testID="onboarding.collection.screen">
+          <Layout.Main>
+            <Trans>What are you learning?</Trans>
             <TextInput
               accessibilityLabel={i18n.t(msg`Enter a collection name`)}
               autoFocus
@@ -106,6 +107,8 @@ export default function CollectionScreen() {
               testID="onboarding.collection.name"
               value={values.name}
             />
+          </Layout.Main>
+          <Layout.Footer>
             <Button
               testID="onboarding.collection.cta"
               onPress={() => handleSubmit()}
@@ -118,9 +121,9 @@ export default function CollectionScreen() {
                 <Trans>Create collection</Trans>
               )}
             </Button>
-          </>
-        )}
-      </Formik>
-    </View>
+          </Layout.Footer>
+        </Layout>
+      )}
+    </Formik>
   )
 }
