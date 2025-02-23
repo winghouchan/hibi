@@ -13,14 +13,13 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   useWindowDimensions,
   View,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FullWindowOverlay } from 'react-native-screens'
 import { collectionsQuery } from '@/collections'
-import { Button } from '@/ui'
+import { Button, Text } from '@/ui'
 
 interface Props {
   onChange?: (value: number[]) => void

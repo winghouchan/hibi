@@ -2,11 +2,11 @@ import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Alert, Text, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { Grade, Rating } from 'ts-fsrs'
 import { createReviewMutation, getNextReview } from '@/reviews/operations'
 import { log } from '@/telemetry'
-import { Button } from '@/ui'
+import { Button, Text } from '@/ui'
 import useTimer from './useTimer'
 
 interface Props

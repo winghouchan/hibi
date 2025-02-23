@@ -3,7 +3,8 @@ import { useLingui } from '@lingui/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
-import { Alert, ScrollView, Text } from 'react-native'
+import { Alert, ScrollView } from 'react-native'
+import { Text } from '@/ui'
 import { noteQuery } from '../../operations'
 
 export default function NoteScreen() {

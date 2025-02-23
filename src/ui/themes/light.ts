@@ -20,6 +20,9 @@ const neutral = [
 ] as const
 
 const colors = {
+  text: {
+    default: neutral[10],
+  },
   neutral: neutral,
 } as const
 

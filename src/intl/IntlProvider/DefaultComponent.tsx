@@ -1,6 +1,6 @@
 import { TransRenderProps } from '@lingui/react'
 import { PropsWithChildren } from 'react'
-import { Text } from 'react-native'
+import { Text } from '@/ui'
 
 /**
  * The default component the internationalization library uses to wrap localized text.

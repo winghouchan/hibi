@@ -2,9 +2,9 @@ import { Trans } from '@lingui/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Tabs } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { collectionsQuery } from '@/collections'
-import { Button } from '@/ui'
+import { Button, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
 
 function NoCollections() {

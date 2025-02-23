@@ -15,7 +15,8 @@ import {
   useNavigation,
 } from 'expo-router'
 import { useEffect } from 'react'
-import { Alert, ScrollView, Text } from 'react-native'
+import { Alert, ScrollView } from 'react-native'
+import { Text } from '@/ui'
 import { collectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
