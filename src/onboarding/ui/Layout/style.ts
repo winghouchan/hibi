@@ -1,10 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export default StyleSheet.create((theme, { insets }) => ({
-  screen: {
-    flex: 1,
-  },
-
   main: {
     flex: 1,
   },

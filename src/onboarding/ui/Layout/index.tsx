@@ -1,28 +1,23 @@
-import { useHeaderHeight } from '@react-navigation/elements'
-import {
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  Platform,
-  ScrollView,
-  ScrollViewProps,
-  View,
-  ViewProps,
-} from 'react-native'
+import { ScrollView, ScrollViewProps, View, ViewProps } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 import style from './style'
 
-function Layout({ style: _style, ...props }: KeyboardAvoidingViewProps) {
-  const headerHeight = useHeaderHeight()
+/**
+ * This style sheet needs to be defined here otherwise the bottom padding will
+ * not dynamically update when the keyboard opens/closes. Root cause yet to be
+ * determined. The `insets` also cannot be destructured from `runtime`.
+ *
+ * @see {@link} https://github.com/jpudysz/react-native-unistyles/issues/623
+ */
+const { screen } = StyleSheet.create((theme, runtime) => ({
+  screen: {
+    flex: 1,
+    paddingBottom: runtime.insets.ime,
+  },
+}))
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={
-        Platform.OS === 'android' ? headerHeight / 2 : headerHeight
-      }
-      style={[style.screen, _style]}
-      {...props}
-    />
-  )
+function Layout({ style: _style, ...props }: ViewProps) {
+  return <View style={[screen, _style]} {...props} />
 }
 
 function Main({
