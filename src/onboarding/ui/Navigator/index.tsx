@@ -6,12 +6,14 @@ import type {
   Route,
 } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { Redirect, Stack, useFocusEffect, useNavigation } from 'expo-router'
+import { Redirect, useFocusEffect, useNavigation, Stack } from 'expo-router'
+import { View } from 'react-native'
 import { Button } from '@/ui'
 import {
   isOnboardingCompleteQuery,
   onboardingCollectionQuery,
 } from '../../operations'
+import Header from './Header'
 
 export default function OnboardingNavigator() {
   const { i18n } = useLingui()
@@ -145,22 +147,20 @@ export default function OnboardingNavigator() {
   if (isOnboardingComplete === false) {
     return (
       <Stack
-        screenOptions={({ navigation }) => ({
-          headerLeft: ({ canGoBack }) =>
-            canGoBack ? (
-              <Button
-                onPress={() => {
-                  navigation.goBack()
-                }}
-              >
-                <Trans>Back</Trans>
-              </Button>
-            ) : null,
-        })}
+        layout={({ children, navigation, state }) => (
+          <View style={{ flex: 1 }}>
+            <Header navigation={navigation} state={state} />
+            {children}
+          </View>
+        )}
+        screenOptions={{
+          headerShown: false,
+        }}
       >
         <Stack.Screen
           name="notes/new"
           options={({ navigation }) => ({
+            headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (
                 <Button
@@ -178,6 +178,7 @@ export default function OnboardingNavigator() {
         <Stack.Screen
           name="notes/edit/[id]"
           options={({ navigation }) => ({
+            headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (
                 <Button
