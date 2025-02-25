@@ -24,7 +24,6 @@
     "run:android": "expo run:android --variant developmentDebug",
     "run:ios": "expo run:ios --configuration Development-Debug",
     "start": "expo start --port 8082 --scheme co.hibi.app.dev",
-    "start:storybook": "STORYBOOK=true expo start --port 8083 --scheme co.hibi.app.dev",
     "start:test": "NODE_ENV=test expo start --port 8081 --scheme co.hibi.app.test",
     "start:production": "expo start --minify --no-dev",
     "start:production:analyze-bundle": "EXPO_UNSTABLE_ATLAS=true yarn start:production",

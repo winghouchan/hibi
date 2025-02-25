@@ -1,13 +1,16 @@
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { useQuery } from '@tanstack/react-query'
 import { SplashScreen, Stack } from 'expo-router'
 import { ComponentProps, useEffect, useState } from 'react'
-import { Platform } from 'react-native'
+import { Platform, Pressable } from 'react-native'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { log } from '@/telemetry'
 
 type StackProps = ComponentProps<typeof Stack>
 
 export default function Navigator() {
+  const { i18n } = useLingui()
   const { isSuccess: hasCheckedOnboardingState } = useQuery(
     isOnboardingCompleteQuery,
   )
@@ -55,6 +58,24 @@ export default function Navigator() {
   useEffect(hideSplashScreen, [hasCheckedOnboardingState, isNavigatorReady])
 
   return (
-    <Stack screenListeners={screenListeners} screenOptions={screenOptions} />
+    <Stack screenListeners={screenListeners} screenOptions={screenOptions}>
+      <Stack.Screen
+        name="storybook"
+        options={({ navigation }) => ({
+          title: i18n.t(msg`Storybook`),
+          presentation: 'fullScreenModal',
+          headerShown: true,
+          headerLeft: ({ canGoBack }) =>
+            canGoBack ? (
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => navigation.goBack()}
+              >
+                <Trans>Close</Trans>
+              </Pressable>
+            ) : null,
+        })}
+      />
+    </Stack>
   )
 }
