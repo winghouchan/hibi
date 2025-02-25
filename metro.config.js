@@ -1,6 +1,8 @@
 /* eslint-env node */
 
+const withStorybook = require('@storybook/react-native/metro/withStorybook')
 const { getDefaultConfig } = require('expo/metro-config')
+const path = require('path')
 
 const config = getDefaultConfig(__dirname)
 
@@ -15,4 +17,7 @@ config.resolver.sourceExts.push('sql')
  */
 config.transformer.unstable_allowRequireContext = true
 
-module.exports = config
+module.exports = withStorybook(config, {
+  enabled: true,
+  configPath: path.resolve(__dirname, './.storybook'),
+})

@@ -94,4 +94,7 @@ export default {
     reactCompiler: true,
     typedRoutes: true,
   },
+  extra: {
+    isStorybookEnabled: Boolean(process.env.STORYBOOK),
+  },
 } satisfies ExpoConfig
