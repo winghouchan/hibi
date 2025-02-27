@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { forwardRef } from 'react'
 import {
   Pressable as NativePressable,
@@ -18,6 +19,8 @@ export default forwardRef<Ref, Props>(function Pressable(
     action = 'primary',
 
     children,
+
+    onPressIn,
 
     /**
      * Do not set a default to `role` as it has precedence over `accessibilityRole`
@@ -46,10 +49,19 @@ export default forwardRef<Ref, Props>(function Pressable(
 
   styles.useVariants({ action, priority, size })
 
+  const handlePressIn: PressableProps['onPressIn'] = (event) => {
+    onPressIn?.(event)
+
+    if (priority === 'high') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    }
+  }
+
   return (
     <NativePressable
       accessibilityRole={accessibilityRole}
       children={children}
+      onPressIn={handlePressIn}
       ref={ref}
       role={role}
       style={(state) => [
