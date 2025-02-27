@@ -94,9 +94,7 @@ describe('<NoteEditor />', () => {
         await user.press(
           await screen.findByRole('switch', { name: 'Separable' }),
         )
-        await user.press(
-          await screen.findByRole('button', { name: 'Add note' }),
-        )
+        await user.press(await screen.findByRole('button', { name: 'Add' }))
 
         expect(backMock).toHaveBeenCalled()
         expect(createNote).toHaveBeenCalledExactlyOnceWith(input.note)
@@ -147,9 +145,7 @@ describe('<NoteEditor />', () => {
           ),
           input.note.fields[1][0].value,
         )
-        await user.press(
-          await screen.findByRole('button', { name: 'Add note' }),
-        )
+        await user.press(await screen.findByRole('button', { name: 'Add' }))
 
         expect(alertSpy).toHaveBeenCalledOnce()
       })
@@ -248,9 +244,7 @@ describe('<NoteEditor />', () => {
         await user.press(
           await screen.findByRole('switch', { name: 'Separable' }),
         )
-        await user.press(
-          await screen.findByRole('button', { name: 'Update note' }),
-        )
+        await user.press(await screen.findByRole('button', { name: 'Update' }))
 
         expect(backMock).toHaveBeenCalled()
         expect(updateNote).toHaveBeenCalledExactlyOnceWith({
@@ -337,9 +331,7 @@ describe('<NoteEditor />', () => {
           await screen.findByDisplayValue(fixture.note.fields[1][0].value),
         ).toBeOnTheScreen()
 
-        await user.press(
-          await screen.findByRole('button', { name: 'Update note' }),
-        )
+        await user.press(await screen.findByRole('button', { name: 'Update' }))
 
         expect(alertSpy).toHaveBeenCalledOnce()
       })

@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
-import { Alert, View } from 'react-native'
+import { Alert } from 'react-native'
 import {
   createCollectionMutation,
   updateCollectionMutation,
@@ -114,11 +114,11 @@ export default function CollectionScreen() {
               onPress={() => handleSubmit()}
             >
               {isSubmitting ? (
-                <Trans>Submitting</Trans>
+                <Trans component={null}>Submitting</Trans>
               ) : values.id ? (
-                <Trans>Update collection</Trans>
+                <Trans component={null}>Update collection</Trans>
               ) : (
-                <Trans>Create collection</Trans>
+                <Trans component={null}>Create collection</Trans>
               )}
             </Button>
           </Layout.Footer>

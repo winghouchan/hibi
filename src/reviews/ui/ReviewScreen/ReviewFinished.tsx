@@ -10,7 +10,7 @@ export default function ReviewFinished() {
     <View testID="review.finished.screen">
       <Trans>Finished</Trans>
       <Button testID="review.finish" onPress={() => router.back()}>
-        <Trans>Finish</Trans>
+        <Trans component={null}>Finish</Trans>
       </Button>
     </View>
   )

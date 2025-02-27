@@ -1,6 +1,7 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Stack } from 'expo-router'
+import { View } from 'react-native'
 import { Button } from '@/ui'
 
 export default function NoteLayout() {
@@ -11,13 +12,18 @@ export default function NoteLayout() {
       screenOptions={({ navigation }) => ({
         headerLeft: ({ canGoBack }) =>
           canGoBack ? (
-            <Button
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <Trans>Back</Trans>
-            </Button>
+            <View>
+              <Button
+                action="neutral"
+                onPress={() => {
+                  navigation.goBack()
+                }}
+                priority="low"
+                size="small"
+              >
+                <Trans component={null}>Back</Trans>
+              </Button>
+            </View>
           ) : null,
       })}
     >

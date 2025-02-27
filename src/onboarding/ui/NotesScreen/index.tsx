@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { type NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
-import { Alert } from 'react-native'
+import { Alert, View } from 'react-native'
 import { log } from '@/telemetry'
 import { Button } from '@/ui'
 import {
@@ -78,23 +78,28 @@ export default function NotesScreen() {
       </Layout.Main>
       <Layout.Footer>
         {collection.notes.length ? (
-          <>
-            <Link href="/onboarding/notes/new">
-              <Trans>Add another note</Trans>
+          <View style={{ gap: 12 }}>
+            <Link asChild href="/onboarding/notes/new">
+              <Button action="neutral" priority="medium">
+                <Trans component={null}>Add another note</Trans>
+              </Button>
             </Link>
             <Button
               onPress={() => handleCompleteOnboarding()}
               testID="onboarding.notes.cta"
             >
-              <Trans>Finish</Trans>
+              <Trans component={null}>Finish</Trans>
             </Button>
-          </>
+          </View>
         ) : (
           <Link
+            asChild
             href="/onboarding/notes/new"
-            testID="onboarding.notes.new-note.button"
+            testID="onboarding.notes.new-note"
           >
-            <Trans>New note</Trans>
+            <Button>
+              <Trans component={null}>New note</Trans>
+            </Button>
           </Link>
         )}
       </Layout.Footer>

@@ -101,11 +101,11 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
           />
           <Button testID="collection.editor.cta" onPress={() => handleSubmit()}>
             {isSubmitting ? (
-              <Trans>Submitting</Trans>
+              <Trans component={null}>Submitting</Trans>
             ) : isUpdatingCollection ? (
-              <Trans>Update collection</Trans>
+              <Trans component={null}>Update collection</Trans>
             ) : (
-              <Trans>Create collection</Trans>
+              <Trans component={null}>Create collection</Trans>
             )}
           </Button>
         </>

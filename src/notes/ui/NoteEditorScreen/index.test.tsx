@@ -119,9 +119,7 @@ describe('<NoteEditorScreen />', () => {
         await screen.findByRole('switch', { name: 'Reversible' }),
       )
       await user.press(await screen.findByRole('switch', { name: 'Separable' }))
-      await user.press(
-        await screen.findByRole('button', { name: 'Update note' }),
-      )
+      await user.press(await screen.findByRole('button', { name: 'Update' }))
 
       expect(updateNote).toHaveBeenCalledExactlyOnceWith({
         collections: [fixture.collection.id],
@@ -253,7 +251,7 @@ describe('<NoteEditorScreen />', () => {
         await screen.findByRole('switch', { name: 'Reversible' }),
       )
       await user.press(await screen.findByRole('switch', { name: 'Separable' }))
-      await user.press(await screen.findByRole('button', { name: 'Add note' }))
+      await user.press(await screen.findByRole('button', { name: 'Add' }))
 
       expect(createNote).toHaveBeenCalledExactlyOnceWith({
         ...input.note,
@@ -279,7 +277,7 @@ describe('<NoteEditorScreen />', () => {
         },
       )
 
-      await user.press(screen.getByRole('button', { name: 'Add note' }))
+      await user.press(screen.getByRole('button', { name: 'Add' }))
 
       expect(alertSpy).toHaveBeenCalledOnce()
     })

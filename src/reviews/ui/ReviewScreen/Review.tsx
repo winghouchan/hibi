@@ -62,34 +62,42 @@ export default function Review({ id, fields, onReview }: Props) {
       <Text>{JSON.stringify(fields[side], null, 2)}</Text>
       {side === 0 && (
         <Button onPress={showAnswer} testID="review.show-answer">
-          <Trans>Show answer</Trans>
+          <Trans component={null}>Show answer</Trans>
         </Button>
       )}
       {side === 1 && (
         <View>
           <Button
+            action="neutral"
+            priority="low"
             onPress={createReviewHandler(Rating.Again)}
             testID="review.rate.forgot"
           >
-            <Trans>Forgot</Trans>
+            <Trans component={null}>Forgot</Trans>
           </Button>
           <Button
+            action="neutral"
+            priority="low"
             onPress={createReviewHandler(Rating.Hard)}
             testID="review.rate.hard"
           >
-            <Trans>Hard</Trans>
+            <Trans component={null}>Hard</Trans>
           </Button>
           <Button
+            action="neutral"
+            priority="low"
             onPress={createReviewHandler(Rating.Good)}
             testID="review.rate.good"
           >
-            <Trans>Good</Trans>
+            <Trans component={null}>Good</Trans>
           </Button>
           <Button
+            action="neutral"
+            priority="low"
             onPress={createReviewHandler(Rating.Easy)}
             testID="review.rate.easy"
           >
-            <Trans>Easy</Trans>
+            <Trans component={null}>Easy</Trans>
           </Button>
         </View>
       )}

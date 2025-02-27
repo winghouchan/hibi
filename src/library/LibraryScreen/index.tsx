@@ -20,14 +20,19 @@ export default function LibraryScreen() {
       <Tabs.Screen
         options={{
           headerRight: () => (
-            <Button
-              testID="library.create.menu"
-              onPress={() => {
-                createMenuRef.current?.open()
-              }}
-            >
-              <Trans>➕</Trans>
-            </Button>
+            <View>
+              <Button
+                action="neutral"
+                priority="low"
+                testID="library.create.menu"
+                onPress={() => {
+                  createMenuRef.current?.open()
+                }}
+                size="small"
+              >
+                <Trans component={null}>➕</Trans>
+              </Button>
+            </View>
           ),
         }}
       />

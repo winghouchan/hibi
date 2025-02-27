@@ -25,7 +25,7 @@ export default function WelcomeScreen() {
           asChild
         >
           <Button>
-            <Trans>Start</Trans>
+            <Trans component={null}>Start</Trans>
           </Button>
         </Link>
       </Layout.Footer>

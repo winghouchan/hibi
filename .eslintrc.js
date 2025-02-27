@@ -62,12 +62,15 @@ module.exports = {
     },
     {
       files: ['src/**/!(*.spec|*.test).{js,jsx,ts,tsx}'],
-      excludedFiles: ['src/ui/themes/**'],
+      excludedFiles: ['src/ui/themes/**', '*.stories.*'],
       plugins: ['lingui'],
       rules: {
         'lingui/no-unlocalized-strings': [
           'error',
           {
+            ignore: [
+              'use no memo', // React Compiler opt-out directive
+            ],
             ignoreFunction: [
               'Error',
               'LogBox.ignoreLogs',

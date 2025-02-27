@@ -1,36 +1,54 @@
-import { forwardRef, LegacyRef } from 'react'
-import { Pressable, PressableProps, View } from 'react-native'
+import {
+  ComponentProps,
+  ComponentRef,
+  forwardRef,
+  RefObject,
+  useImperativeHandle,
+  useRef,
+} from 'react'
+import { Text as NativeText, View as NativeView } from 'react-native'
+import Pressable from './Pressable'
+import Text from './Text'
 
-function Button(
-  {
-    accessibilityRole = 'button',
+type Ref = {
+  pressable: RefObject<NativeView>
+  text: RefObject<NativeText>
+}
+type Props = ComponentProps<typeof Pressable>
 
-    children,
-
-    /**
-     * Do not set a default to `role` as it has precedence over `accessibilityRole`
-     *
-     * @see {@link https://reactnative.dev/docs/accessibility#role}
-     */
-    role,
-
-    testID,
-
-    ...props
-  }: PressableProps,
-  ref: LegacyRef<View>,
+export default forwardRef<Ref, Props>(function Button(
+  { action = 'primary', children, testID, priority = 'high', size, ...props },
+  ref,
 ) {
+  const pressableRef = useRef<ComponentRef<typeof Pressable>>(null)
+  const textRef = useRef<ComponentRef<typeof Text>>(null)
+
+  useImperativeHandle(ref, () => ({
+    pressable: pressableRef,
+    text: textRef,
+  }))
+
   return (
     <Pressable
-      accessibilityRole={accessibilityRole}
-      ref={ref}
-      role={role}
+      action={action}
+      ref={pressableRef}
       testID={testID && `${testID}.button`}
+      priority={priority}
+      size={size}
       {...props}
     >
-      {children}
+      {(state) => (
+        <Text
+          action={action}
+          numberOfLines={1}
+          pressed={state.pressed}
+          priority={priority}
+          ref={textRef}
+          size={size}
+        >
+          {typeof children === 'function' ? children(state) : children}
+        </Text>
+      )}
     </Pressable>
   )
-}
-
-export default forwardRef(Button)
+})

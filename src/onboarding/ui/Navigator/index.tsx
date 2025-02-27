@@ -169,13 +169,18 @@ export default function OnboardingNavigator() {
             headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (
-                <Button
-                  onPress={() => {
-                    navigation.goBack()
-                  }}
-                >
-                  <Trans>Close</Trans>
-                </Button>
+                <View>
+                  <Button
+                    action="neutral"
+                    priority="low"
+                    onPress={() => {
+                      navigation.goBack()
+                    }}
+                    size="small"
+                  >
+                    <Trans component={null}>Close</Trans>
+                  </Button>
+                </View>
               ) : null,
             presentation: 'fullScreenModal',
             title: i18n.t(msg`Create note`),
@@ -187,13 +192,18 @@ export default function OnboardingNavigator() {
             headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (
-                <Button
-                  onPress={() => {
-                    navigation.goBack()
-                  }}
-                >
-                  <Trans>Close</Trans>
-                </Button>
+                <View>
+                  <Button
+                    action="neutral"
+                    priority="low"
+                    onPress={() => {
+                      navigation.goBack()
+                    }}
+                    size="small"
+                  >
+                    <Trans component={null}>Close</Trans>
+                  </Button>
+                </View>
               ) : null,
             presentation: 'fullScreenModal',
             title: i18n.t(msg`Edit note`),

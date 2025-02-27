@@ -170,10 +170,17 @@ export default function NoteEditorScreen() {
 
   const SubmitButton = () => (
     <Button
+      action="primary"
+      priority="low"
       onPress={() => noteEditorRef.current?.submit()}
+      size="small"
       testID="note.note-editor.cta"
     >
-      {isUpdatingNote ? <Trans>Update note</Trans> : <Trans>Add note</Trans>}
+      {isUpdatingNote ? (
+        <Trans component={null}>Update</Trans>
+      ) : (
+        <Trans component={null}>Add</Trans>
+      )}
     </Button>
   )
 
@@ -195,7 +202,11 @@ export default function NoteEditorScreen() {
     <>
       <Stack.Screen
         options={{
-          headerRight: () => <SubmitButton />,
+          headerRight: () => (
+            <View>
+              <SubmitButton />
+            </View>
+          ),
         }}
       />
       <View

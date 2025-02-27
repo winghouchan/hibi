@@ -10,9 +10,12 @@ const runtimeMock = {
 }
 
 export const StyleSheet = {
-  create: jest.fn((stylesheet) =>
-    typeof stylesheet === 'function'
+  create: jest.fn((stylesheet) => ({
+    ...(typeof stylesheet === 'function'
       ? stylesheet(themes.light, runtimeMock)
-      : stylesheet,
-  ),
+      : stylesheet),
+    useVariants: jest.fn(),
+  })),
+
+  hairlineWidth: 1,
 }

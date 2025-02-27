@@ -124,20 +124,38 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
       >
         <BottomSheetView style={{ flex: 1 }}>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            style={{
+              alignItems: 'baseline',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 16,
+            }}
           >
-            <Button
-              onPress={() => close()}
-              testID="note.note-editor.picker.cancel"
-            >
-              <Trans>Cancel</Trans>
-            </Button>
-            <Button
-              onPress={() => done()}
-              testID="note.note-editor.picker.done"
-            >
-              <Trans>Done</Trans>
-            </Button>
+            <View>
+              <Button
+                action="neutral"
+                onPress={() => close()}
+                priority="low"
+                size="small"
+                testID="note.note-editor.picker.cancel"
+              >
+                <Trans component={null}>Cancel</Trans>
+              </Button>
+            </View>
+            <View>
+              <Trans>Select collections</Trans>
+            </View>
+            <View>
+              <Button
+                action="primary"
+                onPress={() => done()}
+                priority="low"
+                size="small"
+                testID="note.note-editor.picker.done"
+              >
+                <Trans component={null}>Done</Trans>
+              </Button>
+            </View>
           </View>
           <BottomSheetFlatList
             data={collections}
