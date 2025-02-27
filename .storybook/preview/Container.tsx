@@ -1,8 +1,14 @@
-import { View } from 'react-native'
+import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 const style = StyleSheet.create((theme) => ({
-  container: {
+  view: {
+    flex: 1,
+  },
+  content: {
+    alignItems: 'center',
+    gap: theme.spacing[4],
+    justifyContent: 'center',
     padding: theme.spacing[4],
   },
 }))
@@ -13,8 +19,12 @@ const style = StyleSheet.create((theme) => ({
  */
 export default (Story: React.ComponentType) => {
   return (
-    <View style={style.container}>
+    <ScrollView
+      alwaysBounceVertical={false}
+      contentContainerStyle={style.content}
+      style={style.view}
+    >
       <Story />
-    </View>
+    </ScrollView>
   )
 }
