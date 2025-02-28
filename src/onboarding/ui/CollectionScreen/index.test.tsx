@@ -72,7 +72,6 @@ describe('<CollectionScreen />', () => {
     })
 
     test('and inputs incorrect information then submits the form, errors are shown to the user', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
       const user = userEvent.setup()
 
       mockCreateCollectionError(new Error('Mock Error'))
@@ -92,7 +91,7 @@ describe('<CollectionScreen />', () => {
         screen.getByRole('button', { name: 'Create collection' }),
       )
 
-      expect(alertSpy).toHaveBeenCalledOnce()
+      expect(screen.getByText('Your collection needs a name')).toBeOnTheScreen()
     })
   })
 

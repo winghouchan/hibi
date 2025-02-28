@@ -83,7 +83,8 @@
     "react-native-webview": "13.12.5",
     "sha.js": "^2.4.11",
     "sql-formatter": "^15.4.10",
-    "ts-fsrs": "^4.6.1"
+    "ts-fsrs": "^4.6.1",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.7",

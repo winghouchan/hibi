@@ -4,12 +4,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Formik, type FormikConfig } from 'formik'
 import { Alert } from 'react-native'
+import { object, string } from 'yup'
 import {
   createCollectionMutation,
   updateCollectionMutation,
 } from '@/collections'
 import { log } from '@/telemetry'
-import { Button, TextInput } from '@/ui'
+import { Button, TextField } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 import Layout from '../Layout'
 
@@ -28,6 +29,10 @@ export default function CollectionScreen() {
     id: collection?.id,
     name: collection?.name ?? '',
   }
+
+  const validationSchema = object({
+    name: string().required(i18n.t(msg`Your collection needs a name`)),
+  })
 
   const onSubmit: FormikConfig<typeof initialValues>['onSubmit'] = async (
     values,
@@ -93,14 +98,16 @@ export default function CollectionScreen() {
       enableReinitialize
       initialValues={initialValues}
       onSubmit={onSubmit}
+      validationSchema={validationSchema}
     >
-      {({ handleChange, handleSubmit, isSubmitting, values }) => (
+      {({ errors, handleChange, handleSubmit, isSubmitting, values }) => (
         <Layout testID="onboarding.collection.screen">
           <Layout.Main>
             <Trans>What are you learning?</Trans>
-            <TextInput
+            <TextField
               accessibilityLabel={i18n.t(msg`Enter a collection name`)}
               autoFocus
+              error={errors.name}
               onChangeText={(value) => handleChange('name')(value)}
               onSubmitEditing={() => handleSubmit()}
               placeholder={i18n.t(msg`Collection name`)}
