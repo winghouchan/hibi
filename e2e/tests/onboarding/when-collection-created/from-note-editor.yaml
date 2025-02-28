@@ -7,7 +7,7 @@ appId: ${appId}
       databaseFixture: onboarding/collection-created
 
 - openLink:
-    link: hibi://onboarding/notes/edit/1
+    link: hibi://onboarding/notes/1/edit
 
 # Acknowledge alert saying note does not exist
 - tapOn: 'OK'

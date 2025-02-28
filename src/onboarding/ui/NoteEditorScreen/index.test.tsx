@@ -38,7 +38,7 @@ const backMock = jest.fn()
   setParams: jest.fn(),
 })
 
-describe('<NoteEditor />', () => {
+describe('<NoteEditorScreen />', () => {
   describe('when there is an onboarding collection', () => {
     describe('and there is no note ID', () => {
       test('a new note can be created', async () => {
@@ -219,10 +219,10 @@ describe('<NoteEditor />', () => {
         renderRouter(
           {
             'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/edit/[id]': NoteEditor,
+            'onboarding/notes/[id]/edit': NoteEditor,
           },
           {
-            initialUrl: 'onboarding/notes/edit/1',
+            initialUrl: 'onboarding/notes/1/edit',
             wrapper: mockAppRoot(),
           },
         )
@@ -316,10 +316,10 @@ describe('<NoteEditor />', () => {
         renderRouter(
           {
             'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/edit/[id]': NoteEditor,
+            'onboarding/notes/[id]/edit': NoteEditor,
           },
           {
-            initialUrl: 'onboarding/notes/edit/1',
+            initialUrl: 'onboarding/notes/1/edit',
             wrapper: mockAppRoot(),
           },
         )
@@ -354,10 +354,10 @@ describe('<NoteEditor />', () => {
         renderRouter(
           {
             'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/edit/[id]': NoteEditor,
+            'onboarding/notes/[id]/edit': NoteEditor,
           },
           {
-            initialUrl: 'onboarding/notes/edit/1',
+            initialUrl: 'onboarding/notes/1/edit',
             wrapper: mockAppRoot(),
           },
         )
@@ -402,10 +402,10 @@ describe('<NoteEditor />', () => {
             _layout: () => <Stack />,
             '(app)/_layout': () => <Stack />,
             'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/edit/[id]': NoteEditor,
+            'onboarding/notes/[id]/edit': NoteEditor,
           },
           {
-            initialUrl: 'onboarding/notes/edit/1',
+            initialUrl: 'onboarding/notes/1/edit',
             wrapper: mockAppRoot(),
           },
         )
@@ -460,10 +460,10 @@ describe('<NoteEditor />', () => {
       renderRouter(
         {
           'onboarding/_layout': () => <Stack />,
-          'onboarding/notes/edit/[id]': NoteEditor,
+          'onboarding/notes/[id]/edit': NoteEditor,
         },
         {
-          initialUrl: 'onboarding/notes/edit/1',
+          initialUrl: 'onboarding/notes/1/edit',
           wrapper: mockAppRoot(),
         },
       )

@@ -7,7 +7,7 @@ appId: ${appId}
       databaseFixture: onboarding/note-created
 
 - openLink:
-    link: hibi://onboarding/notes/edit/1
+    link: hibi://onboarding/notes/1/edit
 
 - tapOn:
     id: onboarding.note-editor.cta.button

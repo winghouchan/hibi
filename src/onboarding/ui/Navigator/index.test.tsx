@@ -21,7 +21,7 @@ describe('<OnboardingNavigator />', () => {
           'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
-          'onboarding/notes/edit/[id]': () => null,
+          'onboarding/notes/[id]/edit': () => null,
           '(app)/(tabs)/index': () => null,
         },
         {
@@ -55,7 +55,7 @@ describe('<OnboardingNavigator />', () => {
           '(app)/(tabs)/index': () => null,
           'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
-          'onboarding/notes/edit/[id]': () => null,
+          'onboarding/notes/[id]/edit': () => null,
           'onboarding/notes/new': () => null,
         },
         {
@@ -123,7 +123,7 @@ describe('<OnboardingNavigator />', () => {
           'onboarding/_layout': OnboardingNavigator,
           'onboarding/index': () => null,
           'onboarding/notes/new': () => null,
-          'onboarding/notes/edit/[id]': () => null,
+          'onboarding/notes/[id]/edit': () => null,
           '(app)/(tabs)/index': () => null,
         },
         {

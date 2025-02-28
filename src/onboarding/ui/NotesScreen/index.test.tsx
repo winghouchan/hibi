@@ -169,7 +169,7 @@ describe('<NotesScreen />', () => {
           {
             'onboarding/_layout': () => <Stack />,
             'onboarding/notes': NotesScreen,
-            'onboarding/notes/edit/[id]': () => null,
+            'onboarding/notes/[id]/edit': () => null,
           },
           {
             initialUrl: 'onboarding/notes',
@@ -181,7 +181,7 @@ describe('<NotesScreen />', () => {
           await screen.findByRole('link', { name: /Front 1.*Back 1/s }),
         )
 
-        expect(screen).toHavePathname('/onboarding/notes/edit/1')
+        expect(screen).toHavePathname('/onboarding/notes/1/edit')
       })
 
       test('pressing the button to complete onboarding navigates to the home screen', async () => {

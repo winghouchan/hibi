@@ -71,7 +71,7 @@ export default function NotesScreen() {
     <Layout testID="onboarding.notes.screen">
       <Layout.Main>
         {collection.notes.map((note) => (
-          <Link key={note.id} href={`/onboarding/notes/edit/${note.id}`}>
+          <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
             {JSON.stringify(note, null, 2)}
           </Link>
         ))}

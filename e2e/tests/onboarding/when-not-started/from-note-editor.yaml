@@ -4,7 +4,7 @@ appId: ${appId}
 - clearState
 
 - openLink:
-    link: hibi://onboarding/notes/edit/1
+    link: hibi://onboarding/notes/1/edit
 
 - assertVisible:
     id: onboarding.welcome.screen

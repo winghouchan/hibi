@@ -115,7 +115,7 @@ export default function OnboardingNavigator() {
             navigation.reset({ index: 1, routes })
           }
 
-          if (pathname.startsWith('onboarding/notes/edit')) {
+          if (/onboarding\/notes\/.+?\/edit/.test(pathname)) {
             routes.push({
               name: 'onboarding',
               state: {
@@ -124,7 +124,7 @@ export default function OnboardingNavigator() {
                   { name: 'collection' },
                   { name: 'notes/index' },
                   {
-                    name: 'notes/edit/[id]',
+                    name: 'notes/[id]/edit',
                     params: state.routes[0].state?.routes[0].params,
                   },
                 ],
@@ -152,7 +152,7 @@ export default function OnboardingNavigator() {
 
           return (
             <View style={{ flex: 1 }}>
-              {!['notes/edit/[id]', 'notes/new'].includes(
+              {!['notes/[id]/edit', 'notes/new'].includes(
                 currentRoute.name,
               ) && <Header navigation={navigation} state={state} />}
               {children}
@@ -187,7 +187,7 @@ export default function OnboardingNavigator() {
           })}
         />
         <Stack.Screen
-          name="notes/edit/[id]"
+          name="notes/[id]/edit"
           options={({ navigation }) => ({
             headerShown: true,
             headerLeft: ({ canGoBack }) =>
