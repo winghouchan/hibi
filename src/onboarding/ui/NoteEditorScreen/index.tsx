@@ -1,25 +1,19 @@
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { ComponentProps, ComponentRef, useEffect, useRef } from 'react'
+import { ComponentRef, useEffect, useRef } from 'react'
 import { Alert, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import {
-  createNoteMutation,
-  NoteEditor,
-  noteQuery,
-  updateNoteMutation,
-} from '@/notes'
-import { log } from '@/telemetry'
+import { NoteEditor, noteQuery } from '@/notes'
 import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
+import useForm from './useForm'
 
 export default function NoteEditorScreen() {
   const noteEditorRef = useRef<ComponentRef<typeof NoteEditor>>(null)
   const { i18n } = useLingui()
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
-  const queryClient = useQueryClient()
   const router = useRouter()
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
     onboardingCollectionQuery,
@@ -27,65 +21,32 @@ export default function NoteEditorScreen() {
   const { data: note, isFetching: isFetchingNote } = useQuery(
     noteQuery(Number(noteId)),
   )
-  const { mutateAsync: createNote } = useMutation(createNoteMutation)
-  const { mutateAsync: updateNote } = useMutation(updateNoteMutation)
   const safeAreaInsets = useSafeAreaInsets()
 
-  const onSubmit: ComponentProps<typeof NoteEditor>['onSubmit'] = async (
-    values,
-  ) => {
-    const isUpdating = 'id' in values && values.id !== undefined
+  const { handleSubmit } = useForm({
+    onSubmitSuccess: () => {
+      router.back()
+    },
+    onSubmitError: (error, retry) => {
+      const errorMessage =
+        typeof note?.id === 'undefined'
+          ? i18n.t(msg`There was an error creating the note`)
+          : i18n.t(msg`There was an error updating the note`)
 
-    type Action = typeof isUpdating extends true
-      ? typeof updateNote
-      : typeof createNote
-
-    type Values = typeof isUpdating extends true
-      ? Parameters<typeof updateNote>[0]
-      : Parameters<typeof createNote>[0]
-
-    type Handlers = typeof isUpdating extends true
-      ? Parameters<typeof updateNote>[1]
-      : Parameters<typeof createNote>[1]
-
-    const action = (isUpdating ? updateNote : createNote) as Action
-
-    const errorMessage = isUpdating
-      ? i18n.t(msg`There was an error updating the note`)
-      : i18n.t(msg`There was an error creating the note`)
-
-    const handlers: Handlers = {
-      async onSuccess() {
-        await queryClient.invalidateQueries({
-          queryKey: onboardingCollectionQuery.queryKey,
-        })
-        router.back()
-      },
-      onError(error: Error) {
-        Alert.alert(i18n.t(msg`Something went wrong`), errorMessage, [
-          {
-            text: i18n.t(msg`Try again`),
-            style: 'default',
-            isPreferred: true,
-            onPress: async () => {
-              await action(values as Values, handlers)
-            },
-          },
-          {
-            text: i18n.t(msg`Cancel`),
-            style: 'cancel',
-          },
-        ])
-        log.error(error)
-      },
-    }
-
-    try {
-      await action(values as Values, handlers)
-    } catch {
-      // Errors handled in `handlers`
-    }
-  }
+      Alert.alert(i18n.t(msg`Something went wrong`), errorMessage, [
+        {
+          text: i18n.t(msg`Try again`),
+          style: 'default',
+          isPreferred: true,
+          onPress: retry,
+        },
+        {
+          text: i18n.t(msg`Cancel`),
+          style: 'cancel',
+        },
+      ])
+    },
+  })
 
   const SubmitButton = () => (
     <Button
@@ -95,10 +56,10 @@ export default function NoteEditorScreen() {
       size="small"
       testID="onboarding.note-editor.cta"
     >
-      {note?.id ? (
-        <Trans component={null}>Update</Trans>
-      ) : (
+      {typeof note?.id === 'undefined' ? (
         <Trans component={null}>Add</Trans>
+      ) : (
+        <Trans component={null}>Update</Trans>
       )}
     </Button>
   )
@@ -143,7 +104,7 @@ export default function NoteEditorScreen() {
       >
         <NoteEditor
           value={{ ...note, collections: [collection.id] }}
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           ref={noteEditorRef}
           testID="onboarding"
         />
