@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ReactNative, { TextInputProps } from 'react-native'
+import { TextInput as NativeTextInput, TextInputProps } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 const styles = StyleSheet.create(
@@ -53,7 +53,7 @@ export default function TextInput({
   styles.useVariants({ focused })
 
   return (
-    <ReactNative.TextInput
+    <NativeTextInput
       onBlur={handleBlur}
       onFocus={handleFocus}
       style={[styles.input, style]}

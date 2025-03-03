@@ -1,3 +1,12 @@
+/**
+ * Babel configuration for the project
+ *
+ * ⚠️ There is also a Babel configuration for Storybook on web (see `.storybook/web/main.ts`).
+ * That configuration is a subset of the configuration here – just enough to get Storybook
+ * working. The two configurations will need to be kept in sync.
+ *
+ * @todo Figure out how to share the Babel config with the Storybook specific config.
+ */
 module.exports = function (api) {
   /**
    * Cache the config based on the value of `NODE_ENV`. Use `NODE_ENV` as the

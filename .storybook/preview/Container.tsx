@@ -1,5 +1,8 @@
 import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
+import configureStyleSheet from '@/ui/configureStyleSheet'
+
+configureStyleSheet()
 
 const style = StyleSheet.create((theme) => ({
   view: {
