@@ -2,7 +2,7 @@ import { ComponentProps } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import Text from '../Text'
-import TextInput from '../TextInput'
+import TextInput from './TextInput'
 
 type Props = ComponentProps<typeof TextInput> & {
   error?: string

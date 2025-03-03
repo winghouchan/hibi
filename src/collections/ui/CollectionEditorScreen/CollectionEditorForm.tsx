@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Formik, type FormikConfig } from 'formik'
 import { Alert } from 'react-native'
 import { log } from '@/telemetry'
-import { Button, TextInput } from '@/ui'
+import { Button, TextField } from '@/ui'
 import {
   createCollectionMutation,
   updateCollectionMutation,
@@ -90,7 +90,7 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
     >
       {({ handleChange, handleSubmit, isSubmitting, values }) => (
         <>
-          <TextInput
+          <TextField
             accessibilityLabel={i18n.t(msg`Enter a collection name`)}
             autoFocus
             onChangeText={(value) => handleChange('name')(value)}
