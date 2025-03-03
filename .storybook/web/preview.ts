@@ -7,4 +7,4 @@
  * the import from `storybook.requires.ts` if it doesn't exist. As a result, the
  * preview `index` file is exported from here.
  */
-export { default as default } from '../preview/index'
+export { default as default } from '../shared/preview/index'
