@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import Icon, { names } from '.'
 
-const meta: Meta<typeof Icon> = {
+type Config = Meta<typeof Icon>
+type Story = StoryObj<Config>
+
+export default {
   component: Icon,
   args: {
     name: 'activity',
@@ -30,10 +33,6 @@ const meta: Meta<typeof Icon> = {
       },
     },
   },
-}
+} satisfies Config
 
-export default meta
-
-type Story = StoryObj<typeof Icon>
-
-export const Overview: Story = {}
+export const Overview = {} satisfies Story
