@@ -18,7 +18,7 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FullWindowOverlay } from 'react-native-screens'
-import { collectionsQuery } from '@/collections'
+import { collectionsQuery } from '@/collections/operations'
 import { Button, Text } from '@/ui'
 
 interface Props {

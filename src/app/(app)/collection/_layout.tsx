@@ -1,1 +1,1 @@
-export { CollectionLayout as default } from '@/collections'
+export { CollectionLayout as default } from '@/collections/ui'

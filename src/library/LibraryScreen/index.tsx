@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, Tabs } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
 import { FlatList, View } from 'react-native'
-import { collectionsQuery } from '@/collections'
+import { collectionsQuery } from '@/collections/operations'
 import { Button, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
 
