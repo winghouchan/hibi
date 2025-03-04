@@ -10,10 +10,11 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react'
-import { KeyboardAvoidingView, Platform, Pressable } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { RichTextInput, Switch } from '@/ui'
 import { createNote, getNote, updateNote } from '../../operations'
 import CollectionPicker from './CollectionPicker'
+import styles from './styles'
 
 interface Ref {
   submit: () => void
@@ -88,14 +89,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
   }))
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={
-        Platform.OS === 'android' ? headerHeight / 2 : headerHeight
-      }
-      style={{ backgroundColor: 'white', flex: 1 }}
-      testID={testID && `${testID}.note-editor`}
-    >
+    <View style={styles.keyboardAvoidingView}>
       {values.fields.map((_, side) => (
         <RichTextInput
           autofocus={side === 0}
@@ -135,6 +129,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
           richTextInputRefs.current?.forEach((ref) => ref?.blur())
           return false
         }}
+        style={styles.settings}
       >
         <CollectionPicker
           onChange={(value) => {
@@ -159,6 +154,6 @@ export default forwardRef<Ref, Props>(function NoteEditor(
           value={values.config.separable}
         />
       </Pressable>
-    </KeyboardAvoidingView>
+    </View>
   )
 })

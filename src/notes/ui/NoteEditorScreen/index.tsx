@@ -9,7 +9,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, Stack, useLocalSearchParams, useNavigation } from 'expo-router'
 import { ComponentProps, ComponentRef, useEffect, useRef } from 'react'
 import { Alert, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { log } from '@/telemetry'
 import { Button } from '@/ui'
 import {
@@ -19,11 +18,11 @@ import {
 } from '../../operations'
 import baseQueryKey from '../../operations/baseQueryKey'
 import NoteEditor from '../NoteEditor'
+import styles from './styles'
 import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
 export default function NoteEditorScreen() {
   const { i18n } = useLingui()
-  const safeAreaInsets = useSafeAreaInsets()
   const localSearchParams = useLocalSearchParams<{
     id?: string
     collections: string
@@ -209,14 +208,7 @@ export default function NoteEditorScreen() {
           ),
         }}
       />
-      <View
-        style={{
-          backgroundColor: 'white',
-          flex: 1,
-          paddingBottom: safeAreaInsets.bottom,
-        }}
-        testID="note-editor.screen"
-      >
+      <View style={styles.screen} testID="note-editor.screen">
         <NoteEditor
           value={{ collections, ...note }}
           onSubmit={onSubmit}

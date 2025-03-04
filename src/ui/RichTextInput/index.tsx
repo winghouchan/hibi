@@ -80,7 +80,11 @@ export default forwardRef<Ref, Props>(function RichTextInput(
 
   return (
     <View style={{ flex: 1 }} testID={testID && `${testID}.editor`}>
-      <RichText editor={editor} testID={testID && `${testID}.editor.input`} />
+      <RichText
+        editor={editor}
+        testID={testID && `${testID}.editor.input`}
+        style={{ backgroundColor: 'transparent' }}
+      />
     </View>
   )
 })

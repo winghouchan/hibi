@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query'
 import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { ComponentRef, useEffect, useRef } from 'react'
 import { Alert, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { NoteEditor, noteQuery } from '@/notes'
 import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
+import styles from './styles'
 import useForm from './useForm'
 
 export default function NoteEditorScreen() {
@@ -21,7 +21,6 @@ export default function NoteEditorScreen() {
   const { data: note, isFetching: isFetchingNote } = useQuery(
     noteQuery(Number(noteId)),
   )
-  const safeAreaInsets = useSafeAreaInsets()
 
   const { handleSubmit } = useForm({
     onSubmitSuccess: () => {
@@ -94,14 +93,7 @@ export default function NoteEditorScreen() {
           ),
         }}
       />
-      <View
-        style={{
-          backgroundColor: 'white',
-          flex: 1,
-          paddingBottom: safeAreaInsets.bottom,
-        }}
-        testID="onboarding.note-editor.screen"
-      >
+      <View style={styles.screen} testID="onboarding.note-editor.screen">
         <NoteEditor
           value={{ ...note, collections: [collection.id] }}
           onSubmit={handleSubmit}
