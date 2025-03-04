@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react'
 import Container from './Container'
 
-const preview: Preview = {
+const preview = {
   decorators: [Container],
   parameters: {
     controls: {
@@ -11,6 +11,6 @@ const preview: Preview = {
       },
     },
   },
-}
+} satisfies Preview
 
 export default preview
