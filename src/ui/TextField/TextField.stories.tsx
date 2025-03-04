@@ -2,7 +2,10 @@ import { action } from '@storybook/addon-actions'
 import type { Meta, StoryObj } from '@storybook/react'
 import TextField from '.'
 
-const meta: Meta<typeof TextField> = {
+type Config = Meta<typeof TextField>
+type Story = StoryObj<Config>
+
+export default {
   component: TextField,
   args: {
     onBlur: action('onBlur'),
@@ -12,10 +15,6 @@ const meta: Meta<typeof TextField> = {
     placeholder: 'Placeholder',
     error: '',
   },
-}
+} satisfies Config
 
-export default meta
-
-type Story = StoryObj<typeof TextField>
-
-export const Default: Story = {}
+export const Default = {} satisfies Story
