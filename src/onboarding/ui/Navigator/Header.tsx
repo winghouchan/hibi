@@ -1,11 +1,12 @@
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import type {
   NavigationHelpers,
   StackNavigationState,
 } from '@react-navigation/native'
+import { useLocales } from 'expo-localization'
 import { Pressable, View } from 'react-native'
-import { Progress } from '@/ui'
+import { Icon, Progress } from '@/ui'
 import style from './style'
 
 interface Props {
@@ -23,6 +24,7 @@ export default function Header({
   state: { index: routeIndex, routes },
 }: Props) {
   const { i18n } = useLingui()
+  const [{ textDirection }] = useLocales()
   const { name: currentRouteName } = routes[routeIndex]
   const progressKey = currentRouteName.includes('notes')
     ? 'notes'
@@ -33,9 +35,13 @@ export default function Header({
       <View>
         <Pressable
           accessibilityRole="button"
+          accessibilityLabel={i18n.t(msg`Go back`)}
           onPress={() => navigation.goBack()}
         >
-          <Trans>Back</Trans>
+          <Icon
+            name={textDirection === 'rtl' ? 'arrow-right' : 'arrow-left'}
+            size={32}
+          />
         </Pressable>
       </View>
       <View style={style.progress}>

@@ -19,3 +19,10 @@ export const StyleSheet = {
 
   hairlineWidth: 1,
 }
+
+export const withUnistyles = jest.fn(
+  (Component, mappings) =>
+    function ComponentWithUnistyles(props?: object) {
+      return <Component {...mappings?.()} {...(props ?? {})} />
+    },
+)

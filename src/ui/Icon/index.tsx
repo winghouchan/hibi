@@ -1,6 +1,7 @@
 import feather, { FeatherAttributes } from 'feather-icons'
 import { kebabCase } from 'lodash'
-import { SvgXml } from 'react-native-svg'
+import { SvgXml as NativeSvgXml } from 'react-native-svg'
+import { withUnistyles } from 'react-native-unistyles'
 import { CamelCasedProperties } from 'type-fest'
 
 interface Props
@@ -9,7 +10,7 @@ interface Props
     'height' | 'width'
   > {
   name: keyof typeof feather.icons
-  size: number
+  size?: number
 }
 
 function kebabCaseProperty<T>(
@@ -24,13 +25,17 @@ function kebabCaseProperty<T>(
 
 export const names = Object.keys(feather.icons)
 
+const SvgXml = withUnistyles(NativeSvgXml)
+
 export default function Icon({ name, size = 24, ...props }: Props) {
   return (
     <SvgXml
       xml={feather.icons[name].toSvg({
-        height: size,
-        width: size,
         ...Object.entries(props).reduce(kebabCaseProperty, {}),
+      })}
+      uniProps={(theme, runtime) => ({
+        height: size * runtime.fontScale,
+        width: size * runtime.fontScale,
       })}
     />
   )
