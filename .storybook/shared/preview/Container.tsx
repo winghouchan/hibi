@@ -1,26 +1,50 @@
+import type { Decorator } from '@storybook/react'
 import { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import configureStyleSheet from '@/ui/configureStyleSheet'
 
 configureStyleSheet()
 
-const style = StyleSheet.create((theme) => ({
+const style = StyleSheet.create(({ spacing }) => ({
   view: {
     flex: 1,
   },
   content: {
-    alignItems: 'center',
-    gap: theme.spacing[4],
-    justifyContent: 'center',
-    padding: theme.spacing[4],
+    gap: spacing[4],
+
+    variants: {
+      /**
+       * Storybook for React Native does not respond to the `layout` parameter.
+       * These styles add support for the `layout` parameter.
+       *
+       * @see {@link https://storybook.js.org/docs/configure/story-layout}
+       */
+      layout: {
+        default: {
+          padding: spacing[4],
+        },
+
+        centered: {
+          alignItems: 'center',
+          flexGrow: 1,
+          justifyContent: 'center',
+        },
+
+        fullscreen: {
+          padding: spacing[0],
+        },
+
+        padded: {
+          padding: spacing[4],
+        },
+      },
+    },
   },
 }))
 
-/**
- * Must be an arrow function otherwise changes to Story `args` do not cause
- * re-renders (for some undetermined reason).
- */
-export default (Story: React.ComponentType) => {
+const Container: Decorator = (Story, context) => {
+  style.useVariants({ layout: context.parameters.layout })
+
   return (
     <ScrollView
       alwaysBounceVertical={false}
@@ -31,3 +55,5 @@ export default (Story: React.ComponentType) => {
     </ScrollView>
   )
 }
+
+export default Container
