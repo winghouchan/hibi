@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import { View } from 'react-native'
-import { nextReviewQuery } from '@/reviews'
+import { nextReviewQuery } from '@/reviews/operations'
 
 export default function HomeScreen() {
   const { data } = useInfiniteQuery(nextReviewQuery({ onlyDue: true }))

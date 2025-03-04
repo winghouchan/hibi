@@ -1,1 +1,1 @@
-export { ReviewScreen as default } from '@/reviews'
+export { ReviewScreen as default } from '@/reviews/ui'
