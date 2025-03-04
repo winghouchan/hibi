@@ -1,4 +1,4 @@
-import { schema } from '@/notes'
+import * as schema from '@/notes/schema'
 
 interface Note extends Pick<typeof schema.note.$inferSelect, 'id'> {
   fields: (typeof schema.noteField.$inferSelect)[]

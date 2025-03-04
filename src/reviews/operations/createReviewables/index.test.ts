@@ -1,5 +1,5 @@
-import { schema } from '@/notes'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
+import * as schema from '@/notes/schema'
 import { mockDatabase } from 'test/utils'
 
 function generateFieldMocks(length: number) {

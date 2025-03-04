@@ -32,7 +32,7 @@ describe('createReview', () => {
         const { createCollection } = await import(
           '@/collections/operations/createCollection'
         )
-        const { createNote } = await import('@/notes')
+        const { createNote } = await import('@/notes/operations')
         const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
           name: 'Collection Mock',
@@ -163,7 +163,7 @@ describe('createReview', () => {
         const { createCollection } = await import(
           '@/collections/operations/createCollection'
         )
-        const { createNote } = await import('@/notes')
+        const { createNote } = await import('@/notes/operations')
         const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
           name: 'Collection Mock',
@@ -334,7 +334,7 @@ describe('createReview', () => {
       async ({ expected, data, input: { duration, rating } }) => {
         const { database, resetDatabaseMock } = await mockDatabase()
         const { createCollection } = await import('@/collections/operations')
-        const { createNote } = await import('@/notes')
+        const { createNote } = await import('@/notes/operations')
         const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
           name: 'Collection Mock',
