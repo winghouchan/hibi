@@ -2,7 +2,10 @@ import { action } from '@storybook/addon-actions'
 import type { Meta, StoryObj } from '@storybook/react'
 import Button from './Button'
 
-const meta: Meta<typeof Button> = {
+type Config = Meta<typeof Button>
+type Story = StoryObj<Config>
+
+export default {
   component: Button,
   args: {
     children: 'Button',
@@ -24,13 +27,9 @@ const meta: Meta<typeof Button> = {
       exclude: ['priority'],
     },
   },
-}
+} satisfies Config
 
-export default meta
-
-type Story = StoryObj<typeof Button>
-
-export const Overview: Story = {
+export const Overview = {
   render: () => (
     <>
       <Button priority="high" action="primary">
@@ -71,25 +70,25 @@ export const Overview: Story = {
       </Button>
     </>
   ),
-}
+} satisfies Story
 
-export const HighPriority: Story = {
+export const HighPriority = {
   args: {
     priority: 'high',
     action: 'primary',
   },
-}
+} satisfies Story
 
-export const MediumPriority: Story = {
+export const MediumPriority = {
   args: {
     priority: 'medium',
     action: 'primary',
   },
-}
+} satisfies Story
 
-export const LowPriority: Story = {
+export const LowPriority = {
   args: {
     priority: 'low',
     action: 'primary',
   },
-}
+} satisfies Story
