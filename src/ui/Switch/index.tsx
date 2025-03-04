@@ -1,4 +1,10 @@
-import ReactNative, { Pressable, SwitchProps, Text } from 'react-native'
+import {
+  Pressable,
+  Switch as NativeSwitch,
+  SwitchProps,
+  Text,
+} from 'react-native'
+import styles from './styles'
 
 interface Props extends SwitchProps {
   label: string
@@ -19,11 +25,11 @@ export default function Switch({
     <Pressable
       accessibilityRole="switch"
       onPress={handleLabelPress}
-      style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+      style={styles.pressable}
       testID={testID && `${testID}.switch`}
     >
       <Text testID={testID && `${testID}.switch.label`}>{label}</Text>
-      <ReactNative.Switch
+      <NativeSwitch
         onValueChange={onValueChange}
         testID={testID && `${testID}.switch.input`}
         value={value}
