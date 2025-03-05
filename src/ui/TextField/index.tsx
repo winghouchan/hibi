@@ -17,7 +17,7 @@ const styles = StyleSheet.create(({ colors, fontWeights, spacing }) => ({
   },
 
   error: {
-    color: colors.red[6],
+    color: colors.danger[1].foreground,
     fontWeight: fontWeights[5],
   },
 
@@ -25,7 +25,7 @@ const styles = StyleSheet.create(({ colors, fontWeights, spacing }) => ({
     variants: {
       error: {
         true: {
-          borderColor: colors.red[6],
+          borderColor: colors.danger[1].border,
         },
       },
     },

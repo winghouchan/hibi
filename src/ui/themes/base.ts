@@ -1,11 +1,5 @@
 const borderWidths = [0, 1, 2, 4] as const
 
-const colors = {
-  black: 'black',
-  white: 'white',
-  transparent: 'transparent',
-} as const
-
 const fontSizes = [12, 14, 16, 18, 20, 24, 28, 32, 36] as const
 
 const fontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900] as const
@@ -36,7 +30,6 @@ const boxShadows = [
 export default {
   borderWidths,
   boxShadows,
-  colors,
   fontSizes,
   fontWeights,
   radii,

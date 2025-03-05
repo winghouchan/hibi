@@ -12,10 +12,10 @@ const styles = StyleSheet.create(({ colors, fontSizes, fontWeights }) => ({
     variants: {
       priority: {
         high: {
-          color: colors.text.inverse,
+          color: colors.primary[0].foreground,
         },
         medium: {
-          color: colors.text.default,
+          color: colors.neutral.foreground,
         },
         low: {},
       },
@@ -50,63 +50,63 @@ const styles = StyleSheet.create(({ colors, fontSizes, fontWeights }) => ({
         priority: 'high',
         action: 'neutral',
         styles: {
-          color: colors.neutral[8],
+          color: colors.secondary[0].foreground,
         },
       },
       {
         priority: 'medium',
         action: 'primary',
         styles: {
-          color: colors.blue[9],
+          color: colors.primary[1].foreground,
         },
       },
       {
         priority: 'medium',
         action: 'neutral',
         styles: {
-          color: colors.neutral[7],
+          color: colors.secondary[0].foreground,
         },
       },
       {
         priority: 'medium',
         action: 'success',
         styles: {
-          color: colors.green[8],
+          color: colors.success[1].foreground,
         },
       },
       {
         priority: 'medium',
         action: 'danger',
         styles: {
-          color: colors.red[7],
+          color: colors.danger[0].background,
         },
       },
       {
         priority: 'low',
         action: 'primary',
         styles: {
-          color: colors.blue[8],
+          color: colors.primary[2].foreground,
         },
       },
       {
         priority: 'low',
         action: 'neutral',
         styles: {
-          color: colors.neutral[8],
+          color: colors.secondary[0].foreground,
         },
       },
       {
         priority: 'low',
         action: 'success',
         styles: {
-          color: colors.green[8],
+          color: colors.success[1].foreground,
         },
       },
       {
         priority: 'low',
         action: 'danger',
         styles: {
-          color: colors.red[7],
+          color: colors.danger[1].foreground,
         },
       },
     ],

@@ -19,16 +19,16 @@ const styles = StyleSheet.create(({ colors, radii, sizes, spacing }) => {
       variants: {
         value: {
           false: {
-            backgroundColor: colors.neutral[2],
+            backgroundColor: colors.secondary[2].background,
           },
           true: {
-            backgroundColor: colors.green[6],
+            backgroundColor: colors.success[0].background,
           },
         },
       },
     },
     knob: {
-      backgroundColor: colors.neutral[0],
+      backgroundColor: colors.secondary[2].foreground,
       borderRadius: radii[2],
       height: size,
       insetBlockStart: inset,
