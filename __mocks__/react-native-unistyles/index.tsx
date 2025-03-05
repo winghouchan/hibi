@@ -23,6 +23,13 @@ export const StyleSheet = {
 export const withUnistyles = jest.fn(
   (Component, mappings) =>
     function ComponentWithUnistyles(props?: object) {
-      return <Component {...mappings?.()} {...(props ?? {})} />
+      const mappedProps =
+        typeof mappings === 'function'
+          ? mappings(themes.light, runtimeMock)
+          : typeof mappings === 'object' && mappings !== null
+            ? mappings
+            : {}
+
+      return <Component {...mappedProps} {...(props ?? {})} />
     },
 )

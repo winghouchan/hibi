@@ -5,6 +5,7 @@ import type {
 } from '@react-navigation/native'
 import { useLocales } from 'expo-localization'
 import { Pressable, View } from 'react-native'
+import { withUnistyles } from 'react-native-unistyles'
 import { Icon, Progress } from '@/ui'
 import style from './style'
 
@@ -17,6 +18,10 @@ const progress = {
   collection: 10,
   notes: 60,
 }
+
+const BackIcon = withUnistyles(Icon, (theme) => ({
+  color: theme.colors.neutral.foreground,
+}))
 
 export default function Header({
   navigation,
@@ -37,7 +42,7 @@ export default function Header({
           accessibilityLabel={translate`Go back`}
           onPress={() => navigation.goBack()}
         >
-          <Icon
+          <BackIcon
             name={textDirection === 'rtl' ? 'arrow-right' : 'arrow-left'}
             size={32}
           />
