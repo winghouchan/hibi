@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Formik, type FormikConfig } from 'formik'
 import { Alert } from 'react-native'
@@ -18,7 +17,7 @@ interface Props {
 }
 
 export default function CollectionEditorForm({ collection, onSubmit }: Props) {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const queryClient = useQueryClient()
   const { mutateAsync: createCollection } = useMutation(
     createCollectionMutation,
@@ -46,8 +45,8 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
     ) as Action
 
     const errorMessage = isUpdatingCollection
-      ? i18n.t(msg`There was an error updating the collection`)
-      : i18n.t(msg`There was an error creating the collection`)
+      ? translate`There was an error updating the collection`
+      : translate`There was an error creating the collection`
 
     const handlers: Parameters<Action>[1] = {
       async onSuccess(data) {
@@ -56,9 +55,9 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
       },
       onError(error) {
         // @todo Handle error
-        Alert.alert(i18n.t(msg`Something went wrong`), errorMessage, [
+        Alert.alert(translate`Something went wrong`, errorMessage, [
           {
-            text: i18n.t(msg`Try again`),
+            text: translate`Try again`,
             style: 'default',
             isPreferred: true,
             onPress: async () => {
@@ -66,7 +65,7 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
             },
           },
           {
-            text: i18n.t(msg`Cancel`),
+            text: translate`Cancel`,
             style: 'cancel',
           },
         ])
@@ -91,22 +90,20 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
       {({ handleChange, handleSubmit, isSubmitting, values }) => (
         <>
           <TextField
-            accessibilityLabel={i18n.t(msg`Enter a collection name`)}
+            accessibilityLabel={translate`Enter a collection name`}
             autoFocus
             onChangeText={(value) => handleChange('name')(value)}
             onSubmitEditing={() => handleSubmit()}
-            placeholder={i18n.t(msg`Collection name`)}
+            placeholder={translate`Collection name`}
             testID="collection.editor.name"
             value={values.name}
           />
           <Button testID="collection.editor.cta" onPress={() => handleSubmit()}>
-            {isSubmitting ? (
-              <Trans component={null}>Submitting</Trans>
-            ) : isUpdatingCollection ? (
-              <Trans component={null}>Update collection</Trans>
-            ) : (
-              <Trans component={null}>Create collection</Trans>
-            )}
+            {isSubmitting
+              ? translate`Submitting`
+              : isUpdatingCollection
+                ? translate`Update collection`
+                : translate`Create collection`}
           </Button>
         </>
       )}

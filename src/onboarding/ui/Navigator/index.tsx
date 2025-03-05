@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import type {
   NavigationProp,
   PartialRoute,
@@ -16,7 +15,7 @@ import {
 import Header from './Header'
 
 export default function OnboardingNavigator() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
   const { data: onboardingCollection } = useQuery(onboardingCollectionQuery)
   const navigation = useNavigation<
@@ -178,12 +177,12 @@ export default function OnboardingNavigator() {
                     }}
                     size="small"
                   >
-                    <Trans component={null}>Close</Trans>
+                    {translate`Close`}
                   </Button>
                 </View>
               ) : null,
             presentation: 'fullScreenModal',
-            title: i18n.t(msg`Create note`),
+            title: translate`Create note`,
           })}
         />
         <Stack.Screen
@@ -201,12 +200,12 @@ export default function OnboardingNavigator() {
                     }}
                     size="small"
                   >
-                    <Trans component={null}>Close</Trans>
+                    {translate`Close`}
                   </Button>
                 </View>
               ) : null,
             presentation: 'fullScreenModal',
-            title: i18n.t(msg`Edit note`),
+            title: translate`Edit note`,
           })}
         />
       </Stack>

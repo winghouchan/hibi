@@ -1,9 +1,11 @@
-import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react/macro'
 import { Stack } from 'expo-router'
 import { View } from 'react-native'
 import { Button } from '@/ui'
 
 export default function CollectionLayout() {
+  const { t: translate } = useLingui()
+
   return (
     <Stack
       screenOptions={({ navigation }) => ({
@@ -18,7 +20,7 @@ export default function CollectionLayout() {
                 priority="low"
                 size="small"
               >
-                <Trans component={null}>Back</Trans>
+                {translate`Back`}
               </Button>
             </View>
           ) : null,

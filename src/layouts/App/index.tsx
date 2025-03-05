@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react/macro'
 import type { NavigationProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, useFocusEffect, useNavigation } from 'expo-router'
@@ -7,6 +7,7 @@ import { isOnboardingCompleteQuery } from '@/onboarding'
 import { Button } from '@/ui'
 
 export default function AppLayout() {
+  const { t: translate } = useLingui()
   const navigation = useNavigation<NavigationProp<{ index: undefined }>>()
   const { data: isOnboardingComplete, isFetching } = useQuery(
     isOnboardingCompleteQuery,
@@ -38,7 +39,7 @@ export default function AppLayout() {
                     priority="low"
                     size="small"
                   >
-                    <Trans component={null}>Back</Trans>
+                    {translate`Back`}
                   </Button>
                 </View>
               ) : null,

@@ -1,5 +1,4 @@
-import { msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import type {
   NavigationHelpers,
   StackNavigationState,
@@ -23,7 +22,7 @@ export default function Header({
   navigation,
   state: { index: routeIndex, routes },
 }: Props) {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const [{ textDirection }] = useLocales()
   const { name: currentRouteName } = routes[routeIndex]
   const progressKey = currentRouteName.includes('notes')
@@ -35,7 +34,7 @@ export default function Header({
       <View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={i18n.t(msg`Go back`)}
+          accessibilityLabel={translate`Go back`}
           onPress={() => navigation.goBack()}
         >
           <Icon
@@ -46,7 +45,7 @@ export default function Header({
       </View>
       <View style={style.progress}>
         <Progress
-          label={i18n.t(msg`Onboarding progress`)}
+          label={translate`Onboarding progress`}
           value={progress[progressKey]}
         />
       </View>

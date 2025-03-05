@@ -1,11 +1,10 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { Stack } from 'expo-router'
 import { View } from 'react-native'
 import { Button } from '@/ui'
 
 export default function NoteLayout() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
 
   return (
     <Stack
@@ -21,7 +20,7 @@ export default function NoteLayout() {
                 priority="low"
                 size="small"
               >
-                <Trans component={null}>Back</Trans>
+                {translate`Back`}
               </Button>
             </View>
           ) : null,
@@ -31,7 +30,7 @@ export default function NoteLayout() {
         name="[id]/edit"
         options={{
           presentation: 'fullScreenModal',
-          title: i18n.t(msg`Edit note`),
+          title: translate`Edit note`,
         }}
       />
     </Stack>

@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
@@ -19,7 +18,7 @@ export default function CollectionScreen() {
   // eslint-disable-next-line react-compiler/react-compiler
   'use no memo'
 
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { data: collection } = useQuery(onboardingCollectionQuery)
 
   const onSubmitSuccess: Parameters<
@@ -33,19 +32,19 @@ export default function CollectionScreen() {
     retry,
   ) => {
     Alert.alert(
-      i18n.t(msg`Something went wrong`),
+      translate`Something went wrong`,
       typeof collection?.id === 'undefined'
-        ? i18n.t(msg`There was an error creating the collection`)
-        : i18n.t(msg`There was an error updating the collection`),
+        ? translate`There was an error creating the collection`
+        : translate`There was an error updating the collection`,
       [
         {
-          text: i18n.t(msg`Try again`),
+          text: translate`Try again`,
           style: 'default',
           isPreferred: true,
           onPress: retry,
         },
         {
-          text: i18n.t(msg`Cancel`),
+          text: translate`Cancel`,
           style: 'cancel',
         },
       ],
@@ -53,7 +52,7 @@ export default function CollectionScreen() {
   }
 
   const validationSchema = object({
-    name: string().required(i18n.t(msg`Your collection needs a name`)),
+    name: string().required(translate`Your collection needs a name`),
   })
 
   const { errors, handleChange, handleSubmit, isSubmitting, values } = useForm({
@@ -69,16 +68,14 @@ export default function CollectionScreen() {
   return (
     <Layout testID="onboarding.collection.screen">
       <Layout.Main>
-        <Text size="heading">
-          <Trans component={null}>What are you learning?</Trans>
-        </Text>
+        <Text size="heading">{translate`What are you learning?`}</Text>
         <TextField
-          accessibilityLabel={i18n.t(msg`Enter a collection name`)}
+          accessibilityLabel={translate`Enter a collection name`}
           autoFocus
           error={errors.name}
           onChangeText={(value) => handleChange('name')(value)}
           onSubmitEditing={() => handleSubmit()}
-          placeholder={i18n.t(msg`Collection name`)}
+          placeholder={translate`Collection name`}
           testID="onboarding.collection.name"
           value={values.name}
         />
@@ -88,13 +85,11 @@ export default function CollectionScreen() {
           testID="onboarding.collection.cta"
           onPress={() => handleSubmit()}
         >
-          {isSubmitting ? (
-            <Trans component={null}>Submitting</Trans>
-          ) : values.id ? (
-            <Trans component={null}>Update collection</Trans>
-          ) : (
-            <Trans component={null}>Create collection</Trans>
-          )}
+          {isSubmitting
+            ? translate`Submitting`
+            : values.id
+              ? translate`Update collection`
+              : translate`Create collection`}
         </Button>
       </Layout.Footer>
     </Layout>

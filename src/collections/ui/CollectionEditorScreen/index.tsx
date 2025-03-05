@@ -1,5 +1,4 @@
-import { msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import type { NavigationProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { router, Stack, useLocalSearchParams, useNavigation } from 'expo-router'
@@ -10,7 +9,7 @@ import CollectionEditorForm from './CollectionEditorForm'
 import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
 export default function CollectionEditorScreen() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const navigation = useNavigation<
     NavigationProp<{
       '(tabs)': undefined
@@ -54,9 +53,9 @@ export default function CollectionEditorScreen() {
        */
       !isDeepLink
     ) {
-      Alert.alert(i18n.t(msg`The collection doesn't exist`), '', [
+      Alert.alert(translate`The collection doesn't exist`, '', [
         {
-          text: i18n.t(msg`OK`),
+          text: translate`OK`,
           style: 'default',
           onPress: () => {
             router.back()
@@ -102,10 +101,10 @@ export default function CollectionEditorScreen() {
 
   useEffect(onNonExistentCollection, [
     collection,
-    i18n,
     isDeepLink,
     isFetchingCollection,
     isUpdatingCollection,
+    translate,
   ])
 
   useDeepLinkHandler({
@@ -120,8 +119,8 @@ export default function CollectionEditorScreen() {
         options={{
           presentation: 'fullScreenModal',
           title: isUpdatingCollection
-            ? i18n.t(msg`Edit collection`)
-            : i18n.t(msg`New collection`),
+            ? translate`Edit collection`
+            : translate`New collection`,
         }}
       />
       {(isUpdatingCollection && collection) ||

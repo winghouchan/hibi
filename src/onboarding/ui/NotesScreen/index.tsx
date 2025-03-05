@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { type NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
@@ -13,7 +12,7 @@ import {
 import Layout from '../Layout'
 
 export default function NotesScreen() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
   const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()
   const { mutateAsync: completeOnboarding } = useMutation(
@@ -45,11 +44,11 @@ export default function NotesScreen() {
       })
     } catch (error) {
       Alert.alert(
-        i18n.t(msg`Something went wrong`),
-        i18n.t(msg`There was an error completing onboarding`),
+        translate`Something went wrong`,
+        translate`There was an error completing onboarding`,
         [
           {
-            text: i18n.t(msg`Try again`),
+            text: translate`Try again`,
             style: 'default',
             isPreferred: true,
             onPress: async () => {
@@ -57,7 +56,7 @@ export default function NotesScreen() {
             },
           },
           {
-            text: i18n.t(msg`Cancel`),
+            text: translate`Cancel`,
             style: 'cancel',
           },
         ],
@@ -81,14 +80,14 @@ export default function NotesScreen() {
           <View style={{ gap: 12 }}>
             <Link asChild href="/onboarding/notes/new">
               <Button action="neutral" priority="medium">
-                <Trans component={null}>Add another note</Trans>
+                {translate`Add another note`}
               </Button>
             </Link>
             <Button
               onPress={() => handleCompleteOnboarding()}
               testID="onboarding.notes.cta"
             >
-              <Trans component={null}>Finish</Trans>
+              {translate`Finish`}
             </Button>
           </View>
         ) : (
@@ -97,9 +96,7 @@ export default function NotesScreen() {
             href="/onboarding/notes/new"
             testID="onboarding.notes.new-note"
           >
-            <Button>
-              <Trans component={null}>New note</Trans>
-            </Button>
+            <Button>{translate`New note`}</Button>
           </Link>
         )}
       </Layout.Footer>

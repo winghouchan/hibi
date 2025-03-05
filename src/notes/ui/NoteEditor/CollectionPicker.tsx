@@ -6,7 +6,7 @@ import {
   type BottomSheetModalProps,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
-import { Trans } from '@lingui/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { PropsWithChildren, useRef, useState } from 'react'
 import {
@@ -39,6 +39,7 @@ function Container({ children }: PropsWithChildren) {
 }
 
 export default function CollectionPicker({ onChange, value = [] }: Props) {
+  const { t: translate } = useLingui()
   const [isOpen, setIsOpen] = useState(false)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const dimensions = useWindowDimensions()
@@ -139,7 +140,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
                 size="small"
                 testID="note.note-editor.picker.cancel"
               >
-                <Trans component={null}>Cancel</Trans>
+                {translate`Cancel`}
               </Button>
             </View>
             <View>
@@ -153,7 +154,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
                 size="small"
                 testID="note.note-editor.picker.done"
               >
-                <Trans component={null}>Done</Trans>
+                {translate`Done`}
               </Button>
             </View>
           </View>

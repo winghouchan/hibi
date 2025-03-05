@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import type {
   NavigationProp,
   PartialRoute,
@@ -20,7 +19,7 @@ import { Text } from '@/ui'
 import { collectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const navigation =
     useNavigation<NavigationProp<{ '(tabs)': undefined }>>('/(app)')
   const localSearchParams = useLocalSearchParams<{ id: string }>()
@@ -31,9 +30,9 @@ export default function CollectionScreen() {
 
   useEffect(() => {
     if (!collection && !isFetchingCollection) {
-      Alert.alert(i18n.t(msg`The collection doesn't exist`), '', [
+      Alert.alert(translate`The collection doesn't exist`, '', [
         {
-          text: i18n.t(msg`OK`),
+          text: translate`OK`,
           style: 'default',
           onPress: () => {
             router.back()
@@ -41,7 +40,7 @@ export default function CollectionScreen() {
         },
       ])
     }
-  }, [collection, i18n, isFetchingCollection])
+  }, [collection, isFetchingCollection, translate])
 
   useFocusEffect(() => {
     const state = navigation.getState()

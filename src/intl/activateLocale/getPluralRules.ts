@@ -1,4 +1,4 @@
-export default function getPluralRules(locale: string): {} | undefined {
+export default function getPluralRules(locale: string): object | undefined {
   /**
    * Dynamic imports with paths determined at runtime are not supported by the
    * bundler (Metro). `require.context` is an experimental API that provides the

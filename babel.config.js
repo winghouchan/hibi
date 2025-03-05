@@ -29,7 +29,7 @@ module.exports = function (api) {
        *
        * @see {@link https://lingui.dev/ref/macro}
        */
-      'macros',
+      '@lingui/babel-plugin-lingui-macro',
 
       ...(api.env((name) => name !== 'test')
         ? // Only apply the following configuration when `NODE_ENV` is not `'test'`

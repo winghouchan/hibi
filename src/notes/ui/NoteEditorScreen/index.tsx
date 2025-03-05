@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import type {
   NavigationProp,
   PartialRoute,
@@ -22,7 +21,7 @@ import styles from './styles'
 import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
 export default function NoteEditorScreen() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const localSearchParams = useLocalSearchParams<{
     id?: string
     collections: string
@@ -62,8 +61,8 @@ export default function NoteEditorScreen() {
     const action = (isUpdatingNote ? updateNote : createNote) as Action
 
     const errorMessage = isUpdatingNote
-      ? i18n.t(msg`There was an error updating the note`)
-      : i18n.t(msg`There was an error creating the note`)
+      ? translate`There was an error updating the note`
+      : translate`There was an error creating the note`
 
     const handlers: Parameters<Action>[1] = {
       async onSuccess({ id, collections }) {
@@ -128,9 +127,9 @@ export default function NoteEditorScreen() {
         }
       },
       onError(error: Error) {
-        Alert.alert(i18n.t(msg`Something went wrong`), errorMessage, [
+        Alert.alert(translate`Something went wrong`, errorMessage, [
           {
-            text: i18n.t(msg`Try again`),
+            text: translate`Try again`,
             style: 'default',
             isPreferred: true,
             onPress: async () => {
@@ -138,7 +137,7 @@ export default function NoteEditorScreen() {
             },
           },
           {
-            text: i18n.t(msg`Cancel`),
+            text: translate`Cancel`,
             style: 'cancel',
           },
         ])
@@ -155,9 +154,9 @@ export default function NoteEditorScreen() {
 
   const onNonExistentNote = () => {
     if (!note && !isFetchingNote && isUpdatingNote && !isDeepLink) {
-      Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
+      Alert.alert(translate`The note doesn't exist`, '', [
         {
-          text: i18n.t(msg`OK`),
+          text: translate`OK`,
           style: 'default',
           onPress: () => {
             router.back()
@@ -175,20 +174,16 @@ export default function NoteEditorScreen() {
       size="small"
       testID="note.note-editor.cta"
     >
-      {isUpdatingNote ? (
-        <Trans component={null}>Update</Trans>
-      ) : (
-        <Trans component={null}>Add</Trans>
-      )}
+      {isUpdatingNote ? translate`Update` : translate`Add`}
     </Button>
   )
 
   useEffect(onNonExistentNote, [
-    i18n,
     isDeepLink,
     isFetchingNote,
     isUpdatingNote,
     note,
+    translate,
   ])
 
   useDeepLinkHandler({

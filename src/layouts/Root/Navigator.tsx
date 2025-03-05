@@ -1,5 +1,5 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
+
 import { useQuery } from '@tanstack/react-query'
 import { SplashScreen, Stack } from 'expo-router'
 import { ComponentProps, useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import { log } from '@/telemetry'
 type StackProps = ComponentProps<typeof Stack>
 
 export default function Navigator() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { isSuccess: hasCheckedOnboardingState } = useQuery(
     isOnboardingCompleteQuery,
   )
@@ -62,7 +62,7 @@ export default function Navigator() {
       <Stack.Screen
         name="storybook"
         options={({ navigation }) => ({
-          title: i18n.t(msg`Storybook`),
+          title: translate`Storybook`,
           presentation: 'fullScreenModal',
           headerShown: true,
           headerLeft: ({ canGoBack }) =>

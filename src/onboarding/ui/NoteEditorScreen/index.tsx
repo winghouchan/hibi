@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { ComponentRef, useEffect, useRef } from 'react'
@@ -13,7 +12,7 @@ import useForm from './useForm'
 
 export default function NoteEditorScreen() {
   const noteEditorRef = useRef<ComponentRef<typeof NoteEditor>>(null)
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
   const router = useRouter()
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
@@ -30,18 +29,18 @@ export default function NoteEditorScreen() {
     onSubmitError: (error, retry) => {
       const errorMessage =
         typeof note?.id === 'undefined'
-          ? i18n.t(msg`There was an error creating the note`)
-          : i18n.t(msg`There was an error updating the note`)
+          ? translate`There was an error creating the note`
+          : translate`There was an error updating the note`
 
-      Alert.alert(i18n.t(msg`Something went wrong`), errorMessage, [
+      Alert.alert(translate`Something went wrong`, errorMessage, [
         {
-          text: i18n.t(msg`Try again`),
+          text: translate`Try again`,
           style: 'default',
           isPreferred: true,
           onPress: retry,
         },
         {
-          text: i18n.t(msg`Cancel`),
+          text: translate`Cancel`,
           style: 'cancel',
         },
       ])
@@ -56,11 +55,7 @@ export default function NoteEditorScreen() {
       size="small"
       testID="onboarding.note-editor.cta"
     >
-      {typeof note?.id === 'undefined' ? (
-        <Trans component={null}>Add</Trans>
-      ) : (
-        <Trans component={null}>Update</Trans>
-      )}
+      {typeof note?.id === 'undefined' ? translate`Add` : translate`Update`}
     </Button>
   )
 
@@ -71,9 +66,9 @@ export default function NoteEditorScreen() {
       !isFetchingNote &&
       note === null
     ) {
-      Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
+      Alert.alert(translate`The note doesn't exist`, '', [
         {
-          text: i18n.t(msg`OK`),
+          text: translate`OK`,
           style: 'default',
           onPress: () => {
             router.back()
@@ -81,7 +76,7 @@ export default function NoteEditorScreen() {
         },
       ])
     }
-  }, [collection, i18n, isFetchingNote, note, noteId, router])
+  }, [collection, isFetchingNote, note, noteId, router, translate])
 
   return collection && !isFetchingCollection ? (
     <>

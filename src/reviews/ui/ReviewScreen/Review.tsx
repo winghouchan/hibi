@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Alert, View } from 'react-native'
@@ -15,7 +14,7 @@ interface Props
 }
 
 export default function Review({ id, fields, onReview }: Props) {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { mutateAsync: review } = useMutation(createReviewMutation)
   const [side, setSide] = useState(0)
   const { duration, stop } = useTimer({ start: true })
@@ -36,11 +35,11 @@ export default function Review({ id, fields, onReview }: Props) {
         onReview?.()
       } catch (error) {
         Alert.alert(
-          i18n.t(msg`Something went wrong`),
-          i18n.t(msg`There was an error submitting your review`),
+          translate`Something went wrong`,
+          translate`There was an error submitting your review`,
           [
             {
-              text: i18n.t(msg`Try again`),
+              text: translate`Try again`,
               style: 'default',
               isPreferred: true,
               onPress: async () => {
@@ -48,7 +47,7 @@ export default function Review({ id, fields, onReview }: Props) {
               },
             },
             {
-              text: i18n.t(msg`Cancel`),
+              text: translate`Cancel`,
               style: 'cancel',
             },
           ],
@@ -62,7 +61,7 @@ export default function Review({ id, fields, onReview }: Props) {
       <Text>{JSON.stringify(fields[side], null, 2)}</Text>
       {side === 0 && (
         <Button onPress={showAnswer} testID="review.show-answer">
-          <Trans component={null}>Show answer</Trans>
+          {translate`Show answer`}
         </Button>
       )}
       {side === 1 && (
@@ -73,7 +72,7 @@ export default function Review({ id, fields, onReview }: Props) {
             onPress={createReviewHandler(Rating.Again)}
             testID="review.rate.forgot"
           >
-            <Trans component={null}>Forgot</Trans>
+            {translate`Forgot`}
           </Button>
           <Button
             action="neutral"
@@ -81,7 +80,7 @@ export default function Review({ id, fields, onReview }: Props) {
             onPress={createReviewHandler(Rating.Hard)}
             testID="review.rate.hard"
           >
-            <Trans component={null}>Hard</Trans>
+            {translate`Hard`}
           </Button>
           <Button
             action="neutral"
@@ -89,7 +88,7 @@ export default function Review({ id, fields, onReview }: Props) {
             onPress={createReviewHandler(Rating.Good)}
             testID="review.rate.good"
           >
-            <Trans component={null}>Good</Trans>
+            {translate`Good`}
           </Button>
           <Button
             action="neutral"
@@ -97,7 +96,7 @@ export default function Review({ id, fields, onReview }: Props) {
             onPress={createReviewHandler(Rating.Easy)}
             testID="review.rate.easy"
           >
-            <Trans component={null}>Easy</Trans>
+            {translate`Easy`}
           </Button>
         </View>
       )}

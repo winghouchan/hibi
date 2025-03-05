@@ -1,23 +1,22 @@
-import { msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { Tabs } from 'expo-router'
 
 export default function TabLayout() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
 
   return (
     <Tabs>
       <Tabs.Screen
         name="index"
         options={{
-          title: i18n.t(msg`Home`),
+          title: translate`Home`,
           tabBarButtonTestID: 'tab.home.button',
         }}
       />
       <Tabs.Screen
         name="library/index"
         options={{
-          title: i18n.t(msg`Library`),
+          title: translate`Library`,
           tabBarButtonTestID: 'tab.library.button',
         }}
       ></Tabs.Screen>

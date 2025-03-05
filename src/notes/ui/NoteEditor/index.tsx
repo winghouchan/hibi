@@ -1,5 +1,4 @@
-import { msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { type FormikConfig, useFormik } from 'formik'
 import {
@@ -35,7 +34,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
   ref,
 ) {
   const headerHeight = useHeaderHeight()
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const richTextInputRefs = useRef<
     (ComponentRef<typeof RichTextInput> | null)[]
   >([])
@@ -115,7 +114,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
           key={side}
           name={`fields.${side}`}
           onChange={onChange}
-          placeholder={side === 0 ? i18n.t(msg`Front`) : i18n.t(msg`Back`)}
+          placeholder={side === 0 ? translate`Front` : translate`Back`}
           ref={(ref) => {
             richTextInputRefs.current[side] = ref
           }}
@@ -138,7 +137,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
           value={values.collections}
         />
         <Switch
-          label={i18n.t(msg`Reversible`)}
+          label={translate`Reversible`}
           onValueChange={(value) => {
             setFieldValue('config.reversible', value)
           }}
@@ -146,7 +145,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
           value={values.config.reversible}
         />
         <Switch
-          label={i18n.t(msg`Separable`)}
+          label={translate`Separable`}
           onValueChange={(value) => {
             setFieldValue('config.separable', value)
           }}

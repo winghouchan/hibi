@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Redirect } from 'expo-router'
 import { Button } from '@/ui'
@@ -7,6 +7,7 @@ import Layout from '../Layout'
 import style from './style'
 
 export default function WelcomeScreen() {
+  const { t: translate } = useLingui()
   const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
 
   if (isOnboardingComplete) {
@@ -24,9 +25,7 @@ export default function WelcomeScreen() {
           testID="onboarding.welcome.cta"
           asChild
         >
-          <Button>
-            <Trans component={null}>Start</Trans>
-          </Button>
+          <Button>{translate`Start`}</Button>
         </Link>
       </Layout.Footer>
     </Layout>

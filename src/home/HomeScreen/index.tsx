@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import { View } from 'react-native'

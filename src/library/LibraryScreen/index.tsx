@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Tabs } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
@@ -12,6 +12,7 @@ function NoCollections() {
 }
 
 export default function LibraryScreen() {
+  const { t: translate } = useLingui()
   const createMenuRef = useRef<ComponentRef<typeof CreateMenu>>(null)
   const { data: collections } = useQuery(collectionsQuery())
 
@@ -30,7 +31,7 @@ export default function LibraryScreen() {
                 }}
                 size="small"
               >
-                <Trans component={null}>➕</Trans>
+                {translate`➕`}
               </Button>
             </View>
           ),

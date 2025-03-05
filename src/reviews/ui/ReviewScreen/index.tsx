@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigation } from 'expo-router'
 import { useEffect, useRef } from 'react'

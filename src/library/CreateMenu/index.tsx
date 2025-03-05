@@ -3,7 +3,7 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Link } from 'expo-router'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { LogBox } from 'react-native'

@@ -1,5 +1,4 @@
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
@@ -8,7 +7,7 @@ import { Text } from '@/ui'
 import { noteQuery } from '../../operations'
 
 export default function NoteScreen() {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
   const { data: note, isPending: isNotePending } = useQuery(
     noteQuery(Number(noteId)),
@@ -16,9 +15,9 @@ export default function NoteScreen() {
 
   useEffect(() => {
     if (!note && !isNotePending) {
-      Alert.alert(i18n.t(msg`The note doesn't exist`), '', [
+      Alert.alert(translate`The note doesn't exist`, '', [
         {
-          text: i18n.t(msg`OK`),
+          text: translate`OK`,
           style: 'default',
           onPress: () => {
             router.back()
@@ -26,7 +25,7 @@ export default function NoteScreen() {
         },
       ])
     }
-  }, [i18n, isNotePending, note])
+  }, [isNotePending, note, translate])
 
   return (
     <>

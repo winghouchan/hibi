@@ -1,5 +1,4 @@
-import { msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import {
   DefaultError,
   QueryCache,
@@ -15,18 +14,18 @@ interface DataProviderProps
   extends Pick<QueryClientProviderProps, 'children'> {}
 
 export default function DataProvider({ children }: DataProviderProps) {
-  const { i18n } = useLingui()
+  const { t: translate } = useLingui()
   const [client] = useState(
     () =>
       new QueryClient({
         queryCache: new QueryCache({
           onError: (error: DefaultError & { title?: string }, query) => {
             Alert.alert(
-              error.title ? error.title : i18n.t(msg`Something went wrong`),
+              error.title ? error.title : translate`Something went wrong`,
               error.message,
               [
                 {
-                  text: i18n.t(msg`Try again`),
+                  text: translate`Try again`,
                   style: 'default',
                   isPreferred: true,
                   onPress: () => {
@@ -34,7 +33,7 @@ export default function DataProvider({ children }: DataProviderProps) {
                   },
                 },
                 {
-                  text: i18n.t(msg`Cancel`),
+                  text: translate`Cancel`,
                   style: 'cancel',
                 },
               ],
