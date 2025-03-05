@@ -1,0 +1,37 @@
+import { Meta, Typeset } from '@storybook/blocks'
+import { text } from './typography'
+
+<Meta title="Theme / Typography" />
+
+# Typography
+
+export const sampleText = {
+  heading: 'Heading',
+  subheading: 'This is a subheading',
+  body: 'This is body text. This is body text. This is body text. This is body text. This is body text.',
+  label: 'This is a label',
+}
+
+<div>
+  {Object.entries(text).map(([key, value]) => (
+    <>
+      <h2>
+        {key.slice(0, 1).toUpperCase()}
+        {key.slice(1).toLowerCase()}
+      </h2>
+      <Typeset
+        fontSizes={
+          'fontSize' in value
+            ? [value.fontSize]
+            : Object.values(value).map(({ fontSize }) => fontSize)
+        }
+        fontWeight={
+          'fontWeight' in value
+            ? value.fontWeight
+            : Object.values(value)[0].fontWeight
+        }
+        sampleText={sampleText[key]}
+      />
+    </>
+  ))}
+</div>

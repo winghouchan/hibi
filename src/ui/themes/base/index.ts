@@ -1,8 +1,6 @@
+import * as typography from './typography'
+
 const borderWidths = [0, 1, 2, 4] as const
-
-const fontSizes = [12, 14, 16, 18, 20, 24, 28, 32, 36] as const
-
-const fontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900] as const
 
 const radii = [0, 4, 8, 12, 16, 20, 24, 28, 999, '50%'] as const
 
@@ -30,9 +28,8 @@ const boxShadows = [
 export default {
   borderWidths,
   boxShadows,
-  fontSizes,
-  fontWeights,
   radii,
   sizes,
   spacing,
+  ...typography,
 }

@@ -5,7 +5,7 @@ import { StyleSheet, UnistylesVariants } from 'react-native-unistyles'
 type Ref = NativeText
 type Props = TextProps & UnistylesVariants<typeof styles>
 
-const styles = StyleSheet.create(({ colors, fontSizes, fontWeights }) => ({
+const styles = StyleSheet.create(({ colors, text }) => ({
   text: {
     textAlign: 'center',
 
@@ -31,16 +31,13 @@ const styles = StyleSheet.create(({ colors, fontSizes, fontWeights }) => ({
       },
       size: {
         small: {
-          fontSize: fontSizes[1],
-          fontWeight: fontWeights[5],
+          ...text.label.small,
         },
         medium: {
-          fontSize: fontSizes[2],
-          fontWeight: fontWeights[5],
+          ...text.label.medium,
         },
         default: {
-          fontSize: fontSizes[2],
-          fontWeight: fontWeights[5],
+          ...text.label.large,
         },
       },
     },

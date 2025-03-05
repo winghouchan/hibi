@@ -10,7 +10,7 @@ type Props = ComponentProps<typeof TextInput> & {
   label?: string
 }
 
-const styles = StyleSheet.create(({ colors, fontWeights, spacing }) => ({
+const styles = StyleSheet.create(({ colors, spacing, text }) => ({
   view: {
     gap: spacing[2],
     width: '100%',
@@ -18,7 +18,7 @@ const styles = StyleSheet.create(({ colors, fontWeights, spacing }) => ({
 
   error: {
     color: colors.danger[1].foreground,
-    fontWeight: fontWeights[5],
+    ...text.label.medium,
   },
 
   input: {
