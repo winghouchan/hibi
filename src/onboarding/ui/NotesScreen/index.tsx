@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { Alert, View } from 'react-native'
 import { log } from '@/telemetry'
-import { Button } from '@/ui'
+import { Button, Text } from '@/ui'
 import {
   completeOnboardingMutation,
   onboardingCollectionQuery,
@@ -69,6 +69,7 @@ export default function NotesScreen() {
   return collection && !isFetching ? (
     <Layout testID="onboarding.notes.screen">
       <Layout.Main>
+        <Text size="heading">{translate`What do you want to remember?`}</Text>
         {collection.notes.map((note) => (
           <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
             {JSON.stringify(note, null, 2)}
