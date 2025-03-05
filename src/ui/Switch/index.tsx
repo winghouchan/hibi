@@ -1,6 +1,7 @@
 import * as Haptics from 'expo-haptics'
 import { useState } from 'react'
-import { Pressable, SwitchProps, Text, View } from 'react-native'
+import { Pressable, SwitchProps, View } from 'react-native'
+import Text from '../Text'
 import styles from './styles'
 
 interface Props
