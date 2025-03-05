@@ -7,6 +7,7 @@ const styles = StyleSheet.create((theme, { insets }) => ({
   },
 
   contentContainer: {
+    gap: theme.spacing[2],
     paddingTop: theme.spacing[2],
     paddingLeft: insets.left + theme.spacing[4],
     paddingRight: insets.right + theme.spacing[4],

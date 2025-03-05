@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
 import { object, string } from 'yup'
-import { Button, TextField } from '@/ui'
+import { Button, Text, TextField } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 import Layout from '../Layout'
 import useForm from './useForm'
@@ -69,7 +69,9 @@ export default function CollectionScreen() {
   return (
     <Layout testID="onboarding.collection.screen">
       <Layout.Main>
-        <Trans>What are you learning?</Trans>
+        <Text size="heading">
+          <Trans component={null}>What are you learning?</Trans>
+        </Text>
         <TextField
           accessibilityLabel={i18n.t(msg`Enter a collection name`)}
           autoFocus
