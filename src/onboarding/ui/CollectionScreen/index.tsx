@@ -10,6 +10,15 @@ import Layout from '../Layout'
 import useForm from './useForm'
 
 export default function CollectionScreen() {
+  /**
+   * Works around an issue where focusing on the text input does not cause the
+   * `Layout` component to adjust the layout to avoid the keyboard.
+   *
+   * @see {@link https://github.com/jpudysz/react-native-unistyles/issues/368}
+   */
+  // eslint-disable-next-line react-compiler/react-compiler
+  'use no memo'
+
   const { i18n } = useLingui()
   const { data: collection } = useQuery(onboardingCollectionQuery)
 
