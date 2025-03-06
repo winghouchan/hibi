@@ -33,3 +33,8 @@ export const withUnistyles = jest.fn(
       return <Component {...mappedProps} {...(props ?? {})} />
     },
 )
+
+export const useUnistyles = jest.fn(() => ({
+  theme: themes.light,
+  rt: runtimeMock,
+}))

@@ -1,9 +1,10 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { SplashScreen, Stack } from 'expo-router'
 import { ComponentProps, useEffect, useState } from 'react'
 import { Platform, Pressable } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { log } from '@/telemetry'
 
@@ -11,6 +12,7 @@ type StackProps = ComponentProps<typeof Stack>
 
 export default function Navigator() {
   const { t: translate } = useLingui()
+  const { theme } = useUnistyles()
   const { isSuccess: hasCheckedOnboardingState } = useQuery(
     isOnboardingCompleteQuery,
   )
@@ -55,27 +57,37 @@ export default function Navigator() {
     }
   }
 
+  const navigatorTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: theme.colors.neutral[0].background,
+    },
+  }
+
   useEffect(hideSplashScreen, [hasCheckedOnboardingState, isNavigatorReady])
 
   return (
-    <Stack screenListeners={screenListeners} screenOptions={screenOptions}>
-      <Stack.Screen
-        name="storybook"
-        options={({ navigation }) => ({
-          title: translate`Storybook`,
-          presentation: 'fullScreenModal',
-          headerShown: true,
-          headerLeft: ({ canGoBack }) =>
-            canGoBack ? (
-              <Pressable
-                accessibilityRole="button"
-                onPress={() => navigation.goBack()}
-              >
-                <Trans>Close</Trans>
-              </Pressable>
-            ) : null,
-        })}
-      />
-    </Stack>
+    <ThemeProvider value={navigatorTheme}>
+      <Stack screenListeners={screenListeners} screenOptions={screenOptions}>
+        <Stack.Screen
+          name="storybook"
+          options={({ navigation }) => ({
+            title: translate`Storybook`,
+            presentation: 'fullScreenModal',
+            headerShown: true,
+            headerLeft: ({ canGoBack }) =>
+              canGoBack ? (
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() => navigation.goBack()}
+                >
+                  <Trans>Close</Trans>
+                </Pressable>
+              ) : null,
+          })}
+        />
+      </Stack>
+    </ThemeProvider>
   )
 }

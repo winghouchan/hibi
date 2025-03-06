@@ -3,7 +3,7 @@ import * as colors from '../../tokens/colors'
 export default {
   neutral: [
     {
-      background: colors.white,
+      background: colors.neutral[0],
       foreground: colors.neutral[10],
       border: [colors.neutral[3], colors.neutral[5]],
     },
