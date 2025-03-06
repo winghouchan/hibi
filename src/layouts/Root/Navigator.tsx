@@ -37,10 +37,14 @@ export default function Navigator() {
       /**
        * If the app is opened via a deep link, the screen may be animated in on
        * iOS. As a result, the navigator is inferred to be ready (and the splash
-       * screen hidden) after the transition has ended.
+       * screen hidden) after the transition has ended. The transition end event
+       * may be fired when the animation has not fully complete. As a result, an
+       * additional timeout is applied.
        */
       if (Platform.OS === 'ios' && !isNavigatorReady) {
-        setIsNavigatorReady(true)
+        setTimeout(() => {
+          setIsNavigatorReady(true)
+        }, 400)
       }
     },
   }
