@@ -98,11 +98,11 @@ export default StyleSheet.create(
           priority: 'medium',
           action: 'primary',
           styles: {
-            backgroundColor: colors.neutral.background,
-            borderColor: colors.primary[0].border,
+            backgroundColor: colors.primary[1].background,
+            borderColor: colors.primary[1].border,
             boxShadow: [
               {
-                color: colors.primary[0].shadow,
+                color: colors.primary[1].shadow,
                 ...(pressed ? boxShadows[0] : boxShadows[1]),
               },
             ],
@@ -112,11 +112,11 @@ export default StyleSheet.create(
           priority: 'medium',
           action: 'neutral',
           styles: {
-            backgroundColor: colors.neutral.background,
-            borderColor: colors.secondary[0].border,
+            backgroundColor: colors.secondary[1].background,
+            borderColor: colors.secondary[1].border,
             boxShadow: [
               {
-                color: colors.secondary[0].shadow,
+                color: colors.secondary[1].shadow,
                 ...(pressed ? boxShadows[0] : boxShadows[1]),
               },
             ],
@@ -126,11 +126,11 @@ export default StyleSheet.create(
           priority: 'medium',
           action: 'success',
           styles: {
-            backgroundColor: colors.neutral.background,
-            borderColor: colors.success[0].border,
+            backgroundColor: colors.success[1].background,
+            borderColor: colors.success[1].border,
             boxShadow: [
               {
-                color: colors.success[0].shadow,
+                color: colors.success[1].shadow,
                 ...(pressed ? boxShadows[0] : boxShadows[1]),
               },
             ],
@@ -140,7 +140,7 @@ export default StyleSheet.create(
           priority: 'medium',
           action: 'danger',
           styles: {
-            backgroundColor: colors.neutral.background,
+            backgroundColor: colors.danger[1].background,
             borderColor: colors.danger[1].border,
             boxShadow: [
               {
@@ -155,36 +155,44 @@ export default StyleSheet.create(
           action: 'primary',
           styles: pressed
             ? {
-                backgroundColor: colors.primary[1].background,
+                backgroundColor: colors.primary[2].background[1],
               }
-            : {},
+            : {
+                backgroundColor: colors.primary[2].background[0],
+              },
         },
         {
           priority: 'low',
           action: 'neutral',
           styles: pressed
             ? {
-                backgroundColor: colors.secondary[1].background,
+                backgroundColor: colors.secondary[2].background[1],
               }
-            : {},
+            : {
+                backgroundColor: colors.secondary[2].background[0],
+              },
         },
         {
           priority: 'low',
           action: 'success',
           styles: pressed
             ? {
-                backgroundColor: colors.success[1].background,
+                backgroundColor: colors.success[2].background[1],
               }
-            : {},
+            : {
+                backgroundColor: colors.success[2].background[0],
+              },
         },
         {
           priority: 'low',
           action: 'danger',
           styles: pressed
             ? {
-                backgroundColor: colors.danger[2].background,
+                backgroundColor: colors.danger[2].background[1],
               }
-            : {},
+            : {
+                backgroundColor: colors.danger[2].background[0],
+              },
         },
       ],
     }),

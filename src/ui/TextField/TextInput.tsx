@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native-unistyles'
 const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing, text }) => ({
     input: {
-      borderColor: colors.neutral.border[0],
+      borderColor: colors.neutral[0].border[0],
       borderRadius: radii[4],
       borderWidth: borderWidths[2],
       padding: spacing[4],
@@ -16,7 +16,7 @@ const styles = StyleSheet.create(
       variants: {
         focused: {
           true: {
-            borderColor: colors.neutral.border[1],
+            borderColor: colors.neutral[0].border[1],
           },
         },
       },

@@ -20,7 +20,7 @@ const progress = {
 }
 
 const BackIcon = withUnistyles(Icon, (theme) => ({
-  color: theme.colors.neutral.foreground,
+  color: theme.colors.neutral[0].foreground,
 }))
 
 export default function Header({

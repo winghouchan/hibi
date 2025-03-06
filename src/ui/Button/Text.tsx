@@ -11,12 +11,8 @@ const styles = StyleSheet.create(({ colors, text }) => ({
 
     variants: {
       priority: {
-        high: {
-          color: colors.primary[0].foreground,
-        },
-        medium: {
-          color: colors.neutral.foreground,
-        },
+        high: {},
+        medium: {},
         low: {},
       },
       action: {
@@ -45,9 +41,30 @@ const styles = StyleSheet.create(({ colors, text }) => ({
     compoundVariants: [
       {
         priority: 'high',
+        action: 'primary',
+        styles: {
+          color: colors.primary[0].foreground,
+        },
+      },
+      {
+        priority: 'high',
         action: 'neutral',
         styles: {
           color: colors.secondary[0].foreground,
+        },
+      },
+      {
+        priority: 'high',
+        action: 'success',
+        styles: {
+          color: colors.success[0].foreground,
+        },
+      },
+      {
+        priority: 'high',
+        action: 'danger',
+        styles: {
+          color: colors.danger[0].foreground,
         },
       },
       {
@@ -61,7 +78,7 @@ const styles = StyleSheet.create(({ colors, text }) => ({
         priority: 'medium',
         action: 'neutral',
         styles: {
-          color: colors.secondary[0].foreground,
+          color: colors.secondary[1].foreground,
         },
       },
       {
@@ -75,7 +92,7 @@ const styles = StyleSheet.create(({ colors, text }) => ({
         priority: 'medium',
         action: 'danger',
         styles: {
-          color: colors.danger[0].background,
+          color: colors.danger[1].foreground,
         },
       },
       {
@@ -89,21 +106,21 @@ const styles = StyleSheet.create(({ colors, text }) => ({
         priority: 'low',
         action: 'neutral',
         styles: {
-          color: colors.secondary[0].foreground,
+          color: colors.secondary[2].foreground,
         },
       },
       {
         priority: 'low',
         action: 'success',
         styles: {
-          color: colors.success[1].foreground,
+          color: colors.success[2].foreground,
         },
       },
       {
         priority: 'low',
         action: 'danger',
         styles: {
-          color: colors.danger[1].foreground,
+          color: colors.danger[2].foreground,
         },
       },
     ],

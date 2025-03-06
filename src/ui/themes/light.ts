@@ -3,39 +3,51 @@ import * as tokens from '../tokens'
 import base from './base'
 
 const colors = {
-  neutral: {
-    background: tokens.colors.white,
-    foreground: tokens.colors.neutral[10],
-    border: [tokens.colors.neutral[3], tokens.colors.neutral[5]],
-  },
+  neutral: [
+    {
+      background: tokens.colors.white,
+      foreground: tokens.colors.neutral[10],
+      border: [tokens.colors.neutral[3], tokens.colors.neutral[5]],
+    },
+    {
+      background: tokens.colors.neutral[2],
+      foreground: tokens.colors.neutral[0],
+    },
+  ],
   primary: [
     {
       background: tokens.colors.blue[7],
-      foreground: tokens.colors.neutral[1],
+      foreground: tokens.colors.neutral[0],
       shadow: tokens.colors.blue[9],
       border: tokens.colors.blue[9],
     },
     {
-      background: tokens.colors.blue[0],
+      background: tokens.colors.transparent,
       foreground: tokens.colors.blue[9],
+      shadow: tokens.colors.blue[9],
+      border: tokens.colors.blue[9],
     },
     {
+      background: [tokens.colors.transparent, tokens.colors.blue[0]],
       foreground: tokens.colors.blue[8],
     },
   ],
   secondary: [
     {
       background: tokens.colors.neutral[1],
-      foreground: tokens.colors.neutral[8],
+      foreground: tokens.colors.neutral[7],
       shadow: tokens.colors.neutral[3],
       border: tokens.colors.neutral[3],
     },
     {
-      background: tokens.colors.neutral[1],
+      background: tokens.colors.transparent,
+      foreground: tokens.colors.neutral[7],
+      shadow: tokens.colors.neutral[3],
+      border: tokens.colors.neutral[3],
     },
     {
-      background: tokens.colors.neutral[3],
-      foreground: tokens.colors.neutral[1],
+      background: [tokens.colors.transparent, tokens.colors.neutral[2]],
+      foreground: tokens.colors.neutral[8],
     },
   ],
   danger: [
@@ -52,7 +64,8 @@ const colors = {
       shadow: tokens.colors.red[7],
     },
     {
-      background: tokens.colors.red[0],
+      background: [tokens.colors.transparent, tokens.colors.red[0]],
+      foreground: tokens.colors.red[7],
     },
   ],
   success: [
@@ -63,7 +76,13 @@ const colors = {
       border: tokens.colors.green[8],
     },
     {
-      background: tokens.colors.green[0],
+      background: tokens.colors.transparent,
+      foreground: tokens.colors.green[8],
+      shadow: tokens.colors.green[8],
+      border: tokens.colors.green[8],
+    },
+    {
+      background: [tokens.colors.transparent, tokens.colors.green[0]],
       foreground: tokens.colors.green[8],
     },
   ],
