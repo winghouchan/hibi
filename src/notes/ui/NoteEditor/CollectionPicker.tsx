@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FullWindowOverlay } from 'react-native-screens'
 import { collectionsQuery } from '@/collections/operations'
 import { Button, Text } from '@/ui'
+import styles from './CollectionPicker.styles'
 
 interface Props {
   onChange?: (value: number[]) => void
@@ -113,25 +114,20 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
          */
         accessible={false}
         backdropComponent={Backdrop}
+        backgroundStyle={styles.background}
         containerComponent={Container}
         enableDynamicSizing={false}
+        handleStyle={styles.handle}
         onChange={onSheetChange}
+        overDragResistanceFactor={0}
         ref={bottomSheetModalRef}
         snapPoints={[
           dimensions.height / 2 + safeAreaInsets.top,
           dimensions.height - safeAreaInsets.top,
         ]}
-        overDragResistanceFactor={0}
       >
-        <BottomSheetView style={{ flex: 1 }}>
-          <View
-            style={{
-              alignItems: 'baseline',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 16,
-            }}
-          >
+        <BottomSheetView style={styles.sheet}>
+          <View style={styles.header}>
             <View>
               <Button
                 action="neutral"
@@ -174,7 +170,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
                 <Text>{selected[id] && '✅'}</Text>
               </Pressable>
             )}
-            style={{ flex: 1 }}
+            style={styles.list}
             testID="note.note-editor.picker.list"
           />
         </BottomSheetView>
