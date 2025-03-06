@@ -1,0 +1,55 @@
+import { ColorItem, ColorPalette, Meta } from '@storybook/blocks'
+import chroma from 'chroma-js'
+import theme from './light'
+
+export function toOklch(color) {
+  return `oklch(${chroma(color)
+    .oklch()
+    .map((value) => (isNaN(value) ? (0).toFixed(3) : value.toFixed(3)))
+    .join(' ')})`
+}
+
+export function createPalette(colors) {
+  return Object.entries(colors).reduce(
+    (palette, [key, value]) => ({
+      ...palette,
+      ...(Array.isArray(value)
+        ? value.reduce(
+            (values, subvalue, index) => ({
+              ...values,
+              [`${key}.${index}`]: toOklch(subvalue),
+            }),
+            {},
+          )
+        : { [key]: toOklch(value) }),
+    }),
+    {},
+  )
+}
+
+export const ordinals = ['Primary', 'Secondary', 'Tertiary']
+
+<Meta title="Theme / Colors" />
+
+# Colors
+
+<ColorPalette>
+  {Object.entries(theme.colors).map(([key, value]) => (
+    <>
+      <h2>
+        {key.slice(0, 1).toUpperCase()}
+        {key.slice(1).toLowerCase()}
+      </h2>
+      {Array.isArray(value) ? (
+        value.map((subvalues, index) => (
+          <ColorItem
+            title={ordinals[index]}
+            colors={createPalette(subvalues)}
+          />
+        ))
+      ) : (
+        <ColorItem title={ordinals[0]} colors={createPalette(value)} />
+      )}
+    </>
+  ))}
+</ColorPalette>
