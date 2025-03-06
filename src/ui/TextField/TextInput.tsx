@@ -8,6 +8,7 @@ const styles = StyleSheet.create(
       borderColor: colors.neutral[0].border[0],
       borderRadius: radii[4],
       borderWidth: borderWidths[2],
+      color: colors.neutral[0].foreground,
       padding: spacing[4],
       width: '100%',
 
