@@ -21,6 +21,7 @@ const progress = {
 
 const BackIcon = withUnistyles(Icon, (theme) => ({
   color: theme.colors.neutral[0].foreground,
+  size: 28,
 }))
 
 export default function Header({
@@ -44,7 +45,6 @@ export default function Header({
         >
           <BackIcon
             name={textDirection === 'rtl' ? 'arrow-right' : 'arrow-left'}
-            size={32}
           />
         </Pressable>
       </View>
