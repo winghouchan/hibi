@@ -2,6 +2,11 @@
   "name": "hibi",
   "main": "index.js",
   "version": "0.1.0",
+  "license": "AGPL-3.0-or-later",
+  "author": {
+    "email": "hello@wii.ng",
+    "name": "Wing-Hou Chan"
+  },
   "scripts": {
     "build:android:test": "yarn build:android:test:debug",
     "build:android:test:base": "cd android && ./gradlew assembleAndroidTest",
