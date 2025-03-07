@@ -1,5 +1,9 @@
-import { ScrollView, ScrollViewProps } from 'react-native'
+import { ScrollView, ScrollViewProps, View, ViewProps } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
+
+type Props =
+  | ({ scrollable?: true } & ScrollViewProps)
+  | ({ scrollable: false } & ViewProps)
 
 const styles = StyleSheet.create((theme, { insets }) => ({
   view: {
@@ -15,17 +19,26 @@ const styles = StyleSheet.create((theme, { insets }) => ({
   },
 }))
 
-export default function Main({
-  contentContainerStyle,
-  style,
-  ...props
-}: ScrollViewProps) {
-  return (
-    <ScrollView
-      alwaysBounceVertical={false}
-      contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
-      style={[styles.view, style]}
-      {...props}
-    />
-  )
+function isScrollView(
+  scrollable: boolean,
+  props: ScrollViewProps | ViewProps,
+): props is ScrollViewProps {
+  return scrollable
+}
+
+export default function Main({ scrollable = true, style, ...props }: Props) {
+  if (isScrollView(scrollable, props)) {
+    const { contentContainerStyle, ...scrollViewProps } = props
+
+    return (
+      <ScrollView
+        alwaysBounceVertical={false}
+        contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
+        style={[styles.view, style]}
+        {...scrollViewProps}
+      />
+    )
+  } else {
+    return <View style={[styles.view, style]} {...props} />
+  }
 }

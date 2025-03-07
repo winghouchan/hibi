@@ -3,6 +3,7 @@ import { type NavigationProp } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { Alert, View } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 import { log } from '@/telemetry'
 import { Button, Text } from '@/ui'
 import {
@@ -10,6 +11,14 @@ import {
   onboardingCollectionQuery,
 } from '../../operations'
 import Layout from '../Layout'
+import List from './List'
+
+const styles = StyleSheet.create(({ spacing }, { insets }) => ({
+  padding: {
+    paddingLeft: insets.left + spacing[4],
+    paddingRight: insets.right + spacing[4],
+  },
+}))
 
 export default function NotesScreen() {
   const { t: translate } = useLingui()
@@ -68,13 +77,12 @@ export default function NotesScreen() {
 
   return collection && !isFetching ? (
     <Layout testID="onboarding.notes.screen">
-      <Layout.Main>
-        <Text size="heading">{translate`What do you want to remember?`}</Text>
-        {collection.notes.map((note) => (
-          <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
-            {JSON.stringify(note, null, 2)}
-          </Link>
-        ))}
+      <Layout.Main scrollable={false}>
+        <Text
+          size="heading"
+          style={styles.padding}
+        >{translate`What do you want to remember?`}</Text>
+        <List data={collection.notes} />
       </Layout.Main>
       <Layout.Footer>
         {collection.notes.length ? (
