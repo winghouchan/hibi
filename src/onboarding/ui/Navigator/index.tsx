@@ -146,18 +146,12 @@ export default function OnboardingNavigator() {
   if (isOnboardingComplete === false) {
     return (
       <Stack
-        layout={({ children, navigation, state }) => {
-          const currentRoute = state.routes[state.index]
-
-          return (
-            <View style={{ flex: 1 }}>
-              {!['notes/[id]/edit', 'notes/new'].includes(
-                currentRoute.name,
-              ) && <Header navigation={navigation} state={state} />}
-              {children}
-            </View>
-          )
-        }}
+        layout={({ children, navigation, state }) => (
+          <View style={{ flex: 1 }}>
+            <Header navigation={navigation} state={state} />
+            {children}
+          </View>
+        )}
         screenOptions={{
           headerShown: false,
         }}
