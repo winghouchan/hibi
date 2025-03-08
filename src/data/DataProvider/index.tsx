@@ -1,3 +1,4 @@
+import { useReactQueryDevTools } from '@dev-plugins/react-query'
 import { useLingui } from '@lingui/react/macro'
 import {
   DefaultError,
@@ -70,6 +71,8 @@ export default function DataProvider({ children }: DataProviderProps) {
         }),
       }),
   )
+
+  useReactQueryDevTools(client)
 
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
