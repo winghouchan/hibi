@@ -1,11 +1,26 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { Link, Tabs } from 'expo-router'
+import { Link } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
 import { FlatList, View } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 import { collectionsQuery } from '@/collections/operations'
 import { Button, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
+
+const styles = StyleSheet.create(({ spacing }, { insets }) => ({
+  screen: {
+    flex: 1,
+    paddingTop: insets.top,
+  },
+
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing[4],
+  },
+}))
 
 function NoCollections() {
   return <Trans>No collections</Trans>
@@ -18,27 +33,24 @@ export default function LibraryScreen() {
 
   return (
     <>
-      <Tabs.Screen
-        options={{
-          headerRight: () => (
-            <View>
-              <Button
-                action="neutral"
-                priority="low"
-                testID="library.create.menu"
-                onPress={() => {
-                  createMenuRef.current?.open()
-                }}
-                size="small"
-              >
-                {translate`➕`}
-              </Button>
-            </View>
-          ),
-        }}
-      />
       <CreateMenu ref={createMenuRef} />
-      <View testID="library.screen" style={{ flex: 1 }}>
+      <View testID="library.screen" style={styles.screen}>
+        <View style={styles.header}>
+          <Text size="heading">{translate`Library`}</Text>
+          <View>
+            <Button
+              action="neutral"
+              priority="low"
+              testID="library.create.menu"
+              onPress={() => {
+                createMenuRef.current?.open()
+              }}
+              size="small"
+            >
+              {translate`➕`}
+            </Button>
+          </View>
+        </View>
         {collections && (
           <FlatList
             data={collections}
