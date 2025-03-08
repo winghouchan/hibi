@@ -34,6 +34,7 @@
     "start:production:analyze-bundle": "EXPO_UNSTABLE_ATLAS=true yarn start:production",
     "start:storybook": "storybook dev --config-dir .storybook/web",
     "test": "NODE_OPTIONS=--disable-warning=DEP0040 jest",
+    "test:coverage": "yarn test --coverage",
     "test:watch": "yarn test --watchAll",
     "test:end-to-end": "./scripts/test/end-to-end.sh",
     "android": "yarn run:android",
