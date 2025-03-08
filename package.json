@@ -33,7 +33,8 @@
     "start:production": "expo start --minify --no-dev",
     "start:production:analyze-bundle": "EXPO_UNSTABLE_ATLAS=true yarn start:production",
     "start:storybook": "storybook dev --config-dir .storybook/web",
-    "test:watch": "NODE_OPTIONS=--disable-warning=DEP0040 jest --watchAll",
+    "test": "NODE_OPTIONS=--disable-warning=DEP0040 jest",
+    "test:watch": "yarn test --watchAll",
     "test:end-to-end": "./scripts/test/end-to-end.sh",
     "android": "yarn run:android",
     "ios": "yarn run:ios"
