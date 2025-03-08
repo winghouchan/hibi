@@ -4,7 +4,7 @@ export default StyleSheet.create((theme) => ({
   track: {
     backgroundColor: theme.colors.secondary[0].shadow,
     borderRadius: theme.radii[3],
-    height: theme.text.body.fontSize,
+    height: theme.text.label.small.fontSize,
     width: '100%',
   },
 
