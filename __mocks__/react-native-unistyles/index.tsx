@@ -30,7 +30,16 @@ export const withUnistyles = jest.fn(
             ? mappings
             : {}
 
-      return <Component {...mappedProps} {...(props ?? {})} />
+      const uniProps =
+        props && 'uniProps' in props
+          ? typeof props.uniProps === 'function'
+            ? props.uniProps(themes.light, runtimeMock)
+            : typeof props.uniProps === 'object' && props.uniProps !== null
+              ? props.uniProps
+              : {}
+          : {}
+
+      return <Component {...mappedProps} {...uniProps} {...(props ?? {})} />
     },
 )
 

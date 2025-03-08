@@ -30,10 +30,11 @@ const SvgXml = withUnistyles(NativeSvgXml)
 export default function Icon({ name, size = 24, ...props }: Props) {
   return (
     <SvgXml
-      xml={feather.icons[name].toSvg({
-        ...Object.entries(props).reduce(kebabCaseProperty, {}),
-      })}
       uniProps={(theme, runtime) => ({
+        xml: feather.icons[name].toSvg({
+          color: theme.colors.neutral[0].foreground,
+          ...Object.entries(props).reduce(kebabCaseProperty, {}),
+        }),
         height: size * runtime.fontScale,
         width: size * runtime.fontScale,
       })}

@@ -3,8 +3,7 @@ import { TabTriggerSlotProps } from 'expo-router/ui'
 import { ComponentProps, forwardRef } from 'react'
 import { Pressable, PressableProps, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
-import { Text } from '@/ui'
-import TabIcon from './Icon'
+import { Icon, Text } from '@/ui'
 
 const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }) => ({
@@ -46,7 +45,7 @@ const styles = StyleSheet.create(
 type Ref = View
 type Props = TabTriggerSlotProps & {
   label: string
-  icon: ComponentProps<typeof TabIcon>['name']
+  icon: ComponentProps<typeof Icon>['name']
 }
 
 export default forwardRef<Ref, Props>(function TabTrigger(
@@ -82,7 +81,7 @@ export default forwardRef<Ref, Props>(function TabTrigger(
       <View style={styles.container}>
         <View style={styles.focusIndicator} />
         <View style={styles.contentContainer}>
-          <TabIcon name={icon} />
+          <Icon name={icon} />
           <Text size="label.small">{label}</Text>
         </View>
       </View>
