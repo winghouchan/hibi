@@ -4,11 +4,13 @@ import { Link } from 'expo-router'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { nextReviewQuery } from '@/reviews/operations'
+import CollectionNavigator from './CollectionNavigator'
 
-const styles = StyleSheet.create((theme, { insets }) => ({
+const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   screen: {
     flex: 1,
-    paddingTop: insets.top,
+    gap: spacing[4],
+    paddingTop: insets.top + spacing[4],
   },
 }))
 
@@ -18,7 +20,7 @@ export default function HomeScreen() {
 
   return (
     <View testID="home.screen" style={styles.screen}>
-      <Trans>Hibi</Trans>
+      <CollectionNavigator />
       {hasDueReview && (
         <Link testID="home.screen.cta.button" href="/review">
           <Trans>Start review</Trans>

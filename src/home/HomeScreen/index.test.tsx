@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import { mockCollections } from '@/collections/test'
 import { mockNextReview, mockNextReviewError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import HomeScreen from '.'
@@ -10,6 +11,9 @@ describe('<HomeScreen />', () => {
     {
       name: 'when there are due reviewables, shows the link to start a review',
       fixture: {
+        collections: [
+          { id: 1, name: 'Collection Name', createdAt: new Date() },
+        ],
         reviewable: {
           id: 1,
           fields: [],
@@ -24,6 +28,9 @@ describe('<HomeScreen />', () => {
     {
       name: 'when there are no due reviewables, does not show the link to start a review',
       fixture: {
+        collections: [
+          { id: 1, name: 'Collection Name', createdAt: new Date() },
+        ],
         reviewable: null,
       },
       expected: async () => {
@@ -34,6 +41,7 @@ describe('<HomeScreen />', () => {
     },
   ])('$name', async ({ expected, fixture }) => {
     mockNextReview(fixture.reviewable)
+    mockCollections(fixture.collections)
 
     renderRouter(
       { index: HomeScreen },
@@ -46,6 +54,7 @@ describe('<HomeScreen />', () => {
   test('when there is an error getting the next review, the user is alerted', async () => {
     const alertSpy = jest.spyOn(Alert, 'alert')
 
+    mockCollections([{ id: 1, name: 'Collection Name', createdAt: new Date() }])
     mockNextReviewError(new Error('Mock Error'))
 
     renderRouter(
