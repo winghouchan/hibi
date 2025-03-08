@@ -27,16 +27,13 @@ export default StyleSheet.create(
         },
         size: {
           small: {
-            paddingBlock: spacing[3],
-            paddingInline: spacing[5],
+            padding: spacing[3],
           },
           medium: {
-            paddingBlock: spacing[4],
-            paddingInline: spacing[7],
+            padding: spacing[4],
           },
           default: {
-            paddingBlock: spacing[4],
-            paddingInline: spacing[7],
+            padding: spacing[4],
           },
         },
       },
