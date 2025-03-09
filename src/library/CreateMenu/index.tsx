@@ -7,7 +7,7 @@ import { Trans } from '@lingui/react/macro'
 import { Link } from 'expo-router'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { LogBox } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import styles from './styles'
 
 /**
  * Ignore error logs for the following deprecated APIs. These are logged when
@@ -24,7 +24,6 @@ export default forwardRef<{
   close: BottomSheetModal['close']
   open: BottomSheetModal['present']
 }>(function CreateMenu(_, ref) {
-  const safeAreaInsets = useSafeAreaInsets()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const close = () => {
@@ -60,15 +59,7 @@ export default forwardRef<{
       ref={bottomSheetModalRef}
       snapPoints={['25%']}
     >
-      <BottomSheetView
-        testID="library.create.menu"
-        style={{
-          flex: 1,
-          paddingBottom: safeAreaInsets.bottom,
-          paddingLeft: safeAreaInsets.left,
-          paddingRight: safeAreaInsets.right,
-        }}
-      >
+      <BottomSheetView testID="library.create.menu" style={styles.view}>
         <Link
           href="/collection/new"
           onPress={onLinkPress}
