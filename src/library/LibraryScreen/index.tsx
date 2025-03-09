@@ -2,10 +2,10 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { collectionsQuery } from '@/collections/operations'
-import { Button, Text } from '@/ui'
+import { Icon, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
 
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
@@ -38,17 +38,16 @@ export default function LibraryScreen() {
         <View style={styles.header}>
           <Text size="heading">{translate`Library`}</Text>
           <View>
-            <Button
-              action="neutral"
-              priority="low"
-              testID="library.create.menu"
+            <Pressable
+              accessibilityLabel={translate`Open menu to create collection or note`}
+              accessibilityRole="button"
+              testID="library.create.menu.button"
               onPress={() => {
                 createMenuRef.current?.open()
               }}
-              size="small"
             >
-              {translate`➕`}
-            </Button>
+              <Icon name="plus" />
+            </Pressable>
           </View>
         </View>
         {collections && (
