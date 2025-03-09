@@ -12,13 +12,14 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   screen: {
     flex: 1,
     paddingTop: insets.top,
+    paddingLeft: insets.left + spacing[4],
+    paddingRight: insets.right + spacing[4],
   },
 
   header: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
   },
 }))
 
