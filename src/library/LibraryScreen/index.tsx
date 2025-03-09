@@ -12,6 +12,9 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   screen: {
     flex: 1,
     paddingTop: insets.top,
+  },
+
+  padding: {
     paddingLeft: insets.left + spacing[4],
     paddingRight: insets.right + spacing[4],
   },
@@ -20,6 +23,10 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+
+  listContent: {
+    paddingVertical: spacing[4],
   },
 }))
 
@@ -36,7 +43,7 @@ export default function LibraryScreen() {
     <>
       <CreateMenu ref={createMenuRef} />
       <View testID="library.screen" style={styles.screen}>
-        <View style={styles.header}>
+        <View style={[styles.header, styles.padding]}>
           <Text size="heading">{translate`Library`}</Text>
           <View>
             <Pressable
@@ -54,6 +61,7 @@ export default function LibraryScreen() {
         {collections && (
           <FlatList
             data={collections}
+            contentContainerStyle={[styles.listContent, styles.padding]}
             renderItem={({ item: { id, name } }) => (
               <Link
                 key={id}
