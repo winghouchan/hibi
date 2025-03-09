@@ -1,14 +1,21 @@
-import { Trans } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Link } from 'expo-router'
-import { View } from 'react-native'
+import { Button } from '@/ui'
+import Layout from '../Layout'
 
 export default function NoReviews() {
+  const { t: translate } = useLingui()
+
   return (
-    <View testID="review.no-reviews">
-      <Trans>No reviews due</Trans>
-      <Link href="/" testID="review.no-reviews.cta.button">
-        <Trans>Go home</Trans>
-      </Link>
-    </View>
+    <>
+      <Layout.Main testID="review.no-reviews">
+        <Trans>No reviews due</Trans>
+      </Layout.Main>
+      <Layout.Footer>
+        <Link href="/" testID="review.no-reviews.cta" asChild>
+          <Button>{translate`Go home`}</Button>
+        </Link>
+      </Layout.Footer>
+    </>
   )
 }

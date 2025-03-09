@@ -1,10 +1,9 @@
-import { Trans } from '@lingui/react/macro'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigation } from 'expo-router'
 import { useEffect, useRef } from 'react'
-import { View } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { nextReviewQuery } from '@/reviews/operations'
+import Layout from '../Layout'
 import NoReviews from './NoReviews'
 import Review from './Review'
 import ReviewFinished from './ReviewFinished'
@@ -41,10 +40,7 @@ export default function ReviewScreen() {
   useEffect(onNewPage, [data?.pages.length])
 
   return (
-    <View testID="review.screen" style={{ flex: 1 }}>
-      <View>
-        <Trans>Review Screen</Trans>
-      </View>
+    <Layout testID="review.screen">
       {(data?.pages.length ?? 0) > 0 && (
         <PagerView
           initialPage={initialPage}
@@ -70,6 +66,6 @@ export default function ReviewScreen() {
           })}
         </PagerView>
       )}
-    </View>
+    </Layout>
   )
 }
