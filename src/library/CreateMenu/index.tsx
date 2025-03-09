@@ -1,14 +1,10 @@
-import {
-  BottomSheetBackdrop,
-  type BottomSheetBackdropProps,
-  BottomSheetModal,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet'
-import { Trans } from '@lingui/react/macro'
-import { Link } from 'expo-router'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { useLingui } from '@lingui/react/macro'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { LogBox } from 'react-native'
-import styles from './styles'
+import { Text } from '@/ui'
+import Menu from './Menu'
+import Modal from './Modal'
 
 /**
  * Ignore error logs for the following deprecated APIs. These are logged when
@@ -21,25 +17,22 @@ LogBox.ignoreLogs([
   'findNodeHandle is deprecated in StrictMode',
 ])
 
-function Backdrop(props: BottomSheetBackdropProps) {
-  return <BottomSheetBackdrop {...props} disappearsOnIndex={-1} />
-}
-
 export default forwardRef<{
   close: BottomSheetModal['close']
   open: BottomSheetModal['present']
 }>(function CreateMenu(_, ref) {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const { t: translate } = useLingui()
+  const modalRef = useRef<BottomSheetModal>(null)
 
   const close = () => {
-    bottomSheetModalRef.current?.close()
+    modalRef.current?.close()
   }
 
   const open = () => {
-    bottomSheetModalRef.current?.present()
+    modalRef.current?.present()
   }
 
-  const onLinkPress = () => {
+  const onMenuItemPress = () => {
     close()
   }
 
@@ -49,31 +42,25 @@ export default forwardRef<{
   }))
 
   return (
-    <BottomSheetModal
-      /**
-       * Setting `accessibility` to `false` allows for the tapping of elements
-       * within the bottom sheet by the testing framework.
-       *
-       * @see {@link https://maestro.mobile.dev/platform-support/react-native#interacting-with-nested-components-on-ios}
-       */
-      accessible={false}
-      backdropComponent={Backdrop}
-      enableDynamicSizing={false}
-      ref={bottomSheetModalRef}
-      snapPoints={['25%']}
-    >
-      <BottomSheetView testID="library.create.menu" style={styles.view}>
-        <Link
+    <Modal ref={modalRef}>
+      <Menu testID="library.create.menu">
+        <Menu.Item
           href="/collection/new"
-          onPress={onLinkPress}
+          icon="folder"
+          onPress={onMenuItemPress}
           testID="create.collection.link"
         >
-          <Trans>Collection</Trans>
-        </Link>
-        <Link href="/note/new" onPress={onLinkPress} testID="create.note.link">
-          <Trans>Note</Trans>
-        </Link>
-      </BottomSheetView>
-    </BottomSheetModal>
+          <Text>{translate`Collection`}</Text>
+        </Menu.Item>
+        <Menu.Item
+          href="/note/new"
+          icon="edit-3"
+          onPress={onMenuItemPress}
+          testID="create.note.link"
+        >
+          <Text>{translate`Note`}</Text>
+        </Menu.Item>
+      </Menu>
+    </Modal>
   )
 })
