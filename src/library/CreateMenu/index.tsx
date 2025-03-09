@@ -1,5 +1,6 @@
 import {
   BottomSheetBackdrop,
+  type BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
@@ -19,6 +20,10 @@ LogBox.ignoreLogs([
   'findHostInstance_DEPRECATED is deprecated in StrictMode',
   'findNodeHandle is deprecated in StrictMode',
 ])
+
+function Backdrop(props: BottomSheetBackdropProps) {
+  return <BottomSheetBackdrop {...props} disappearsOnIndex={-1} />
+}
 
 export default forwardRef<{
   close: BottomSheetModal['close']
@@ -52,9 +57,7 @@ export default forwardRef<{
        * @see {@link https://maestro.mobile.dev/platform-support/react-native#interacting-with-nested-components-on-ios}
        */
       accessible={false}
-      backdropComponent={(props) => (
-        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} />
-      )}
+      backdropComponent={Backdrop}
       enableDynamicSizing={false}
       ref={bottomSheetModalRef}
       snapPoints={['25%']}
