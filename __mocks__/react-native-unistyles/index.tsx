@@ -7,6 +7,9 @@ const runtimeMock = {
     left: 0,
     right: 0,
   },
+  screen: {
+    height: 0,
+  },
 }
 
 export const StyleSheet = {
