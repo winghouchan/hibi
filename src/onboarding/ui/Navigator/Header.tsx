@@ -1,36 +1,30 @@
 import { useLingui } from '@lingui/react/macro'
-import type {
-  NavigationHelpers,
-  StackNavigationState,
-} from '@react-navigation/native'
+import { type StackHeaderProps } from '@react-navigation/stack'
 import { useLocales } from 'expo-localization'
-import { Pressable, View } from 'react-native'
+import { Animated, Pressable, View } from 'react-native'
 import { Icon, Progress } from '@/ui'
 import style from './style'
 
-interface Props {
-  navigation: NavigationHelpers<any>
-  state: StackNavigationState<any>
-}
+type Props = StackHeaderProps
 
-const progress = {
+const onboardingProgress = {
   collection: 10,
   notes: 60,
 }
 
-export default function Header({
-  navigation,
-  state: { index: routeIndex, routes },
-}: Props) {
+export default function Header({ navigation, route, progress }: Props) {
   const { t: translate } = useLingui()
   const [{ textDirection }] = useLocales()
-  const { name: currentRouteName } = routes[routeIndex]
-  const progressKey = currentRouteName.includes('notes')
-    ? 'notes'
-    : 'collection'
+  const progressKey = route.name.includes('notes') ? 'notes' : 'collection'
+
+  const opacity =
+    progress?.next?.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0],
+    }) ?? 1
 
   return (
-    <View style={[style.header]}>
+    <Animated.View style={[style.header, { opacity }]}>
       <View>
         <Pressable
           accessibilityRole="button"
@@ -46,9 +40,9 @@ export default function Header({
       <View style={style.progress}>
         <Progress
           label={translate`Onboarding progress`}
-          value={progress[progressKey]}
+          value={onboardingProgress[progressKey]}
         />
       </View>
-    </View>
+    </Animated.View>
   )
 }

@@ -1,12 +1,13 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { SplashScreen, Stack } from 'expo-router'
+import { SplashScreen } from 'expo-router'
 import { ComponentProps, useEffect, useState } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { log } from '@/telemetry'
+import { CardStyleInterpolators, Stack } from '@/ui'
 
 type StackProps = ComponentProps<typeof Stack>
 
@@ -75,10 +76,17 @@ export default function Navigator() {
     <ThemeProvider value={navigatorTheme}>
       <Stack screenListeners={screenListeners} screenOptions={screenOptions}>
         <Stack.Screen
+          name="onboarding"
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
+          }}
+        />
+        <Stack.Screen
           name="storybook"
           options={({ navigation }) => ({
+            animation: 'slide_from_bottom',
             title: translate`Storybook`,
-            presentation: 'fullScreenModal',
+            headerMode: 'screen',
             headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (

@@ -5,9 +5,9 @@ import type {
   Route,
 } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { Redirect, useFocusEffect, useNavigation, Stack } from 'expo-router'
+import { Redirect, useFocusEffect, useNavigation } from 'expo-router'
 import { View } from 'react-native'
-import { Button } from '@/ui'
+import { Button, CardStyleInterpolators, Stack } from '@/ui'
 import {
   isOnboardingCompleteQuery,
   onboardingCollectionQuery,
@@ -146,19 +146,20 @@ export default function OnboardingNavigator() {
   if (isOnboardingComplete === false) {
     return (
       <Stack
-        layout={({ children, navigation, state }) => (
-          <View style={{ flex: 1 }}>
-            <Header navigation={navigation} state={state} />
-            {children}
-          </View>
-        )}
         screenOptions={{
-          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
+          gestureEnabled: true,
+          headerMode: 'float',
+          header: (props) => <Header {...props} />,
         }}
       >
         <Stack.Screen
           name="notes/new"
           options={({ navigation }) => ({
+            animation: 'slide_from_bottom',
+            cardStyleInterpolator: undefined,
+            header: undefined,
+            headerMode: 'screen',
             headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (
@@ -175,13 +176,16 @@ export default function OnboardingNavigator() {
                   </Button>
                 </View>
               ) : null,
-            presentation: 'fullScreenModal',
             title: translate`Create note`,
           })}
         />
         <Stack.Screen
           name="notes/[id]/edit"
           options={({ navigation }) => ({
+            animation: 'slide_from_bottom',
+            cardStyleInterpolator: undefined,
+            header: undefined,
+            headerMode: 'screen',
             headerShown: true,
             headerLeft: ({ canGoBack }) =>
               canGoBack ? (
@@ -198,7 +202,6 @@ export default function OnboardingNavigator() {
                   </Button>
                 </View>
               ) : null,
-            presentation: 'fullScreenModal',
             title: translate`Edit note`,
           })}
         />

@@ -24,3 +24,5 @@ export const useNavigation = jest.fn(ExpoRouter.useNavigation)
 export const usePathname = jest.fn(ExpoRouter.usePathname)
 
 export const useRouter = jest.fn(ExpoRouter.useRouter)
+
+export const withLayoutContext = ExpoRouter.withLayoutContext
