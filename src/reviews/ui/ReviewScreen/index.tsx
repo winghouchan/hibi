@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigation } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect, useRef } from 'react'
 import PagerView from 'react-native-pager-view'
 import { nextReviewQuery } from '@/reviews/operations'
@@ -9,11 +9,13 @@ import Review from './Review'
 import ReviewFinished from './ReviewFinished'
 
 export default function ReviewScreen() {
+  const localSearchParams = useLocalSearchParams<{ collections?: string }>()
+  const collections = localSearchParams.collections?.split(',').map(Number)
   const initialPage = 0
   const navigation = useNavigation()
   const queryClient = useQueryClient()
   const pagerViewRef = useRef<PagerView>(null)
-  const query = nextReviewQuery({ onlyDue: true })
+  const query = nextReviewQuery({ collections, onlyDue: true })
   const { data, fetchNextPage } = useInfiniteQuery(query)
 
   const onNewPage = () => {

@@ -1,6 +1,7 @@
-import { asc, desc, eq, isNull, lt, or, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, inArray, isNull, lt, or, sql } from 'drizzle-orm'
+import { collection, collectionToNote } from '@/collections/schema'
 import { database } from '@/data/database'
-import { noteField } from '@/notes/schema'
+import { note, noteField } from '@/notes/schema'
 import {
   reviewable,
   reviewableField,
@@ -8,6 +9,7 @@ import {
 } from '@/reviews/schema'
 
 interface Options {
+  collections?: (typeof collection.$inferSelect)['id'][]
   onlyDue?: boolean
 }
 
@@ -56,13 +58,20 @@ export default async function getNextReview(options?: Options) {
     .select()
     .from(reviewable)
     .leftJoin(latestSnapshot, eq(reviewable.id, latestSnapshot.reviewable))
+    .innerJoin(note, eq(reviewable.note, note.id))
+    .innerJoin(collectionToNote, eq(note.id, collectionToNote.note))
     .where(
-      options?.onlyDue
-        ? or(
-            lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`),
-            isNull(latestSnapshot.due),
-          )
-        : undefined,
+      and(
+        options?.onlyDue
+          ? or(
+              lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`),
+              isNull(latestSnapshot.due),
+            )
+          : undefined,
+        options?.collections && options.collections.length > 0
+          ? inArray(collectionToNote.collection, options.collections)
+          : undefined,
+      ),
     )
     .orderBy(
       sql`
