@@ -1,7 +1,9 @@
+import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { FlatList, View } from 'react-native'
+import { FlatList, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { collectionsQuery } from '@/collections/operations'
+import { collection } from '@/collections/schema'
 import { Text } from '@/ui'
 
 const styles = StyleSheet.create(
@@ -11,30 +13,40 @@ const styles = StyleSheet.create(
       paddingInline: spacing[4],
     },
 
-    chip: {
+    chip: (active: boolean) => ({
       backgroundColor: colors.neutral[1].background,
-      borderColor: colors.neutral[0].border[0],
+      borderColor: colors.neutral[0].border[active ? 1 : 0],
       borderWidth: borderWidths[2],
       borderRadius: radii[4],
       paddingHorizontal: spacing[4],
       paddingVertical: spacing[2],
-    },
+    }),
   }),
 )
 
-export default function CollectionNavigator() {
+type Props = {
+  onChange?: (id?: typeof collection.$inferSelect.id) => void
+  value?: typeof collection.$inferSelect.id
+}
+
+export default function CollectionFilter({ onChange, value }: Props) {
+  const { t: translate } = useLingui()
   const { data: collections } = useQuery(collectionsQuery())
 
   return (
     <View>
       <FlatList
-        data={collections}
+        data={[{ id: undefined, name: translate`All` }, ...(collections ?? [])]}
         horizontal={true}
         contentContainerStyle={styles.container}
-        renderItem={({ item: { name } }) => (
-          <View style={styles.chip}>
+        renderItem={({ item: { id, name } }) => (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => onChange?.(id)}
+            style={styles.chip(id === value)}
+          >
             <Text size="label.medium">{name}</Text>
-          </View>
+          </Pressable>
         )}
         showsHorizontalScrollIndicator={false}
       />
