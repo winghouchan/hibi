@@ -14,9 +14,11 @@ import {
   useNavigation,
 } from 'expo-router'
 import { useEffect } from 'react'
-import { Alert, ScrollView } from 'react-native'
-import { Button, Text } from '@/ui'
+import { Alert, Text } from 'react-native'
+import { Button } from '@/ui'
 import { collectionQuery } from '../../operations'
+import Layout from '../Layout'
+import List from './List'
 
 export default function CollectionScreen() {
   const { t: translate } = useLingui()
@@ -73,6 +75,8 @@ export default function CollectionScreen() {
       <>
         <Stack.Screen
           options={{
+            title: collection.name,
+            headerTitle: ({ children }) => <Text>{children}</Text>,
             headerRight: () => (
               <Link href={`/collection/${collectionId}/edit`}>
                 <Trans>Edit</Trans>
@@ -80,30 +84,25 @@ export default function CollectionScreen() {
             ),
           }}
         />
-        <ScrollView style={{ flex: 1 }} testID="library.collection.screen">
-          <Text>{collection.name}</Text>
-          {collection.notes.map((note) => (
+        <Layout testID="library.collection.screen">
+          <Layout.Main scrollable={false}>
+            <List data={collection.notes} />
+          </Layout.Main>
+          <Layout.Footer>
             <Link
-              key={note.id}
-              href={`/note/${note.id}`}
-              testID="library.collection.note.link"
+              href={{
+                pathname: '/note/new',
+                params: {
+                  collections: [collectionId],
+                },
+              }}
+              testID="collection.add-note.link"
+              asChild
             >
-              {JSON.stringify(note, null, 2)}
+              <Button>{translate`Add note`}</Button>
             </Link>
-          ))}
-          <Link
-            href={{
-              pathname: '/note/new',
-              params: {
-                collections: [collectionId],
-              },
-            }}
-            testID="collection.add-note.link"
-            asChild
-          >
-            <Button>{translate`Add note`}</Button>
-          </Link>
-        </ScrollView>
+          </Layout.Footer>
+        </Layout>
       </>
     )
   } else {
