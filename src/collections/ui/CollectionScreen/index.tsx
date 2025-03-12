@@ -15,7 +15,7 @@ import {
 } from 'expo-router'
 import { useEffect } from 'react'
 import { Alert, ScrollView } from 'react-native'
-import { Text } from '@/ui'
+import { Button, Text } from '@/ui'
 import { collectionQuery } from '../../operations'
 
 export default function CollectionScreen() {
@@ -99,8 +99,9 @@ export default function CollectionScreen() {
               },
             }}
             testID="collection.add-note.link"
+            asChild
           >
-            <Trans>Add note</Trans>
+            <Button>{translate`Add note`}</Button>
           </Link>
         </ScrollView>
       </>
