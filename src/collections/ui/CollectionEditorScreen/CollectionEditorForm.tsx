@@ -10,6 +10,7 @@ import {
 } from '../../operations'
 import baseQueryKey from '../../operations/baseQueryKey'
 import { collection } from '../../schema'
+import Layout from '../Layout'
 
 interface Props {
   collection?: typeof collection.$inferSelect
@@ -89,22 +90,29 @@ export default function CollectionEditorForm({ collection, onSubmit }: Props) {
     >
       {({ handleChange, handleSubmit, isSubmitting, values }) => (
         <>
-          <TextField
-            accessibilityLabel={translate`Enter a collection name`}
-            autoFocus
-            onChangeText={(value) => handleChange('name')(value)}
-            onSubmitEditing={() => handleSubmit()}
-            placeholder={translate`Collection name`}
-            testID="collection.editor.name"
-            value={values.name}
-          />
-          <Button testID="collection.editor.cta" onPress={() => handleSubmit()}>
-            {isSubmitting
-              ? translate`Submitting`
-              : isUpdatingCollection
-                ? translate`Update collection`
-                : translate`Create collection`}
-          </Button>
+          <Layout.Main>
+            <TextField
+              accessibilityLabel={translate`Enter a collection name`}
+              autoFocus
+              onChangeText={(value) => handleChange('name')(value)}
+              onSubmitEditing={() => handleSubmit()}
+              placeholder={translate`Collection name`}
+              testID="collection.editor.name"
+              value={values.name}
+            />
+          </Layout.Main>
+          <Layout.Footer>
+            <Button
+              testID="collection.editor.cta"
+              onPress={() => handleSubmit()}
+            >
+              {isSubmitting
+                ? translate`Submitting`
+                : isUpdatingCollection
+                  ? translate`Update collection`
+                  : translate`Create collection`}
+            </Button>
+          </Layout.Footer>
         </>
       )}
     </Formik>

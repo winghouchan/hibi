@@ -5,6 +5,7 @@ import { router, Stack, useLocalSearchParams, useNavigation } from 'expo-router'
 import { ComponentProps, useEffect } from 'react'
 import { Alert, ScrollView } from 'react-native'
 import { collectionQuery } from '../../operations'
+import Layout from '../Layout'
 import CollectionEditorForm from './CollectionEditorForm'
 import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
@@ -123,25 +124,22 @@ export default function CollectionEditorScreen() {
             : translate`New collection`,
         }}
       />
-      {(isUpdatingCollection && collection) ||
-      (!isUpdatingCollection && typeof collection === 'undefined') ? (
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          testID="collection.editor.screen"
-        >
+      <Layout testID="collection.editor.screen">
+        {(isUpdatingCollection && collection) ||
+        (!isUpdatingCollection && typeof collection === 'undefined') ? (
           <CollectionEditorForm collection={collection} onSubmit={onSubmit} />
-        </ScrollView>
-      ) : /**
-       * If the `collectionId` is defined and the collection is `undefined`, the
-       * collection has not been successfully queried yet. If the query is still
-       * in-progress, it typically takes less than 1 second to complete so no
-       * loading state is shown. If the query failed, an alert is shown by the
-       * data provider component.
-       *
-       * If the collection is `null`, it does not exist. An alert is displayed
-       * by the effect hook above.
-       */
-      null}
+        ) : /**
+         * If the `collectionId` is defined and the collection is `undefined`, the
+         * collection has not been successfully queried yet. If the query is still
+         * in-progress, it typically takes less than 1 second to complete so no
+         * loading state is shown. If the query failed, an alert is shown by the
+         * data provider component.
+         *
+         * If the collection is `null`, it does not exist. An alert is displayed
+         * by the effect hook above.
+         */
+        null}
+      </Layout>
     </>
   )
 }
