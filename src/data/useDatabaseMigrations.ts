@@ -8,6 +8,7 @@ import { database, migrations } from './database'
  *
  * @see {@link https://orm.drizzle.team/docs/get-started-sqlite#add-migrations-to-your-app | Drizzle Documentation}
  */
+/* istanbul ignore next: function is a wrapper for dependency */
 export default function useDatabaseMigrations() {
   const { error, success } = useMigrations(database, migrations)
 

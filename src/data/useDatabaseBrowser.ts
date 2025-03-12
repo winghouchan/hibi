@@ -6,6 +6,7 @@ import { nativeDatabase } from './database'
  *
  * @see {@link https://github.com/drizzle-team/drizzle-studio-expo | Drizzle Documentation}
  */
+/* istanbul ignore next: function is a wrapper for dependency */
 export default function useDatabaseBrowser() {
   useDrizzleStudio({ driver: 'opsqlite', db: nativeDatabase })
 }
