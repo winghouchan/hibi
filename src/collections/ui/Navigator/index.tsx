@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { View } from 'react-native'
 import { Button } from '@/ui'
 
-export default function CollectionLayout() {
+export default function CollectionNavigator() {
   const { t: translate } = useLingui()
 
   return (
