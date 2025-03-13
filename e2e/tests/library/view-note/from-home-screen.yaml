@@ -1,20 +1,24 @@
 name: '[Library] When viewing a note > and it exists > it can be viewed via a navigation from the library'
 appId: ${appId}
+env:
+  collectionName: Collection Name
+  databaseFixture: onboarding/complete
 ---
 - runFlow:
     file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
-      databaseFixture: onboarding/complete
+      databaseFixture: ${databaseFixture}
 
 - launchApp
 
-- runFlow: ../__subflows__/view-collection-list.yaml
+- runFlow: ../__subflows__/view-library.yaml
 
 - tapOn:
-    text: Collection Name
+    text: ${collectionName}
 
 - assertVisible:
-    id: library.collection.screen
+    text: ${collectionName}
+    selected: true
 
 - tapOn:
     id: library.collection.note.link

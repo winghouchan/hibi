@@ -13,9 +13,9 @@ const styles = StyleSheet.create(
       paddingInline: spacing[4],
     },
 
-    chip: (active: boolean) => ({
+    chip: (selected: boolean) => ({
       backgroundColor: colors.neutral[1].background,
-      borderColor: colors.neutral[0].border[active ? 1 : 0],
+      borderColor: colors.neutral[0].border[selected ? 1 : 0],
       borderWidth: borderWidths[2],
       borderRadius: radii[4],
       paddingHorizontal: spacing[4],
@@ -36,18 +36,23 @@ export default function CollectionFilter({ onChange, value }: Props) {
   return (
     <View>
       <FlatList
+        accessibilityRole="tablist"
         data={[{ id: undefined, name: translate`All` }, ...(collections ?? [])]}
         horizontal={true}
         contentContainerStyle={styles.container}
-        renderItem={({ item: { id, name } }) => (
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => onChange?.(id)}
-            style={styles.chip(id === value)}
-          >
-            <Text size="label.medium">{name}</Text>
-          </Pressable>
-        )}
+        renderItem={({ item: { id, name } }) => {
+          const selected = id === value
+          return (
+            <Pressable
+              accessibilityRole="tab"
+              accessibilityState={{ selected }}
+              onPress={() => onChange?.(id)}
+              style={styles.chip(selected)}
+            >
+              <Text size="label.medium">{name}</Text>
+            </Pressable>
+          )
+        }}
         showsHorizontalScrollIndicator={false}
       />
     </View>

@@ -6,4 +6,4 @@ tags:
     id: tab.library.button
 
 - assertVisible:
-    id: library.collection.list.item
+    id: library.screen

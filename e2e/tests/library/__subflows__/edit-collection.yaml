@@ -14,9 +14,3 @@ tags:
 
 - assertVisible:
     text: ${collectionName}
-
-- tapOn:
-    text: Back
-
-- assertVisible:
-    text: ${collectionName}

@@ -1,29 +1,34 @@
 name: '[Library] When creating a note > it can be created from a collection'
 appId: ${appId}
+env:
+  databaseFixture: onboarding/complete
+  collectionName: Collection Name
+  front: Front 1
+  back: Back 1
 ---
 - runFlow:
     file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
-      databaseFixture: onboarding/complete
+      databaseFixture: ${databaseFixture}
 
 - launchApp
 
-- runFlow: ../__subflows__/view-collection-list.yaml
+- runFlow: ../__subflows__/view-library.yaml
 
 - tapOn:
-    text: Collection Name
-
-- assertVisible:
-    id: library.collection.screen
+    text: ${collectionName}
 
 - tapOn:
-    id: collection.add-note.link
+    id: library.create.menu.button
+
+- tapOn:
+    id: create.note.link
 
 - runFlow:
     file: ../__subflows__/create-note.yaml
     env:
-      front: Front 1
-      back: Back 1
+      front: ${front}
+      back: ${back}
       reversible: true
       separable: true
 
@@ -31,7 +36,7 @@ appId: ${appId}
     text: Back
 
 - assertVisible:
-    text: .*Front 1.*
+    text: .*${front}.*
 
 - assertVisible:
-    text: .*Back 1.*
+    text: .*${back}.*

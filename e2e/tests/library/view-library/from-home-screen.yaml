@@ -1,0 +1,11 @@
+name: '[Library] When viewing the library > it can be viewed via a navigation from the home screen'
+appId: ${appId}
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: onboarding/complete
+
+- launchApp
+
+- runFlow: ../__subflows__/view-library.yaml

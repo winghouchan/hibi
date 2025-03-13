@@ -1,25 +1,30 @@
 name: '[Library] When editing a collection > and it exists > it can be edited via a navigation from the library'
 appId: ${appId}
+env:
+  databaseFixture: onboarding/complete
+  newCollectionName: New Collection Name
+  oldCollectionName: Collection Name
 ---
 - runFlow:
     file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
-      databaseFixture: onboarding/complete
+      databaseFixture: ${databaseFixture}
 
 - launchApp
 
-- runFlow: ../__subflows__/view-collection-list.yaml
+- runFlow: ../__subflows__/view-library.yaml
 
 - tapOn:
-    text: Collection Name
+    text: ${oldCollectionName}
 
 - assertVisible:
-    id: library.collection.screen
+    text: ${oldCollectionName}
+    selected: true
 
 - tapOn:
-    text: Edit
+    id: library.collection.edit.link
 
 - runFlow:
     file: ../__subflows__/edit-collection.yaml
     env:
-      collectionName: New Collection Name
+      collectionName: ${newCollectionName}

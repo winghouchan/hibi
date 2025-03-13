@@ -4,9 +4,9 @@ import { Link } from 'expo-router'
 import { useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
+import { CollectionFilter } from '@/collections/ui'
 import { nextReviewQuery } from '@/reviews/operations'
 import { Button } from '@/ui'
-import CollectionFilter from './CollectionFilter'
 
 const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }, { insets, screen }) => ({

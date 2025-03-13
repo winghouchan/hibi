@@ -1,16 +1,19 @@
-import { Trans, useLingui } from '@lingui/react/macro'
+import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
-import { ComponentRef, useRef } from 'react'
-import { FlatList, Pressable, View } from 'react-native'
+import { ComponentRef, useRef, useState } from 'react'
+import { Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
-import { collectionsQuery } from '@/collections/operations'
+import { CollectionFilter } from '@/collections/ui'
+import { notesQuery } from '@/notes/operations'
 import { Icon, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
+import List from './List'
 
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   screen: {
     flex: 1,
+    gap: spacing[4],
     paddingTop: insets.top,
   },
 
@@ -25,27 +28,40 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
     justifyContent: 'space-between',
   },
 
+  headerInlineEnd: {
+    flexDirection: 'row',
+    gap: spacing[3],
+  },
+
   listContent: {
     paddingVertical: spacing[4],
   },
 }))
 
-function NoCollections() {
-  return <Trans>No collections</Trans>
-}
-
 export default function LibraryScreen() {
   const { t: translate } = useLingui()
   const createMenuRef = useRef<ComponentRef<typeof CreateMenu>>(null)
-  const { data: collections } = useQuery(collectionsQuery())
+  const [collection, setCollection] = useState<number | undefined>(undefined)
+  const { data: notes } = useQuery(
+    notesQuery(collection ? { filter: { collection } } : undefined),
+  )
 
   return (
     <>
-      <CreateMenu ref={createMenuRef} />
+      <CreateMenu collection={collection} ref={createMenuRef} />
       <View testID="library.screen" style={styles.screen}>
         <View style={[styles.header, styles.padding]}>
           <Text size="heading">{translate`Library`}</Text>
-          <View>
+          <View style={styles.headerInlineEnd}>
+            {typeof collection !== 'undefined' && (
+              <Link
+                accessibilityLabel={translate`Edit the currently selected collection`}
+                href={`/collection/${collection}/edit`}
+                testID="library.collection.edit.link"
+              >
+                <Icon name="edit" />
+              </Link>
+            )}
             <Pressable
               accessibilityLabel={translate`Open menu to create collection or note`}
               accessibilityRole="button"
@@ -58,23 +74,8 @@ export default function LibraryScreen() {
             </Pressable>
           </View>
         </View>
-        {collections && (
-          <FlatList
-            data={collections}
-            contentContainerStyle={[styles.listContent, styles.padding]}
-            renderItem={({ item: { id, name } }) => (
-              <Link
-                key={id}
-                href={`/collection/${id}`}
-                testID="library.collection.list.item"
-              >
-                <Text>{name}</Text>
-              </Link>
-            )}
-            testID="library.collection.list"
-            ListEmptyComponent={NoCollections}
-          />
-        )}
+        <CollectionFilter onChange={setCollection} value={collection} />
+        <List data={notes} />
       </View>
     </>
   )

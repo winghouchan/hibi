@@ -1,14 +1,17 @@
 name: '[Library] When creating a collection > it can be created via a navigation from the library'
 appId: ${appId}
+env:
+  collectionName: New Collection Name
+  databaseFixture: onboarding/complete
 ---
 - runFlow:
     file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
-      databaseFixture: onboarding/complete
+      databaseFixture: ${databaseFixture}
 
 - launchApp
 
-- runFlow: ../__subflows__/view-collection-list.yaml
+- runFlow: ../__subflows__/view-library.yaml
 
 - tapOn:
     id: library.create.menu.button
@@ -22,4 +25,4 @@ appId: ${appId}
 - runFlow:
     file: ../__subflows__/create-collection.yaml
     env:
-      collectionName: New Collection Name
+      collectionName: ${collectionName}

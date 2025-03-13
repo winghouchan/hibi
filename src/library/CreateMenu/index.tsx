@@ -2,9 +2,18 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useLingui } from '@lingui/react/macro'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { LogBox } from 'react-native'
+import { collection } from '@/collections/schema'
 import { Text } from '@/ui'
 import Menu from './Menu'
 import Modal from './Modal'
+
+type Ref = {
+  close: BottomSheetModal['close']
+  open: BottomSheetModal['present']
+}
+type Props = {
+  collection?: (typeof collection.$inferSelect)['id']
+}
 
 /**
  * Ignore error logs for the following deprecated APIs. These are logged when
@@ -17,10 +26,7 @@ LogBox.ignoreLogs([
   'findNodeHandle is deprecated in StrictMode',
 ])
 
-export default forwardRef<{
-  close: BottomSheetModal['close']
-  open: BottomSheetModal['present']
-}>(function CreateMenu(_, ref) {
+export default forwardRef<Ref, Props>(function CreateMenu({ collection }, ref) {
   const { t: translate } = useLingui()
   const modalRef = useRef<BottomSheetModal>(null)
 
@@ -53,7 +59,14 @@ export default forwardRef<{
           <Text>{translate`Collection`}</Text>
         </Menu.Item>
         <Menu.Item
-          href="/note/new"
+          href={{
+            pathname: '/note/new',
+            ...(typeof collection !== 'undefined' && {
+              params: {
+                collections: [collection],
+              },
+            }),
+          }}
           icon="edit-3"
           onPress={onMenuItemPress}
           testID="create.note.link"

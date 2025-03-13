@@ -1,5 +1,7 @@
 name: '[Library] When viewing a collection > and it exists > it can be viewed via a navigation from the library'
 appId: ${appId}
+env:
+  collectionName: Collection Name
 ---
 - runFlow:
     file: ../../../fixtures/loadDatabaseFixture.yaml
@@ -8,10 +10,11 @@ appId: ${appId}
 
 - launchApp
 
-- runFlow: ../__subflows__/view-collection-list.yaml
+- runFlow: ../__subflows__/view-library.yaml
 
 - tapOn:
-    text: Collection Name
+    text: ${collectionName}
 
 - assertVisible:
-    id: library.collection.screen
+    text: ${collectionName}
+    selected: true

@@ -1,4 +1,4 @@
-name: '[Library] When viewing the collections list > and collections exist > they can be viewed via a navigation from a deep link'
+name: '[Library] When viewing the library > it can be viewed via a navigation from a deep link'
 appId: ${appId}
 ---
 - runFlow:
@@ -10,4 +10,4 @@ appId: ${appId}
     link: hibi://library
 
 - assertVisible:
-    id: library.collection.list
+    id: library.screen
