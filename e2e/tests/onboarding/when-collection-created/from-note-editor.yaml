@@ -12,7 +12,7 @@ appId: ${appId}
 # Acknowledge alert saying note does not exist
 - tapOn: 'OK'
 
-- runFlow: ../__subflows__/open-note-editor.yaml
+- runFlow: ../__subflows__/open-note-creator.yaml
 
 - runFlow: ../__subflows__/create-note.yaml
 

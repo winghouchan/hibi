@@ -1,9 +1,0 @@
-appId: ${appId}
-tags:
-  - subflow
----
-- assertVisible:
-    id: onboarding.notes.screen
-
-- tapOn:
-    id: onboarding.notes.new-note.button
