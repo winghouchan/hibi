@@ -13,6 +13,9 @@ import {
 import { mockAppRoot } from 'test/utils'
 import CollectionScreen from '.'
 
+// eslint-disable-next-line import/order -- This must be imported after it has been mocked
+import { getOnboardingCollection } from '@/onboarding/operations'
+
 describe('<CollectionScreen />', () => {
   describe('when the user has not created a collection during onboarding before', () => {
     test('and inputs the correct information then submits the form by pressing the button, the form submits successfully', async () => {
@@ -194,7 +197,7 @@ describe('<CollectionScreen />', () => {
   })
 
   describe('when there is an error fetching the onboarding collection', () => {
-    test('the user is alerted', async () => {
+    test('the user is alerted and can retry fetching the onboarding collection', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
 
       mockOnboardingCollectionError(new Error('Mock Error'))
@@ -211,6 +214,12 @@ describe('<CollectionScreen />', () => {
       )
 
       await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
+
+      const retry = alertSpy.mock.calls[0][2]?.[0].onPress
+
+      retry?.()
+
+      expect(getOnboardingCollection).toHaveBeenCalledTimes(2)
     })
   })
 })
