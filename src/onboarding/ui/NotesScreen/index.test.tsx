@@ -3,6 +3,7 @@ import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
+import { mockNotes } from '@/notes/test'
 import {
   mockCompleteOnboardingError,
   mockOnboardingCollection,
@@ -14,7 +15,12 @@ import NotesScreen from '.'
 describe('<NotesScreen />', () => {
   describe('when there are 0 collections', () => {
     test('redirects to the welcome screen', async () => {
-      mockOnboardingCollection(null)
+      const fixture = {
+        collection: null,
+        notes: [],
+      }
+
+      mockOnboardingCollection(fixture.collection)
 
       renderRouter(
         {
@@ -38,13 +44,17 @@ describe('<NotesScreen />', () => {
     describe('with 0 notes', () => {
       test('pressing the button to add a note opens the note editor', async () => {
         const user = userEvent.setup()
-
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+          },
           notes: [],
-        })
+        }
+
+        mockOnboardingCollection(fixture.collection)
+        mockNotes(fixture.notes)
 
         renderRouter(
           {
@@ -74,41 +84,50 @@ describe('<NotesScreen />', () => {
 
     describe('with at least 1 note', () => {
       test('shows the notes', async () => {
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+          },
           notes: [
             {
               id: 1,
               createdAt: new Date(),
               fields: [
-                {
-                  id: 1,
-                  createdAt: new Date(),
-                  note: 1,
-                  value: 'Front 1',
-                  hash: hashNoteFieldValue('Front 1'),
-                  side: 0,
-                  position: 0,
-                  archived: false,
-                },
-                {
-                  id: 2,
-                  createdAt: new Date(),
-                  note: 1,
-                  value: 'Back 1',
-                  hash: hashNoteFieldValue('Back 1'),
-                  side: 1,
-                  position: 0,
-                  archived: false,
-                },
+                [
+                  {
+                    id: 1,
+                    createdAt: new Date(),
+                    note: 1,
+                    value: 'Front 1',
+                    hash: hashNoteFieldValue('Front 1'),
+                    side: 0,
+                    position: 0,
+                    archived: false,
+                  },
+                ],
+                [
+                  {
+                    id: 2,
+                    createdAt: new Date(),
+                    note: 1,
+                    value: 'Back 1',
+                    hash: hashNoteFieldValue('Back 1'),
+                    side: 1,
+                    position: 0,
+                    archived: false,
+                  },
+                ],
               ],
               reversible: false,
               separable: false,
             },
           ],
-        })
+        }
+
+        mockOnboardingCollection(fixture.collection)
+        mockNotes(fixture.notes)
 
         renderRouter(
           {
@@ -128,42 +147,50 @@ describe('<NotesScreen />', () => {
 
       test('pressing a note opens the note editor', async () => {
         const user = userEvent.setup()
-
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+          },
           notes: [
             {
               id: 1,
               createdAt: new Date(),
               fields: [
-                {
-                  id: 1,
-                  createdAt: new Date(),
-                  note: 1,
-                  value: 'Front 1',
-                  hash: hashNoteFieldValue('Front 1'),
-                  side: 0,
-                  position: 0,
-                  archived: false,
-                },
-                {
-                  id: 2,
-                  createdAt: new Date(),
-                  note: 1,
-                  value: 'Back 1',
-                  hash: hashNoteFieldValue('Back 1'),
-                  side: 1,
-                  position: 0,
-                  archived: false,
-                },
+                [
+                  {
+                    id: 1,
+                    createdAt: new Date(),
+                    note: 1,
+                    value: 'Front 1',
+                    hash: hashNoteFieldValue('Front 1'),
+                    side: 0,
+                    position: 0,
+                    archived: false,
+                  },
+                ],
+                [
+                  {
+                    id: 2,
+                    createdAt: new Date(),
+                    note: 1,
+                    value: 'Back 1',
+                    hash: hashNoteFieldValue('Back 1'),
+                    side: 1,
+                    position: 0,
+                    archived: false,
+                  },
+                ],
               ],
               reversible: false,
               separable: false,
             },
           ],
-        })
+        }
+
+        mockOnboardingCollection(fixture.collection)
+        mockNotes(fixture.notes)
 
         renderRouter(
           {
@@ -186,42 +213,50 @@ describe('<NotesScreen />', () => {
 
       test('pressing the button to complete onboarding navigates to the home screen', async () => {
         const user = userEvent.setup()
-
-        mockOnboardingCollection({
-          id: 1,
-          name: 'Collection Name',
-          createdAt: new Date(),
+        const fixture = {
+          collection: {
+            id: 1,
+            name: 'Collection Name',
+            createdAt: new Date(),
+          },
           notes: [
             {
               id: 1,
               createdAt: new Date(),
               fields: [
-                {
-                  id: 1,
-                  createdAt: new Date(),
-                  note: 1,
-                  value: 'Front 1',
-                  hash: hashNoteFieldValue('Front 1'),
-                  side: 0,
-                  position: 0,
-                  archived: false,
-                },
-                {
-                  id: 2,
-                  createdAt: new Date(),
-                  note: 1,
-                  value: 'Back 1',
-                  hash: hashNoteFieldValue('Back 1'),
-                  side: 1,
-                  position: 0,
-                  archived: false,
-                },
+                [
+                  {
+                    id: 1,
+                    createdAt: new Date(),
+                    note: 1,
+                    value: 'Front 1',
+                    hash: hashNoteFieldValue('Front 1'),
+                    side: 0,
+                    position: 0,
+                    archived: false,
+                  },
+                ],
+                [
+                  {
+                    id: 2,
+                    createdAt: new Date(),
+                    note: 1,
+                    value: 'Back 1',
+                    hash: hashNoteFieldValue('Back 1'),
+                    side: 1,
+                    position: 0,
+                    archived: false,
+                  },
+                ],
               ],
               reversible: false,
               separable: false,
             },
           ],
-        })
+        }
+
+        mockOnboardingCollection(fixture.collection)
+        mockNotes(fixture.notes)
 
         renderRouter(
           {
@@ -272,44 +307,52 @@ describe('<NotesScreen />', () => {
     test('the user is alerted', async () => {
       const user = userEvent.setup()
       const alertSpy = jest.spyOn(Alert, 'alert')
-
-      mockCompleteOnboardingError(new Error('Mock Error'))
-
-      mockOnboardingCollection({
-        id: 1,
-        name: 'Collection Name',
-        createdAt: new Date(),
+      const fixture = {
+        collection: {
+          id: 1,
+          name: 'Collection Name',
+          createdAt: new Date(),
+        },
         notes: [
           {
             id: 1,
             createdAt: new Date(),
             fields: [
-              {
-                id: 1,
-                createdAt: new Date(),
-                note: 1,
-                value: 'Front 1',
-                hash: hashNoteFieldValue('Front 1'),
-                side: 0,
-                position: 0,
-                archived: false,
-              },
-              {
-                id: 2,
-                createdAt: new Date(),
-                note: 1,
-                value: 'Back 1',
-                hash: hashNoteFieldValue('Back 1'),
-                side: 1,
-                position: 0,
-                archived: false,
-              },
+              [
+                {
+                  id: 1,
+                  createdAt: new Date(),
+                  note: 1,
+                  value: 'Front 1',
+                  hash: hashNoteFieldValue('Front 1'),
+                  side: 0,
+                  position: 0,
+                  archived: false,
+                },
+              ],
+              [
+                {
+                  id: 2,
+                  createdAt: new Date(),
+                  note: 1,
+                  value: 'Back 1',
+                  hash: hashNoteFieldValue('Back 1'),
+                  side: 1,
+                  position: 0,
+                  archived: false,
+                },
+              ],
             ],
             reversible: false,
             separable: false,
           },
         ],
-      })
+      }
+
+      mockCompleteOnboardingError(new Error('Mock Error'))
+
+      mockOnboardingCollection(fixture.collection)
+      mockNotes(fixture.notes)
 
       renderRouter(
         {

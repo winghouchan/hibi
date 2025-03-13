@@ -2,6 +2,7 @@ import { screen, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { Alert } from 'react-native'
+import { mockNotes } from '@/notes/test'
 import { mockAppRoot } from 'test/utils'
 import { mockCollection, mockCollectionError } from '../../test'
 import CollectionScreen from '.'
@@ -14,11 +15,12 @@ describe('<CollectionScreen />', () => {
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
-          notes: [],
         },
+        notes: [],
       }
 
       mockCollection(fixture.collection)
+      mockNotes(fixture.notes)
 
       renderRouter(
         {

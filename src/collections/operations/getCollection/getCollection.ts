@@ -25,16 +25,7 @@ export default async function getCollection({ filter }: Params) {
         [],
       ),
     ),
-
-    with: { notes: { with: { note: { with: { fields: true } } } } },
   })
 
-  return result
-    ? {
-        ...result,
-        notes: result.notes.map<
-          Omit<(typeof result.notes)[number]['note'], keyof number>
-        >(({ note }) => note),
-      }
-    : null
+  return result ?? null
 }

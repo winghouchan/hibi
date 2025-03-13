@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ComponentProps } from 'react'
 import { createNoteMutation, updateNoteMutation } from '@/notes/operations'
+import noteQueryKey from '@/notes/operations/baseQueryKey'
 import { NoteEditor } from '@/notes/ui'
 import { onboardingCollectionQuery } from '@/onboarding/operations'
 import { log } from '@/telemetry'
@@ -30,6 +31,9 @@ export default function useForm({ onSubmitSuccess, onSubmitError }: Params) {
       async onSuccess() {
         await queryClient.invalidateQueries({
           queryKey: onboardingCollectionQuery.queryKey,
+        })
+        await queryClient.invalidateQueries({
+          queryKey: [noteQueryKey],
         })
         onSubmitSuccess?.()
       },

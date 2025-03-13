@@ -1,11 +1,7 @@
-import { View } from 'react-native'
+import { View, ViewProps } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
-import { noteField } from '@/notes/schema'
-import { Text } from '@/ui'
 
-type Props = {
-  fields: (typeof noteField.$inferSelect)[]
-}
+type Props = ViewProps
 
 const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }) => ({
@@ -35,12 +31,10 @@ const styles = StyleSheet.create(
   }),
 )
 
-export default function Card({ fields }: Props) {
+export default function Card({ children, style, ...props }: Props) {
   return (
-    <View style={styles.view}>
-      {fields.map((field) => (
-        <Text key={field.id}>{field.value}</Text>
-      ))}
+    <View style={[styles.view, style]} {...props}>
+      {children}
     </View>
   )
 }

@@ -15,10 +15,11 @@ import {
 } from 'expo-router'
 import { useEffect } from 'react'
 import { Alert, Text } from 'react-native'
+import { notesQuery } from '@/notes/operations'
+import { NoteList } from '@/notes/ui'
 import { Button } from '@/ui'
 import { collectionQuery } from '../../operations'
 import Layout from '../Layout'
-import List from './List'
 
 export default function CollectionScreen() {
   const { t: translate } = useLingui()
@@ -28,6 +29,9 @@ export default function CollectionScreen() {
   const collectionId = Number(localSearchParams.id)
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
     collectionQuery({ filter: { id: collectionId } }),
+  )
+  const { data: notes } = useQuery(
+    notesQuery({ filter: { collection: collection?.id } }),
   )
 
   useEffect(() => {
@@ -86,7 +90,14 @@ export default function CollectionScreen() {
         />
         <Layout testID="library.collection.screen">
           <Layout.Main scrollable={false}>
-            <List data={collection.notes} />
+            <NoteList
+              data={notes}
+              renderItem={({ item: note }) => (
+                <Link key={note.id} href={`/note/${note.id}`}>
+                  <NoteList.Item fields={note.fields} />
+                </Link>
+              )}
+            />
           </Layout.Main>
           <Layout.Footer>
             <Link

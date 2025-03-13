@@ -6,9 +6,9 @@ import { Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { CollectionFilter } from '@/collections/ui'
 import { notesQuery } from '@/notes/operations'
+import { NoteList } from '@/notes/ui'
 import { Icon, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
-import List from './List'
 
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   screen: {
@@ -75,7 +75,18 @@ export default function LibraryScreen() {
           </View>
         </View>
         <CollectionFilter onChange={setCollection} value={collection} />
-        <List data={notes} />
+        <NoteList
+          data={notes}
+          renderItem={({ item: note }) => (
+            <Link
+              key={note.id}
+              href={`/note/${note.id}`}
+              testID="library.collection.note.link"
+            >
+              <NoteList.Item fields={note.fields} />
+            </Link>
+          )}
+        />
       </View>
     </>
   )

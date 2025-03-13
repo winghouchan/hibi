@@ -1,4 +1,5 @@
 export { default as Button } from './Button'
+export { default as Card } from './Card'
 export * as CardStyleInterpolators from './CardStyleInterpolators'
 export { default as Icon } from './Icon'
 export { default as Progress } from './Progress'

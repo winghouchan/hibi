@@ -19,13 +19,11 @@ function isCollectionToNoteColumn(
 }
 
 type Options = {
-  filter?: RequireAtLeastOne<
-    {
-      [Key in keyof Note]: Note[Key] | Note[Key][]
-    } & {
-      collection: Collection['id'] | Collection['id'][]
-    }
-  >
+  filter?: {
+    [Key in keyof Note]?: Note[Key] | Note[Key][]
+  } & {
+    collection?: Collection['id'] | Collection['id'][]
+  }
 }
 
 export default async function getNotes({ filter }: Options = {}) {

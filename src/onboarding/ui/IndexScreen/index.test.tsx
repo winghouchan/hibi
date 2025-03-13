@@ -11,7 +11,6 @@ describe('<IndexScreen />', () => {
         id: 1,
         name: 'Collection Name',
         createdAt: new Date(),
-        notes: [],
       })
 
       renderRouter(

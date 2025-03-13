@@ -111,7 +111,6 @@ describe('<CollectionScreen />', () => {
         id: 1,
         name: input.existing.collectionName,
         createdAt: new Date(),
-        notes: [],
       })
 
       renderRouter(
@@ -160,7 +159,6 @@ describe('<CollectionScreen />', () => {
         id: 1,
         name: input.existing.collectionName,
         createdAt: new Date(),
-        notes: [],
       })
 
       mockUpdateCollectionError(new Error('Mock Error'))

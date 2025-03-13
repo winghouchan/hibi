@@ -4,6 +4,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
+import { notesQuery } from '@/notes/operations'
+import { NoteList } from '@/notes/ui'
 import { log } from '@/telemetry'
 import { Button, Text } from '@/ui'
 import {
@@ -11,7 +13,6 @@ import {
   onboardingCollectionQuery,
 } from '../../operations'
 import Layout from '../Layout'
-import List from './List'
 
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   padding: {
@@ -23,6 +24,9 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
 export default function NotesScreen() {
   const { t: translate } = useLingui()
   const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
+  const { data: notes } = useQuery(
+    notesQuery({ filter: { collection: collection?.id } }),
+  )
   const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()
   const { mutateAsync: completeOnboarding } = useMutation(
     completeOnboardingMutation,
@@ -82,10 +86,17 @@ export default function NotesScreen() {
           size="heading"
           style={styles.padding}
         >{translate`What do you want to remember?`}</Text>
-        <List data={collection.notes} />
+        <NoteList
+          data={notes}
+          renderItem={({ item: note }) => (
+            <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
+              <NoteList.Item fields={note.fields} />
+            </Link>
+          )}
+        />
       </Layout.Main>
       <Layout.Footer>
-        {collection.notes.length ? (
+        {notes?.length ? (
           <View style={{ gap: 12 }}>
             <Link asChild href="/onboarding/notes/new">
               <Button action="neutral" priority="medium">

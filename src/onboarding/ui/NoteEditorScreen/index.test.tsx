@@ -345,7 +345,6 @@ describe('<NoteEditorScreen />', () => {
           id: 1,
           name: 'Collection Name',
           createdAt: new Date(),
-          notes: [],
         })
         mockCollections([])
 
@@ -451,7 +450,6 @@ describe('<NoteEditorScreen />', () => {
         id: 1,
         name: 'Collection Name',
         createdAt: new Date(),
-        notes: [],
       })
       mockCollections([])
 

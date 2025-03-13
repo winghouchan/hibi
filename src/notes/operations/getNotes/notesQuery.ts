@@ -9,7 +9,7 @@ export default function notesQuery(...args: Parameters<typeof getNotes>) {
     queryKey: [baseQueryKey, 'list', ...args],
     queryFn: filter
       ? Object.values(filter).some((value) =>
-          Array.isArray(value) ? value.length > 0 : true,
+          Array.isArray(value) ? value.length > 0 : value !== undefined,
         )
         ? () => getNotes(...args)
         : skipToken
