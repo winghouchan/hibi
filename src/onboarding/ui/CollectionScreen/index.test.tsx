@@ -33,13 +33,15 @@ describe('<CollectionScreen />', () => {
         },
       )
 
-      await user.type(
-        screen.getByLabelText('Enter a collection name'),
-        input.collectionName,
+      const collectionNameInput = screen.getByLabelText(
+        'Enter a collection name',
       )
-      await user.press(
-        screen.getByRole('button', { name: 'Create collection' }),
-      )
+      const createCollectionButton = screen.getByRole('button', {
+        name: 'Create collection',
+      })
+
+      await user.type(collectionNameInput, input.collectionName)
+      await user.press(createCollectionButton)
 
       expect(screen).toHavePathname('/onboarding/notes')
     })
@@ -62,11 +64,13 @@ describe('<CollectionScreen />', () => {
         },
       )
 
-      await user.type(
-        screen.getByLabelText('Enter a collection name'),
-        input.collectionName,
-        { submitEditing: true },
+      const collectionNameInput = screen.getByLabelText(
+        'Enter a collection name',
       )
+
+      await user.type(collectionNameInput, input.collectionName, {
+        submitEditing: true,
+      })
 
       expect(screen).toHavePathname('/onboarding/notes')
     })
@@ -87,9 +91,11 @@ describe('<CollectionScreen />', () => {
         },
       )
 
-      await user.press(
-        screen.getByRole('button', { name: 'Create collection' }),
-      )
+      const createCollectionButton = screen.getByRole('button', {
+        name: 'Create collection',
+      })
+
+      await user.press(createCollectionButton)
 
       expect(screen.getByText('Your collection needs a name')).toBeOnTheScreen()
     })
@@ -98,20 +104,18 @@ describe('<CollectionScreen />', () => {
   describe('when the user has created a collection during onboarding before', () => {
     test('the form is pre-populated with the previously submitted information and can be updated', async () => {
       const user = userEvent.setup()
-      const input = {
-        existing: {
-          collectionName: 'Collection Name',
-        },
-        new: {
-          collectionName: 'New Collection Name',
+      const fixture = {
+        collection: {
+          id: 1,
+          name: 'Collection Name',
+          createdAt: new Date(),
         },
       }
+      const input = {
+        collectionName: 'New Collection Name',
+      }
 
-      mockOnboardingCollection({
-        id: 1,
-        name: input.existing.collectionName,
-        createdAt: new Date(),
-      })
+      mockOnboardingCollection(fixture.collection)
 
       renderRouter(
         {
@@ -125,20 +129,19 @@ describe('<CollectionScreen />', () => {
         },
       )
 
-      expect(
-        await screen.findByDisplayValue(input.existing.collectionName),
-      ).toBeOnTheScreen()
-      expect(
-        await screen.findByRole('button', { name: 'Update collection' }),
-      ).toBeOnTheScreen()
+      const collectionNameInput = await screen.findByDisplayValue(
+        fixture.collection.name,
+      )
+      const updateCollectionButton = await screen.findByRole('button', {
+        name: 'Update collection',
+      })
 
-      await user.type(
-        screen.getByLabelText('Enter a collection name'),
-        input.new.collectionName,
-      )
-      await user.press(
-        screen.getByRole('button', { name: 'Update collection' }),
-      )
+      expect(collectionNameInput).toBeOnTheScreen()
+      expect(updateCollectionButton).toBeOnTheScreen()
+
+      await user.clear(collectionNameInput)
+      await user.type(collectionNameInput, input.collectionName)
+      await user.press(updateCollectionButton)
 
       expect(screen).toHavePathname('/onboarding/notes')
     })
@@ -146,21 +149,18 @@ describe('<CollectionScreen />', () => {
     test('and there is an error updating the collection, the user is alerted', async () => {
       const alertSpy = jest.spyOn(Alert, 'alert')
       const user = userEvent.setup()
-      const input = {
-        existing: {
-          collectionName: 'Collection Name',
-        },
-        new: {
-          collectionName: 'New Collection Name',
+      const fixture = {
+        collection: {
+          id: 1,
+          name: 'Collection Name',
+          createdAt: new Date(),
         },
       }
+      const input = {
+        collectionName: 'New Collection Name',
+      }
 
-      mockOnboardingCollection({
-        id: 1,
-        name: input.existing.collectionName,
-        createdAt: new Date(),
-      })
-
+      mockOnboardingCollection(fixture.collection)
       mockUpdateCollectionError(new Error('Mock Error'))
 
       renderRouter(
@@ -175,20 +175,19 @@ describe('<CollectionScreen />', () => {
         },
       )
 
-      expect(
-        await screen.findByDisplayValue(input.existing.collectionName),
-      ).toBeOnTheScreen()
-      expect(
-        await screen.findByRole('button', { name: 'Update collection' }),
-      ).toBeOnTheScreen()
+      const collectionNameInput = await screen.findByDisplayValue(
+        fixture.collection.name,
+      )
+      const updateCollectionButton = await screen.findByRole('button', {
+        name: 'Update collection',
+      })
 
-      await user.type(
-        screen.getByLabelText('Enter a collection name'),
-        input.new.collectionName,
-      )
-      await user.press(
-        screen.getByRole('button', { name: 'Update collection' }),
-      )
+      expect(collectionNameInput).toBeOnTheScreen()
+      expect(updateCollectionButton).toBeOnTheScreen()
+
+      await user.clear(collectionNameInput)
+      await user.type(collectionNameInput, input.collectionName)
+      await user.press(updateCollectionButton)
 
       expect(alertSpy).toHaveBeenCalledOnce()
     })
