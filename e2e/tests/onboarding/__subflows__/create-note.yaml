@@ -1,16 +1,19 @@
 appId: ${appId}
 tags:
   - subflow
+env:
+  front: Front 1
+  back: Back 1
 ---
 - assertVisible:
     id: onboarding.note-editor.screen
 
-- inputText: Front 1
+- inputText: ${front}
 
 - tapOn:
     id: onboarding.note-editor.side-1.editor
 
-- inputText: Back 1
+- inputText: ${back}
 
 - tapOn:
     id: onboarding.note-editor.reversible.switch
@@ -20,3 +23,9 @@ tags:
 
 - tapOn:
     id: onboarding.note-editor.cta.button
+
+- assertVisible:
+    text: .*${front}.*
+
+- assertVisible:
+    text: .*${back}.*
