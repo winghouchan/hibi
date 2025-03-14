@@ -1,5 +1,4 @@
 import { and, eq, getTableColumns, inArray } from 'drizzle-orm'
-import { RequireAtLeastOne } from 'type-fest'
 import { collection, collectionToNote } from '@/collections/schema'
 import { database } from '@/data'
 import { note, noteField } from '../../schema'
@@ -20,9 +19,9 @@ function isCollectionToNoteColumn(
 
 type Options = {
   filter?: {
-    [Key in keyof Note]?: Note[Key] | Note[Key][]
+    [Key in keyof Note]?: Note[Key][]
   } & {
-    collection?: Collection['id'] | Collection['id'][]
+    collection?: Collection['id'][]
   }
 }
 
@@ -40,18 +39,11 @@ export default async function getNotes({ filter }: Options = {}) {
             ReturnType<typeof inArray | typeof eq>[]
           >((conditions, [key, value]) => {
             if (isNoteColumn(key)) {
-              return [
-                ...conditions,
-                Array.isArray(value)
-                  ? inArray(note[key], value)
-                  : eq(note[key], value),
-              ]
+              return [...conditions, inArray(note[key], value)]
             } else if (isCollectionToNoteColumn(key)) {
               return [
                 ...conditions,
-                Array.isArray(value)
-                  ? inArray(collectionToNote[key], value as number[])
-                  : eq(collectionToNote[key], value as number),
+                inArray(collectionToNote[key], value as number[]),
               ]
             } else {
               return conditions

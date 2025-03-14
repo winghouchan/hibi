@@ -43,7 +43,9 @@ export default function LibraryScreen() {
   const createMenuRef = useRef<ComponentRef<typeof CreateMenu>>(null)
   const [collection, setCollection] = useState<number | undefined>(undefined)
   const { data: notes } = useQuery(
-    notesQuery(collection ? { filter: { collection } } : undefined),
+    notesQuery(
+      collection ? { filter: { collection: [collection] } } : undefined,
+    ),
   )
 
   return (
