@@ -1,15 +1,30 @@
 #!/bin/bash
 
-TEST_DIR="e2e/tests${1:+/$1}"
+APP_ID=co.hibi.app.test
+E2E_ROOT_DIR="e2e/tests"
 
-echo "Running end-to-end tests in ${TEST_DIR}"
+MAYBE_TEST_PATH="e2e/tests${1:+/$1}"
+MAYBE_TEST_FILE="${MAYBE_TEST_PATH}.yaml"
+
+if test -d "${MAYBE_TEST_PATH}"; then
+  TEST_PATH=$MAYBE_TEST_PATH
+elif test -f "${MAYBE_TEST_PATH}"; then
+  TEST_PATH=$MAYBE_TEST_PATH
+elif test -f "${MAYBE_TEST_FILE}"; then
+  TEST_PATH="${MAYBE_TEST_FILE}"
+else
+  >&2 echo "End-to-end tests not found in ${MAYBE_TEST_PATH} or ${MAYBE_TEST_FILE}"
+  exit 1
+fi
+
+echo "Running end-to-end tests in ${TEST_PATH}"
 
 CONCURRENTLY_ARGS=(
   # Start the fixture server
   "bun ./e2e/fixtures/server.ts"
 
   # Run the end-to-end tests
-  "MAESTRO_USE_GRAALJS=true maestro test -e appId=co.hibi.app.test ${TEST_DIR}"
+  "MAESTRO_USE_GRAALJS=true maestro test -e appId=${APP_ID} ${TEST_PATH}"
 
   # Kill all commands if one dies
   #
