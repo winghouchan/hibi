@@ -1,4 +1,4 @@
-name: '[Library] When creating a note > it can be created via a navigation from the library'
+name: '[Notes] When creating a note > it can be created from a collection'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete
@@ -13,7 +13,10 @@ env:
 
 - launchApp
 
-- runFlow: ../__subflows__/view-library.yaml
+- runFlow: ../../library/__subflows__/view-library.yaml
+
+- tapOn:
+    text: ${collectionName}
 
 - tapOn:
     id: library.create.menu.button
@@ -24,8 +27,16 @@ env:
 - runFlow:
     file: ../__subflows__/create-note.yaml
     env:
-      collection: ${collectionName}
       front: ${front}
       back: ${back}
       reversible: true
       separable: true
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    text: .*${front}.*
+
+- assertVisible:
+    text: .*${back}.*

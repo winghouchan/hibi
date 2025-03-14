@@ -1,4 +1,4 @@
-name: "[Library] When editing a collection > and it doesn't exist > an alert is shown"
+name: "[Collections] When viewing a collection > and it doesn't exist > an alert is shown"
 appId: ${appId}
 ---
 - runFlow:
@@ -7,7 +7,7 @@ appId: ${appId}
       databaseFixture: onboarding/complete
 
 - openLink:
-    link: hibi://collection/0/edit
+    link: hibi://collection/0
 
 - assertVisible:
     text: The collection doesn't exist

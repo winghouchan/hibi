@@ -1,4 +1,4 @@
-name: '[Library] When creating a collection > it can be created via a navigation from the library'
+name: '[Collections] When creating a collection > it can be created via a navigation from the library'
 appId: ${appId}
 env:
   collectionName: New Collection Name
@@ -11,7 +11,7 @@ env:
 
 - launchApp
 
-- runFlow: ../__subflows__/view-library.yaml
+- runFlow: ../../library/__subflows__/view-library.yaml
 
 - tapOn:
     id: library.create.menu.button
