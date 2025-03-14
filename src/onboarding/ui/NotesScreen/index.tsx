@@ -25,7 +25,12 @@ export default function NotesScreen() {
   const { t: translate } = useLingui()
   const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
   const { data: notes } = useQuery(
-    notesQuery({ filter: { collection: collection?.id } }),
+    notesQuery({
+      filter: {
+        collection:
+          typeof collection?.id !== 'undefined' ? [collection.id] : undefined,
+      },
+    }),
   )
   const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()
   const { mutateAsync: completeOnboarding } = useMutation(

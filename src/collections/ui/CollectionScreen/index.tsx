@@ -31,7 +31,12 @@ export default function CollectionScreen() {
     collectionQuery({ filter: { id: collectionId } }),
   )
   const { data: notes } = useQuery(
-    notesQuery({ filter: { collection: collection?.id } }),
+    notesQuery({
+      filter: {
+        collection:
+          typeof collection?.id !== 'undefined' ? [collection.id] : undefined,
+      },
+    }),
   )
 
   useEffect(() => {
