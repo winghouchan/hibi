@@ -1,5 +1,4 @@
 import { and, eq, inArray } from 'drizzle-orm'
-import { RequireAtLeastOne } from 'type-fest'
 import { collection } from '@/collections/schema'
 import { database } from '@/data/database'
 
@@ -10,9 +9,9 @@ function isValidColumn(column: string): column is keyof Collection {
 }
 
 interface Params {
-  filter?: RequireAtLeastOne<{
-    [Key in keyof Collection]: Collection[Key] | Collection[Key][]
-  }>
+  filter?: {
+    [Key in keyof Collection]?: Collection[Key][]
+  }
 }
 
 export default async function getCollections({ filter }: Params = {}) {

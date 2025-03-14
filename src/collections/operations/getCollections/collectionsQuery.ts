@@ -10,8 +10,8 @@ export default function collectionsQuery(
   return queryOptions({
     queryKey: [baseQueryKey, 'list', ...args],
     queryFn: filter
-      ? Object.values(filter).some((value) =>
-          Array.isArray(value) ? value.length > 0 : true,
+      ? Object.values(filter).some(
+          (value) => Array.isArray(value) && value.length > 0,
         )
         ? () => getCollections(...args)
         : skipToken
