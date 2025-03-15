@@ -1,1 +1,1 @@
-export { NoteLayout as default } from '@/notes/ui'
+export { RootNoteNavigator as default } from '@/notes/ui'

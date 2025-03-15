@@ -17,6 +17,7 @@ const styles = StyleSheet.create(
     },
 
     padding: {
+      gap: spacing[4],
       paddingHorizontal: spacing[4],
     },
 
@@ -63,6 +64,23 @@ export default function HomeScreen() {
             </Link>
           )}
         </View>
+        <Link
+          href={{
+            pathname: '/note/new',
+            params: {
+              ...(typeof collection !== 'undefined' && {
+                collections: [collection],
+              }),
+            },
+          }}
+          testID="home.note.create"
+          asChild
+        >
+          <Button
+            action="neutral"
+            priority="medium"
+          >{translate`Add note`}</Button>
+        </Link>
       </View>
     </View>
   )

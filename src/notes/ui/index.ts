@@ -1,5 +1,6 @@
 export { default as Card } from '../../ui/Card'
-export { default as NoteLayout } from './Layout'
+export { default as NoteNavigator } from './navigators/Note'
+export { default as RootNoteNavigator } from './navigators/Root'
 export { default as NoteEditor } from './NoteEditor'
 export { default as NoteEditorScreen } from './NoteEditorScreen'
 export { default as NoteList } from './NoteList'

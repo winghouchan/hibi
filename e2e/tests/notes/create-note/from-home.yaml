@@ -1,4 +1,4 @@
-name: '[Notes] When creating a note > it can be created via a navigation from the library'
+name: '[Notes] When creating a note > it can be created via the home screen'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete
@@ -15,13 +15,8 @@ env:
 
 - launchApp
 
-- runFlow: ../../library/__subflows__/view-library.yaml
-
 - tapOn:
-    id: library.create.menu.button
-
-- tapOn:
-    id: create.note.link
+    id: home.note.create.button
 
 - runFlow:
     file: ../__subflows__/create-note.yaml
@@ -36,10 +31,4 @@ env:
     text: Back
 
 - assertVisible:
-    id: library.screen
-
-- assertVisible:
-    text: .*${front}.*
-
-- assertVisible:
-    text: .*${back}.*
+    id: home.screen

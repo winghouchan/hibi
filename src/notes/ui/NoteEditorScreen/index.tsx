@@ -1,4 +1,4 @@
-import { Trans, useLingui } from '@lingui/react/macro'
+import { useLingui } from '@lingui/react/macro'
 import type {
   NavigationProp,
   PartialRoute,
@@ -18,7 +18,6 @@ import {
 import baseQueryKey from '../../operations/baseQueryKey'
 import NoteEditor from '../NoteEditor'
 import styles from './styles'
-import useDeepLinkHandler, { checkIsDeepLink } from './useDeepLinkHandler'
 
 export default function NoteEditorScreen() {
   const { t: translate } = useLingui()
@@ -37,7 +36,11 @@ export default function NoteEditorScreen() {
   const isUpdatingNote = typeof noteId !== 'undefined'
   const noteQueryOptions = noteQuery(noteId)
   const queryClient = useQueryClient()
-  const { data: note, isFetching: isFetchingNote } = useQuery(noteQueryOptions)
+  const {
+    data: note,
+    isFetching: isFetchingNote,
+    isError: isNoteError,
+  } = useQuery(noteQueryOptions)
   const { mutateAsync: createNote } = useMutation(createNoteMutation)
   const { mutateAsync: updateNote } = useMutation(updateNoteMutation)
   const noteEditorRef = useRef<ComponentRef<typeof NoteEditor>>(null)
@@ -48,8 +51,6 @@ export default function NoteEditorScreen() {
       note: undefined
     }>
   >('/(app)')
-  const navigationState = navigation.getState()
-  const isDeepLink = checkIsDeepLink(navigationState)
 
   const onSubmit: ComponentProps<typeof NoteEditor>['onSubmit'] = async (
     values,
@@ -65,55 +66,35 @@ export default function NoteEditorScreen() {
       : translate`There was an error creating the note`
 
     const handlers: Parameters<Action>[1] = {
-      async onSuccess({ id, collections }) {
-        if (isUpdatingNote) {
-          await queryClient.invalidateQueries({
-            queryKey: noteQueryOptions.queryKey,
-          })
+      async onSuccess({ id }) {
+        const navigationState = navigation.getState()
 
+        await queryClient.invalidateQueries({
+          queryKey: [baseQueryKey],
+        })
+
+        if (isUpdatingNote) {
           router.back()
         } else {
-          await queryClient.invalidateQueries({
-            queryKey: [baseQueryKey],
-          })
-
           /**
-           * Navigate to the newly created note but set the note's collection
-           * screen (if it is in only one collection) or the library screen (if
-           * it is in multiple collections) to be the screen to be navigated to
-           * upon a back navigation. Not doing this means a back navigation
-           * would take the user back to this screen (the note creation screen)
-           * which is undesirable.
+           * Navigate to the newly created note but remove the editor screen from
+           * the history
            */
           const routes = [
-            {
-              name: '(tabs)',
-              state: {
-                index: 1,
-                routes: [{ name: 'index' }, { name: 'library/index' }],
-              },
-            },
-            ...(collections.length === 1
-              ? [
-                  {
-                    name: 'collection',
-                    state: {
-                      index: 0,
-                      routes: [
-                        {
-                          name: '[id]/index',
-                          params: { id: collections[0].id },
-                        },
-                      ],
-                    },
-                  },
-                ]
+            navigationState.routes[0],
+            ...(navigationState.routes[1]?.name === 'collection'
+              ? [navigationState.routes[1]]
               : []),
             {
               name: 'note',
               state: {
                 index: 0,
-                routes: [{ name: '[id]/index', params: { id } }],
+                routes: [
+                  {
+                    name: '[id]',
+                    params: { screen: 'index', id, params: { id } },
+                  },
+                ],
               },
             },
           ] as PartialRoute<
@@ -153,7 +134,7 @@ export default function NoteEditorScreen() {
   }
 
   const onNonExistentNote = () => {
-    if (!note && !isFetchingNote && isUpdatingNote && !isDeepLink) {
+    if (!note && !isFetchingNote && isUpdatingNote && !isNoteError) {
       Alert.alert(translate`The note doesn't exist`, '', [
         {
           text: translate`OK`,
@@ -179,18 +160,12 @@ export default function NoteEditorScreen() {
   )
 
   useEffect(onNonExistentNote, [
-    isDeepLink,
     isFetchingNote,
+    isNoteError,
     isUpdatingNote,
     note,
     translate,
   ])
-
-  useDeepLinkHandler({
-    note,
-    isFetchingNote,
-    isUpdatingNote,
-  })
 
   return (
     <>

@@ -82,7 +82,6 @@ describe('<NoteEditorScreen />', () => {
       } as const
 
       mockGetNote(noteMock)
-      mockGetNote(noteMock) // `mockGetNote` is called twice because of navigation reset
       mockCollections([fixture.collection])
       mockUpdateNote({
         id: fixture.note.id,
@@ -96,7 +95,12 @@ describe('<NoteEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/note/_layout': () => <Stack />,
+          '(app)/note/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/note/[id]/edit': NoteEditorScreen,
+          '(app)/note/[id]/index': () => null,
         },
         {
           initialUrl: 'note/1/edit',
@@ -138,7 +142,12 @@ describe('<NoteEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/note/_layout': () => <Stack />,
+          '(app)/note/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/note/[id]/edit': NoteEditorScreen,
+          '(app)/note/[id]/index': () => null,
         },
         {
           initialUrl: 'note/1/edit',
@@ -161,6 +170,10 @@ describe('<NoteEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/note/_layout': () => <Stack />,
+          '(app)/note/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/note/[id]/edit': NoteEditorScreen,
         },
         {
@@ -199,7 +212,6 @@ describe('<NoteEditorScreen />', () => {
         },
       } as const
 
-      mockCollections(fixture.collections)
       mockCollections(fixture.collections)
       mockCreateNote({
         id: 1,
