@@ -11,8 +11,7 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 import { log } from '@/telemetry'
 
-interface DataProviderProps
-  extends Pick<QueryClientProviderProps, 'children'> {}
+type DataProviderProps = Pick<QueryClientProviderProps, 'children'>
 
 export default function DataProvider({ children }: DataProviderProps) {
   const { t: translate } = useLingui()
