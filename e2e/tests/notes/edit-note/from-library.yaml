@@ -30,3 +30,12 @@ env:
     env:
       front: ${front}
       back: ${back}
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    text: .*${front}.*
+
+- assertVisible:
+    text: .*${back}.*

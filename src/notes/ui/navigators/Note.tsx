@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { View } from 'react-native'
 import { Button } from '@/ui'
 
-export default function NoteLayout() {
+export default function NoteNavigator() {
   const { t: translate } = useLingui()
 
   return (
@@ -27,7 +27,7 @@ export default function NoteLayout() {
       })}
     >
       <Stack.Screen
-        name="[id]/edit"
+        name="edit"
         options={{
           presentation: 'fullScreenModal',
           title: translate`Edit note`,

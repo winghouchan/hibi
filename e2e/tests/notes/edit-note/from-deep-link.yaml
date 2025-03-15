@@ -1,10 +1,14 @@
 name: '[Notes] When editing a note > and it exists > it can be edited via a navigation from a deep link'
 appId: ${appId}
+env:
+  databaseFixture: onboarding/complete
+  front: New Front 1
+  back: New Back 1
 ---
 - runFlow:
     file: ../../../fixtures/loadDatabaseFixture.yaml
     env:
-      databaseFixture: onboarding/complete
+      databaseFixture: ${databaseFixture}
 
 - openLink:
     link: hibi://note/1/edit
@@ -12,5 +16,11 @@ appId: ${appId}
 - runFlow:
     file: ../__subflows__/edit-note.yaml
     env:
-      front: New Front 1
-      back: New Back 1
+      front: ${front}
+      back: ${back}
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    id: home.screen
