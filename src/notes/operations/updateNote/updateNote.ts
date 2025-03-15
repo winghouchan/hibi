@@ -9,11 +9,10 @@ import { reviewable, reviewableField } from '@/reviews/schema'
 import hashNoteFieldValue from '../../hashNoteFieldValue'
 import { note, noteField } from '../../schema'
 
-interface Field
-  extends Omit<
-    typeof noteField.$inferInsert,
-    'id' | 'createdAt' | 'hash' | 'note' | 'position' | 'side'
-  > {}
+type Field = Omit<
+  typeof noteField.$inferInsert,
+  'id' | 'createdAt' | 'hash' | 'note' | 'position' | 'side'
+>
 
 type UpdateNoteParameters = {
   id: Exclude<(typeof note.$inferInsert)['id'], undefined>

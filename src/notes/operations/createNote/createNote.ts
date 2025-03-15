@@ -6,11 +6,10 @@ import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
 import hashNoteFieldValue from '../../hashNoteFieldValue'
 import { noteField, note } from '../../schema'
 
-interface Field
-  extends Omit<
-    typeof noteField.$inferInsert,
-    'id' | 'createdAt' | 'hash' | 'note' | 'position' | 'side'
-  > {}
+type Field = Omit<
+  typeof noteField.$inferInsert,
+  'id' | 'createdAt' | 'hash' | 'note' | 'position' | 'side'
+>
 
 interface CreateNoteParameters {
   collections: (typeof collection.$inferSelect)['id'][]
