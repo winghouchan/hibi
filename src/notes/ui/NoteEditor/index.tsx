@@ -1,5 +1,4 @@
 import { useLingui } from '@lingui/react/macro'
-import { useHeaderHeight } from '@react-navigation/elements'
 import { type FormikConfig, useFormik } from 'formik'
 import {
   ComponentProps,
@@ -33,7 +32,6 @@ export default forwardRef<Ref, Props>(function NoteEditor(
   { value, onSubmit, testID },
   ref,
 ) {
-  const headerHeight = useHeaderHeight()
   const { t: translate } = useLingui()
   const richTextInputRefs = useRef<
     (ComponentRef<typeof RichTextInput> | null)[]
