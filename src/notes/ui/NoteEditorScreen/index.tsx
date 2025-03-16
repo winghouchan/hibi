@@ -5,8 +5,14 @@ import type {
   Route,
 } from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { router, Stack, useLocalSearchParams, useNavigation } from 'expo-router'
-import { ComponentProps, ComponentRef, useEffect, useRef } from 'react'
+import {
+  router,
+  Stack,
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+} from 'expo-router'
+import { ComponentProps, ComponentRef, useRef } from 'react'
 import { Alert, View } from 'react-native'
 import { log } from '@/telemetry'
 import { Button } from '@/ui'
@@ -140,7 +146,7 @@ export default function NoteEditorScreen() {
           text: translate`OK`,
           style: 'default',
           onPress: () => {
-            router.back()
+            router.dismissTo('/')
           },
         },
       ])
@@ -159,13 +165,7 @@ export default function NoteEditorScreen() {
     </Button>
   )
 
-  useEffect(onNonExistentNote, [
-    isFetchingNote,
-    isNoteError,
-    isUpdatingNote,
-    note,
-    translate,
-  ])
+  useFocusEffect(onNonExistentNote)
 
   return (
     <>

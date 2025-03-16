@@ -1,0 +1,21 @@
+name: "[Notes] When viewing a note > and it doesn't exist > an alert is shown"
+appId: ${appId}
+env:
+  databaseFixture: onboarding/complete
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: ${databaseFixture}
+
+- openLink:
+    link: hibi://note/0
+
+- assertVisible:
+    text: The note doesn't exist
+
+- tapOn:
+    text: OK
+
+- assertVisible:
+    id: home.screen

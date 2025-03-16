@@ -1,7 +1,12 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { Link, router, Stack, useLocalSearchParams } from 'expo-router'
-import { useEffect } from 'react'
+import {
+  Link,
+  router,
+  Stack,
+  useFocusEffect,
+  useLocalSearchParams,
+} from 'expo-router'
 import { Alert, ScrollView } from 'react-native'
 import { Text } from '@/ui'
 import { noteQuery } from '../../operations'
@@ -13,7 +18,7 @@ export default function NoteScreen() {
     noteQuery(Number(noteId)),
   )
 
-  useEffect(() => {
+  useFocusEffect(() => {
     if (!note && !isNotePending) {
       Alert.alert(translate`The note doesn't exist`, '', [
         {
@@ -25,23 +30,36 @@ export default function NoteScreen() {
         },
       ])
     }
-  }, [isNotePending, note, translate])
+  })
 
-  return (
-    <>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <Link href={`/note/${noteId}/edit`}>
-              <Trans>Edit</Trans>
-            </Link>
-          ),
-        }}
-      />
-      <ScrollView testID="library.note.screen">
-        <Text>{noteId}</Text>
-        <Text>{JSON.stringify(note, null, 2)}</Text>
-      </ScrollView>
-    </>
-  )
+  if (note) {
+    return (
+      <>
+        <Stack.Screen
+          options={{
+            headerRight: () => (
+              <Link href={`/note/${noteId}/edit`}>
+                <Trans>Edit</Trans>
+              </Link>
+            ),
+          }}
+        />
+        <ScrollView testID="library.note.screen">
+          <Text>{noteId}</Text>
+          <Text>{JSON.stringify(note, null, 2)}</Text>
+        </ScrollView>
+      </>
+    )
+  } else {
+    /**
+     * If the note is `undefined`, it has not been successfully queried yet. If
+     * the query is still in-progress, it typically takes less than 1 second to
+     * complete so no loading state is shown. If the query failed, an alert is
+     * shown by the data provider component.
+     *
+     * If the note is `null`, it does not exist. An alert is displayed by the
+     * focus effect hook above.
+     */
+    return null
+  }
 }
