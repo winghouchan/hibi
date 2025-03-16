@@ -6,21 +6,19 @@ import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import WelcomeScreen from '.'
 
+const routerMock = {
+  _layout: () => <Stack />,
+  '(app)/(tabs)/index': () => null,
+  'onboarding/collection': () => null,
+  index: WelcomeScreen,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<WelcomeScreen />', () => {
   describe('when onboarding has been completed', () => {
     it('redirects to the home screen', async () => {
       mockOnboardedState(true)
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          index: WelcomeScreen,
-          '(app)/(tabs)/index': () => null,
-        },
-        {
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, { wrapper: mockAppRoot() })
 
       await waitFor(() => {
         expect(screen).toHaveRouterState(
@@ -51,16 +49,7 @@ describe('<WelcomeScreen />', () => {
 
       mockOnboardedState(false)
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          index: WelcomeScreen,
-          'onboarding/collection': () => null,
-        },
-        {
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, { wrapper: mockAppRoot() })
 
       await user.press(
         await screen.findByTestId('onboarding.welcome.cta.button'),
@@ -76,13 +65,7 @@ describe('<WelcomeScreen />', () => {
 
       mockOnboardedStateError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          index: WelcomeScreen,
-        },
-        { wrapper: mockAppRoot() },
-      )
+      renderRouter(routerMock, { wrapper: mockAppRoot() })
 
       await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
     })
