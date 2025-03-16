@@ -5,6 +5,10 @@ import { mockGetNote } from '@/notes/test'
 import { mockAppRoot } from 'test/utils'
 import NoteScreen from '.'
 
+const routerMock = {
+  'note/[id]': NoteScreen,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<NoteScreen />', () => {
   test('when there is a note ID and the note exists, the note is displayed', async () => {
     const fixture = {
@@ -20,15 +24,10 @@ describe('<NoteScreen />', () => {
 
     mockGetNote(fixture.note)
 
-    renderRouter(
-      {
-        'note/[id]': NoteScreen,
-      },
-      {
-        initialUrl: '/note/1',
-        wrapper: mockAppRoot(),
-      },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '/note/1',
+      wrapper: mockAppRoot(),
+    })
 
     await waitFor(async () => {
       expect(await screen.findByText(`${fixture.note.id}`)).toBeOnTheScreen()
@@ -43,15 +42,10 @@ describe('<NoteScreen />', () => {
 
     mockGetNote(fixture.note)
 
-    renderRouter(
-      {
-        'note/[id]': NoteScreen,
-      },
-      {
-        initialUrl: '/note/0',
-        wrapper: mockAppRoot(),
-      },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '/note/0',
+      wrapper: mockAppRoot(),
+    })
 
     await waitFor(async () => {
       expect(alertSpy).toHaveBeenCalledOnce()
