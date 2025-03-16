@@ -6,6 +6,10 @@ import { mockNextReview, mockNextReviewError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import HomeScreen from '.'
 
+const routerMock = {
+  index: HomeScreen,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<HomeScreen />', () => {
   test.each([
     {
@@ -43,10 +47,7 @@ describe('<HomeScreen />', () => {
     mockNextReview(fixture.reviewable)
     mockCollections(fixture.collections)
 
-    renderRouter(
-      { index: HomeScreen },
-      { initialUrl: '/', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
     await waitFor(expected)
   })
@@ -57,10 +58,7 @@ describe('<HomeScreen />', () => {
     mockCollections([{ id: 1, name: 'Collection Name', createdAt: new Date() }])
     mockNextReviewError(new Error('Mock Error'))
 
-    renderRouter(
-      { index: HomeScreen },
-      { initialUrl: '/', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledOnce()
