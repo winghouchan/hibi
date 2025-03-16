@@ -16,6 +16,12 @@ import CollectionScreen from '.'
 // eslint-disable-next-line import/order -- This must be imported after it has been mocked
 import { getOnboardingCollection } from '@/onboarding/operations'
 
+const routerMock = {
+  'onboarding/_layout': () => <Stack />,
+  'onboarding/collection': CollectionScreen,
+  'onboarding/notes': () => null,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<CollectionScreen />', () => {
   describe('when the user has not created a collection during onboarding before', () => {
     test('and inputs the correct information then submits the form by pressing the button, the form submits successfully', async () => {
@@ -24,17 +30,10 @@ describe('<CollectionScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/collection': CollectionScreen,
-          'onboarding/notes': () => null,
-        },
-        {
-          initialUrl: 'onboarding/collection',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/collection',
+        wrapper: mockAppRoot(),
+      })
 
       const collectionNameInput = screen.getByLabelText(
         'Enter a collection name',
@@ -55,17 +54,10 @@ describe('<CollectionScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/collection': CollectionScreen,
-          'onboarding/notes': () => null,
-        },
-        {
-          initialUrl: 'onboarding/collection',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/collection',
+        wrapper: mockAppRoot(),
+      })
 
       const collectionNameInput = screen.getByLabelText(
         'Enter a collection name',
@@ -83,16 +75,10 @@ describe('<CollectionScreen />', () => {
 
       mockCreateCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/collection': CollectionScreen,
-        },
-        {
-          initialUrl: 'onboarding/collection',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/collection',
+        wrapper: mockAppRoot(),
+      })
 
       const createCollectionButton = screen.getByRole('button', {
         name: 'Create collection',
@@ -120,17 +106,10 @@ describe('<CollectionScreen />', () => {
 
       mockOnboardingCollection(fixture.collection)
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/collection': CollectionScreen,
-          'onboarding/notes': () => null,
-        },
-        {
-          initialUrl: 'onboarding/collection',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/collection',
+        wrapper: mockAppRoot(),
+      })
 
       const collectionNameInput = await screen.findByDisplayValue(
         fixture.collection.name,
@@ -166,17 +145,10 @@ describe('<CollectionScreen />', () => {
       mockOnboardingCollection(fixture.collection)
       mockUpdateCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/collection': CollectionScreen,
-          'onboarding/notes': () => null,
-        },
-        {
-          initialUrl: 'onboarding/collection',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/collection',
+        wrapper: mockAppRoot(),
+      })
 
       const collectionNameInput = await screen.findByDisplayValue(
         fixture.collection.name,
@@ -202,16 +174,10 @@ describe('<CollectionScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/collection': CollectionScreen,
-        },
-        {
-          initialUrl: 'onboarding/collection',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/collection',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
 
