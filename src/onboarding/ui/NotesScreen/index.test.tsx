@@ -12,6 +12,17 @@ import {
 import { mockAppRoot } from 'test/utils'
 import NotesScreen from '.'
 
+const routerMock = {
+  '(app)/_layout': () => null,
+  '(app)/(tabs)/_layout': () => null,
+  '(app)/(tabs)/index': () => null,
+  'onboarding/_layout': () => <Stack />,
+  'onboarding/notes': NotesScreen,
+  'onboarding/notes/[id]/edit': () => null,
+  'onboarding/notes/new': () => null,
+  index: () => null,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<NotesScreen />', () => {
   describe('when there are 0 collections', () => {
     test('redirects to the welcome screen', async () => {
@@ -22,17 +33,10 @@ describe('<NotesScreen />', () => {
 
       mockOnboardingCollection(fixture.collection)
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/notes': NotesScreen,
-          index: () => null,
-        },
-        {
-          initialUrl: 'onboarding/notes',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/notes',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHavePathname('/')
@@ -56,17 +60,10 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes(fixture.notes)
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes': NotesScreen,
-            'onboarding/notes/new': () => null,
-          },
-          {
-            initialUrl: 'onboarding/notes',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes',
+          wrapper: mockAppRoot(),
+        })
 
         const newNoteButton = await screen.findByRole('link', {
           name: 'New note',
@@ -129,16 +126,10 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes(fixture.notes)
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes': NotesScreen,
-          },
-          {
-            initialUrl: 'onboarding/notes',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes',
+          wrapper: mockAppRoot(),
+        })
 
         expect(
           await screen.findByRole('link', { name: /Front 1.*Back 1/s }),
@@ -192,17 +183,10 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes(fixture.notes)
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes': NotesScreen,
-            'onboarding/notes/[id]/edit': () => null,
-          },
-          {
-            initialUrl: 'onboarding/notes',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes',
+          wrapper: mockAppRoot(),
+        })
 
         await user.press(
           await screen.findByRole('link', { name: /Front 1.*Back 1/s }),
@@ -258,19 +242,10 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes(fixture.notes)
 
-        renderRouter(
-          {
-            '(app)/_layout': () => null,
-            '(app)/(tabs)/_layout': () => null,
-            '(app)/(tabs)/index': () => null,
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes': NotesScreen,
-          },
-          {
-            initialUrl: 'onboarding/notes',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes',
+          wrapper: mockAppRoot(),
+        })
 
         await user.press(await screen.findByRole('button', { name: 'Finish' }))
 
@@ -287,17 +262,10 @@ describe('<NotesScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/notes': NotesScreen,
-          index: () => null,
-        },
-        {
-          initialUrl: 'onboarding/notes',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/notes',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
     })
@@ -354,16 +322,10 @@ describe('<NotesScreen />', () => {
       mockOnboardingCollection(fixture.collection)
       mockNotes(fixture.notes)
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/notes': NotesScreen,
-        },
-        {
-          initialUrl: 'onboarding/notes',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/notes',
+        wrapper: mockAppRoot(),
+      })
 
       await user.press(await screen.findByRole('button', { name: 'Finish' }))
 
