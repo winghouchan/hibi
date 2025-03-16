@@ -38,6 +38,14 @@ const backMock = jest.fn()
   setParams: jest.fn(),
 })
 
+const routerMock = {
+  _layout: () => <Stack />,
+  '(app)/_layout': () => <Stack />,
+  'onboarding/_layout': () => <Stack />,
+  'onboarding/notes/[id]/edit': NoteEditor,
+  'onboarding/notes/new': NoteEditor,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<NoteEditorScreen />', () => {
   describe('when there is an onboarding collection', () => {
     describe('and there is no note ID', () => {
@@ -65,16 +73,10 @@ describe('<NoteEditorScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockCollections([])
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/new': NoteEditor,
-          },
-          {
-            initialUrl: 'onboarding/notes/new',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes/new',
+          wrapper: mockAppRoot(),
+        })
 
         await user.type(
           await screen.findByTestId(
@@ -122,16 +124,10 @@ describe('<NoteEditorScreen />', () => {
 
         mockCreateNoteError(new Error('Mock Error'))
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/new': NoteEditor,
-          },
-          {
-            initialUrl: 'onboarding/notes/new',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes/new',
+          wrapper: mockAppRoot(),
+        })
 
         await user.type(
           await screen.findByTestId(
@@ -216,16 +212,10 @@ describe('<NoteEditorScreen />', () => {
           ...fixture.note.config,
         })
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/[id]/edit': NoteEditor,
-          },
-          {
-            initialUrl: 'onboarding/notes/1/edit',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes/1/edit',
+          wrapper: mockAppRoot(),
+        })
 
         const frontEditor = await screen.findByDisplayValue(
           fixture.note.fields[0][0].value,
@@ -313,16 +303,10 @@ describe('<NoteEditorScreen />', () => {
 
         mockUpdateNoteError(new Error('Mock Error'))
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/[id]/edit': NoteEditor,
-          },
-          {
-            initialUrl: 'onboarding/notes/1/edit',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes/1/edit',
+          wrapper: mockAppRoot(),
+        })
 
         expect(
           await screen.findByDisplayValue(fixture.note.fields[0][0].value),
@@ -350,16 +334,10 @@ describe('<NoteEditorScreen />', () => {
 
         mockGetNote(null)
 
-        renderRouter(
-          {
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/[id]/edit': NoteEditor,
-          },
-          {
-            initialUrl: 'onboarding/notes/1/edit',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes/1/edit',
+          wrapper: mockAppRoot(),
+        })
 
         await waitFor(async () => {
           expect(alertSpy).toHaveBeenCalledOnce()
@@ -372,18 +350,10 @@ describe('<NoteEditorScreen />', () => {
     test('redirects to the welcome screen', async () => {
       mockOnboardingCollection(null)
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          '(app)/_layout': () => <Stack />,
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/notes/new': NoteEditor,
-        },
-        {
-          initialUrl: 'onboarding/notes/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/notes/new',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHavePathname('/')
@@ -396,18 +366,10 @@ describe('<NoteEditorScreen />', () => {
 
         mockOnboardingCollection(null)
 
-        renderRouter(
-          {
-            _layout: () => <Stack />,
-            '(app)/_layout': () => <Stack />,
-            'onboarding/_layout': () => <Stack />,
-            'onboarding/notes/[id]/edit': NoteEditor,
-          },
-          {
-            initialUrl: 'onboarding/notes/1/edit',
-            wrapper: mockAppRoot(),
-          },
-        )
+        renderRouter(routerMock, {
+          initialUrl: 'onboarding/notes/1/edit',
+          wrapper: mockAppRoot(),
+        })
 
         await waitFor(() => {
           expect(screen).toHavePathname('/')
@@ -423,18 +385,10 @@ describe('<NoteEditorScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          '(app)/_layout': () => <Stack />,
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/notes/new': NoteEditor,
-        },
-        {
-          initialUrl: 'onboarding/notes/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/notes/new',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(async () => {
         expect(alertSpy).toHaveBeenCalledOnce()
@@ -455,16 +409,10 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNoteError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          'onboarding/_layout': () => <Stack />,
-          'onboarding/notes/[id]/edit': NoteEditor,
-        },
-        {
-          initialUrl: 'onboarding/notes/1/edit',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding/notes/1/edit',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(async () => {
         expect(alertSpy).toHaveBeenCalledOnce()
