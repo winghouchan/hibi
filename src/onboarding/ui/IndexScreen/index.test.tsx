@@ -4,6 +4,12 @@ import { mockOnboardingCollection } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import Index from '.'
 
+const routerMock = {
+  index: () => null,
+  onboarding: Index,
+  'onboarding/notes': () => null,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<IndexScreen />', () => {
   describe('when a collection exists', () => {
     it('redirects to the onboarding note creation screen', async () => {
@@ -13,16 +19,10 @@ describe('<IndexScreen />', () => {
         createdAt: new Date(),
       })
 
-      renderRouter(
-        {
-          onboarding: Index,
-          'onboarding/notes': () => null,
-        },
-        {
-          initialUrl: 'onboarding',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHavePathname('/onboarding/notes')
@@ -34,17 +34,10 @@ describe('<IndexScreen />', () => {
     it('redirects to the welcome screen', async () => {
       mockOnboardingCollection(null)
 
-      renderRouter(
-        {
-          index: () => null,
-          onboarding: Index,
-          'onboarding/notes': () => null,
-        },
-        {
-          initialUrl: 'onboarding',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHavePathname('/')
