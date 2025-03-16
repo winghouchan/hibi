@@ -15,7 +15,7 @@ import ReviewScreen from '.'
 
 jest.mock('@/reviews/operations/createReview/createReview')
 
-const routerMock = {
+const expoRouterMock = {
   back: jest.fn(),
   canDismiss: jest.fn(),
   canGoBack: jest.fn(),
@@ -37,17 +37,21 @@ enum Ratings {
 }
 
 ;(useRouter as jest.MockedFunction<typeof useRouter>).mockReturnValue(
-  routerMock,
+  expoRouterMock,
 )
+
+const routerMock = {
+  '(app)/review': ReviewScreen,
+} satisfies Parameters<typeof renderRouter>[0]
 
 describe('<ReviewScreen />', () => {
   test('when there are no reviewables, the user is informed', async () => {
     mockNextReview(null)
 
-    renderRouter(
-      { '(app)/review': ReviewScreen },
-      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
 
     expect(await screen.findByText('No reviews due')).toBeOnTheScreen()
   })
@@ -169,10 +173,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReview(inputs[0].reviewable)
 
-    renderRouter(
-      { '(app)/review': ReviewScreen },
-      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
 
     for (let index = 0; index < inputs.length; index++) {
       expect(
@@ -230,7 +234,7 @@ describe('<ReviewScreen />', () => {
 
     await user.press(screen.getByRole('button', { name: 'Finish' }))
 
-    expect(routerMock.back).toHaveBeenCalledOnce()
+    expect(expoRouterMock.back).toHaveBeenCalledOnce()
   })
 
   test('when there is an error getting the initial reviewable, the user is alerted', async () => {
@@ -238,10 +242,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReviewError(new Error('Mock Error'))
 
-    renderRouter(
-      { '(app)/review': ReviewScreen },
-      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
 
     await waitFor(async () => expect(alertSpy).toHaveBeenCalledOnce())
   })
@@ -263,10 +267,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReview(input.reviewable)
 
-    renderRouter(
-      { '(app)/review': ReviewScreen },
-      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
 
     await screen.findByText(/Front/)
 
@@ -297,10 +301,10 @@ describe('<ReviewScreen />', () => {
     mockNextReview(input.reviewable)
     mockCreateReviewError(new Error('Mock Error'))
 
-    renderRouter(
-      { '(app)/review': ReviewScreen },
-      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
 
     await screen.findByText(/Front/)
 
@@ -332,10 +336,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReview(input.reviewable)
 
-    renderRouter(
-      { '(app)/review': ReviewScreen },
-      { initialUrl: '(app)/review', wrapper: mockAppRoot() },
-    )
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
 
     await screen.findByText(/Front/, { interval: 0 })
 
