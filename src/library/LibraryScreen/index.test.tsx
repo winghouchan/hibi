@@ -6,6 +6,10 @@ import { mockNotes, mockNotesError } from '@/notes/test'
 import { mockAppRoot } from 'test/utils'
 import LibraryScreen from '.'
 
+const routerMock = {
+  index: LibraryScreen,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<LibraryScreen />', () => {
   test('shows a list of collections and a list of notes', async () => {
     const fixture = {
@@ -56,7 +60,7 @@ describe('<LibraryScreen />', () => {
     mockCollections(fixture.collections)
     mockNotes(fixture.notes)
 
-    renderRouter({ index: LibraryScreen }, { wrapper: mockAppRoot() })
+    renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     expect(await screen.findByRole('tab', { name: 'All' })).toBeOnTheScreen()
     await Promise.all(
@@ -164,7 +168,7 @@ describe('<LibraryScreen />', () => {
     mockCollections(fixture.collections)
     mockNotes(fixture.notes)
 
-    renderRouter({ index: LibraryScreen }, { wrapper: mockAppRoot() })
+    renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     mockNotes([fixture.notes[0]])
 
@@ -191,7 +195,7 @@ describe('<LibraryScreen />', () => {
     mockCollectionsError(new Error('Mock Error'))
     mockNotes([])
 
-    renderRouter({ index: LibraryScreen }, { wrapper: mockAppRoot() })
+    renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledOnce()
@@ -204,7 +208,7 @@ describe('<LibraryScreen />', () => {
     mockCollections([])
     mockNotesError(new Error('Mock Error'))
 
-    renderRouter({ index: LibraryScreen }, { wrapper: mockAppRoot() })
+    renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledOnce()
