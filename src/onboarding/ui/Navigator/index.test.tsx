@@ -10,30 +10,40 @@ import {
 import { mockAppRoot } from 'test/utils'
 import OnboardingNavigator from '.'
 
+const routerMock = {
+  _layout: () => <Stack />,
+  '(app)/_layout': () => <Stack />,
+  '(app)/(tabs)/_layout': () => <Stack />,
+  '(app)/(tabs)/index': () => null,
+  'onboarding/_layout': OnboardingNavigator,
+  'onboarding/index': () => null,
+  'onboarding/notes/[id]/edit': () => null,
+  'onboarding/notes/new': () => null,
+  index: () => null,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<OnboardingNavigator />', () => {
   describe('when onboarding is complete', () => {
     it('redirects to the home screen', async () => {
       const onboardedStateMock = mockOnboardedState(true)
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          'onboarding/_layout': OnboardingNavigator,
-          'onboarding/index': () => null,
-          'onboarding/notes/new': () => null,
-          'onboarding/notes/[id]/edit': () => null,
-          '(app)/(tabs)/index': () => null,
-        },
-        {
-          initialUrl: 'onboarding',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
-            routes: [expect.objectContaining({ name: '(app)/(tabs)/index' })],
+            routes: [
+              expect.objectContaining({
+                name: '(app)',
+                params: {
+                  screen: '(tabs)',
+                  params: expect.objectContaining({ screen: 'index' }),
+                },
+              }),
+            ],
           }),
         )
       })
@@ -46,23 +56,10 @@ describe('<OnboardingNavigator />', () => {
     it('does not redirect to the home screen', async () => {
       const onboardedStateMock = mockOnboardedState(false)
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          index: () => null,
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/(tabs)/index': () => null,
-          'onboarding/_layout': OnboardingNavigator,
-          'onboarding/index': () => null,
-          'onboarding/notes/[id]/edit': () => null,
-          'onboarding/notes/new': () => null,
-        },
-        {
-          initialUrl: 'onboarding',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHaveRouterState(
@@ -88,17 +85,10 @@ describe('<OnboardingNavigator />', () => {
         new Error('Mock Error'),
       )
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          'onboarding/_layout': OnboardingNavigator,
-          'onboarding/index': () => null,
-        },
-        {
-          initialUrl: 'onboarding',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledOnce()
@@ -117,20 +107,10 @@ describe('<OnboardingNavigator />', () => {
         new Error('Mock Error'),
       )
 
-      renderRouter(
-        {
-          _layout: () => <Stack />,
-          'onboarding/_layout': OnboardingNavigator,
-          'onboarding/index': () => null,
-          'onboarding/notes/new': () => null,
-          'onboarding/notes/[id]/edit': () => null,
-          '(app)/(tabs)/index': () => null,
-        },
-        {
-          initialUrl: 'onboarding',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'onboarding',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledOnce()
