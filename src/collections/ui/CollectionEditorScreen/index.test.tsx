@@ -13,6 +13,19 @@ import CollectionEditorScreen from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { updateCollection } from '../../operations'
 
+const routerMock = {
+  '(app)/_layout': () => <Stack />,
+  '(app)/(tabs)/_layout': () => <Stack />,
+  '(app)/collection/_layout': () => <Stack />,
+  '(app)/collection/[id]/_layout': {
+    unstable_settings: { initialRouteName: 'index' },
+    default: () => <Stack />,
+  },
+  '(app)/collection/[id]/edit': CollectionEditorScreen,
+  '(app)/collection/[id]/index': () => null,
+  '(app)/collection/new': CollectionEditorScreen,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<CollectionEditorScreen />', () => {
   describe('when there is a collection ID', () => {
     test('and the collection exists, the collection can be edited', async () => {
@@ -31,23 +44,10 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCollection(fixture.collection)
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/collection/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/collection/[id]/edit': CollectionEditorScreen,
-          '(app)/collection/[id]/index': () => null,
-        },
-        {
-          initialUrl: `collection/${fixture.collection.id}/edit`,
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: `collection/${fixture.collection.id}/edit`,
+        wrapper: mockAppRoot(),
+      })
 
       await screen.findByTestId('collection.editor.screen')
 
@@ -84,23 +84,10 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCollection(fixture.collection)
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/collection/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/collection/[id]/edit': CollectionEditorScreen,
-          '(app)/collection/[id]/index': () => null,
-        },
-        {
-          initialUrl: 'collection/0/edit',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'collection/0/edit',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledOnce()
@@ -112,23 +99,10 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/collection/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/collection/[id]/edit': CollectionEditorScreen,
-          '(app)/collection/[id]/index': () => null,
-        },
-        {
-          initialUrl: 'collection/1/edit',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'collection/1/edit',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledOnce()
@@ -143,23 +117,10 @@ describe('<CollectionEditorScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/collection/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/collection/[id]/index': () => null,
-          '(app)/collection/new': CollectionEditorScreen,
-        },
-        {
-          initialUrl: 'collection/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'collection/new',
+        wrapper: mockAppRoot(),
+      })
 
       await user.type(
         screen.getByLabelText('Enter a collection name'),
@@ -178,23 +139,10 @@ describe('<CollectionEditorScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/collection/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/collection/[id]/index': () => null,
-          '(app)/collection/new': CollectionEditorScreen,
-        },
-        {
-          initialUrl: 'collection/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'collection/new',
+        wrapper: mockAppRoot(),
+      })
 
       await user.type(
         screen.getByLabelText('Enter a collection name'),
@@ -211,23 +159,10 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCreateCollectionError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/collection/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/collection/[id]/index': () => null,
-          '(app)/collection/new': CollectionEditorScreen,
-        },
-        {
-          initialUrl: 'collection/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'collection/new',
+        wrapper: mockAppRoot(),
+      })
 
       await user.press(
         screen.getByRole('button', { name: 'Create collection' }),
