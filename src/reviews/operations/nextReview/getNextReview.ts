@@ -1,4 +1,15 @@
-import { and, asc, desc, eq, inArray, isNull, lt, or, sql } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  inArray,
+  isNull,
+  lt,
+  not,
+  or,
+  sql,
+} from 'drizzle-orm'
 import { collection, collectionToNote } from '@/collections/schema'
 import { database } from '@/data/database'
 import { note, noteField } from '@/notes/schema'
@@ -62,6 +73,7 @@ export default async function getNextReview(options?: Options) {
     .innerJoin(collectionToNote, eq(note.id, collectionToNote.note))
     .where(
       and(
+        not(eq(reviewable.archived, true)),
         options?.onlyDue
           ? or(
               lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`),

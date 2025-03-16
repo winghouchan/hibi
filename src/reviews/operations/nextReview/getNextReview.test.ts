@@ -41,6 +41,37 @@ describe('getNextReview', () => {
         expected: null,
       },
       {
+        and: 'there is 1 reviewable that has been archived',
+        then: 'returns `null`',
+        fixture: {
+          collections: [
+            { id: 1, name: 'Collection Mock 1' },
+            { id: 2, name: 'Collection Mock 2' },
+          ],
+          notes: [
+            {
+              id: 1,
+              collections: [2],
+              reversible: false,
+              separable: false,
+            },
+          ],
+          reviewables: [
+            {
+              id: 1,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front' },
+                { side: 1, position: 0, value: 'Back' },
+              ],
+              archived: true,
+              snapshots: [],
+            },
+          ],
+        },
+        expected: null,
+      },
+      {
         and: 'there is 1 reviewable with no snapshots',
         then:
           input.collections === undefined ||
@@ -69,6 +100,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front' },
                 { side: 1, position: 0, value: 'Back' },
               ],
+              archived: false,
               snapshots: [],
             },
           ],
@@ -115,6 +147,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front' },
                 { side: 1, position: 0, value: 'Back' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -166,6 +199,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front' },
                 { side: 1, position: 0, value: 'Back' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -217,6 +251,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front' },
                 { side: 1, position: 0, value: 'Back' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -272,6 +307,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front' },
                 { side: 1, position: 0, value: 'Back' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -327,6 +363,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -341,6 +378,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 2 }),
@@ -392,6 +430,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -406,6 +445,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -457,6 +497,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 2 }),
@@ -471,6 +512,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -522,6 +564,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -540,6 +583,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 3 }),
@@ -595,6 +639,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 4 }),
@@ -613,6 +658,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 2 }),
@@ -668,6 +714,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -686,6 +733,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -741,6 +789,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -759,6 +808,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 2 }),
@@ -814,6 +864,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [],
             },
             {
@@ -823,6 +874,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -874,6 +926,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [],
             },
             {
@@ -883,6 +936,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -934,6 +988,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 1' },
                 { side: 1, position: 0, value: 'Back 1' },
               ],
+              archived: false,
               snapshots: [],
             },
             {
@@ -943,6 +998,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: add(new Date(), { days: 1 }),
@@ -957,6 +1013,7 @@ describe('getNextReview', () => {
                 { side: 0, position: 0, value: 'Front 3' },
                 { side: 1, position: 0, value: 'Back 3' },
               ],
+              archived: false,
               snapshots: [
                 {
                   due: sub(new Date(), { days: 1 }),
@@ -975,6 +1032,73 @@ describe('getNextReview', () => {
                 fields: [
                   [expect.objectContaining({ value: 'Front 3' })],
                   [expect.objectContaining({ value: 'Back 3' })],
+                ],
+              })
+            : null,
+      },
+      {
+        and: 'there are many reviewables each with 1 snapshot with a due date in the past with some reviewables being archived',
+        then:
+          input.collections === undefined ||
+          input.collections?.length === 0 ||
+          input.collections?.includes(2)
+            ? 'returns the reviewable with the oldest due date that is not archived'
+            : 'returns `null`',
+        fixture: {
+          collections: [
+            { id: 1, name: 'Collection Mock 1' },
+            { id: 2, name: 'Collection Mock 2' },
+          ],
+          notes: [
+            {
+              id: 1,
+              collections: [2],
+              reversible: false,
+              separable: false,
+            },
+          ],
+          reviewables: [
+            {
+              id: 1,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 1' },
+                { side: 1, position: 0, value: 'Back 1' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: sub(new Date(), { days: 1 }),
+                  createdAt: sub(new Date(), { days: 2 }),
+                },
+              ],
+            },
+            {
+              id: 2,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 2' },
+                { side: 1, position: 0, value: 'Back 2' },
+              ],
+              archived: true,
+              snapshots: [
+                {
+                  due: sub(new Date(), { days: 2 }),
+                  createdAt: sub(new Date(), { days: 3 }),
+                },
+              ],
+            },
+          ],
+        },
+        expected:
+          input.collections === undefined ||
+          input.collections?.length === 0 ||
+          input.collections?.includes(2)
+            ? expect.objectContaining({
+                id: 1,
+                fields: [
+                  [expect.objectContaining({ value: 'Front 1' })],
+                  [expect.objectContaining({ value: 'Back 1' })],
                 ],
               })
             : null,
@@ -1013,10 +1137,10 @@ describe('getNextReview', () => {
 
           await Promise.all(
             fixture.reviewables?.map(
-              async ({ id, fields, note: noteId, snapshots }) => {
+              async ({ archived, id, fields, note: noteId, snapshots }) => {
                 const [{ id: reviewableId }] = await database
                   .insert(reviewable)
-                  .values({ id, note: noteId })
+                  .values({ id, note: noteId, archived })
                   .returning()
 
                 await Promise.all(
