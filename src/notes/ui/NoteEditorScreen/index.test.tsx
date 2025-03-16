@@ -19,6 +19,19 @@ import { createNote, updateNote } from '@/notes/operations'
 
 jest.mock('@/ui/RichTextInput')
 
+const routerMock = {
+  '(app)/_layout': () => <Stack />,
+  '(app)/(tabs)/_layout': () => <Stack />,
+  '(app)/note/_layout': () => <Stack />,
+  '(app)/note/[id]/_layout': {
+    unstable_settings: { initialRouteName: 'index' },
+    default: () => <Stack />,
+  },
+  '(app)/note/[id]/edit': NoteEditorScreen,
+  '(app)/note/[id]/index': () => null,
+  '(app)/note/new': NoteEditorScreen,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<NoteEditorScreen />', () => {
   describe('when there is a note ID', () => {
     test('and the note exists, the note can be edited', async () => {
@@ -90,23 +103,10 @@ describe('<NoteEditorScreen />', () => {
         fields: [], // Empty because value is not significant for this test
       })
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/note/_layout': () => <Stack />,
-          '(app)/note/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/note/[id]/edit': NoteEditorScreen,
-          '(app)/note/[id]/index': () => null,
-        },
-        {
-          initialUrl: 'note/1/edit',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'note/1/edit',
+        wrapper: mockAppRoot(),
+      })
 
       const frontEditor = await screen.findByDisplayValue(
         fixture.note.fields[0][0].value,
@@ -137,23 +137,10 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNote(null)
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/note/_layout': () => <Stack />,
-          '(app)/note/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/note/[id]/edit': NoteEditorScreen,
-          '(app)/note/[id]/index': () => null,
-        },
-        {
-          initialUrl: 'note/1/edit',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'note/1/edit',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(async () => {
         expect(alertSpy).toHaveBeenCalledOnce()
@@ -165,22 +152,10 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNoteError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/note/_layout': () => <Stack />,
-          '(app)/note/[id]/_layout': {
-            unstable_settings: { initialRouteName: 'index' },
-            default: () => <Stack />,
-          },
-          '(app)/note/[id]/edit': NoteEditorScreen,
-        },
-        {
-          initialUrl: 'note/1/edit',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'note/1/edit',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(async () => {
         expect(alertSpy).toHaveBeenCalledOnce()
@@ -222,19 +197,10 @@ describe('<NoteEditorScreen />', () => {
         ...input.note.config,
       })
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/collection/_layout': () => <Stack />,
-          '(app)/note/_layout': () => <Stack />,
-          '(app)/note/new': NoteEditorScreen,
-        },
-        {
-          initialUrl: 'note/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'note/new',
+        wrapper: mockAppRoot(),
+      })
 
       await user.type(
         await screen.findByTestId('note.note-editor.side-0.editor.input'),
@@ -276,18 +242,10 @@ describe('<NoteEditorScreen />', () => {
 
       mockCreateNoteError(new Error('Mock Error'))
 
-      renderRouter(
-        {
-          '(app)/_layout': () => <Stack />,
-          '(app)/(tabs)/_layout': () => <Stack />,
-          '(app)/note/_layout': () => <Stack />,
-          '(app)/note/new': NoteEditorScreen,
-        },
-        {
-          initialUrl: 'note/new',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: 'note/new',
+        wrapper: mockAppRoot(),
+      })
 
       await user.press(screen.getByRole('button', { name: 'Add' }))
 
