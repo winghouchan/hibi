@@ -30,14 +30,18 @@ describe('<CollectionEditorScreen />', () => {
       }
 
       mockCollection(fixture.collection)
-      mockCollection(fixture.collection)
 
       renderRouter(
         {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/collection/[id]/edit': CollectionEditorScreen,
+          '(app)/collection/[id]/index': () => null,
         },
         {
           initialUrl: `collection/${fixture.collection.id}/edit`,
@@ -79,14 +83,18 @@ describe('<CollectionEditorScreen />', () => {
       }
 
       mockCollection(fixture.collection)
-      mockCollection(fixture.collection)
 
       renderRouter(
         {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/collection/[id]/edit': CollectionEditorScreen,
+          '(app)/collection/[id]/index': () => null,
         },
         {
           initialUrl: 'collection/0/edit',
@@ -109,7 +117,12 @@ describe('<CollectionEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/collection/[id]/edit': CollectionEditorScreen,
+          '(app)/collection/[id]/index': () => null,
         },
         {
           initialUrl: 'collection/1/edit',
@@ -135,6 +148,10 @@ describe('<CollectionEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/collection/[id]/index': () => null,
           '(app)/collection/new': CollectionEditorScreen,
         },
@@ -166,6 +183,10 @@ describe('<CollectionEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/collection/[id]/index': () => null,
           '(app)/collection/new': CollectionEditorScreen,
         },
@@ -195,6 +216,10 @@ describe('<CollectionEditorScreen />', () => {
           '(app)/_layout': () => <Stack />,
           '(app)/(tabs)/_layout': () => <Stack />,
           '(app)/collection/_layout': () => <Stack />,
+          '(app)/collection/[id]/_layout': {
+            unstable_settings: { initialRouteName: 'index' },
+            default: () => <Stack />,
+          },
           '(app)/collection/[id]/index': () => null,
           '(app)/collection/new': CollectionEditorScreen,
         },

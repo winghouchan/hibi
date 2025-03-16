@@ -11,10 +11,7 @@ tags:
     id: collection.editor.cta.button
 
 - assertVisible:
-    text: ${collectionName}
-
-- tapOn:
-    text: Back
+    id: library.collection.screen
 
 - assertVisible:
     text: ${collectionName}

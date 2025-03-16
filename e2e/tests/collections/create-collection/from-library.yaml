@@ -26,3 +26,9 @@ env:
     file: ../__subflows__/create-collection.yaml
     env:
       collectionName: ${collectionName}
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    id: library.screen

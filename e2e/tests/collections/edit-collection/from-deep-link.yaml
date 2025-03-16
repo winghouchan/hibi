@@ -13,3 +13,15 @@ appId: ${appId}
     file: ../__subflows__/edit-collection.yaml
     env:
       collectionName: New Collection Name
+
+- assertVisible:
+    id: library.collection.screen
+
+- assertVisible:
+    text: ${collectionName}
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    id: home.screen

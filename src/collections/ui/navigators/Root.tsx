@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { View } from 'react-native'
 import { Button } from '@/ui'
 
-export default function CollectionNavigator() {
+export default function RootCollectionNavigator() {
   const { t: translate } = useLingui()
 
   return (
@@ -25,6 +25,8 @@ export default function CollectionNavigator() {
             </View>
           ) : null,
       })}
-    />
+    >
+      <Stack.Screen name="[id]" options={{ headerShown: false }} />
+    </Stack>
   )
 }

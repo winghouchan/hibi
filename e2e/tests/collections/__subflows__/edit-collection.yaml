@@ -11,6 +11,3 @@ tags:
 
 - tapOn:
     id: collection.editor.cta.button
-
-- assertVisible:
-    text: ${collectionName}

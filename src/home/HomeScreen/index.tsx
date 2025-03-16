@@ -81,6 +81,23 @@ export default function HomeScreen() {
             priority="medium"
           >{translate`Add note`}</Button>
         </Link>
+        {typeof collection !== 'undefined' && (
+          <Link
+            href={{
+              pathname: '/collection/[id]/edit',
+              params: {
+                id: collection,
+              },
+            }}
+            testID="home.collection.edit"
+            asChild
+          >
+            <Button
+              action="neutral"
+              priority="medium"
+            >{translate`Edit collection`}</Button>
+          </Link>
+        )}
       </View>
     </View>
   )

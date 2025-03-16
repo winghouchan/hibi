@@ -13,3 +13,9 @@ appId: ${appId}
     file: ../__subflows__/create-collection.yaml
     env:
       collectionName: New Collection Name
+
+- tapOn:
+    text: Back
+
+- assertVisible:
+    id: home.screen

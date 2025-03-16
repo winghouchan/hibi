@@ -1,1 +1,1 @@
-export { CollectionNavigator as default } from '@/collections/ui'
+export { RootCollectionNavigator as default } from '@/collections/ui'

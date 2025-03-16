@@ -16,4 +16,4 @@ appId: ${appId}
     text: OK
 
 - assertVisible:
-    id: library.screen
+    id: home.screen

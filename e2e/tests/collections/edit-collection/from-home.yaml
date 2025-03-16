@@ -1,4 +1,4 @@
-name: '[Collections] When editing a collection > and it exists > it can be edited via a navigation from the library'
+name: '[Collections] When editing a collection > and it exists > it can be edited via a navigation from the home screen'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete
@@ -12,17 +12,11 @@ env:
 
 - launchApp
 
-- runFlow: ../../library/__subflows__/view-library.yaml
-
 - tapOn:
     text: ${oldCollectionName}
 
-- assertVisible:
-    text: ${oldCollectionName}
-    selected: true
-
 - tapOn:
-    id: library.collection.edit.link
+    id: home.collection.edit.button
 
 - runFlow:
     file: ../__subflows__/edit-collection.yaml
@@ -30,7 +24,7 @@ env:
       collectionName: ${newCollectionName}
 
 - assertVisible:
-    id: library.screen
+    id: home.screen
 
 - assertVisible:
     text: ${newCollectionName}
