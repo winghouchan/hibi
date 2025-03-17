@@ -48,7 +48,9 @@ export default function LibraryScreen() {
     isFetchingNextPage: isFetchingMoreNotes,
   } = useInfiniteQuery(
     notesQuery(
-      collection ? { filter: { collection: [collection] } } : undefined,
+      collection
+        ? { filter: { collection: [collection] }, order: { id: 'desc' } }
+        : { order: { id: 'desc' } },
     ),
   )
 
@@ -83,6 +85,7 @@ export default function LibraryScreen() {
         <CollectionFilter onChange={setCollection} value={collection} />
         <NoteList
           data={notes}
+          onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
           renderItem={({ item: note }) => (
             <Link
               key={note.id}
