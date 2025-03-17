@@ -1,18 +1,33 @@
-import { queryOptions, skipToken } from '@tanstack/react-query'
+import { infiniteQueryOptions, skipToken } from '@tanstack/react-query'
 import baseQueryKey from '../baseQueryKey'
 import getNotes from './getNotes'
 
 export default function notesQuery(...args: Parameters<typeof getNotes>) {
   const [{ filter = undefined } = {}] = args
 
-  return queryOptions({
+  return infiniteQueryOptions({
     queryKey: [baseQueryKey, 'list', ...args],
     queryFn: filter
       ? Object.values(filter).some(
           (value) => Array.isArray(value) && value.length > 0,
         )
-        ? () => getNotes(...args)
+        ? ({ pageParam }) =>
+            getNotes({
+              ...args[0],
+              pagination: { ...args[0]?.pagination, cursor: pageParam },
+            })
         : skipToken
-      : () => getNotes(...args),
+      : ({ pageParam }) =>
+          getNotes({
+            ...args[0],
+            pagination: { ...args[0]?.pagination, cursor: pageParam },
+          }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.cursor.next,
+    select: (data) =>
+      data.pages.reduce<(typeof data.pages)[number]['notes']>(
+        (accumulator, { notes }) => [...accumulator, ...notes],
+        [],
+      ),
   })
 }

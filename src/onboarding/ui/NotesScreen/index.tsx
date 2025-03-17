@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { type NavigationProp } from '@react-navigation/native'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
@@ -24,7 +24,11 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
 export default function NotesScreen() {
   const { t: translate } = useLingui()
   const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
-  const { data: notes } = useQuery(
+  const {
+    data: notes,
+    fetchNextPage: fetchMoreNotes,
+    isFetchingNextPage: isFetchingMoreNotes,
+  } = useInfiniteQuery(
     notesQuery({
       filter: {
         collection:
@@ -93,6 +97,7 @@ export default function NotesScreen() {
         >{translate`What do you want to remember?`}</Text>
         <NoteList
           data={notes}
+          onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
           renderItem={({ item: note }) => (
             <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
               <NoteList.Item fields={note.fields} />

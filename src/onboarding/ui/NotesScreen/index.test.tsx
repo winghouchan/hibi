@@ -58,7 +58,7 @@ describe('<NotesScreen />', () => {
         }
 
         mockOnboardingCollection(fixture.collection)
-        mockNotes(fixture.notes)
+        mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
         renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
@@ -124,7 +124,7 @@ describe('<NotesScreen />', () => {
         }
 
         mockOnboardingCollection(fixture.collection)
-        mockNotes(fixture.notes)
+        mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
         renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
@@ -181,7 +181,7 @@ describe('<NotesScreen />', () => {
         }
 
         mockOnboardingCollection(fixture.collection)
-        mockNotes(fixture.notes)
+        mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
         renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
@@ -240,7 +240,7 @@ describe('<NotesScreen />', () => {
         }
 
         mockOnboardingCollection(fixture.collection)
-        mockNotes(fixture.notes)
+        mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
         renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
@@ -320,7 +320,7 @@ describe('<NotesScreen />', () => {
       mockCompleteOnboardingError(new Error('Mock Error'))
 
       mockOnboardingCollection(fixture.collection)
-      mockNotes(fixture.notes)
+      mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
       renderRouter(routerMock, {
         initialUrl: 'onboarding/notes',

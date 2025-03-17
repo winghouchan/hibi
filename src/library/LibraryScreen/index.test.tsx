@@ -58,7 +58,7 @@ describe('<LibraryScreen />', () => {
     }
 
     mockCollections(fixture.collections)
-    mockNotes(fixture.notes)
+    mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
 
@@ -166,11 +166,11 @@ describe('<LibraryScreen />', () => {
     }
 
     mockCollections(fixture.collections)
-    mockNotes(fixture.notes)
+    mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
 
-    mockNotes([fixture.notes[0]])
+    mockNotes({ cursor: { next: undefined }, notes: [fixture.notes[0]] })
 
     await user.press(
       await screen.findByRole('tab', { name: fixture.collections[0].name }),
@@ -193,7 +193,7 @@ describe('<LibraryScreen />', () => {
     const alertSpy = jest.spyOn(Alert, 'alert')
 
     mockCollectionsError(new Error('Mock Error'))
-    mockNotes([])
+    mockNotes({ cursor: { next: undefined }, notes: [] })
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
 

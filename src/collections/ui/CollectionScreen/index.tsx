@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import {
   Link,
   router,
@@ -21,7 +21,11 @@ export default function CollectionScreen() {
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
     collectionQuery({ filter: { id: collectionId } }),
   )
-  const { data: notes } = useQuery(
+  const {
+    data: notes,
+    fetchNextPage: fetchMoreNotes,
+    isFetchingNextPage: isFetchingMoreNotes,
+  } = useInfiniteQuery(
     notesQuery({
       filter: {
         collection:
@@ -62,6 +66,7 @@ export default function CollectionScreen() {
           <Layout.Main scrollable={false}>
             <NoteList
               data={notes}
+              onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
               renderItem={({ item: note }) => (
                 <Link key={note.id} href={`/note/${note.id}`}>
                   <NoteList.Item fields={note.fields} />

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { renderHook } from '@testing-library/react-native'
 import { mockAppRoot } from 'test/utils'
 import getNotes from './getNotes'
@@ -77,7 +77,9 @@ describe('notesQuery', () => {
       skipped: true,
     },
   ])('$name', async ({ input, skipped }) => {
-    renderHook(() => useQuery(notesQuery(input)), { wrapper: mockAppRoot() })
+    renderHook(() => useInfiniteQuery(notesQuery(input)), {
+      wrapper: mockAppRoot(),
+    })
 
     expect(getNotes).toHaveBeenCalledTimes(skipped ? 0 : 1)
   })

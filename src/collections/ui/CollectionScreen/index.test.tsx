@@ -27,7 +27,7 @@ describe('<CollectionScreen />', () => {
       }
 
       mockCollection(fixture.collection)
-      mockNotes(fixture.notes)
+      mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
       renderRouter(routerMock, {
         initialUrl: `/collection/${fixture.collection.id}`,
