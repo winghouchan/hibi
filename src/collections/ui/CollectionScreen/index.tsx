@@ -31,6 +31,9 @@ export default function CollectionScreen() {
         collection:
           typeof collection?.id !== 'undefined' ? [collection.id] : undefined,
       },
+      order: {
+        id: 'desc',
+      },
     }),
   )
 
