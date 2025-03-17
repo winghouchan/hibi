@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@10play/tentap-editor": "^0.5.33",
+    "@dev-plugins/react-navigation": "^0.1.0",
     "@dev-plugins/react-query": "^0.1.0",
     "@expo/vector-icons": "^14.0.3",
     "@formatjs/intl-locale": "^4.2.9",

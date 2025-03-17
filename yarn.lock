@@ -1180,6 +1180,14 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@dev-plugins/react-navigation@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@dev-plugins/react-navigation/-/react-navigation-0.1.0.tgz#b38cc5ce02e569351023c4cd7c709d78b122d66c"
+  integrity sha512-eV6gkA/wH2E7LS6UfH5Kw1Qhk4zcMU3OMhQSqn4XCZn33HoT/Q2tcBHrUiiWcBVX9MwB9NyJB0hPnJ8lNAIQxg==
+  dependencies:
+    "@react-navigation/devtools" "^7.0.1"
+    nanoid "^5.0.8"
+
 "@dev-plugins/react-query@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@dev-plugins/react-query/-/react-query-0.1.0.tgz#121871fc63c78b85b77e8ce971061dbdece88dfc"
@@ -2904,6 +2912,15 @@
     react-is "^18.2.0"
     use-latest-callback "^0.2.1"
     use-sync-external-store "^1.2.2"
+
+"@react-navigation/devtools@^7.0.1":
+  version "7.0.16"
+  resolved "https://registry.yarnpkg.com/@react-navigation/devtools/-/devtools-7.0.16.tgz#3a642037482d6e9b33a9d70fe4f4123dc7d54a6f"
+  integrity sha512-3rWR5TmI+JhxFyJMQXcAEdPumBIThpI1pj0YInON6u8olpL7nD5QGdGXaF71hilPpjID43+tgtV98fcAvhzzOA==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+    nanoid "3.3.8"
+    stacktrace-parser "^0.1.10"
 
 "@react-navigation/elements@^2.2.5":
   version "2.2.5"
@@ -10078,6 +10095,11 @@ nanoid@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
+
+nanoid@^5.0.8:
+  version "5.1.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.4.tgz#10b15a91d2f727b1f200faf0ff73656fd96c497d"
+  integrity sha512-GTFcMIDgR7tqji/LpSY8rtg464VnJl/j6ypoehYnuGb+Y8qZUdtKB8WVCXon0UEZgFDbuUxpIl//6FHLHgXSNA==
 
 natural-compare@^1.4.0:
   version "1.4.0"

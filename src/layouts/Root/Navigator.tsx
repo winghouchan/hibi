@@ -1,7 +1,8 @@
+import { useReactNavigationDevTools } from '@dev-plugins/react-navigation'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { SplashScreen } from 'expo-router'
+import { SplashScreen, useNavigationContainerRef } from 'expo-router'
 import { ComponentProps, useEffect, useState } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
@@ -69,6 +70,10 @@ export default function Navigator() {
       background: theme.colors.neutral[0].background,
     },
   }
+
+  const navigationContainerRef = useNavigationContainerRef()
+
+  useReactNavigationDevTools(navigationContainerRef)
 
   useEffect(hideSplashScreen, [hasCheckedOnboardingState, isNavigatorReady])
 
