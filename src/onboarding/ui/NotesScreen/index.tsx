@@ -34,6 +34,9 @@ export default function NotesScreen() {
         collection:
           typeof collection?.id !== 'undefined' ? [collection.id] : undefined,
       },
+      order: {
+        id: 'desc',
+      },
     }),
   )
   const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()
