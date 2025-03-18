@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { FlatList, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { collectionsQuery } from '@/collections/operations'
@@ -31,7 +31,11 @@ type Props = {
 
 export default function CollectionFilter({ onChange, value }: Props) {
   const { t: translate } = useLingui()
-  const { data: collections } = useQuery(collectionsQuery())
+  const {
+    data: collections,
+    fetchNextPage: fetchMoreCollections,
+    isFetchingNextPage: isFetchingMoreCollections,
+  } = useInfiniteQuery(collectionsQuery())
 
   return (
     <View>
@@ -40,6 +44,9 @@ export default function CollectionFilter({ onChange, value }: Props) {
         data={[{ id: undefined, name: translate`All` }, ...(collections ?? [])]}
         horizontal={true}
         contentContainerStyle={styles.container}
+        onEndReached={() =>
+          !isFetchingMoreCollections && fetchMoreCollections()
+        }
         renderItem={({ item: { id, name } }) => {
           const selected = id === value
           return (

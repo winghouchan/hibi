@@ -45,7 +45,10 @@ describe('<HomeScreen />', () => {
     },
   ])('$name', async ({ expected, fixture }) => {
     mockNextReview(fixture.reviewable)
-    mockCollections(fixture.collections)
+    mockCollections({
+      cursor: { next: undefined },
+      collections: fixture.collections,
+    })
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
@@ -55,7 +58,10 @@ describe('<HomeScreen />', () => {
   test('when there is an error getting the next review, the user is alerted', async () => {
     const alertSpy = jest.spyOn(Alert, 'alert')
 
-    mockCollections([{ id: 1, name: 'Collection Name', createdAt: new Date() }])
+    mockCollections({
+      cursor: { next: undefined },
+      collections: [{ id: 1, name: 'Collection Name', createdAt: new Date() }],
+    })
     mockNextReviewError(new Error('Mock Error'))
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })

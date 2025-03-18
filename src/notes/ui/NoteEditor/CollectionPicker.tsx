@@ -7,7 +7,7 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { PropsWithChildren, useRef, useState } from 'react'
 import {
   Platform,
@@ -45,10 +45,14 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const dimensions = useWindowDimensions()
   const safeAreaInsets = useSafeAreaInsets()
-  const { data: selectedCollections } = useQuery(
+  const { data: selectedCollections } = useInfiniteQuery(
     collectionsQuery({ filter: { id: value } }),
   )
-  const { data: collections } = useQuery({
+  const {
+    data: collections,
+    fetchNextPage: fetchMoreCollections,
+    isFetchingNextPage: isFetchingMoreCollections,
+  } = useInfiniteQuery({
     ...collectionsQuery(),
     enabled: isOpen,
   })
@@ -157,6 +161,9 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
           <BottomSheetFlatList
             data={collections}
             keyExtractor={({ id }) => `${id}`}
+            onEndReached={() =>
+              !isFetchingMoreCollections && fetchMoreCollections()
+            }
             renderItem={({ item: { id, name } }) => (
               <Pressable
                 accessibilityRole="button"

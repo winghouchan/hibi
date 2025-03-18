@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { renderHook } from '@testing-library/react-native'
 import { mockAppRoot } from 'test/utils'
 import collectionsQuery from './collectionsQuery'
@@ -77,7 +77,7 @@ describe('collectionsQuery', () => {
       skipped: true,
     },
   ])('$name', async ({ input, skipped }) => {
-    renderHook(() => useQuery(collectionsQuery(input)), {
+    renderHook(() => useInfiniteQuery(collectionsQuery(input)), {
       wrapper: mockAppRoot(),
     })
 

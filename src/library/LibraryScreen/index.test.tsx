@@ -57,7 +57,10 @@ describe('<LibraryScreen />', () => {
       ],
     }
 
-    mockCollections(fixture.collections)
+    mockCollections({
+      cursor: { next: undefined },
+      collections: fixture.collections,
+    })
     mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
@@ -165,7 +168,10 @@ describe('<LibraryScreen />', () => {
       ],
     }
 
-    mockCollections(fixture.collections)
+    mockCollections({
+      cursor: { next: undefined },
+      collections: fixture.collections,
+    })
     mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
@@ -205,7 +211,7 @@ describe('<LibraryScreen />', () => {
   test('when there is an error fetching the notes, an alert is displayed', async () => {
     const alertSpy = jest.spyOn(Alert, 'alert')
 
-    mockCollections([])
+    mockCollections({ cursor: { next: undefined }, collections: [] })
     mockNotesError(new Error('Mock Error'))
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })

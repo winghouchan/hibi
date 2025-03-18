@@ -95,7 +95,10 @@ describe('<NoteEditorScreen />', () => {
       } as const
 
       mockGetNote(noteMock)
-      mockCollections([fixture.collection])
+      mockCollections({
+        cursor: { next: undefined },
+        collections: [fixture.collection],
+      })
       mockUpdateNote({
         id: fixture.note.id,
         ...input.note.config,
@@ -187,7 +190,14 @@ describe('<NoteEditorScreen />', () => {
         },
       } as const
 
-      mockCollections(fixture.collections)
+      mockCollections({
+        cursor: { next: undefined },
+        collections: fixture.collections,
+      })
+      mockCollections({
+        cursor: { next: undefined },
+        collections: fixture.collections,
+      })
       mockCreateNote({
         id: 1,
         collections: fixture.collections,

@@ -71,7 +71,7 @@ describe('<NoteEditorScreen />', () => {
         const user = userEvent.setup()
 
         mockOnboardingCollection(fixture.collection)
-        mockCollections([])
+        mockCollections({ cursor: { next: undefined }, collections: [] })
 
         renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/new',
@@ -120,7 +120,7 @@ describe('<NoteEditorScreen />', () => {
         const alertSpy = jest.spyOn(Alert, 'alert')
 
         mockOnboardingCollection(fixture.collection)
-        mockCollections([])
+        mockCollections({ cursor: { next: undefined }, collections: [] })
 
         mockCreateNoteError(new Error('Mock Error'))
 
@@ -177,7 +177,7 @@ describe('<NoteEditorScreen />', () => {
         } as const
 
         mockOnboardingCollection(fixture.collection)
-        mockCollections([])
+        mockCollections({ cursor: { next: undefined }, collections: [] })
 
         mockGetNote({
           id: fixture.note.id,
@@ -265,7 +265,7 @@ describe('<NoteEditorScreen />', () => {
         const user = userEvent.setup()
 
         mockOnboardingCollection(fixture.collection)
-        mockCollections([])
+        mockCollections({ cursor: { next: undefined }, collections: [] })
 
         mockGetNote({
           id: fixture.note.id,
@@ -330,7 +330,7 @@ describe('<NoteEditorScreen />', () => {
           name: 'Collection Name',
           createdAt: new Date(),
         })
-        mockCollections([])
+        mockCollections({ cursor: { next: undefined }, collections: [] })
 
         mockGetNote(null)
 
@@ -405,7 +405,7 @@ describe('<NoteEditorScreen />', () => {
         name: 'Collection Name',
         createdAt: new Date(),
       })
-      mockCollections([])
+      mockCollections({ cursor: { next: undefined }, collections: [] })
 
       mockGetNoteError(new Error('Mock Error'))
 
