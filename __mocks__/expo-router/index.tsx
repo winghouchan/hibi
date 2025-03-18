@@ -1,8 +1,8 @@
 const ExpoRouter = jest.requireActual('expo-router')
 
 export const SplashScreen = {
-  hideAsync: jest.fn(),
-  preventAutoHideAsync: jest.fn(),
+  hideAsync: jest.fn(async () => {}),
+  preventAutoHideAsync: jest.fn(async () => {}),
 }
 
 export const Link = jest.fn((props) => <ExpoRouter.Link {...props} />)
@@ -20,6 +20,10 @@ export const useFocusEffect = jest.fn(ExpoRouter.useFocusEffect)
 export const useLocalSearchParams = jest.fn(ExpoRouter.useLocalSearchParams)
 
 export const useNavigation = jest.fn(ExpoRouter.useNavigation)
+
+export const useNavigationContainerRef = jest.fn(
+  ExpoRouter.useNavigationContainerRef,
+)
 
 export const usePathname = jest.fn(ExpoRouter.usePathname)
 

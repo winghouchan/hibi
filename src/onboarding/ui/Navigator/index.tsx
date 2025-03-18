@@ -12,6 +12,7 @@ import {
   isOnboardingCompleteQuery,
   onboardingCollectionQuery,
 } from '../../operations'
+import ErrorBoundary from './ErrorBoundary'
 import Header from './Header'
 
 export default function OnboardingNavigator() {
@@ -61,7 +62,10 @@ export default function OnboardingNavigator() {
           Route<'index' | 'onboarding', object | undefined>
         >[] = [{ name: 'index' }]
 
-        if (pathname === 'onboarding/collection') {
+        if (
+          pathname === 'onboarding/collection' ||
+          pathname === '/onboarding/collection'
+        ) {
           routes.push({
             name: 'onboarding',
             state: {
@@ -86,7 +90,10 @@ export default function OnboardingNavigator() {
            * exist, updating the route history to allow for back navigation.
            */
 
-          if (pathname === 'onboarding/notes') {
+          if (
+            pathname === 'onboarding/notes' ||
+            pathname === '/onboarding/notes'
+          ) {
             routes.push({
               name: 'onboarding',
               state: {
@@ -98,7 +105,10 @@ export default function OnboardingNavigator() {
             navigation.reset({ index: 1, routes })
           }
 
-          if (pathname === 'onboarding/notes/new') {
+          if (
+            pathname === 'onboarding/notes/new' ||
+            pathname === '/onboarding/notes/new'
+          ) {
             routes.push({
               name: 'onboarding',
               state: {
@@ -146,12 +156,16 @@ export default function OnboardingNavigator() {
   if (isOnboardingComplete === false) {
     return (
       <Stack
+        initialRouteName="index"
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
           gestureEnabled: true,
           headerMode: 'float',
           header: (props) => <Header {...props} />,
         }}
+        screenLayout={({ children }) => (
+          <ErrorBoundary>{children}</ErrorBoundary>
+        )}
       >
         <Stack.Screen
           name="notes/new"

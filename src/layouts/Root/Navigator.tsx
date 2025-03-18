@@ -9,6 +9,7 @@ import { useUnistyles } from 'react-native-unistyles'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { log } from '@/telemetry'
 import { CardStyleInterpolators, Stack } from '@/ui'
+import ErrorBoundary from './ErrorBoundary'
 
 type StackProps = ComponentProps<typeof Stack>
 
@@ -19,6 +20,10 @@ export default function Navigator() {
     isOnboardingCompleteQuery,
   )
   const [isNavigatorReady, setIsNavigatorReady] = useState(false)
+
+  const screenLayout: StackProps['screenLayout'] = ({ children }) => (
+    <ErrorBoundary>{children}</ErrorBoundary>
+  )
 
   const screenListeners: StackProps['screenListeners'] = {
     state: () => {
@@ -79,7 +84,11 @@ export default function Navigator() {
 
   return (
     <ThemeProvider value={navigatorTheme}>
-      <Stack screenListeners={screenListeners} screenOptions={screenOptions}>
+      <Stack
+        screenListeners={screenListeners}
+        screenOptions={screenOptions}
+        screenLayout={screenLayout}
+      >
         <Stack.Screen
           name="onboarding"
           options={{

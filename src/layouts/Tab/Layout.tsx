@@ -1,7 +1,9 @@
 import { useLingui } from '@lingui/react/macro'
+import { useNavigation } from 'expo-router'
 import { Tabs, TabTrigger, TabList, TabSlot } from 'expo-router/ui'
 import { StyleSheet } from 'react-native-unistyles'
 import TabButton from './Button'
+import ErrorBoundary from './ErrorBoundary'
 
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   tabList: {
@@ -15,10 +17,15 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
 
 export default function TabLayout() {
   const { t: translate } = useLingui()
+  const navigation = useNavigation()
+  const navigationState = navigation.getState()
+  const errorBoundaryKey = navigationState?.routes[0].state?.index
 
   return (
     <Tabs>
-      <TabSlot />
+      <ErrorBoundary key={errorBoundaryKey}>
+        <TabSlot />
+      </ErrorBoundary>
       <TabList style={styles.tabList}>
         <TabTrigger name="home" href="/" testID="tab.home.button" asChild>
           <TabButton label={translate`Home`} icon="home" />

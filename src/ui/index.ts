@@ -1,6 +1,7 @@
 export { default as Button } from './Button'
 export { default as Card } from './Card'
 export * as CardStyleInterpolators from './CardStyleInterpolators'
+export * as Fault from './Fault'
 export { default as Icon } from './Icon'
 export { default as Progress } from './Progress'
 export { default as RichTextInput } from './RichTextInput'

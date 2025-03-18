@@ -4,23 +4,22 @@ import { mockOnboardedState } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import AppLayout from '.'
 
+const routerMock = {
+  '(app)/_layout': AppLayout,
+  '(app)/index': () => null,
+  '(app)/review': () => null,
+  index: () => null,
+} satisfies Parameters<typeof renderRouter>[0]
+
 describe('<AppLayout />', () => {
   describe('when onboarding has not been completed', () => {
     it('redirects to the welcome screen', async () => {
       mockOnboardedState(false)
 
-      renderRouter(
-        {
-          '(app)/_layout': AppLayout,
-          '(app)/index': () => null,
-          '(app)/review': () => null,
-          index: () => null,
-        },
-        {
-          initialUrl: '(app)',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: '(app)',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHaveRouterState(
@@ -37,18 +36,10 @@ describe('<AppLayout />', () => {
     it('does not redirect to the welcome screen', async () => {
       mockOnboardedState(true)
 
-      renderRouter(
-        {
-          '(app)/_layout': AppLayout,
-          '(app)/index': () => null,
-          '(app)/review': () => null,
-          index: () => null,
-        },
-        {
-          initialUrl: '(app)',
-          wrapper: mockAppRoot(),
-        },
-      )
+      renderRouter(routerMock, {
+        initialUrl: '(app)',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHaveRouterState(
@@ -64,6 +55,30 @@ describe('<AppLayout />', () => {
           }),
         )
       })
+    })
+  })
+
+  describe('when there is an error from a screen in the navigator', () => {
+    it('shows an error message and button to try again', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
+
+      mockOnboardedState(true)
+
+      renderRouter(
+        {
+          ...routerMock,
+          '(app)/index': () => {
+            throw new Error('Mock Error')
+          },
+        },
+        { initialUrl: '(app)', wrapper: mockAppRoot() },
+      )
+
+      expect(await screen.findByText('Something went wrong')).toBeOnTheScreen()
+      expect(
+        await screen.findByRole('button', { name: 'Try again' }),
+      ).toBeOnTheScreen()
     })
   })
 })

@@ -11208,6 +11208,13 @@ react-dom@18.3.1, react-dom@^18.2.0:
   dependencies:
     scheduler "^0.25.0"
 
+react-error-boundary@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-5.0.0.tgz#6b6c7e075c922afb0283147e5b084efa44e68570"
+  integrity sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
 react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"

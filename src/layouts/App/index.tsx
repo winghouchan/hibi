@@ -5,6 +5,7 @@ import { Stack, useFocusEffect, useNavigation } from 'expo-router'
 import { View } from 'react-native'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { Button } from '@/ui'
+import ErrorBoundary from './ErrorBoundary'
 
 export default function AppLayout() {
   const { t: translate } = useLingui()
@@ -24,7 +25,12 @@ export default function AppLayout() {
 
   if (!isFetching && isOnboardingComplete) {
     return (
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack
+        screenOptions={{ headerShown: false }}
+        screenLayout={({ children }) => (
+          <ErrorBoundary>{children}</ErrorBoundary>
+        )}
+      >
         <Stack.Screen
           name="review"
           options={({ navigation }) => ({
