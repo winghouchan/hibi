@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { ComponentRef, useEffect, useRef } from 'react'
+import { ComponentRef, useRef } from 'react'
 import { Alert, View } from 'react-native'
 import { noteQuery } from '@/notes/operations'
 import { NoteEditor } from '@/notes/ui'
@@ -9,11 +9,13 @@ import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 import styles from './styles'
 import useForm from './useForm'
+import useHandleNonExistentNote from './useHandleNonExistentNote'
 
 export default function NoteEditorScreen() {
   const noteEditorRef = useRef<ComponentRef<typeof NoteEditor>>(null)
   const { t: translate } = useLingui()
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
+  const isUpdatingNote = typeof noteId !== 'undefined'
   const router = useRouter()
   const { data: collection, isFetching: isFetchingCollection } = useQuery(
     onboardingCollectionQuery,
@@ -59,24 +61,12 @@ export default function NoteEditorScreen() {
     </Button>
   )
 
-  useEffect(() => {
-    if (
-      collection &&
-      typeof noteId !== 'undefined' &&
-      !isFetchingNote &&
-      note === null
-    ) {
-      Alert.alert(translate`The note doesn't exist`, '', [
-        {
-          text: translate`OK`,
-          style: 'default',
-          onPress: () => {
-            router.back()
-          },
-        },
-      ])
-    }
-  }, [collection, isFetchingNote, note, noteId, router, translate])
+  useHandleNonExistentNote(
+    !Boolean(collection && isUpdatingNote && !isFetchingNote && note === null),
+    () => {
+      router.back()
+    },
+  )
 
   return collection && !isFetchingCollection ? (
     <>

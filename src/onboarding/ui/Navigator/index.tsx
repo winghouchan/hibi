@@ -1,9 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import type {
-  NavigationProp,
-  PartialRoute,
-  Route,
-} from '@react-navigation/native'
+import { CommonActions, type NavigationProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Redirect, useFocusEffect, useNavigation } from 'expo-router'
 import { View } from 'react-native'
@@ -35,13 +31,9 @@ export default function OnboardingNavigator() {
       const state = navigation.getState()
 
       /**
-       * Pathname of the current screen
-       *
-       * It is pulled from the navigation state as the `usePathname` from
-       * `expo-router` sometimes returns `/onboarding` which is (assumed to be)
-       * from the parent navigator.
+       * Pathname of the current screen in the onboarding navigator
        */
-      const pathname = state.routes[0].state?.routes[0].path || ''
+      const pathname = state.routes[0].state?.routes[0].path ?? ''
 
       /**
        * Did the navigation occur via a deep link?
@@ -53,28 +45,16 @@ export default function OnboardingNavigator() {
       const isDeepLink = state.routes[0].name === 'onboarding'
 
       if (isDeepLink && isOnboardingComplete === false) {
-        /**
-         * New route history state.
-         *
-         * The first item is the welcome screen.
-         */
-        const routes: PartialRoute<
-          Route<'index' | 'onboarding', object | undefined>
-        >[] = [{ name: 'index' }]
+        if (pathname.endsWith('onboarding/collection')) {
+          navigation.dispatch((state) => {
+            const routes = [{ name: 'index' }, ...state.routes]
 
-        if (
-          pathname === 'onboarding/collection' ||
-          pathname === '/onboarding/collection'
-        ) {
-          routes.push({
-            name: 'onboarding',
-            state: {
-              index: 0,
-              routes: [{ name: 'collection' }],
-            },
+            return CommonActions.reset({
+              ...state,
+              index: routes.length - 1,
+              routes,
+            })
           })
-
-          navigation.reset({ index: 1, routes })
         } else if (onboardingCollection === null) {
           /**
            * All subsequent routes require an onboarding collection to exist.
@@ -82,7 +62,7 @@ export default function OnboardingNavigator() {
            * exist, sending the user to the welcome screen.
            */
 
-          navigation.reset({ index: 0, routes })
+          navigation.reset({ index: 0, routes: [{ name: 'index' }] })
         } else if (onboardingCollection) {
           /**
            * All subsequent routes require an onboarding collection to exist.
@@ -90,58 +70,35 @@ export default function OnboardingNavigator() {
            * exist, updating the route history to allow for back navigation.
            */
 
-          if (
-            pathname === 'onboarding/notes' ||
-            pathname === '/onboarding/notes'
-          ) {
-            routes.push({
-              name: 'onboarding',
-              state: {
-                index: 1,
-                routes: [{ name: 'collection' }, { name: 'notes/index' }],
-              },
-            })
+          navigation.dispatch((state) => {
+            const routes = [
+              { name: 'collection' },
+              ...(pathname.endsWith('onboarding/notes/new') ||
+              /onboarding\/notes\/.+?\/edit/.test(pathname)
+                ? [{ name: 'notes/index' }]
+                : []),
+              ...(state.routes[0].state?.routes ?? []),
+            ]
 
-            navigation.reset({ index: 1, routes })
-          }
-
-          if (
-            pathname === 'onboarding/notes/new' ||
-            pathname === '/onboarding/notes/new'
-          ) {
-            routes.push({
-              name: 'onboarding',
-              state: {
-                index: 2,
-                routes: [
-                  { name: 'collection' },
-                  { name: 'notes/index' },
-                  { name: 'notes/new' },
-                ],
-              },
-            })
-
-            navigation.reset({ index: 1, routes })
-          }
-
-          if (/onboarding\/notes\/.+?\/edit/.test(pathname)) {
-            routes.push({
-              name: 'onboarding',
-              state: {
-                index: 2,
-                routes: [
-                  { name: 'collection' },
-                  { name: 'notes/index' },
-                  {
-                    name: 'notes/[id]/edit',
-                    params: state.routes[0].state?.routes[0].params,
+            const newState = {
+              ...state,
+              index: 1,
+              routes: [
+                { name: 'index' },
+                {
+                  ...state.routes[0],
+                  state: {
+                    ...state.routes[0].state,
+                    stale: true,
+                    index: routes.length - 1,
+                    routes,
                   },
-                ],
-              },
-            })
+                },
+              ],
+            }
 
-            navigation.reset({ index: 1, routes })
-          }
+            return CommonActions.reset(newState)
+          })
         }
       }
     }, 0)
