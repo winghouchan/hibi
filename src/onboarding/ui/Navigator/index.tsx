@@ -31,9 +31,10 @@ export default function OnboardingNavigator() {
       const state = navigation.getState()
 
       /**
-       * Pathname of the current screen in the onboarding navigator
+       * Name of the first screen in the onboarding navigator. If the screen was
+       * opened with a deep link, it will also be the current screen.
        */
-      const pathname = state.routes[0].state?.routes[0].path ?? ''
+      const routeName = state.routes[0].state?.routes[0].name ?? ''
 
       /**
        * Did the navigation occur via a deep link?
@@ -45,7 +46,7 @@ export default function OnboardingNavigator() {
       const isDeepLink = state.routes[0].name === 'onboarding'
 
       if (isDeepLink && isOnboardingComplete === false) {
-        if (pathname.endsWith('onboarding/collection')) {
+        if (routeName === 'collection') {
           navigation.dispatch((state) => {
             const routes = [{ name: 'index' }, ...state.routes]
 
@@ -73,8 +74,7 @@ export default function OnboardingNavigator() {
           navigation.dispatch((state) => {
             const routes = [
               { name: 'collection' },
-              ...(pathname.endsWith('onboarding/notes/new') ||
-              /onboarding\/notes\/.+?\/edit/.test(pathname)
+              ...(routeName === 'notes/new' || routeName === 'notes/[id]/edit'
                 ? [{ name: 'notes/index' }]
                 : []),
               ...(state.routes[0].state?.routes ?? []),
@@ -89,7 +89,6 @@ export default function OnboardingNavigator() {
                   ...state.routes[0],
                   state: {
                     ...state.routes[0].state,
-                    stale: true,
                     index: routes.length - 1,
                     routes,
                   },
