@@ -1,4 +1,4 @@
-import { infiniteQueryOptions, skipToken } from '@tanstack/react-query'
+import { infiniteQueryOptions } from '@tanstack/react-query'
 import baseQueryKey from '../baseQueryKey'
 import getCollections from './getCollections'
 
@@ -18,17 +18,22 @@ export default function collectionsQuery(
               ...args[0],
               pagination: { ...args[0]?.pagination, cursor: pageParam },
             })
-        : skipToken
+        : () => null
       : ({ pageParam }) =>
           getCollections({
             ...args[0],
             pagination: { ...args[0]?.pagination, cursor: pageParam },
           }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.cursor.next,
+    getNextPageParam: (lastPage) => lastPage?.cursor.next,
     select: (data) =>
-      data.pages.reduce<(typeof data.pages)[number]['collections']>(
-        (accumulator, { collections }) => [...accumulator, ...collections],
+      data.pages.reduce<
+        Exclude<(typeof data.pages)[number], null>['collections']
+      >(
+        (accumulator, page) =>
+          page?.collections
+            ? [...accumulator, ...page.collections]
+            : [...accumulator],
         [],
       ),
   })

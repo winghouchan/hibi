@@ -1,12 +1,25 @@
 import { screen, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { View } from 'react-native'
 import { mockCollections } from '@/collections/test'
 import { mockNextReview, mockNextReviewError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import HomeScreen from '.'
 
 const routerMock = {
+  _layout: () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   index: HomeScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
@@ -55,8 +68,9 @@ describe('<HomeScreen />', () => {
     await waitFor(expected)
   })
 
-  test('when there is an error getting the next review, the user is alerted', async () => {
-    const alertSpy = jest.spyOn(Alert, 'alert')
+  test('when there is an error getting the next review, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
 
     mockCollections({
       cursor: { next: undefined },
@@ -66,8 +80,8 @@ describe('<HomeScreen />', () => {
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
-    await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledOnce()
-    })
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 })

@@ -1,12 +1,25 @@
-import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { screen, userEvent } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { View } from 'react-native'
 import { mockCollections, mockCollectionsError } from '@/collections/test'
 import { mockNotes, mockNotesError } from '@/notes/test'
 import { mockAppRoot } from 'test/utils'
 import LibraryScreen from '.'
 
 const routerMock = {
+  _layout: () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   index: LibraryScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
@@ -195,29 +208,31 @@ describe('<LibraryScreen />', () => {
     })
   })
 
-  test('when there is an error fetching the collections, an alert is displayed', async () => {
-    const alertSpy = jest.spyOn(Alert, 'alert')
+  test('when there is an error fetching the collections, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
 
     mockCollectionsError(new Error('Mock Error'))
     mockNotes({ cursor: { next: undefined }, notes: [] })
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
 
-    await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledOnce()
-    })
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 
-  test('when there is an error fetching the notes, an alert is displayed', async () => {
-    const alertSpy = jest.spyOn(Alert, 'alert')
+  test('when there is an error fetching the notes, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
 
     mockCollections({ cursor: { next: undefined }, collections: [] })
     mockNotesError(new Error('Mock Error'))
 
     renderRouter(routerMock, { wrapper: mockAppRoot() })
 
-    await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledOnce()
-    })
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 })

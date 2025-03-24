@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect, useRef } from 'react'
 import PagerView from 'react-native-pager-view'
@@ -16,7 +16,12 @@ export default function ReviewScreen() {
   const queryClient = useQueryClient()
   const pagerViewRef = useRef<PagerView>(null)
   const query = nextReviewQuery({ collections, onlyDue: true })
-  const { data, fetchNextPage } = useInfiniteQuery(query)
+  const { data, error, fetchNextPage, isFetching } =
+    useSuspenseInfiniteQuery(query)
+
+  if (error && !isFetching) {
+    throw error
+  }
 
   const onNewPage = () => {
     // Set the current page of the pager view to the last page after it has rendered

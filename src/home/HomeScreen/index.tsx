@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import { useState } from 'react'
 import { View } from 'react-native'
@@ -36,7 +36,7 @@ const styles = StyleSheet.create(
 export default function HomeScreen() {
   const { t: translate } = useLingui()
   const [collection, setCollection] = useState<number | undefined>(undefined)
-  const { data } = useInfiniteQuery(
+  const { data } = useSuspenseInfiniteQuery(
     nextReviewQuery({
       ...(collection && { collections: [collection] }),
       onlyDue: true,

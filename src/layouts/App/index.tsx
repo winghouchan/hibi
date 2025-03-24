@@ -1,7 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
 import type { NavigationProp } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Stack, useFocusEffect, useNavigation } from 'expo-router'
+import { Suspense } from 'react'
 import { View } from 'react-native'
 import { isOnboardingCompleteQuery } from '@/onboarding'
 import { Button } from '@/ui'
@@ -10,12 +11,12 @@ import ErrorBoundary from './ErrorBoundary'
 export default function AppLayout() {
   const { t: translate } = useLingui()
   const navigation = useNavigation<NavigationProp<{ index: undefined }>>()
-  const { data: isOnboardingComplete, isFetching } = useQuery(
+  const { data: isOnboardingComplete } = useSuspenseQuery(
     isOnboardingCompleteQuery,
   )
 
   useFocusEffect(() => {
-    if (!isFetching && isOnboardingComplete === false) {
+    if (!isOnboardingComplete) {
       navigation.reset({
         index: 0,
         routes: [{ name: 'index' }],
@@ -23,12 +24,14 @@ export default function AppLayout() {
     }
   })
 
-  if (!isFetching && isOnboardingComplete) {
+  if (isOnboardingComplete) {
     return (
       <Stack
         screenOptions={{ headerShown: false }}
         screenLayout={({ children }) => (
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ErrorBoundary>
+            <Suspense>{children}</Suspense>
+          </ErrorBoundary>
         )}
       >
         <Stack.Screen
@@ -55,7 +58,7 @@ export default function AppLayout() {
         />
       </Stack>
     )
+  } else {
+    return null
   }
-
-  return null
 }

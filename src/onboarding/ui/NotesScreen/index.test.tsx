@@ -1,7 +1,8 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { mockNotes } from '@/notes/test'
 import {
@@ -16,7 +17,17 @@ const routerMock = {
   '(app)/_layout': () => null,
   '(app)/(tabs)/_layout': () => null,
   '(app)/(tabs)/index': () => null,
-  'onboarding/_layout': () => <Stack />,
+  'onboarding/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   'onboarding/notes': NotesScreen,
   'onboarding/notes/[id]/edit': () => null,
   'onboarding/notes/new': () => null,
@@ -257,8 +268,9 @@ describe('<NotesScreen />', () => {
   })
 
   describe('when there is an error fetching the onboarding collection', () => {
-    test('the user is alerted', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
@@ -267,7 +279,9 @@ describe('<NotesScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 

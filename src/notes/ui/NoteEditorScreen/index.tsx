@@ -4,7 +4,11 @@ import type {
   PartialRoute,
   Route,
 } from '@react-navigation/native'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import {
   router,
   Stack,
@@ -42,11 +46,7 @@ export default function NoteEditorScreen() {
   const isUpdatingNote = typeof noteId !== 'undefined'
   const noteQueryOptions = noteQuery(noteId)
   const queryClient = useQueryClient()
-  const {
-    data: note,
-    isFetching: isFetchingNote,
-    isError: isNoteError,
-  } = useQuery(noteQueryOptions)
+  const { data: note } = useSuspenseQuery(noteQueryOptions)
   const { mutateAsync: createNote } = useMutation(createNoteMutation)
   const { mutateAsync: updateNote } = useMutation(updateNoteMutation)
   const noteEditorRef = useRef<ComponentRef<typeof NoteEditor>>(null)
@@ -140,7 +140,7 @@ export default function NoteEditorScreen() {
   }
 
   const onNonExistentNote = () => {
-    if (!note && !isFetchingNote && isUpdatingNote && !isNoteError) {
+    if (!note && isUpdatingNote) {
       Alert.alert(translate`The note doesn't exist`, '', [
         {
           text: translate`OK`,

@@ -1,12 +1,10 @@
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
 import { SplashScreen, useNavigationContainerRef } from 'expo-router'
-import { ComponentProps, useEffect, useState } from 'react'
+import { ComponentProps, Suspense, useEffect, useState } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
-import { isOnboardingCompleteQuery } from '@/onboarding'
 import { log } from '@/telemetry'
 import { CardStyleInterpolators, Stack } from '@/ui'
 import ErrorBoundary from './ErrorBoundary'
@@ -16,13 +14,12 @@ type StackProps = ComponentProps<typeof Stack>
 export default function Navigator() {
   const { t: translate } = useLingui()
   const { theme } = useUnistyles()
-  const { isSuccess: hasCheckedOnboardingState } = useQuery(
-    isOnboardingCompleteQuery,
-  )
   const [isNavigatorReady, setIsNavigatorReady] = useState(false)
 
   const screenLayout: StackProps['screenLayout'] = ({ children }) => (
-    <ErrorBoundary>{children}</ErrorBoundary>
+    <ErrorBoundary>
+      <Suspense>{children}</Suspense>
+    </ErrorBoundary>
   )
 
   const screenListeners: StackProps['screenListeners'] = {
@@ -61,7 +58,7 @@ export default function Navigator() {
   }
 
   const hideSplashScreen = () => {
-    if (hasCheckedOnboardingState && isNavigatorReady) {
+    if (isNavigatorReady) {
       SplashScreen.hideAsync().then(() => {
         log.info('Splash screen hidden')
       })
@@ -80,14 +77,14 @@ export default function Navigator() {
 
   useReactNavigationDevTools(navigationContainerRef)
 
-  useEffect(hideSplashScreen, [hasCheckedOnboardingState, isNavigatorReady])
+  useEffect(hideSplashScreen, [isNavigatorReady])
 
   return (
     <ThemeProvider value={navigatorTheme}>
       <Stack
+        screenLayout={screenLayout}
         screenListeners={screenListeners}
         screenOptions={screenOptions}
-        screenLayout={screenLayout}
       >
         <Stack.Screen
           name="onboarding"

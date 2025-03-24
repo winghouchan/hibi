@@ -1,5 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import {
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import {
   Link,
   router,
@@ -18,14 +21,14 @@ export default function CollectionScreen() {
   const { t: translate } = useLingui()
   const localSearchParams = useLocalSearchParams<{ id: string }>()
   const collectionId = Number(localSearchParams.id)
-  const { data: collection, isFetching: isFetchingCollection } = useQuery(
+  const { data: collection } = useSuspenseQuery(
     collectionQuery({ filter: { id: collectionId } }),
   )
   const {
     data: notes,
     fetchNextPage: fetchMoreNotes,
     isFetchingNextPage: isFetchingMoreNotes,
-  } = useInfiniteQuery(
+  } = useSuspenseInfiniteQuery(
     notesQuery({
       filter: {
         collection:
@@ -38,7 +41,7 @@ export default function CollectionScreen() {
   )
 
   useFocusEffect(() => {
-    if (!collection && !isFetchingCollection) {
+    if (!collection) {
       Alert.alert(translate`The collection doesn't exist`, '', [
         {
           text: translate`OK`,
@@ -96,13 +99,8 @@ export default function CollectionScreen() {
     )
   } else {
     /**
-     * If the collection is `undefined`, it has not been successfully queried
-     * yet. If the query is still in-progress, it typically takes less than 1
-     * second to complete so no loading state is shown. If the query failed,
-     * an alert is shown by the data provider component.
-     *
-     * If the collection is `null`, it does not exist. An alert is displayed
-     * by the effect hook above.
+     * If the collection is `null`, it does not exist. An alert is displayed by
+     * the effect hook above.
      */
     return null
   }

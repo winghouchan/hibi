@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useTransition } from 'react'
 import { FlatList, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { collectionsQuery } from '@/collections/operations'
@@ -35,7 +36,8 @@ export default function CollectionFilter({ onChange, value }: Props) {
     data: collections,
     fetchNextPage: fetchMoreCollections,
     isFetchingNextPage: isFetchingMoreCollections,
-  } = useInfiniteQuery(collectionsQuery())
+  } = useSuspenseInfiniteQuery(collectionsQuery())
+  const [, startTransition] = useTransition()
 
   return (
     <View>
@@ -53,7 +55,11 @@ export default function CollectionFilter({ onChange, value }: Props) {
             <Pressable
               accessibilityRole="tab"
               accessibilityState={{ selected }}
-              onPress={() => onChange?.(id)}
+              onPress={() =>
+                startTransition(() => {
+                  onChange?.(id)
+                })
+              }
               style={styles.chip(selected)}
             >
               <Text size="label.medium">{name}</Text>

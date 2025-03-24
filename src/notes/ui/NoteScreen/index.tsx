@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   Link,
   router,
@@ -14,12 +14,10 @@ import { noteQuery } from '../../operations'
 export default function NoteScreen() {
   const { t: translate } = useLingui()
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
-  const { data: note, isPending: isNotePending } = useQuery(
-    noteQuery(Number(noteId)),
-  )
+  const { data: note } = useSuspenseQuery(noteQuery(Number(noteId)))
 
   useFocusEffect(() => {
-    if (!note && !isNotePending) {
+    if (!note) {
       Alert.alert(translate`The note doesn't exist`, '', [
         {
           text: translate`OK`,
@@ -52,11 +50,6 @@ export default function NoteScreen() {
     )
   } else {
     /**
-     * If the note is `undefined`, it has not been successfully queried yet. If
-     * the query is still in-progress, it typically takes less than 1 second to
-     * complete so no loading state is shown. If the query failed, an alert is
-     * shown by the data provider component.
-     *
      * If the note is `null`, it does not exist. An alert is displayed by the
      * focus effect hook above.
      */

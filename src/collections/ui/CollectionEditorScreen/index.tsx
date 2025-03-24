@@ -4,7 +4,7 @@ import type {
   PartialRoute,
   Route,
 } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   router,
   useFocusEffect,
@@ -31,7 +31,7 @@ export default function CollectionEditorScreen() {
       ? Number(localSearchParams.id)
       : undefined
   const isUpdatingCollection = typeof collectionId !== 'undefined'
-  const { data: collection, isFetching: isFetchingCollection } = useQuery(
+  const { data: collection } = useSuspenseQuery(
     collectionQuery({ filter: { id: collectionId } }),
   )
 
@@ -41,11 +41,6 @@ export default function CollectionEditorScreen() {
        * A collection may be non-existent if `collection` is falsy.
        */
       !collection &&
-      /**
-       * `collection` may be falsy it is being fetched. As a result, determine
-       * if the collection is non-existent only when it is not being fetched.
-       */
-      !isFetchingCollection &&
       /**
        * `collection` may also be falsy if the user is trying to create a
        * collection as the collection won't exist yet. As a result, determine
@@ -103,10 +98,7 @@ export default function CollectionEditorScreen() {
 
   useFocusEffect(onNonExistentCollection)
 
-  if (
-    (isUpdatingCollection && collection) ||
-    (!isUpdatingCollection && typeof collection === 'undefined')
-  ) {
+  if ((isUpdatingCollection && collection) || !isUpdatingCollection) {
     return (
       <Layout testID="collection.editor.screen">
         <CollectionEditorForm collection={collection} onSubmit={onSubmit} />
@@ -114,14 +106,8 @@ export default function CollectionEditorScreen() {
     )
   } else {
     /**
-     * If the `collectionId` is defined and the collection is `undefined`, the
-     * collection has not been successfully queried yet. If the query is still
-     * in-progress, it typically takes less than 1 second to complete so no
-     * loading state is shown. If the query failed, an alert is shown by the
-     * data provider component.
-     *
-     * If the collection is `null`, it does not exist. An alert is displayed
-     * by the focus effect hook above.
+     * If the `collectionId` is defined and the collection is `null`, an alert
+     * is displayed by the focus effect hook above.
      */
     return null
   }

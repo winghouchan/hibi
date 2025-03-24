@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
 import { object, string } from 'yup'
@@ -19,7 +19,7 @@ export default function CollectionScreen() {
   'use no memo'
 
   const { t: translate } = useLingui()
-  const { data: collection } = useQuery(onboardingCollectionQuery)
+  const { data: collection } = useSuspenseQuery(onboardingCollectionQuery)
 
   const onSubmitSuccess: Parameters<
     typeof useForm

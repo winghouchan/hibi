@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
 import { Alert, View } from 'react-native'
@@ -17,12 +17,8 @@ export default function NoteEditorScreen() {
   const { id: noteId } = useLocalSearchParams<{ id?: string }>()
   const isUpdatingNote = typeof noteId !== 'undefined'
   const router = useRouter()
-  const { data: collection, isFetching: isFetchingCollection } = useQuery(
-    onboardingCollectionQuery,
-  )
-  const { data: note, isFetching: isFetchingNote } = useQuery(
-    noteQuery(Number(noteId)),
-  )
+  const { data: collection } = useSuspenseQuery(onboardingCollectionQuery)
+  const { data: note } = useSuspenseQuery(noteQuery(Number(noteId)))
 
   const { handleSubmit } = useForm({
     onSubmitSuccess: () => {
@@ -62,33 +58,35 @@ export default function NoteEditorScreen() {
   )
 
   useHandleNonExistentNote(
-    !Boolean(collection && isUpdatingNote && !isFetchingNote && note === null),
+    !Boolean(collection && isUpdatingNote && note === null),
     () => {
       router.back()
     },
   )
 
-  return collection && !isFetchingCollection ? (
-    <>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <View>
-              <SubmitButton />
-            </View>
-          ),
-        }}
-      />
-      <View style={styles.screen} testID="onboarding.note-editor.screen">
-        <NoteEditor
-          value={{ ...note, collections: [collection.id] }}
-          onSubmit={handleSubmit}
-          ref={noteEditorRef}
-          testID="onboarding"
+  if (collection) {
+    return (
+      <>
+        <Stack.Screen
+          options={{
+            headerRight: () => (
+              <View>
+                <SubmitButton />
+              </View>
+            ),
+          }}
         />
-      </View>
-    </>
-  ) : !collection && !isFetchingCollection ? (
-    <Redirect href="/" />
-  ) : null
+        <View style={styles.screen} testID="onboarding.note-editor.screen">
+          <NoteEditor
+            value={{ ...note, collections: [collection.id] }}
+            onSubmit={handleSubmit}
+            ref={noteEditorRef}
+            testID="onboarding"
+          />
+        </View>
+      </>
+    )
+  } else {
+    return <Redirect href="/" />
+  }
 }

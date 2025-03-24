@@ -1,7 +1,8 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
 import { mockAppRoot } from 'test/utils'
 import {
   mockCollection,
@@ -16,7 +17,17 @@ import { updateCollection } from '../../operations'
 const routerMock = {
   '(app)/_layout': () => <Stack />,
   '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/collection/_layout': () => <Stack />,
+  '(app)/collection/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   '(app)/collection/[id]/_layout': {
     unstable_settings: { initialRouteName: 'index' },
     default: () => <Stack />,
@@ -94,8 +105,9 @@ describe('<CollectionEditorScreen />', () => {
       })
     })
 
-    test('and there is an error fetching the collection, an alert is displayed', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('and there is an error fetching the collection, an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockCollectionError(new Error('Mock Error'))
 
@@ -104,9 +116,9 @@ describe('<CollectionEditorScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await waitFor(() => {
-        expect(alertSpy).toHaveBeenCalledOnce()
-      })
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 
@@ -123,11 +135,11 @@ describe('<CollectionEditorScreen />', () => {
       })
 
       await user.type(
-        screen.getByLabelText('Enter a collection name'),
+        await screen.findByLabelText('Enter a collection name'),
         input.collectionName,
       )
       await user.press(
-        screen.getByRole('button', { name: 'Create collection' }),
+        await screen.findByRole('button', { name: 'Create collection' }),
       )
 
       expect(screen).toHavePathname('/collection/1')
@@ -145,7 +157,7 @@ describe('<CollectionEditorScreen />', () => {
       })
 
       await user.type(
-        screen.getByLabelText('Enter a collection name'),
+        await screen.findByLabelText('Enter a collection name'),
         input.collectionName,
         { submitEditing: true },
       )
@@ -165,7 +177,7 @@ describe('<CollectionEditorScreen />', () => {
       })
 
       await user.press(
-        screen.getByRole('button', { name: 'Create collection' }),
+        await screen.findByRole('button', { name: 'Create collection' }),
       )
 
       expect(alertSpy).toHaveBeenCalledOnce()

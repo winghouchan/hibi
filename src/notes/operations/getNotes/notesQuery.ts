@@ -1,4 +1,4 @@
-import { infiniteQueryOptions, skipToken } from '@tanstack/react-query'
+import { infiniteQueryOptions } from '@tanstack/react-query'
 import baseQueryKey from '../baseQueryKey'
 import getNotes from './getNotes'
 
@@ -16,17 +16,18 @@ export default function notesQuery(...args: Parameters<typeof getNotes>) {
               ...args[0],
               pagination: { ...args[0]?.pagination, cursor: pageParam },
             })
-        : skipToken
+        : () => null
       : ({ pageParam }) =>
           getNotes({
             ...args[0],
             pagination: { ...args[0]?.pagination, cursor: pageParam },
           }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.cursor.next,
+    getNextPageParam: (lastPage) => lastPage?.cursor.next,
     select: (data) =>
-      data.pages.reduce<(typeof data.pages)[number]['notes']>(
-        (accumulator, { notes }) => [...accumulator, ...notes],
+      data.pages.reduce<Exclude<(typeof data.pages)[number], null>['notes']>(
+        (accumulator, page) =>
+          page?.notes ? [...accumulator, ...page.notes] : [...accumulator],
         [],
       ),
   })

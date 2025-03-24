@@ -1,6 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useNavigation } from 'expo-router'
 import { Tabs, TabTrigger, TabList, TabSlot } from 'expo-router/ui'
+import { Suspense } from 'react'
 import { StyleSheet } from 'react-native-unistyles'
 import TabButton from './Button'
 import ErrorBoundary from './ErrorBoundary'
@@ -24,7 +25,9 @@ export default function TabLayout() {
   return (
     <Tabs>
       <ErrorBoundary key={errorBoundaryKey}>
-        <TabSlot />
+        <Suspense>
+          <TabSlot />
+        </Suspense>
       </ErrorBoundary>
       <TabList style={styles.tabList}>
         <TabTrigger name="home" href="/" testID="tab.home.button" asChild>

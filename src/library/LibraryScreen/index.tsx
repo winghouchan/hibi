@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import { ComponentRef, useRef, useState } from 'react'
 import { Pressable, View } from 'react-native'
@@ -46,7 +46,7 @@ export default function LibraryScreen() {
     data: notes,
     fetchNextPage: fetchMoreNotes,
     isFetchingNextPage: isFetchingMoreNotes,
-  } = useInfiniteQuery(
+  } = useSuspenseInfiniteQuery(
     notesQuery(
       collection
         ? { filter: { collection: [collection] }, order: { id: 'desc' } }

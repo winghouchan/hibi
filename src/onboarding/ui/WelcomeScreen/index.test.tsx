@@ -1,13 +1,24 @@
 import { userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter, screen } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { View } from 'react-native'
 import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import WelcomeScreen from '.'
 
 const routerMock = {
-  _layout: () => <Stack />,
+  _layout: () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   '(app)/(tabs)/index': () => null,
   'onboarding/collection': () => null,
   index: WelcomeScreen,
@@ -60,14 +71,17 @@ describe('<WelcomeScreen />', () => {
   })
 
   describe('when there is an error getting the onboarding state', () => {
-    it('alerts the user', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockOnboardedStateError(new Error('Mock Error'))
 
       renderRouter(routerMock, { wrapper: mockAppRoot() })
 
-      await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 })

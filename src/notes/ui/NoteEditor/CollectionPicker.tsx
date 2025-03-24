@@ -7,8 +7,11 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { PropsWithChildren, useRef, useState } from 'react'
+import {
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query'
+import { PropsWithChildren, useDeferredValue, useRef, useState } from 'react'
 import {
   Platform,
   Pressable,
@@ -45,8 +48,9 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const dimensions = useWindowDimensions()
   const safeAreaInsets = useSafeAreaInsets()
-  const { data: selectedCollections } = useInfiniteQuery(
-    collectionsQuery({ filter: { id: value } }),
+  const deferredValue = useDeferredValue(value)
+  const { data: selectedCollections } = useSuspenseInfiniteQuery(
+    collectionsQuery({ filter: { id: deferredValue } }),
   )
   const {
     data: collections,

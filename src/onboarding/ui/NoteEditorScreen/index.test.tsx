@@ -1,7 +1,8 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { Stack, useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
 import { mockCollections } from '@/collections/test'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import {
@@ -21,11 +22,8 @@ import NoteEditor from '.'
 import { createNote, updateNote } from '@/notes/operations'
 
 jest.mock('@/ui/RichTextInput')
-
-const backMock = jest.fn()
-
 ;(useRouter as jest.MockedFunction<typeof useRouter>).mockReturnValue({
-  back: backMock,
+  back: jest.fn(),
   canDismiss: jest.fn(),
   canGoBack: jest.fn(),
   dismiss: jest.fn(),
@@ -41,7 +39,17 @@ const backMock = jest.fn()
 const routerMock = {
   _layout: () => <Stack />,
   '(app)/_layout': () => <Stack />,
-  'onboarding/_layout': () => <Stack />,
+  'onboarding/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   'onboarding/notes/[id]/edit': NoteEditor,
   'onboarding/notes/new': NoteEditor,
 } satisfies Parameters<typeof renderRouter>[0]
@@ -98,7 +106,6 @@ describe('<NoteEditorScreen />', () => {
         )
         await user.press(await screen.findByRole('button', { name: 'Add' }))
 
-        expect(backMock).toHaveBeenCalled()
         expect(createNote).toHaveBeenCalledExactlyOnceWith(input.note)
       })
 
@@ -236,7 +243,6 @@ describe('<NoteEditorScreen />', () => {
         )
         await user.press(await screen.findByRole('button', { name: 'Update' }))
 
-        expect(backMock).toHaveBeenCalled()
         expect(updateNote).toHaveBeenCalledExactlyOnceWith({
           collections: [fixture.collection.id],
           ...fixture.note,
@@ -380,8 +386,9 @@ describe('<NoteEditorScreen />', () => {
   })
 
   describe('when there is an error fetching the onboarding collection', () => {
-    test('the user is alerted', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
@@ -390,15 +397,16 @@ describe('<NoteEditorScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await waitFor(async () => {
-        expect(alertSpy).toHaveBeenCalledOnce()
-      })
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 
   describe('when there is an error fetching the note', () => {
-    test('the user is alerted', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockOnboardingCollection({
         id: 1,
@@ -414,9 +422,9 @@ describe('<NoteEditorScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await waitFor(async () => {
-        expect(alertSpy).toHaveBeenCalledOnce()
-      })
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 })

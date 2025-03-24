@@ -1,9 +1,10 @@
 import { act, screen, userEvent, waitFor } from '@testing-library/react-native'
 import { DEFAULT_MIN_PRESS_DURATION } from '@testing-library/react-native/build/user-event/press/press'
 import { addHours } from 'date-fns'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
 import { createReview } from '@/reviews/operations/createReview'
 import {
   mockCreateReviewError,
@@ -41,11 +42,22 @@ enum Ratings {
 )
 
 const routerMock = {
+  '(app)/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   '(app)/review': ReviewScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<ReviewScreen />', () => {
-  test('when there are no reviewables, the user is informed', async () => {
+  test('when there are no reviewables, an error message is shown', async () => {
     mockNextReview(null)
 
     renderRouter(routerMock, {
@@ -237,8 +249,9 @@ describe('<ReviewScreen />', () => {
     expect(expoRouterMock.back).toHaveBeenCalledOnce()
   })
 
-  test('when there is an error getting the initial reviewable, the user is alerted', async () => {
-    const alertSpy = jest.spyOn(Alert, 'alert')
+  test('when there is an error getting the initial reviewable, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
 
     mockNextReviewError(new Error('Mock Error'))
 
@@ -247,11 +260,15 @@ describe('<ReviewScreen />', () => {
       wrapper: mockAppRoot(),
     })
 
-    await waitFor(async () => expect(alertSpy).toHaveBeenCalledOnce())
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 
-  test('when there is an error getting the next reviewable, the user is alerted', async () => {
-    const alertSpy = jest.spyOn(Alert, 'alert')
+  test('when there is an error getting the next reviewable, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
+
     const user = userEvent.setup()
 
     const input = {
@@ -280,7 +297,9 @@ describe('<ReviewScreen />', () => {
 
     await user.press(screen.getByRole('button', { name: Ratings[1] }))
 
-    await waitFor(async () => expect(alertSpy).toHaveBeenCalledOnce())
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 
   test('when there is an error submitting the review, the user is alerted', async () => {

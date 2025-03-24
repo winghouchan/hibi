@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, Redirect } from 'expo-router'
 import { Button } from '@/ui'
 import { isOnboardingCompleteQuery } from '../../operations'
@@ -8,7 +8,9 @@ import style from './style'
 
 export default function WelcomeScreen() {
   const { t: translate } = useLingui()
-  const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
+  const { data: isOnboardingComplete } = useSuspenseQuery(
+    isOnboardingCompleteQuery,
+  )
 
   if (isOnboardingComplete) {
     return <Redirect href="/(app)/(tabs)" />

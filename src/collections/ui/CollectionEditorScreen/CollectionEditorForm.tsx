@@ -13,7 +13,7 @@ import { collection } from '../../schema'
 import Layout from '../Layout'
 
 interface Props {
-  collection?: typeof collection.$inferSelect
+  collection?: typeof collection.$inferSelect | null
   onSubmit?: (arg: typeof collection.$inferSelect) => void
 }
 

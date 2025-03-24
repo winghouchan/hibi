@@ -1,11 +1,24 @@
 import { screen, waitFor } from '@testing-library/react-native'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
-import { mockGetNote } from '@/notes/test'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
+import { mockGetNote, mockGetNoteError } from '@/notes/test'
 import { mockAppRoot } from 'test/utils'
 import NoteScreen from '.'
 
 const routerMock = {
+  'note/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   'note/[id]': NoteScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
@@ -50,5 +63,21 @@ describe('<NoteScreen />', () => {
     await waitFor(async () => {
       expect(alertSpy).toHaveBeenCalledOnce()
     })
+  })
+
+  test('when there is an error fetching the note, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
+
+    mockGetNoteError(new Error('Mock Error'))
+
+    renderRouter(routerMock, {
+      initialUrl: '/note/1',
+      wrapper: mockAppRoot(),
+    })
+
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 })

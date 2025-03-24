@@ -1,7 +1,8 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
 import { mockCollections } from '@/collections/test'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import {
@@ -22,7 +23,17 @@ jest.mock('@/ui/RichTextInput')
 const routerMock = {
   '(app)/_layout': () => <Stack />,
   '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/note/_layout': () => <Stack />,
+  '(app)/note/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   '(app)/note/[id]/_layout': {
     unstable_settings: { initialRouteName: 'index' },
     default: () => <Stack />,
@@ -150,8 +161,9 @@ describe('<NoteEditorScreen />', () => {
       })
     })
 
-    test('and there is an error fetching the note, an alert is displayed', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('and there is an error fetching the note, an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockGetNoteError(new Error('Mock Error'))
 
@@ -160,9 +172,9 @@ describe('<NoteEditorScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await waitFor(async () => {
-        expect(alertSpy).toHaveBeenCalledOnce()
-      })
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 
@@ -257,7 +269,7 @@ describe('<NoteEditorScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await user.press(screen.getByRole('button', { name: 'Add' }))
+      await user.press(await screen.findByRole('button', { name: 'Add' }))
 
       expect(alertSpy).toHaveBeenCalledOnce()
     })

@@ -1,7 +1,8 @@
-import { screen, userEvent, waitFor } from '@testing-library/react-native'
+import { screen, userEvent } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
-import { Alert } from 'react-native'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Alert, View } from 'react-native'
 import {
   mockCreateCollectionError,
   mockUpdateCollectionError,
@@ -13,11 +14,18 @@ import {
 import { mockAppRoot } from 'test/utils'
 import CollectionScreen from '.'
 
-// eslint-disable-next-line import/order -- This must be imported after it has been mocked
-import { getOnboardingCollection } from '@/onboarding/operations'
-
 const routerMock = {
-  'onboarding/_layout': () => <Stack />,
+  'onboarding/_layout': () => (
+    <Stack
+      screenLayout={({ children }) => (
+        <ErrorBoundary
+          fallback={<View testID="error-boundary-fallback-mock" />}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    />
+  ),
   'onboarding/collection': CollectionScreen,
   'onboarding/notes': () => null,
 } satisfies Parameters<typeof renderRouter>[0]
@@ -35,10 +43,10 @@ describe('<CollectionScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      const collectionNameInput = screen.getByLabelText(
+      const collectionNameInput = await screen.findByLabelText(
         'Enter a collection name',
       )
-      const createCollectionButton = screen.getByRole('button', {
+      const createCollectionButton = await screen.findByRole('button', {
         name: 'Create collection',
       })
 
@@ -59,7 +67,7 @@ describe('<CollectionScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      const collectionNameInput = screen.getByLabelText(
+      const collectionNameInput = await screen.findByLabelText(
         'Enter a collection name',
       )
 
@@ -80,7 +88,7 @@ describe('<CollectionScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      const createCollectionButton = screen.getByRole('button', {
+      const createCollectionButton = await screen.findByRole('button', {
         name: 'Create collection',
       })
 
@@ -169,8 +177,9 @@ describe('<CollectionScreen />', () => {
   })
 
   describe('when there is an error fetching the onboarding collection', () => {
-    test('the user is alerted and can retry fetching the onboarding collection', async () => {
-      const alertSpy = jest.spyOn(Alert, 'alert')
+    test('an error message is shown', async () => {
+      // Suppress console error from the error mock
+      jest.spyOn(console, 'error').mockImplementation()
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
@@ -179,13 +188,9 @@ describe('<CollectionScreen />', () => {
         wrapper: mockAppRoot(),
       })
 
-      await waitFor(() => expect(alertSpy).toHaveBeenCalledOnce())
-
-      const retry = alertSpy.mock.calls[0][2]?.[0].onPress
-
-      retry?.()
-
-      expect(getOnboardingCollection).toHaveBeenCalledTimes(2)
+      expect(
+        await screen.findByTestId('error-boundary-fallback-mock'),
+      ).toBeOnTheScreen()
     })
   })
 })

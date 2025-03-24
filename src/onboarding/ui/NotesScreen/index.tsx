@@ -1,6 +1,11 @@
 import { useLingui } from '@lingui/react/macro'
 import { type NavigationProp } from '@react-navigation/native'
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
@@ -10,6 +15,7 @@ import { log } from '@/telemetry'
 import { Button, Text } from '@/ui'
 import {
   completeOnboardingMutation,
+  isOnboardingCompleteQuery,
   onboardingCollectionQuery,
 } from '../../operations'
 import Layout from '../Layout'
@@ -23,12 +29,12 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
 
 export default function NotesScreen() {
   const { t: translate } = useLingui()
-  const { data: collection, isFetching } = useQuery(onboardingCollectionQuery)
+  const { data: collection } = useSuspenseQuery(onboardingCollectionQuery)
   const {
     data: notes,
     fetchNextPage: fetchMoreNotes,
     isFetchingNextPage: isFetchingMoreNotes,
-  } = useInfiniteQuery(
+  } = useSuspenseInfiniteQuery(
     notesQuery({
       filter: {
         collection:
@@ -43,10 +49,15 @@ export default function NotesScreen() {
   const { mutateAsync: completeOnboarding } = useMutation(
     completeOnboardingMutation,
   )
+  const queryClient = useQueryClient()
 
   const handleCompleteOnboarding = async () => {
     try {
       await completeOnboarding()
+
+      await queryClient.invalidateQueries({
+        queryKey: isOnboardingCompleteQuery.queryKey,
+      })
 
       navigation.reset({
         index: 0,
@@ -91,50 +102,52 @@ export default function NotesScreen() {
     }
   }
 
-  return collection && !isFetching ? (
-    <Layout testID="onboarding.notes.screen">
-      <Layout.Main scrollable={false}>
-        <Text
-          size="heading"
-          style={styles.padding}
-        >{translate`What do you want to remember?`}</Text>
-        <NoteList
-          data={notes}
-          onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
-          renderItem={({ item: note }) => (
-            <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
-              <NoteList.Item fields={note.fields} />
+  if (collection) {
+    return (
+      <Layout testID="onboarding.notes.screen">
+        <Layout.Main scrollable={false}>
+          <Text
+            size="heading"
+            style={styles.padding}
+          >{translate`What do you want to remember?`}</Text>
+          <NoteList
+            data={notes}
+            onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
+            renderItem={({ item: note }) => (
+              <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
+                <NoteList.Item fields={note.fields} />
+              </Link>
+            )}
+          />
+        </Layout.Main>
+        <Layout.Footer>
+          {notes?.length ? (
+            <View style={{ gap: 12 }}>
+              <Link asChild href="/onboarding/notes/new">
+                <Button action="neutral" priority="medium">
+                  {translate`Add another note`}
+                </Button>
+              </Link>
+              <Button
+                onPress={() => handleCompleteOnboarding()}
+                testID="onboarding.notes.cta"
+              >
+                {translate`Finish`}
+              </Button>
+            </View>
+          ) : (
+            <Link
+              asChild
+              href="/onboarding/notes/new"
+              testID="onboarding.notes.new-note"
+            >
+              <Button>{translate`New note`}</Button>
             </Link>
           )}
-        />
-      </Layout.Main>
-      <Layout.Footer>
-        {notes?.length ? (
-          <View style={{ gap: 12 }}>
-            <Link asChild href="/onboarding/notes/new">
-              <Button action="neutral" priority="medium">
-                {translate`Add another note`}
-              </Button>
-            </Link>
-            <Button
-              onPress={() => handleCompleteOnboarding()}
-              testID="onboarding.notes.cta"
-            >
-              {translate`Finish`}
-            </Button>
-          </View>
-        ) : (
-          <Link
-            asChild
-            href="/onboarding/notes/new"
-            testID="onboarding.notes.new-note"
-          >
-            <Button>{translate`New note`}</Button>
-          </Link>
-        )}
-      </Layout.Footer>
-    </Layout>
-  ) : !collection && !isFetching ? (
-    <Redirect href="/" />
-  ) : null
+        </Layout.Footer>
+      </Layout>
+    )
+  } else {
+    return <Redirect href="/" />
+  }
 }

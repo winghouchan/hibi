@@ -1,7 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
 import { CommonActions, type NavigationProp } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Redirect, useFocusEffect, useNavigation } from 'expo-router'
+import { Suspense } from 'react'
 import { View } from 'react-native'
 import { Button, CardStyleInterpolators, Stack } from '@/ui'
 import {
@@ -13,8 +14,12 @@ import Header from './Header'
 
 export default function OnboardingNavigator() {
   const { t: translate } = useLingui()
-  const { data: isOnboardingComplete } = useQuery(isOnboardingCompleteQuery)
-  const { data: onboardingCollection } = useQuery(onboardingCollectionQuery)
+  const { data: isOnboardingComplete } = useSuspenseQuery(
+    isOnboardingCompleteQuery,
+  )
+  const { data: onboardingCollection } = useSuspenseQuery(
+    onboardingCollectionQuery,
+  )
   const navigation = useNavigation<
     NavigationProp<{
       index: undefined
@@ -23,96 +28,88 @@ export default function OnboardingNavigator() {
   >()
 
   const onFocus = () => {
+    const state = navigation.getState()
+
     /**
-     * `setTimeout` fixes issue where `navigation.reset` has no effect when the
-     * new architecture is enabled. The cause and resolution is not fully understood.
+     * Name of the first screen in the onboarding navigator. If the screen was
+     * opened with a deep link, it will also be the current screen.
      */
-    setTimeout(() => {
-      const state = navigation.getState()
+    const routeName = state.routes[0].state?.routes[0].name ?? ''
 
-      /**
-       * Name of the first screen in the onboarding navigator. If the screen was
-       * opened with a deep link, it will also be the current screen.
-       */
-      const routeName = state.routes[0].state?.routes[0].name ?? ''
+    /**
+     * Did the navigation occur via a deep link?
+     *
+     * The navigation into the onboarding journey occurred via a deep link if
+     * the first item in the history has the name `onboarding` as opposed to
+     * `index` which represents the welcome screen.
+     */
+    const isDeepLink = state.routes[0].name === 'onboarding'
 
-      /**
-       * Did the navigation occur via a deep link?
-       *
-       * The navigation into the onboarding journey occurred via a deep link if
-       * the first item in the history has the name `onboarding` as opposed to
-       * `index` which represents the welcome screen.
-       */
-      const isDeepLink = state.routes[0].name === 'onboarding'
+    if (isDeepLink && isOnboardingComplete === false) {
+      if (routeName === 'collection') {
+        navigation.dispatch((state) => {
+          const routes = [{ name: 'index' }, ...state.routes]
 
-      if (isDeepLink && isOnboardingComplete === false) {
-        if (routeName === 'collection') {
-          navigation.dispatch((state) => {
-            const routes = [{ name: 'index' }, ...state.routes]
-
-            return CommonActions.reset({
-              ...state,
-              index: routes.length - 1,
-              routes,
-            })
+          return CommonActions.reset({
+            ...state,
+            index: routes.length - 1,
+            routes,
           })
-        } else if (onboardingCollection === null) {
-          /**
-           * All subsequent routes require an onboarding collection to exist.
-           * This block handles the case where the onboarding collection does not
-           * exist, sending the user to the welcome screen.
-           */
+        })
+      } else if (onboardingCollection === null) {
+        /**
+         * All subsequent routes require an onboarding collection to exist.
+         * This block handles the case where the onboarding collection does not
+         * exist, sending the user to the welcome screen.
+         */
 
-          navigation.reset({ index: 0, routes: [{ name: 'index' }] })
-        } else if (onboardingCollection) {
-          /**
-           * All subsequent routes require an onboarding collection to exist.
-           * This block handles the case where the onboarding collection does
-           * exist, updating the route history to allow for back navigation.
-           */
+        navigation.reset({ index: 0, routes: [{ name: 'index' }] })
+      } else if (onboardingCollection) {
+        /**
+         * All subsequent routes require an onboarding collection to exist.
+         * This block handles the case where the onboarding collection does
+         * exist, updating the route history to allow for back navigation.
+         */
 
-          navigation.dispatch((state) => {
-            const routes = [
-              { name: 'collection' },
-              ...(routeName === 'notes/new' || routeName === 'notes/[id]/edit'
-                ? [{ name: 'notes/index' }]
-                : []),
-              ...(state.routes[0].state?.routes ?? []),
-            ]
+        navigation.dispatch((state) => {
+          const routes = [
+            { name: 'collection' },
+            ...(routeName === 'notes/new' || routeName === 'notes/[id]/edit'
+              ? [{ name: 'notes/index' }]
+              : []),
+            ...(state.routes[0].state?.routes ?? []),
+          ]
 
-            const newState = {
-              ...state,
-              index: 1,
-              routes: [
-                { name: 'index' },
-                {
-                  ...state.routes[0],
-                  state: {
-                    ...state.routes[0].state,
-                    index: routes.length - 1,
-                    routes,
-                  },
+          const newState = {
+            ...state,
+            index: 1,
+            routes: [
+              { name: 'index' },
+              {
+                ...state.routes[0],
+                state: {
+                  ...state.routes[0].state,
+                  stale: true,
+                  index: routes.length - 1,
+                  routes,
                 },
-              ],
-            }
+              },
+            ],
+          }
 
-            return CommonActions.reset(newState)
-          })
-        }
+          return CommonActions.reset(newState)
+        })
       }
-    }, 0)
+    }
   }
 
   useFocusEffect(onFocus)
 
   if (isOnboardingComplete) {
     return <Redirect href="/(app)/(tabs)" />
-  }
-
-  if (isOnboardingComplete === false) {
+  } else {
     return (
       <Stack
-        initialRouteName="index"
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
           gestureEnabled: true,
@@ -120,7 +117,9 @@ export default function OnboardingNavigator() {
           header: (props) => <Header {...props} />,
         }}
         screenLayout={({ children }) => (
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ErrorBoundary>
+            <Suspense>{children}</Suspense>
+          </ErrorBoundary>
         )}
       >
         <Stack.Screen
@@ -178,6 +177,4 @@ export default function OnboardingNavigator() {
       </Stack>
     )
   }
-
-  return null
 }
