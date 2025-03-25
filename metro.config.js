@@ -1,10 +1,10 @@
 /* eslint-env node */
 
+const { getSentryExpoConfig } = require('@sentry/react-native/metro')
 const withStorybook = require('@storybook/react-native/metro/withStorybook')
-const { getDefaultConfig } = require('expo/metro-config')
 const path = require('path')
 
-const config = getDefaultConfig(__dirname)
+const config = getSentryExpoConfig(__dirname)
 
 config.resolver.sourceExts.push('sql')
 

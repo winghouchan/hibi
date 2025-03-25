@@ -44,15 +44,16 @@ export default {
     favicon: './assets/images/favicon.png',
   },
   plugins: [
-    'expo-font',
-    'expo-localization',
-    'expo-router',
+    ['@sentry/react-native/expo'],
     [
       'expo-dev-client',
       {
         addGeneratedScheme: false,
       },
     ],
+    'expo-font',
+    'expo-localization',
+    'expo-router',
     [
       'expo-splash-screen',
       {

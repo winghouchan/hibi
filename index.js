@@ -1,7 +1,11 @@
+import * as Sentry from '@sentry/react-native'
 import { registerRootComponent } from 'expo'
 import { ExpoRoot } from 'expo-router'
 import { StrictMode } from 'react'
+import { configureTelemetry } from '@/telemetry'
 import configureStyleSheet from '@/ui/configureStyleSheet'
+
+configureTelemetry()
 
 /**
  * Style sheet must be configured before components are imported
@@ -20,4 +24,4 @@ export function App() {
   )
 }
 
-registerRootComponent(App)
+registerRootComponent(Sentry.wrap(App))
