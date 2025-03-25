@@ -5,7 +5,7 @@ import { SplashScreen, useNavigationContainerRef } from 'expo-router'
 import { ComponentProps, Suspense, useEffect, useState } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
-import { log } from '@/telemetry'
+import { log, telemetryInstrumentation } from '@/telemetry'
 import { CardStyleInterpolators, Stack } from '@/ui'
 import ErrorBoundary from './ErrorBoundary'
 
@@ -78,6 +78,14 @@ export default function Navigator() {
   useReactNavigationDevTools(navigationContainerRef)
 
   useEffect(hideSplashScreen, [isNavigatorReady])
+
+  useEffect(() => {
+    if (navigationContainerRef) {
+      telemetryInstrumentation.navigation.registerNavigationContainer(
+        navigationContainerRef,
+      )
+    }
+  }, [navigationContainerRef])
 
   return (
     <ThemeProvider value={navigatorTheme}>

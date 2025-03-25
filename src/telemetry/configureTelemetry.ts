@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react-native'
+import navigationInstrumentation from './instrumentation/navigation'
 
 export default function configureTelemetry() {
   Sentry.init({
@@ -7,6 +8,8 @@ export default function configureTelemetry() {
       if (__DEV__) {
         integrations.push(Sentry.spotlightIntegration())
       }
+
+      integrations.push(navigationInstrumentation)
 
       return integrations
     },
