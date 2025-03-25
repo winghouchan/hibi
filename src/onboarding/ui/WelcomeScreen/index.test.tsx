@@ -1,11 +1,19 @@
 import { userEvent, waitFor } from '@testing-library/react-native'
-import { Stack } from 'expo-router'
+import { Stack, useNavigation } from 'expo-router'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
 import { View } from 'react-native'
 import { mockOnboardedState, mockOnboardedStateError } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
 import WelcomeScreen from '.'
+
+const useNavigationMock = useNavigation as jest.MockedFunction<
+  typeof useNavigation
+>
+
+useNavigationMock.mockReturnValue({
+  preload: jest.fn(),
+})
 
 const routerMock = {
   _layout: () => (
@@ -45,10 +53,7 @@ describe('<WelcomeScreen />', () => {
     it('shows a button to start onboarding', async () => {
       mockOnboardedState(false)
 
-      renderRouter(
-        { _layout: () => <Stack />, index: WelcomeScreen },
-        { wrapper: mockAppRoot() },
-      )
+      renderRouter(routerMock, { wrapper: mockAppRoot() })
 
       expect(
         await screen.findByTestId('onboarding.welcome.cta.button'),
