@@ -1,7 +1,12 @@
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 
-export default async function getOnboardingCollection() {
+async function getOnboardingCollection() {
   const collection = await database.query.collection.findFirst()
 
   return collection ?? null
 }
+
+export default tracer.withSpan(
+  { name: 'getOnboardingCollection' },
+  getOnboardingCollection,
+)

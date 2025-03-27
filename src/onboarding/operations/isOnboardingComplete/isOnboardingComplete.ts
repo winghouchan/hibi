@@ -1,6 +1,6 @@
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 
-export default async function isOnboardingComplete() {
+async function isOnboardingComplete() {
   const { onboarded } =
     (await database.query.user.findFirst({
       columns: {
@@ -10,3 +10,8 @@ export default async function isOnboardingComplete() {
 
   return Boolean(onboarded)
 }
+
+export default tracer.withSpan(
+  { name: 'isOnboardingComplete' },
+  isOnboardingComplete,
+)

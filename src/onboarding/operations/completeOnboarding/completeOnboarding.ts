@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { user } from '@/user/schema'
 
-export default async function completeOnboarding() {
+async function completeOnboarding() {
   return await database.transaction(async (transaction) => {
     const { id: userId } =
       (await transaction.query.user.findFirst({ columns: { id: true } })) ?? {}
@@ -21,3 +21,8 @@ export default async function completeOnboarding() {
       .returning()
   })
 }
+
+export default tracer.withSpan(
+  { name: 'completeOnboarding' },
+  completeOnboarding,
+)
