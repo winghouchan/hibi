@@ -1,6 +1,6 @@
 import { inArray } from 'drizzle-orm'
 import { collection, collectionToNote } from '@/collections/schema'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import createReviewables from '@/reviews/operations/createReviewables'
 import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
 import hashNoteFieldValue from '../../hashNoteFieldValue'
@@ -17,7 +17,7 @@ interface CreateNoteParameters {
   config: Parameters<typeof createReviewables>[0]['config']
 }
 
-export default async function createNote({
+async function createNote({
   collections,
   fields: sides,
   config,
@@ -110,3 +110,5 @@ export default async function createNote({
     }
   })
 }
+
+export default tracer.withSpan({ name: 'createNote' }, createNote)

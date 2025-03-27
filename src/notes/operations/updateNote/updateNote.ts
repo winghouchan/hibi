@@ -3,7 +3,7 @@ import differenceWith from 'lodash/differenceWith'
 import isEqual from 'lodash/isEqual'
 import { RequireAtLeastOne } from 'type-fest'
 import { collection, collectionToNote } from '@/collections/schema'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { createReviewables } from '@/reviews/operations'
 import { reviewable, reviewableField } from '@/reviews/schema'
 import hashNoteFieldValue from '../../hashNoteFieldValue'
@@ -25,7 +25,7 @@ type UpdateNoteParameters = {
   'collections' | 'config' | 'fields'
 >
 
-export default async function updateNote({
+async function updateNote({
   id,
   collections,
   fields: sides,
@@ -385,3 +385,5 @@ export default async function updateNote({
     }
   })
 }
+
+export default tracer.withSpan({ name: 'updateNote' }, updateNote)

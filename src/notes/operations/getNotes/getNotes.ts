@@ -11,7 +11,7 @@ import {
   lte,
 } from 'drizzle-orm'
 import { collection, collectionToNote } from '@/collections/schema'
-import { database } from '@/data'
+import { database, tracer } from '@/data/database'
 import { note, noteField } from '../../schema'
 
 type Collection = typeof collection.$inferSelect
@@ -45,11 +45,7 @@ type Options = {
 
 const PAGINATION_DEFAULT_LIMIT = 10
 
-export default async function getNotes({
-  filter,
-  order,
-  pagination,
-}: Options = {}) {
+async function getNotes({ filter, order, pagination }: Options = {}) {
   const filterConditions = filter
     ? Object.entries(filter).reduce<ReturnType<typeof inArray | typeof eq>[]>(
         (conditions, [key, value]) => {
@@ -135,3 +131,5 @@ export default async function getNotes({
     ),
   }
 }
+
+export default tracer.withSpan({ name: 'getNotes' }, getNotes)
