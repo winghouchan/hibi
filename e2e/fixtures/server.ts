@@ -192,6 +192,12 @@ export default {
       mock.module('@/data/database', () => ({
         database,
         nativeDatabase,
+        tracer: {
+          withSpan:
+            (_: unknown, operation: Function) =>
+            async (...args: any[]) =>
+              operation(...args),
+        },
       }))
 
       log('Applying migrations')
