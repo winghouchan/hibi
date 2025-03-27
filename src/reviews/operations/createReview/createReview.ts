@@ -6,7 +6,7 @@ import {
   Rating,
   State,
 } from 'ts-fsrs'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { review, reviewableSnapshot } from '../../schema'
 
 interface CreateReviewParameters {
@@ -15,7 +15,7 @@ interface CreateReviewParameters {
   duration: number
 }
 
-export default async function createReview({
+async function createReview({
   reviewable,
   rating,
   duration,
@@ -140,3 +140,5 @@ export default async function createReview({
     }
   })
 }
+
+export default tracer.withSpan({ name: 'createReview' }, createReview)

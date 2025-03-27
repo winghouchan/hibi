@@ -11,7 +11,7 @@ import {
   sql,
 } from 'drizzle-orm'
 import { collection, collectionToNote } from '@/collections/schema'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { note, noteField } from '@/notes/schema'
 import {
   reviewable,
@@ -24,7 +24,7 @@ interface Options {
   onlyDue?: boolean
 }
 
-export default async function getNextReview(options?: Options) {
+async function getNextReview(options?: Options) {
   /**
    * Partitions by reviewable ordered by created dates descending
    */
@@ -127,3 +127,5 @@ export default async function getNextReview(options?: Options) {
 
   return nextReviewable ? { id: nextReviewable.reviewable.id, fields } : null
 }
+
+export default tracer.withSpan({ name: 'getNextReview' }, getNextReview)
