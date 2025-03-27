@@ -38,11 +38,6 @@ export default {
     supportsTablet: true,
     bundleIdentifier: identifierByEnvironment.production,
   },
-  web: {
-    bundler: 'metro',
-    output: 'static',
-    favicon: './assets/images/favicon.png',
-  },
   plugins: [
     ['@sentry/react-native/expo'],
     [
