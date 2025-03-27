@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { collection } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>
@@ -8,7 +8,7 @@ export interface Collection<Name extends string = string>
   name: Name extends '' ? never : Name
 }
 
-export default async function updateCollection<Name extends string>({
+async function updateCollection<Name extends string>({
   id,
   name,
 }: Collection<Name>) {
@@ -20,3 +20,5 @@ export default async function updateCollection<Name extends string>({
       .returning()
   )[0]
 }
+
+export default tracer.withSpan({ name: 'updateCollection' }, updateCollection)

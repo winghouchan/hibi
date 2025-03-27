@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { collection } from '../../schema/collection'
 
 type Collection = typeof collection.$inferSelect
@@ -14,7 +14,7 @@ interface Params {
   }>
 }
 
-export default async function getCollection({ filter }: Params) {
+async function getCollection({ filter }: Params) {
   const result = await database.query.collection.findFirst({
     where: and(
       ...Object.entries(filter).reduce<ReturnType<typeof eq>[]>(
@@ -29,3 +29,5 @@ export default async function getCollection({ filter }: Params) {
 
   return result ?? null
 }
+
+export default tracer.withSpan({ name: 'getCollection' }, getCollection)

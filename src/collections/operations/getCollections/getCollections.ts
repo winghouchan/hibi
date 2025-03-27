@@ -11,7 +11,7 @@ import {
   lte,
 } from 'drizzle-orm'
 import { collection } from '@/collections/schema'
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 
 type Collection = typeof collection.$inferSelect
 
@@ -34,11 +34,7 @@ interface Options {
 
 const PAGINATION_DEFAULT_LIMIT = 10
 
-export default async function getCollections({
-  filter,
-  order,
-  pagination,
-}: Options = {}) {
+async function getCollections({ filter, order, pagination }: Options = {}) {
   const filterConditions = filter
     ? Object.entries(filter).reduce<ReturnType<typeof inArray | typeof eq>[]>(
         (conditions, [column, value]) => {
@@ -107,3 +103,5 @@ export default async function getCollections({
     collections,
   }
 }
+
+export default tracer.withSpan({ name: 'getCollections' }, getCollections)

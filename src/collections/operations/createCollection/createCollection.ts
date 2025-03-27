@@ -1,4 +1,4 @@
-import { database } from '@/data/database'
+import { database, tracer } from '@/data/database'
 import { collection } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>
@@ -6,7 +6,7 @@ export interface Collection<Name extends string = string>
   name: Name extends '' ? never : Name
 }
 
-export default async function createCollection<Name extends string>({
+async function createCollection<Name extends string>({
   name,
 }: Collection<Name>) {
   const [result] = await database
@@ -16,3 +16,5 @@ export default async function createCollection<Name extends string>({
 
   return result
 }
+
+export default tracer.withSpan({ name: 'createCollection' }, createCollection)
