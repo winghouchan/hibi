@@ -3,8 +3,9 @@ import { type ExpoDevMenuItem, registerDevMenuItems } from 'expo-dev-menu'
 import { router } from 'expo-router'
 import { DevSettings } from 'react-native'
 import { nativeDatabase } from '@/data'
+import { log } from '@/telemetry'
 
-export default function configureDevMenu() {
+export default async function configureDevMenu() {
   const devMenuItems: ExpoDevMenuItem[] = [
     {
       name: translate`📚 Open Storybook`,
@@ -21,5 +22,9 @@ export default function configureDevMenu() {
     },
   ]
 
-  return registerDevMenuItems(devMenuItems)
+  try {
+    return await registerDevMenuItems(devMenuItems)
+  } catch (error) {
+    log.info('Failed to register dev menu items. Reason:', error)
+  }
 }
