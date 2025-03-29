@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
 import { View } from 'react-native'
-import { mockCollections } from '@/collections/test'
+import { mockCollections, mockCollectionsError } from '@/collections/test'
 import { mockNextReview, mockNextReviewError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import HomeScreen from '.'
@@ -68,6 +68,20 @@ describe('<HomeScreen />', () => {
     expect(await screen.findByTestId('home.screen')).toBeOnTheScreen()
 
     await waitFor(expected)
+  })
+
+  test('when there is an error getting the collections, an error message is shown', async () => {
+    // Suppress console error from the error mock
+    jest.spyOn(console, 'error').mockImplementation()
+
+    mockCollectionsError(new Error('Mock Error'))
+    mockNextReview(null)
+
+    renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
+
+    expect(
+      await screen.findByTestId('error-boundary-fallback-mock'),
+    ).toBeOnTheScreen()
   })
 
   test('when there is an error getting the next review, an error message is shown', async () => {
