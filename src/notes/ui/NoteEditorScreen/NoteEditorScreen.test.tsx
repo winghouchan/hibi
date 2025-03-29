@@ -23,7 +23,7 @@ jest.mock('@/ui/RichTextInput/RichTextInput')
 const routerMock = {
   '(app)/_layout': () => <Stack />,
   '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/note/_layout': () => (
+  '(app)/notes/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -34,13 +34,13 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/note/[id]/_layout': {
+  '(app)/notes/[id]/_layout': {
     unstable_settings: { initialRouteName: 'index' },
     default: () => <Stack />,
   },
-  '(app)/note/[id]/edit': NoteEditorScreen,
-  '(app)/note/[id]/index': () => null,
-  '(app)/note/new': NoteEditorScreen,
+  '(app)/notes/[id]/edit': NoteEditorScreen,
+  '(app)/notes/[id]/index': () => null,
+  '(app)/notes/new': NoteEditorScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<NoteEditorScreen />', () => {
@@ -118,7 +118,7 @@ describe('<NoteEditorScreen />', () => {
       })
 
       renderRouter(routerMock, {
-        initialUrl: 'note/1/edit',
+        initialUrl: 'notes/1/edit',
         wrapper: mockAppRoot(),
       })
 
@@ -152,7 +152,7 @@ describe('<NoteEditorScreen />', () => {
       mockGetNote(null)
 
       renderRouter(routerMock, {
-        initialUrl: 'note/1/edit',
+        initialUrl: 'notes/1/edit',
         wrapper: mockAppRoot(),
       })
 
@@ -168,7 +168,7 @@ describe('<NoteEditorScreen />', () => {
       mockGetNoteError(new Error('Mock Error'))
 
       renderRouter(routerMock, {
-        initialUrl: 'note/1/edit',
+        initialUrl: 'notes/1/edit',
         wrapper: mockAppRoot(),
       })
 
@@ -220,7 +220,7 @@ describe('<NoteEditorScreen />', () => {
       })
 
       renderRouter(routerMock, {
-        initialUrl: 'note/new',
+        initialUrl: 'notes/new',
         wrapper: mockAppRoot(),
       })
 
@@ -265,7 +265,7 @@ describe('<NoteEditorScreen />', () => {
       mockCreateNoteError(new Error('Mock Error'))
 
       renderRouter(routerMock, {
-        initialUrl: 'note/new',
+        initialUrl: 'notes/new',
         wrapper: mockAppRoot(),
       })
 

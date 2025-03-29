@@ -74,7 +74,7 @@ export default function CollectionScreen() {
               data={notes}
               onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
               renderItem={({ item: note }) => (
-                <Link key={note.id} href={`/note/${note.id}`}>
+                <Link key={note.id} href={`/notes/${note.id}`}>
                   <NoteList.Item fields={note.fields} />
                 </Link>
               )}
@@ -83,7 +83,7 @@ export default function CollectionScreen() {
           <Layout.Footer>
             <Link
               href={{
-                pathname: '/note/new',
+                pathname: '/notes/new',
                 params: {
                   collections: [collectionId],
                 },

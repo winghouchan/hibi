@@ -66,7 +66,7 @@ export default function HomeScreen() {
         </View>
         <Link
           href={{
-            pathname: '/note/new',
+            pathname: '/notes/new',
             params: {
               ...(typeof collection !== 'undefined' && {
                 collections: [collection],

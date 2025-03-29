@@ -89,7 +89,7 @@ export default function LibraryScreen() {
           renderItem={({ item: note }) => (
             <Link
               key={note.id}
-              href={`/note/${note.id}`}
+              href={`/notes/${note.id}`}
               testID="library.collection.note.link"
             >
               <NoteList.Item fields={note.fields} />

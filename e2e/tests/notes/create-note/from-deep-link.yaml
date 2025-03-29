@@ -14,7 +14,7 @@ env:
       databaseFixture: ${databaseFixture}
 
 - openLink:
-    link: hibi://note/new
+    link: hibi://notes/new
 
 - runFlow:
     file: ../__subflows__/create-note.yaml

@@ -60,7 +60,7 @@ export default forwardRef<Ref, Props>(function CreateMenu({ collection }, ref) {
         </Menu.Item>
         <Menu.Item
           href={{
-            pathname: '/note/new',
+            pathname: '/notes/new',
             ...(typeof collection !== 'undefined' && {
               params: {
                 collections: [collection],

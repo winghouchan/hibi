@@ -36,7 +36,7 @@ export default function NoteScreen() {
         <Stack.Screen
           options={{
             headerRight: () => (
-              <Link href={`/note/${noteId}/edit`}>
+              <Link href={`/notes/${noteId}/edit`}>
                 <Trans>Edit</Trans>
               </Link>
             ),

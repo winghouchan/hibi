@@ -8,7 +8,7 @@ import { mockAppRoot } from 'test/utils'
 import NoteScreen from '.'
 
 const routerMock = {
-  'note/_layout': () => (
+  'notes/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -19,7 +19,7 @@ const routerMock = {
       )}
     />
   ),
-  'note/[id]': NoteScreen,
+  'notes/[id]': NoteScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<NoteScreen />', () => {
@@ -38,7 +38,7 @@ describe('<NoteScreen />', () => {
     mockGetNote(fixture.note)
 
     renderRouter(routerMock, {
-      initialUrl: '/note/1',
+      initialUrl: '/notes/1',
       wrapper: mockAppRoot(),
     })
 
@@ -56,7 +56,7 @@ describe('<NoteScreen />', () => {
     mockGetNote(fixture.note)
 
     renderRouter(routerMock, {
-      initialUrl: '/note/0',
+      initialUrl: '/notes/0',
       wrapper: mockAppRoot(),
     })
 
@@ -72,7 +72,7 @@ describe('<NoteScreen />', () => {
     mockGetNoteError(new Error('Mock Error'))
 
     renderRouter(routerMock, {
-      initialUrl: '/note/1',
+      initialUrl: '/notes/1',
       wrapper: mockAppRoot(),
     })
 

@@ -9,7 +9,7 @@ env:
       databaseFixture: ${databaseFixture}
 
 - openLink:
-    link: hibi://note/0/edit
+    link: hibi://notes/0/edit
 
 - assertVisible:
     text: The note doesn't exist

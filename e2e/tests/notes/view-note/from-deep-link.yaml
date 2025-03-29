@@ -7,7 +7,7 @@ appId: ${appId}
       databaseFixture: onboarding/complete
 
 - openLink:
-    link: hibi://note/1
+    link: hibi://notes/1
 
 - assertVisible:
     id: library.note.screen

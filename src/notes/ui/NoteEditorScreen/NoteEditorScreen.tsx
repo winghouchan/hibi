@@ -92,7 +92,7 @@ export default function NoteEditorScreen() {
               ? [navigationState.routes[1]]
               : []),
             {
-              name: 'note',
+              name: 'notes',
               state: {
                 index: 0,
                 routes: [
