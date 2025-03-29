@@ -3,7 +3,7 @@ import { type StackHeaderProps } from '@react-navigation/stack'
 import { useLocales } from 'expo-localization'
 import { Animated, Pressable, View } from 'react-native'
 import { Icon, Progress } from '@/ui'
-import style from './style'
+import style from './Header.styles'
 
 type Props = StackHeaderProps
 

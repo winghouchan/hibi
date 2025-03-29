@@ -11,7 +11,7 @@ import {
   mockOnboardingCollectionError,
 } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import NotesScreen from '.'
+import NotesScreen from './NotesScreen'
 
 const routerMock = {
   '(app)/_layout': () => null,

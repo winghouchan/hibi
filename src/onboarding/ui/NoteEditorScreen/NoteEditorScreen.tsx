@@ -7,7 +7,7 @@ import { noteQuery } from '@/notes/operations'
 import { NoteEditor } from '@/notes/ui'
 import { Button } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
-import styles from './styles'
+import styles from './NoteEditorScreen.styles'
 import useForm from './useForm'
 import useHandleNonExistentNote from './useHandleNonExistentNote'
 

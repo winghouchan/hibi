@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { Button } from '@/ui'
 import { isOnboardingCompleteQuery } from '../../operations'
 import Layout from '../Layout'
-import style from './style'
+import style from './WelcomeScreen.styles'
 
 export default function WelcomeScreen() {
   const { t: translate } = useLingui()
