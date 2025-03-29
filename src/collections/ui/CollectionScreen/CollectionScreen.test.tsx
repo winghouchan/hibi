@@ -11,7 +11,7 @@ import CollectionScreen from './CollectionScreen'
 const routerMock = {
   '(app)/_layout': () => <Stack />,
   '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/collection/_layout': () => (
+  '(app)/collections/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -22,7 +22,7 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/collection/[id]/index': CollectionScreen,
+  '(app)/collections/[id]/index': CollectionScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<CollectionScreen />', () => {
@@ -41,7 +41,7 @@ describe('<CollectionScreen />', () => {
       mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
       renderRouter(routerMock, {
-        initialUrl: `/collection/${fixture.collection.id}`,
+        initialUrl: `/collections/${fixture.collection.id}`,
         wrapper: mockAppRoot(),
       })
 
@@ -61,7 +61,7 @@ describe('<CollectionScreen />', () => {
       mockCollection(fixture.collection)
 
       renderRouter(routerMock, {
-        initialUrl: '/collection/0',
+        initialUrl: '/collections/0',
         wrapper: mockAppRoot(),
       })
 
@@ -77,7 +77,7 @@ describe('<CollectionScreen />', () => {
       mockCollectionError(new Error('Mock Error'))
 
       renderRouter(routerMock, {
-        initialUrl: '/collection/1',
+        initialUrl: '/collections/1',
         wrapper: mockAppRoot(),
       })
 

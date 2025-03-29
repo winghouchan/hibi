@@ -72,7 +72,7 @@ export default function CollectionEditorScreen() {
       const routes = [
         navigationState.routes[0],
         {
-          name: 'collection',
+          name: 'collections',
           state: {
             index: 0,
             routes: [

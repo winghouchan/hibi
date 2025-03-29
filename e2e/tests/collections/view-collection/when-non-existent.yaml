@@ -7,7 +7,7 @@ appId: ${appId}
       databaseFixture: onboarding/complete
 
 - openLink:
-    link: hibi://collection/0
+    link: hibi://collections/0
 
 - assertVisible:
     text: The collection doesn't exist

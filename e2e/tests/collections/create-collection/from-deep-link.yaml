@@ -7,7 +7,7 @@ appId: ${appId}
       databaseFixture: onboarding/complete
 
 - openLink:
-    link: hibi://collection/new
+    link: hibi://collections/new
 
 - runFlow:
     file: ../__subflows__/create-collection.yaml

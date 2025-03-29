@@ -17,7 +17,7 @@ import { updateCollection } from '../../operations'
 const routerMock = {
   '(app)/_layout': () => <Stack />,
   '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/collection/_layout': () => (
+  '(app)/collections/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -28,13 +28,13 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/collection/[id]/_layout': {
+  '(app)/collections/[id]/_layout': {
     unstable_settings: { initialRouteName: 'index' },
     default: () => <Stack />,
   },
-  '(app)/collection/[id]/edit': CollectionEditorScreen,
-  '(app)/collection/[id]/index': () => null,
-  '(app)/collection/new': CollectionEditorScreen,
+  '(app)/collections/[id]/edit': CollectionEditorScreen,
+  '(app)/collections/[id]/index': () => null,
+  '(app)/collections/new': CollectionEditorScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<CollectionEditorScreen />', () => {
@@ -56,7 +56,7 @@ describe('<CollectionEditorScreen />', () => {
       mockCollection(fixture.collection)
 
       renderRouter(routerMock, {
-        initialUrl: `collection/${fixture.collection.id}/edit`,
+        initialUrl: `collections/${fixture.collection.id}/edit`,
         wrapper: mockAppRoot(),
       })
 
@@ -96,7 +96,7 @@ describe('<CollectionEditorScreen />', () => {
       mockCollection(fixture.collection)
 
       renderRouter(routerMock, {
-        initialUrl: 'collection/0/edit',
+        initialUrl: 'collections/0/edit',
         wrapper: mockAppRoot(),
       })
 
@@ -112,7 +112,7 @@ describe('<CollectionEditorScreen />', () => {
       mockCollectionError(new Error('Mock Error'))
 
       renderRouter(routerMock, {
-        initialUrl: 'collection/1/edit',
+        initialUrl: 'collections/1/edit',
         wrapper: mockAppRoot(),
       })
 
@@ -130,7 +130,7 @@ describe('<CollectionEditorScreen />', () => {
       }
 
       renderRouter(routerMock, {
-        initialUrl: 'collection/new',
+        initialUrl: 'collections/new',
         wrapper: mockAppRoot(),
       })
 
@@ -142,7 +142,7 @@ describe('<CollectionEditorScreen />', () => {
         await screen.findByRole('button', { name: 'Create collection' }),
       )
 
-      expect(screen).toHavePathname('/collection/1')
+      expect(screen).toHavePathname('/collections/1')
     })
 
     test('a collection can be created by completing the form and submitting by pressing the enter key on the keyboard', async () => {
@@ -152,7 +152,7 @@ describe('<CollectionEditorScreen />', () => {
       }
 
       renderRouter(routerMock, {
-        initialUrl: 'collection/new',
+        initialUrl: 'collections/new',
         wrapper: mockAppRoot(),
       })
 
@@ -162,7 +162,7 @@ describe('<CollectionEditorScreen />', () => {
         { submitEditing: true },
       )
 
-      expect(screen).toHavePathname('/collection/1')
+      expect(screen).toHavePathname('/collections/1')
     })
 
     test('and invalid information is submitted, an alert is shown', async () => {
@@ -172,7 +172,7 @@ describe('<CollectionEditorScreen />', () => {
       mockCreateCollectionError(new Error('Mock Error'))
 
       renderRouter(routerMock, {
-        initialUrl: 'collection/new',
+        initialUrl: 'collections/new',
         wrapper: mockAppRoot(),
       })
 

@@ -64,7 +64,7 @@ export default function LibraryScreen() {
             {typeof collection !== 'undefined' && (
               <Link
                 accessibilityLabel={translate`Edit the currently selected collection`}
-                href={`/collection/${collection}/edit`}
+                href={`/collections/${collection}/edit`}
                 testID="library.collection.edit.link"
               >
                 <Icon name="edit" />

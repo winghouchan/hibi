@@ -84,7 +84,7 @@ export default function HomeScreen() {
         {typeof collection !== 'undefined' && (
           <Link
             href={{
-              pathname: '/collection/[id]/edit',
+              pathname: '/collections/[id]/edit',
               params: {
                 id: collection,
               },

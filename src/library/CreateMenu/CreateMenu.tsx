@@ -51,7 +51,7 @@ export default forwardRef<Ref, Props>(function CreateMenu({ collection }, ref) {
     <Modal ref={modalRef}>
       <Menu testID="library.create.menu">
         <Menu.Item
-          href="/collection/new"
+          href="/collections/new"
           icon="folder"
           onPress={onMenuItemPress}
           testID="create.collection.link"

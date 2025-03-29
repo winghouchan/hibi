@@ -62,7 +62,7 @@ export default function CollectionScreen() {
             title: collection.name,
             headerTitle: ({ children }) => <Text>{children}</Text>,
             headerRight: () => (
-              <Link href={`/collection/${collectionId}/edit`}>
+              <Link href={`/collections/${collectionId}/edit`}>
                 <Trans>Edit</Trans>
               </Link>
             ),
