@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import style from './style'
+import styles from './Progress.styles'
 
 interface Props {
   label?: string
@@ -12,9 +12,9 @@ export default function Progress({ label, value }: Props) {
       accessible={true}
       accessibilityLabel={`${label ? `${label} ` : ''}${value}%`}
       accessibilityRole="progressbar"
-      style={style.track}
+      style={styles.track}
     >
-      <View style={style.indicator(value)} />
+      <View style={styles.indicator(value)} />
     </View>
   )
 }

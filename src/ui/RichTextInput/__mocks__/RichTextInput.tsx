@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { TextInput, TextInputProps, View } from 'react-native'
-import type { Props, Ref } from '..'
+import type { Props, Ref } from '../RichTextInput'
 
 export default forwardRef<Ref, Props>(function RichTextInput(
   { autofocus, initialContent, name, onChange, testID },

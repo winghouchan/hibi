@@ -21,7 +21,7 @@ import NoteEditor from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { createNote, updateNote } from '@/notes/operations'
 
-jest.mock('@/ui/RichTextInput')
+jest.mock('@/ui/RichTextInput/RichTextInput')
 ;(useRouter as jest.MockedFunction<typeof useRouter>).mockReturnValue({
   back: jest.fn(),
   canDismiss: jest.fn(),

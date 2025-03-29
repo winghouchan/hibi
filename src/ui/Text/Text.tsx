@@ -1,6 +1,6 @@
 import { Text as NativeText, TextProps } from 'react-native'
 import { UnistylesVariants } from 'react-native-unistyles'
-import styles from './style'
+import styles from './Text.styles'
 
 type Props = TextProps & UnistylesVariants<typeof styles>
 

@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions'
 import type { Meta, StoryObj } from '@storybook/react'
-import TextField from '.'
+import TextField from './TextField'
 
 type Config = Meta<typeof TextField>
 type Story = StoryObj<Config>

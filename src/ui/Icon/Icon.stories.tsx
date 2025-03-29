@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import Icon, { names } from '.'
+import Icon, { names } from './Icon'
 
 type Config = Meta<typeof Icon>
 type Story = StoryObj<Config>

@@ -18,7 +18,7 @@ import NoteEditorScreen from '.'
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { createNote, updateNote } from '@/notes/operations'
 
-jest.mock('@/ui/RichTextInput')
+jest.mock('@/ui/RichTextInput/RichTextInput')
 
 const routerMock = {
   '(app)/_layout': () => <Stack />,
