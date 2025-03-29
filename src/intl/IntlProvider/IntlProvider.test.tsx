@@ -288,7 +288,7 @@ describe('<IntlProvider />', () => {
       fixture.preference && mockLocalePreference(fixture.preference)
 
       const { Trans } = await import('@lingui/react')
-      const { default: IntlProvider } = await import('.')
+      const { default: IntlProvider } = await import('./IntlProvider')
 
       render(
         <IntlProvider>
@@ -309,7 +309,7 @@ describe('<IntlProvider />', () => {
       })
 
       const { Trans } = await import('@lingui/react')
-      const { default: IntlProvider } = await import('.')
+      const { default: IntlProvider } = await import('./IntlProvider')
 
       mockLocalePreference([supportedLocaleMock.data])
 
