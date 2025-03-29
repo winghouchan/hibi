@@ -9,7 +9,7 @@ import {
   mockCollectionError,
   mockCreateCollectionError,
 } from '../../test'
-import CollectionEditorScreen from '.'
+import CollectionEditorScreen from './CollectionEditorScreen'
 
 // eslint-disable-next-line import/order -- These must be imported after they have been mocked
 import { updateCollection } from '../../operations'

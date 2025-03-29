@@ -6,7 +6,7 @@ import { Alert, View } from 'react-native'
 import { mockNotes } from '@/notes/test'
 import { mockAppRoot } from 'test/utils'
 import { mockCollection, mockCollectionError } from '../../test'
-import CollectionScreen from '.'
+import CollectionScreen from './CollectionScreen'
 
 const routerMock = {
   '(app)/_layout': () => <Stack />,
