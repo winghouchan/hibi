@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { mockOnboardedState } from '@/onboarding/test'
 import { mockAppRoot } from 'test/utils'
-import AppLayout from '.'
+import AppLayout from './App'
 
 const routerMock = {
   '(app)/_layout': AppLayout,
