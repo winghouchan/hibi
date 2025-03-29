@@ -65,6 +65,8 @@ describe('<HomeScreen />', () => {
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
+    expect(await screen.findByTestId('home.screen')).toBeOnTheScreen()
+
     await waitFor(expected)
   })
 
