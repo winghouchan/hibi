@@ -6,7 +6,7 @@ import { View } from 'react-native'
 import { mockCollections, mockCollectionsError } from '@/collections/test'
 import { mockNextReview, mockNextReviewError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
-import HomeScreen from '.'
+import HomeScreen from './HomeScreen'
 
 const routerMock = {
   _layout: () => (
