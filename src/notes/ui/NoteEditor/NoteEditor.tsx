@@ -12,7 +12,7 @@ import { Pressable, View } from 'react-native'
 import { RichTextInput, Switch } from '@/ui'
 import { createNote, getNote, updateNote } from '../../operations'
 import CollectionPicker from './CollectionPicker'
-import styles from './styles'
+import styles from './NoteEditor.styles'
 
 interface Ref {
   submit: () => void

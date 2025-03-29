@@ -27,7 +27,7 @@ import {
 } from '../../operations'
 import baseQueryKey from '../../operations/baseQueryKey'
 import NoteEditor from '../NoteEditor'
-import styles from './styles'
+import styles from './NoteEditorScreen.styles'
 
 export default function NoteEditorScreen() {
   const { t: translate } = useLingui()
