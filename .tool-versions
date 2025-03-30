@@ -8,3 +8,7 @@ java    17
 # Node.js is a JavaScript runtime environment. It is a dependency of Expo.
 # See https://docs.expo.dev/get-started/create-a-project/.
 nodejs  lts
+
+# Ruby is the language for CocoaPods, a dependency manager for iOS projects.
+# See https://cocoapods.org.
+ruby    2
