@@ -85,6 +85,7 @@ export default {
         },
       },
     ],
+    ['./plugins/withExpoUpdates'],
   ],
   experiments: {
     reactCompiler: true,
