@@ -1,3 +1,10 @@
+# Java is a dependency for Android development. The version is dependent on the configuration from Expo.
+#
+# See:
+#  - https://developer.android.com/build/jdks
+#  - https://docs.expo.dev/get-started/set-up-your-environment/?platform=android&device=physical&mode=development-build&buildEnv=local
+java    17
+
 # Node.js is a JavaScript runtime environment. It is a dependency of Expo.
 # See https://docs.expo.dev/get-started/create-a-project/.
 nodejs  lts
