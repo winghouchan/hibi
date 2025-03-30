@@ -4,11 +4,7 @@
 
 After cloning the project:
 
-1. Install project dependencies (see [`package.json`](./package.json)):
-
-   ```bash
-   yarn install
-   ```
+1. Ensure the language runtimes are consistent with the versions specified in [`.tool-versions`](./.tool-versions). If you use a runtime version manager like [asdf](https://asdf-vm.com) or [mise-en-place](https://mise.jdx.dev) they should automatically use the versions specified.
 
 2. Install environment dependencies (see [`Brewfile`](./Brewfile)):
 
@@ -16,9 +12,15 @@ After cloning the project:
    brew bundle install
    ```
 
-3. Make sure your environment is set up for development with the [Expo](https://docs.expo.dev/) framework for [React Native](https://reactnative.dev) – see [documentation](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local). Dependencies should have been installed in the previous steps, however some extra configuration may be required.
+3. Install project dependencies (see [`package.json`](./package.json)):
 
-4. Build the apps, see below.
+   ```bash
+   yarn install
+   ```
+
+4. Make sure your environment is set up for development with the [Expo](https://docs.expo.dev/) framework for [React Native](https://reactnative.dev) – see [documentation](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local). Dependencies should have been installed in the previous steps, however some extra configuration may be required.
+
+5. Build the apps, see below.
 
 ## Building
 

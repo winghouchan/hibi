@@ -1,0 +1,3 @@
+# Node.js is a JavaScript runtime environment. It is a dependency of Expo.
+# See https://docs.expo.dev/get-started/create-a-project/.
+nodejs  lts
