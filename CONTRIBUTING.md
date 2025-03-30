@@ -4,7 +4,7 @@
 
 After cloning the project:
 
-1. Ensure the language runtimes are consistent with the versions specified in [`.tool-versions`](./.tool-versions). If you use a runtime version manager like [asdf](https://asdf-vm.com) or [mise-en-place](https://mise.jdx.dev) they should automatically use the versions specified.
+1. Ensure language runtimes and development tool versions are consistent with the versions specified in [`.tool-versions`](./.tool-versions). If you use a version manager like [asdf](https://asdf-vm.com) or [mise-en-place](https://mise.jdx.dev) they should automatically use the versions specified. If you don't use a version manager (or use a version manager that doesn't understand a `.tool-versions` file), you will need to install and configure these dependencies yourself.
 
 2. Install environment dependencies (see [`Brewfile`](./Brewfile)):
 
