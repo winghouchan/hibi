@@ -1,3 +1,3 @@
 export * from './createReview'
 export { default as createReviewables } from './createReviewables'
-export * from './nextReview'
+export * from './getNextReview'
