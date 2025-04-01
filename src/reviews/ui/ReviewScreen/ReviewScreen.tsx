@@ -8,6 +8,13 @@ import NoReviews from './NoReviews'
 import Review from './Review'
 import ReviewFinished from './ReviewFinished'
 
+/**
+ * Maximum number of reviews that can be completed in one set of reviews
+ *
+ * @todo Make this configurable by the user
+ */
+const MAX_REVIEW_COUNT = 20
+
 export default function ReviewScreen() {
   const localSearchParams = useLocalSearchParams<{ collections?: string }>()
   const collections = localSearchParams.collections?.split(',').map(Number)
@@ -57,11 +64,8 @@ export default function ReviewScreen() {
         >
           {data?.pages.map((reviewable, index) => {
             const noReviewsDue = reviewable === null && index === 0
-            const finishedReview = reviewable === null && index > 0
-
-            if (reviewable) {
-              return <Review key={index} {...reviewable} onReview={onReview} />
-            }
+            const finishedReview =
+              (reviewable === null && index > 0) || index === MAX_REVIEW_COUNT
 
             if (noReviewsDue) {
               return <NoReviews key={index} />
@@ -69,6 +73,10 @@ export default function ReviewScreen() {
 
             if (finishedReview) {
               return <ReviewFinished key={index} />
+            }
+
+            if (reviewable) {
+              return <Review key={index} {...reviewable} onReview={onReview} />
             }
           })}
         </PagerView>

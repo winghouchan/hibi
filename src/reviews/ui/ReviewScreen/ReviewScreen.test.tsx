@@ -249,6 +249,67 @@ describe('<ReviewScreen />', () => {
     expect(expoRouterMock.back).toHaveBeenCalledOnce()
   })
 
+  test('when the maximum number of reviews has been completed in a session, the review session can be finished', async () => {
+    /**
+     * Simulates the amount of time in milliseconds it takes for the user to
+     * recall an answer after seeing the prompt.
+     */
+    const recallTime = 2000
+
+    const user = userEvent.setup()
+
+    const mockReviewable = (id: number) => ({
+      id,
+      fields: [
+        [{ side: 0, position: 0, value: `Front ${id}` }],
+        [{ side: 1, position: 0, value: `Back ${id}` }],
+      ],
+    })
+
+    mockNextReview(mockReviewable(0))
+
+    renderRouter(routerMock, {
+      initialUrl: '(app)/review',
+      wrapper: mockAppRoot(),
+    })
+
+    for (let index = 0; index < 20; index++) {
+      expect(
+        await screen.findByText(new RegExp(`Front ${index}`), {
+          interval: 0,
+        }),
+      ).toBeOnTheScreen()
+
+      await act(async () => {
+        // Wait for `recallTime` to elapse
+        await new Promise((resolve) => {
+          setTimeout(resolve, recallTime)
+          jest.advanceTimersByTime(recallTime)
+        })
+      })
+
+      await user.press(screen.getByRole('button', { name: 'Show answer' }))
+
+      expect(
+        await screen.findByText(new RegExp(`Back ${index}`)),
+      ).toBeOnTheScreen()
+
+      mockNextReview(mockReviewable(index + 1))
+
+      await user.press(
+        // @ts-ignore: "ts2345: Type 'undefined' is not assignable to type 'ReactTestInstance'"
+        // If there is no button (i.e. the value is `undefined`) the test should fail at run time.
+        screen.getAllByRole('button', { name: Ratings[1] }).at(-1),
+      )
+    }
+
+    expect(await screen.findByText(/Finished/)).toBeOnTheScreen()
+
+    await user.press(screen.getByRole('button', { name: 'Finish' }))
+
+    expect(expoRouterMock.back).toHaveBeenCalledOnce()
+  })
+
   test('when there is an error getting the initial reviewable, an error message is shown', async () => {
     // Suppress console error from the error mock
     jest.spyOn(console, 'error').mockImplementation()
