@@ -38,8 +38,10 @@ export default function HomeScreen() {
   const [collection, setCollection] = useState<number | undefined>(undefined)
   const { data } = useSuspenseInfiniteQuery(
     nextReviewQuery({
-      ...(collection && { collections: [collection] }),
-      onlyDue: true,
+      filter: {
+        ...(collection && { collections: [collection] }),
+        onlyDue: true,
+      },
     }),
   )
   const hasDueReview = data?.pages[0] !== null

@@ -20,11 +20,13 @@ import {
 } from '@/reviews/schema'
 
 interface Options {
-  collections?: (typeof collection.$inferSelect)['id'][]
-  onlyDue?: boolean
+  filter?: {
+    collections?: (typeof collection.$inferSelect)['id'][]
+    onlyDue?: boolean
+  }
 }
 
-async function getNextReview(options?: Options) {
+async function getNextReview({ filter }: Options = {}) {
   /**
    * Partitions by reviewable ordered by created dates descending
    */
@@ -74,14 +76,14 @@ async function getNextReview(options?: Options) {
     .where(
       and(
         not(eq(reviewable.archived, true)),
-        options?.onlyDue
+        filter?.onlyDue
           ? or(
               lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`),
               isNull(latestSnapshot.due),
             )
           : undefined,
-        options?.collections && options.collections.length > 0
-          ? inArray(collectionToNote.collection, options.collections)
+        filter?.collections && filter.collections.length > 0
+          ? inArray(collectionToNote.collection, filter.collections)
           : undefined,
       ),
     )

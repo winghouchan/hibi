@@ -2,7 +2,7 @@ import { useSuspenseInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect, useRef } from 'react'
 import PagerView from 'react-native-pager-view'
-import { nextReviewQuery } from '@/reviews/operations'
+import { nextReviewQuery } from '../../operations'
 import Layout from '../Layout'
 import NoReviews from './NoReviews'
 import Review from './Review'
@@ -22,7 +22,7 @@ export default function ReviewScreen() {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
   const pagerViewRef = useRef<PagerView>(null)
-  const query = nextReviewQuery({ collections, onlyDue: true })
+  const query = nextReviewQuery({ filter: { collections, onlyDue: true } })
   const { data, error, fetchNextPage, isFetching } =
     useSuspenseInfiniteQuery(query)
 
