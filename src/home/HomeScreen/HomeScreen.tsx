@@ -40,7 +40,7 @@ export default function HomeScreen() {
     nextReviewQuery({
       filter: {
         ...(collection && { collections: [collection] }),
-        onlyDue: true,
+        due: true,
       },
     }),
   )

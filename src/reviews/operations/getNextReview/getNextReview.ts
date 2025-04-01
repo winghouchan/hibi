@@ -22,7 +22,7 @@ import {
 interface Options {
   filter?: {
     collections?: (typeof collection.$inferSelect)['id'][]
-    onlyDue?: boolean
+    due?: boolean
   }
 }
 
@@ -76,7 +76,7 @@ async function getNextReview({ filter }: Options = {}) {
     .where(
       and(
         not(eq(reviewable.archived, true)),
-        filter?.onlyDue
+        filter?.due
           ? or(
               lt(latestSnapshot.due, sql`(unixepoch('now', 'subsec') * 1000)`),
               isNull(latestSnapshot.due),

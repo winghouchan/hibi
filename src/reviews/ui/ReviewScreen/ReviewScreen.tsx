@@ -22,7 +22,7 @@ export default function ReviewScreen() {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
   const pagerViewRef = useRef<PagerView>(null)
-  const query = nextReviewQuery({ filter: { collections, onlyDue: true } })
+  const query = nextReviewQuery({ filter: { collections, due: true } })
   const { data, error, fetchNextPage, isFetching } =
     useSuspenseInfiniteQuery(query)
 

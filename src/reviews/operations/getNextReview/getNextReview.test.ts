@@ -25,12 +25,12 @@ describe('getNextReview', () => {
       input: { filter: { collections: [1, 2] } },
     },
     {
-      when: '`onlyDue` option is `false`',
-      input: { filter: { onlyDue: false } },
+      when: '`due` option is `false`',
+      input: { filter: { due: false } },
     },
     {
-      when: '`onlyDue` option is `true`',
-      input: { filter: { onlyDue: true } },
+      when: '`due` option is `true`',
+      input: { filter: { due: true } },
     },
   ])('when $when', ({ input }) => {
     describe.each([
@@ -175,7 +175,7 @@ describe('getNextReview', () => {
         then:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? 'returns the reviewable'
             : 'returns `null`',
         fixture: {
@@ -212,7 +212,7 @@ describe('getNextReview', () => {
         expected:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? expect.objectContaining({
                 id: 1,
                 fields: [
@@ -281,7 +281,7 @@ describe('getNextReview', () => {
       {
         and: 'there is 1 reviewable with many snapshots with all due dates in the future',
         then:
-          input.filter.onlyDue === false ||
+          input.filter.due === false ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable'
@@ -324,7 +324,7 @@ describe('getNextReview', () => {
         expected:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? expect.objectContaining({
                 id: 1,
                 fields: [
@@ -473,7 +473,7 @@ describe('getNextReview', () => {
         then:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? 'returns the reviewable with the oldest due date'
             : 'returns `null`',
         fixture: {
@@ -525,7 +525,7 @@ describe('getNextReview', () => {
         expected:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? expect.objectContaining({
                 id: 2,
                 fields: [
@@ -615,7 +615,7 @@ describe('getNextReview', () => {
         then:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
             : 'returns `null`',
         fixture: {
@@ -675,7 +675,7 @@ describe('getNextReview', () => {
         expected:
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
-          input.filter.onlyDue === false
+          input.filter.due === false
             ? expect.objectContaining({
                 id: 2,
                 fields: [
