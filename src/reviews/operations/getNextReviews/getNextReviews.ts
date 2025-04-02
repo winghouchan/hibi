@@ -26,7 +26,7 @@ interface Options {
   }
 }
 
-async function getNextReview({ filter }: Options = {}) {
+async function getNextReviews({ filter }: Options = {}) {
   /**
    * Partitions by reviewable ordered by created dates descending
    */
@@ -67,7 +67,7 @@ async function getNextReview({ filter }: Options = {}) {
   /**
    * Reviewables joined against their latest snapshots
    */
-  const [nextReviewable] = await database
+  const nextReviewables = await database
     .select()
     .from(reviewable)
     .leftJoin(latestSnapshot, eq(reviewable.id, latestSnapshot.reviewable))
@@ -99,8 +99,9 @@ async function getNextReview({ filter }: Options = {}) {
     )
     .limit(1)
 
-  const fields = nextReviewable
-    ? (
+  const reviewables = await Promise.all(
+    nextReviewables.map(async ({ reviewable: nextReviewable }) => {
+      const fields = (
         await database
           .select({
             side: reviewableField.side,
@@ -108,7 +109,7 @@ async function getNextReview({ filter }: Options = {}) {
             value: noteField.value,
           })
           .from(reviewableField)
-          .where(eq(reviewableField.reviewable, nextReviewable.reviewable.id))
+          .where(eq(reviewableField.reviewable, nextReviewable.id))
           .innerJoin(noteField, eq(reviewableField.field, noteField.id))
           .orderBy(asc(reviewableField.side), asc(noteField.position))
       ).reduce<
@@ -125,9 +126,14 @@ async function getNextReview({ filter }: Options = {}) {
 
         return newState
       }, [])
-    : []
 
-  return nextReviewable ? { id: nextReviewable.reviewable.id, fields } : null
+      return { id: nextReviewable.id, fields }
+    }),
+  )
+
+  return {
+    reviewables,
+  }
 }
 
-export default tracer.withSpan({ name: 'getNextReview' }, getNextReview)
+export default tracer.withSpan({ name: 'getNextReviews' }, getNextReviews)

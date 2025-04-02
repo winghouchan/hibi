@@ -8,8 +8,8 @@ import { Alert, View } from 'react-native'
 import { createReview } from '@/reviews/operations/createReview'
 import {
   mockCreateReviewError,
-  mockNextReview,
-  mockNextReviewError,
+  mockNextReviews,
+  mockNextReviewsError,
 } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import ReviewScreen from '.'
@@ -57,8 +57,8 @@ const routerMock = {
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<ReviewScreen />', () => {
-  test('when there are no reviewables, an error message is shown', async () => {
-    mockNextReview(null)
+  test('when there are no reviewables, a message is shown', async () => {
+    mockNextReviews({ reviewables: [] })
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -183,7 +183,7 @@ describe('<ReviewScreen />', () => {
 
     const user = userEvent.setup()
 
-    mockNextReview(inputs[0].reviewable)
+    mockNextReviews({ reviewables: [inputs[0].reviewable] })
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -211,7 +211,11 @@ describe('<ReviewScreen />', () => {
         await screen.findByText(new RegExp(`Back ${index + 1}`)),
       ).toBeOnTheScreen()
 
-      mockNextReview(inputs[index + 1]?.reviewable ?? null)
+      mockNextReviews({
+        reviewables: inputs[index + 1]?.reviewable
+          ? [inputs[index + 1].reviewable]
+          : [],
+      })
 
       await user.press(
         // @ts-ignore: "ts2345: Type 'undefined' is not assignable to type 'ReactTestInstance'"
@@ -266,7 +270,7 @@ describe('<ReviewScreen />', () => {
       ],
     })
 
-    mockNextReview(mockReviewable(0))
+    mockNextReviews({ reviewables: [mockReviewable(0)] })
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -294,7 +298,7 @@ describe('<ReviewScreen />', () => {
         await screen.findByText(new RegExp(`Back ${index}`)),
       ).toBeOnTheScreen()
 
-      mockNextReview(mockReviewable(index + 1))
+      mockNextReviews({ reviewables: [mockReviewable(index + 1)] })
 
       await user.press(
         // @ts-ignore: "ts2345: Type 'undefined' is not assignable to type 'ReactTestInstance'"
@@ -314,7 +318,7 @@ describe('<ReviewScreen />', () => {
     // Suppress console error from the error mock
     jest.spyOn(console, 'error').mockImplementation()
 
-    mockNextReviewError(new Error('Mock Error'))
+    mockNextReviewsError(new Error('Mock Error'))
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -343,7 +347,7 @@ describe('<ReviewScreen />', () => {
       rating: Ratings[1],
     }
 
-    mockNextReview(input.reviewable)
+    mockNextReviews({ reviewables: [input.reviewable] })
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -354,7 +358,7 @@ describe('<ReviewScreen />', () => {
 
     await user.press(screen.getByRole('button', { name: 'Show answer' }))
 
-    mockNextReviewError(new Error('Mock Error'))
+    mockNextReviewsError(new Error('Mock Error'))
 
     await user.press(screen.getByRole('button', { name: Ratings[1] }))
 
@@ -378,7 +382,7 @@ describe('<ReviewScreen />', () => {
       rating: Ratings[1],
     }
 
-    mockNextReview(input.reviewable)
+    mockNextReviews({ reviewables: [input.reviewable] })
     mockCreateReviewError(new Error('Mock Error'))
 
     renderRouter(routerMock, {
@@ -414,7 +418,7 @@ describe('<ReviewScreen />', () => {
       rating: Ratings[1],
     }
 
-    mockNextReview(input.reviewable)
+    mockNextReviews({ reviewables: [input.reviewable] })
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -435,7 +439,7 @@ describe('<ReviewScreen />', () => {
 
     await user.press(screen.getByRole('button', { name: 'Show answer' }))
 
-    mockNextReview(null)
+    mockNextReviews({ reviewables: [] })
 
     await user.press(screen.getByRole('button', { name: Ratings[1] }))
 

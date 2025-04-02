@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { CollectionFilter } from '@/collections/ui'
-import { nextReviewQuery } from '@/reviews/operations'
+import { nextReviewsQuery } from '@/reviews/operations'
 import { Button } from '@/ui'
 
 const styles = StyleSheet.create(
@@ -37,14 +37,14 @@ export default function HomeScreen() {
   const { t: translate } = useLingui()
   const [collection, setCollection] = useState<number | undefined>(undefined)
   const { data } = useSuspenseInfiniteQuery(
-    nextReviewQuery({
+    nextReviewsQuery({
       filter: {
         ...(collection && { collections: [collection] }),
         due: true,
       },
     }),
   )
-  const hasDueReview = data?.pages[0] !== null
+  const hasDueReview = data[0] !== null
 
   return (
     <View testID="home.screen" style={styles.screen}>

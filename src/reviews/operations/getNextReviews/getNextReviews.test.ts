@@ -10,7 +10,7 @@ import {
 } from '@/reviews/schema'
 import { mockDatabase } from 'test/utils'
 
-describe('getNextReview', () => {
+describe('getNextReviews', () => {
   describe.each([
     {
       when: '`collections` option is empty',
@@ -36,13 +36,13 @@ describe('getNextReview', () => {
     describe.each([
       {
         and: 'there are no reviewables',
-        then: 'returns `null`',
+        then: 'returns an empty array',
         fixture: {},
-        expected: null,
+        expected: { reviewables: [] },
       },
       {
         and: 'there is 1 reviewable that has been archived',
-        then: 'returns `null`',
+        then: 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -69,7 +69,7 @@ describe('getNextReview', () => {
             },
           ],
         },
-        expected: null,
+        expected: { reviewables: [] },
       },
       {
         and: 'there is 1 reviewable with no snapshots',
@@ -78,7 +78,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -109,14 +109,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front' })],
-                  [expect.objectContaining({ value: 'Back' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front' })],
+                      [expect.objectContaining({ value: 'Back' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there is 1 reviewable with 1 snapshot with a due date in the past',
@@ -125,7 +129,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -161,14 +165,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front' })],
-                  [expect.objectContaining({ value: 'Back' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front' })],
+                      [expect.objectContaining({ value: 'Back' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there is 1 reviewable with 1 snapshot with a due date in the future',
@@ -177,7 +185,7 @@ describe('getNextReview', () => {
           input.filter.collections?.includes(2) ||
           input.filter.due === false
             ? 'returns the reviewable'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -213,14 +221,18 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
           input.filter.due === false
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front' })],
-                  [expect.objectContaining({ value: 'Back' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front' })],
+                      [expect.objectContaining({ value: 'Back' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there is 1 reviewable with many snapshots with all due dates in the past',
@@ -229,7 +241,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -269,14 +281,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front' })],
-                  [expect.objectContaining({ value: 'Back' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front' })],
+                      [expect.objectContaining({ value: 'Back' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there is 1 reviewable with many snapshots with all due dates in the future',
@@ -285,7 +301,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -325,14 +341,18 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
           input.filter.due === false
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front' })],
-                  [expect.objectContaining({ value: 'Back' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front' })],
+                      [expect.objectContaining({ value: 'Back' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with 1 snapshot with a due date in the past',
@@ -341,7 +361,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -392,14 +412,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with 1 snapshot with some due dates being in the past and some in the future',
@@ -408,7 +432,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -459,14 +483,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with 1 snapshot with a due date in the future',
@@ -475,7 +503,7 @@ describe('getNextReview', () => {
           input.filter.collections?.includes(2) ||
           input.filter.due === false
             ? 'returns the reviewable with the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -526,14 +554,18 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
           input.filter.due === false
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with many snapshots with all due dates in the past',
@@ -542,7 +574,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -601,14 +633,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with many snapshots with all due dates in the future',
@@ -617,7 +653,7 @@ describe('getNextReview', () => {
           input.filter.collections?.includes(2) ||
           input.filter.due === false
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -676,14 +712,18 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2) ||
           input.filter.due === false
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with many snapshots with some due dates in the past and some in the future',
@@ -692,7 +732,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -751,14 +791,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with many snapshots that have interleaved created and due dates',
@@ -767,7 +811,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -826,14 +870,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables with some having snapshots with due dates in the past and some having no snapshots',
@@ -842,7 +890,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -888,14 +936,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 2,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 2' })],
-                  [expect.objectContaining({ value: 'Back 2' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 2,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables with some having snapshots with due dates in the future and some having no snapshots',
@@ -904,7 +956,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with no snapshot'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -950,14 +1002,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 1' })],
-                  [expect.objectContaining({ value: 'Back 1' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 1' })],
+                      [expect.objectContaining({ value: 'Back 1' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables with some having snapshots with due dates in the past, some with due dates in the future and some having no snapshots',
@@ -966,7 +1022,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -1027,14 +1083,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 3,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 3' })],
-                  [expect.objectContaining({ value: 'Back 3' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 3,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 3' })],
+                      [expect.objectContaining({ value: 'Back 3' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
       {
         and: 'there are many reviewables each with 1 snapshot with a due date in the past with some reviewables being archived',
@@ -1043,7 +1103,7 @@ describe('getNextReview', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with the oldest due date that is not archived'
-            : 'returns `null`',
+            : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -1094,14 +1154,18 @@ describe('getNextReview', () => {
           input.filter.collections === undefined ||
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
-            ? expect.objectContaining({
-                id: 1,
-                fields: [
-                  [expect.objectContaining({ value: 'Front 1' })],
-                  [expect.objectContaining({ value: 'Back 1' })],
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 1' })],
+                      [expect.objectContaining({ value: 'Back 1' })],
+                    ],
+                  }),
                 ],
-              })
-            : null,
+              }
+            : { reviewables: [] },
       },
     ])('and $and', ({ then, fixture, expected }) => {
       test(
@@ -1109,7 +1173,7 @@ describe('getNextReview', () => {
         then,
         async () => {
           const { database, resetDatabaseMock } = await mockDatabase()
-          const { default: getNextReview } = await import('./getNextReview')
+          const { default: getNextReviews } = await import('./getNextReviews')
 
           await Promise.all(
             fixture.collections?.map(
@@ -1197,7 +1261,7 @@ describe('getNextReview', () => {
             ) ?? [],
           )
 
-          const output = await getNextReview(input)
+          const output = await getNextReviews(input)
 
           expect(output).toEqual(expected)
 
@@ -1210,7 +1274,7 @@ describe('getNextReview', () => {
   describe('when the note field side and reviewable field side differ', () => {
     it('returns the fields with the reviewable side, ordered by the reviewable field side and note field position ascending', async () => {
       const { database, resetDatabaseMock } = await mockDatabase()
-      const { default: getNextReview } = await import('./getNextReview')
+      const { default: getNextReviews } = await import('./getNextReviews')
 
       const fixture = {
         reviewable: {
@@ -1266,38 +1330,40 @@ describe('getNextReview', () => {
         .insert(collectionToNote)
         .values({ collection: collectionId, note: noteId })
 
-      const output = await getNextReview()
+      const output = await getNextReviews()
 
-      expect(output).toEqual(
-        expect.objectContaining({
-          fields: [
-            [
-              expect.objectContaining({
-                side: 0,
-                position: 0,
-                value: 'C',
-              }),
-              expect.objectContaining({
-                side: 0,
-                position: 1,
-                value: 'D',
-              }),
+      expect(output).toEqual({
+        reviewables: [
+          expect.objectContaining({
+            fields: [
+              [
+                expect.objectContaining({
+                  side: 0,
+                  position: 0,
+                  value: 'C',
+                }),
+                expect.objectContaining({
+                  side: 0,
+                  position: 1,
+                  value: 'D',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  side: 1,
+                  position: 0,
+                  value: 'A',
+                }),
+                expect.objectContaining({
+                  side: 1,
+                  position: 1,
+                  value: 'B',
+                }),
+              ],
             ],
-            [
-              expect.objectContaining({
-                side: 1,
-                position: 0,
-                value: 'A',
-              }),
-              expect.objectContaining({
-                side: 1,
-                position: 1,
-                value: 'B',
-              }),
-            ],
-          ],
-        }),
-      )
+          }),
+        ],
+      })
 
       resetDatabaseMock()
     })

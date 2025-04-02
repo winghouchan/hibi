@@ -4,7 +4,7 @@ import { renderRouter } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
 import { View } from 'react-native'
 import { mockCollections, mockCollectionsError } from '@/collections/test'
-import { mockNextReview, mockNextReviewError } from '@/reviews/test'
+import { mockNextReviews, mockNextReviewsError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import HomeScreen from './HomeScreen'
 
@@ -31,10 +31,12 @@ describe('<HomeScreen />', () => {
         collections: [
           { id: 1, name: 'Collection Name', createdAt: new Date() },
         ],
-        reviewable: {
-          id: 1,
-          fields: [],
-        },
+        reviewables: [
+          {
+            id: 1,
+            fields: [],
+          },
+        ],
       },
       expected: async () => {
         expect(
@@ -48,7 +50,7 @@ describe('<HomeScreen />', () => {
         collections: [
           { id: 1, name: 'Collection Name', createdAt: new Date() },
         ],
-        reviewable: null,
+        reviewables: [],
       },
       expected: async () => {
         expect(
@@ -57,7 +59,7 @@ describe('<HomeScreen />', () => {
       },
     },
   ])('$name', async ({ expected, fixture }) => {
-    mockNextReview(fixture.reviewable)
+    mockNextReviews({ reviewables: fixture.reviewables })
     mockCollections({
       cursor: { next: undefined },
       collections: fixture.collections,
@@ -75,7 +77,7 @@ describe('<HomeScreen />', () => {
     jest.spyOn(console, 'error').mockImplementation()
 
     mockCollectionsError(new Error('Mock Error'))
-    mockNextReview(null)
+    mockNextReviews({ reviewables: [] })
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
@@ -92,7 +94,7 @@ describe('<HomeScreen />', () => {
       cursor: { next: undefined },
       collections: [{ id: 1, name: 'Collection Name', createdAt: new Date() }],
     })
-    mockNextReviewError(new Error('Mock Error'))
+    mockNextReviewsError(new Error('Mock Error'))
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 

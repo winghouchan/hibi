@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { Grade, Rating } from 'ts-fsrs'
-import { createReviewMutation, getNextReview } from '@/reviews/operations'
+import { createReviewMutation, getNextReviews } from '@/reviews/operations'
 import { log } from '@/telemetry'
 import { Button, Text } from '@/ui'
 import Layout from '../Layout'
 import useTimer from './useTimer'
 
-interface Props
-  extends Exclude<Awaited<ReturnType<typeof getNextReview>>, null> {
+type Props = Awaited<
+  ReturnType<typeof getNextReviews>
+>['reviewables'][number] & {
   onReview?: () => void
 }
 

@@ -2,7 +2,7 @@ import { useSuspenseInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect, useRef } from 'react'
 import PagerView from 'react-native-pager-view'
-import { nextReviewQuery } from '../../operations'
+import { nextReviewsQuery } from '../../operations'
 import Layout from '../Layout'
 import NoReviews from './NoReviews'
 import Review from './Review'
@@ -22,7 +22,7 @@ export default function ReviewScreen() {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
   const pagerViewRef = useRef<PagerView>(null)
-  const query = nextReviewQuery({ filter: { collections, due: true } })
+  const query = nextReviewsQuery({ filter: { collections, due: true } })
   const { data, error, fetchNextPage, isFetching } =
     useSuspenseInfiniteQuery(query)
 
@@ -33,7 +33,7 @@ export default function ReviewScreen() {
   const onNewPage = () => {
     // Set the current page of the pager view to the last page after it has rendered
     setTimeout(() => {
-      data?.pages.length && pagerViewRef.current?.setPage(data.pages.length - 1)
+      data.length && pagerViewRef.current?.setPage(data.length - 1)
     }, 0)
   }
 
@@ -51,25 +51,20 @@ export default function ReviewScreen() {
 
   useEffect(handleScreenClose, [navigation, query.queryKey, queryClient])
 
-  useEffect(onNewPage, [data?.pages.length])
+  useEffect(onNewPage, [data.length])
 
   return (
     <Layout testID="review.screen">
-      {(data?.pages.length ?? 0) > 0 && (
+      {data[0] !== null ? (
         <PagerView
           initialPage={initialPage}
           ref={pagerViewRef}
           scrollEnabled={false}
           style={{ flex: 1 }}
         >
-          {data?.pages.map((reviewable, index) => {
-            const noReviewsDue = reviewable === null && index === 0
+          {data.map((reviewable, index) => {
             const finishedReview =
               (reviewable === null && index > 0) || index === MAX_REVIEW_COUNT
-
-            if (noReviewsDue) {
-              return <NoReviews key={index} />
-            }
 
             if (finishedReview) {
               return <ReviewFinished key={index} />
@@ -80,6 +75,8 @@ export default function ReviewScreen() {
             }
           })}
         </PagerView>
+      ) : (
+        <NoReviews />
       )}
     </Layout>
   )
