@@ -18,15 +18,19 @@ import {
   reviewableField,
   reviewableSnapshot,
 } from '@/reviews/schema'
+import MAX_REVIEW_COUNT from '../../maxReviewCount'
 
 interface Options {
   filter?: {
     collections?: (typeof collection.$inferSelect)['id'][]
     due?: boolean
   }
+  pagination?: {
+    limit?: number
+  }
 }
 
-async function getNextReviews({ filter }: Options = {}) {
+async function getNextReviews({ filter, pagination }: Options = {}) {
   /**
    * Partitions by reviewable ordered by created dates descending
    */
@@ -97,7 +101,7 @@ async function getNextReviews({ filter }: Options = {}) {
       `,
       asc(latestSnapshot.due),
     )
-    .limit(1)
+    .limit(pagination?.limit ?? MAX_REVIEW_COUNT)
 
   const reviewables = await Promise.all(
     nextReviewables.map(async ({ reviewable: nextReviewable }) => {

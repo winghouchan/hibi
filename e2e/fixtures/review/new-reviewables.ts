@@ -12,8 +12,8 @@ async function fixture() {
     collections: [id],
     fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
     config: {
-      reversible: false,
-      separable: false,
+      reversible: true,
+      separable: true,
     },
   })
 

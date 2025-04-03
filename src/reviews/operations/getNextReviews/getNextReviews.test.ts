@@ -13,24 +13,44 @@ import { mockDatabase } from 'test/utils'
 describe('getNextReviews', () => {
   describe.each([
     {
-      when: '`collections` option is empty',
-      input: { filter: { collections: [] } },
+      when: '`collections` option is empty and the pagination limit is `1`',
+      input: { filter: { collections: [] }, pagination: { limit: 1 } },
     },
     {
-      when: '`collections` option only has a collection with no reviewables',
-      input: { filter: { collections: [1] } },
+      when: '`collections` option only has a collection with no reviewables and the pagination limit is `1`',
+      input: { filter: { collections: [1] }, pagination: { limit: 1 } },
     },
     {
-      when: '`collections` option has a collection with reviewables',
-      input: { filter: { collections: [1, 2] } },
+      when: '`collections` option has a collection with reviewables and the pagination limit is `1`',
+      input: { filter: { collections: [1, 2] }, pagination: { limit: 1 } },
     },
     {
-      when: '`due` option is `false`',
-      input: { filter: { due: false } },
+      when: '`due` option is `false` and the pagination limit is `1`',
+      input: { filter: { due: false }, pagination: { limit: 1 } },
     },
     {
-      when: '`due` option is `true`',
-      input: { filter: { due: true } },
+      when: '`due` option is `true` and the pagination limit is `1`',
+      input: { filter: { due: true }, pagination: { limit: 1 } },
+    },
+    {
+      when: '`collections` option is empty and the pagination limit is greater than `1` but less than the number of reviewables if the number of reviewables is greater than `1`',
+      input: { filter: { collections: [] }, pagination: { limit: 2 } },
+    },
+    {
+      when: '`collections` option only has a collection with no reviewables and the pagination limit is greater than `1` but less than the number of reviewables if the number of reviewables is greater than `1`',
+      input: { filter: { collections: [1] }, pagination: { limit: 2 } },
+    },
+    {
+      when: '`collections` option has a collection with reviewables and the pagination limit is greater than `1` but less than the number of reviewables if the number of reviewables is greater than `1`',
+      input: { filter: { collections: [1, 2] }, pagination: { limit: 2 } },
+    },
+    {
+      when: '`due` option is `false` and the pagination limit is greater than `1` but less than the number of reviewables if the number of reviewables is greater than `1`',
+      input: { filter: { due: false }, pagination: { limit: 2 } },
+    },
+    {
+      when: '`due` option is `true` and the pagination limit is greater than `1` but less than the number of reviewables if the number of reviewables is greater than `1`',
+      input: { filter: { due: true }, pagination: { limit: 2 } },
     },
   ])('when $when', ({ input }) => {
     describe.each([
@@ -361,7 +381,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -406,6 +428,21 @@ describe('getNextReviews', () => {
                 },
               ],
             },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: new Date(),
+                  createdAt: sub(new Date(), { days: 1 }),
+                },
+              ],
+            },
           ],
         },
         expected:
@@ -421,6 +458,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -432,7 +480,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -457,7 +507,7 @@ describe('getNextReviews', () => {
               archived: false,
               snapshots: [
                 {
-                  due: add(new Date(), { days: 1 }),
+                  due: sub(new Date(), { days: 1 }),
                   createdAt: sub(new Date(), { days: 2 }),
                 },
               ],
@@ -472,7 +522,22 @@ describe('getNextReviews', () => {
               archived: false,
               snapshots: [
                 {
-                  due: sub(new Date(), { days: 1 }),
+                  due: sub(new Date(), { days: 2 }),
+                  createdAt: sub(new Date(), { days: 2 }),
+                },
+              ],
+            },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: add(new Date(), { days: 2 }),
                   createdAt: sub(new Date(), { days: 2 }),
                 },
               ],
@@ -492,6 +557,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -503,7 +579,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.includes(2) ||
           input.filter.due === false
             ? 'returns the reviewable with the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -548,6 +626,21 @@ describe('getNextReviews', () => {
                 },
               ],
             },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: add(new Date(), { days: 3 }),
+                  createdAt: sub(new Date(), { days: 1 }),
+                },
+              ],
+            },
           ],
         },
         expected:
@@ -563,6 +656,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -574,7 +678,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -627,6 +733,25 @@ describe('getNextReviews', () => {
                 },
               ],
             },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: sub(new Date(), { days: 0, hours: 12 }),
+                  createdAt: sub(new Date(), { days: 1 }),
+                },
+                {
+                  due: sub(new Date(), { days: 0, hours: 13 }),
+                  createdAt: sub(new Date(), { days: 2 }),
+                },
+              ],
+            },
           ],
         },
         expected:
@@ -642,6 +767,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -653,7 +789,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.includes(2) ||
           input.filter.due === false
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -706,6 +844,25 @@ describe('getNextReviews', () => {
                 },
               ],
             },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: add(new Date(), { days: 4 }),
+                  createdAt: sub(new Date(), { days: 5 }),
+                },
+                {
+                  due: add(new Date(), { days: 5 }),
+                  createdAt: sub(new Date(), { days: 6 }),
+                },
+              ],
+            },
           ],
         },
         expected:
@@ -721,6 +878,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -732,7 +900,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -776,12 +946,31 @@ describe('getNextReviews', () => {
               archived: false,
               snapshots: [
                 {
-                  due: sub(new Date(), { days: 1 }),
+                  due: sub(new Date(), { days: 2 }),
+                  createdAt: sub(new Date(), { days: 3 }),
+                },
+                {
+                  due: sub(new Date(), { days: 3 }),
+                  createdAt: sub(new Date(), { days: 4 }),
+                },
+              ],
+            },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: sub(new Date(), { days: 2 }),
                   createdAt: sub(new Date(), { days: 2 }),
                 },
                 {
-                  due: sub(new Date(), { days: 2 }),
-                  createdAt: sub(new Date(), { days: 3 }),
+                  due: sub(new Date(), { days: 1 }),
+                  createdAt: sub(new Date(), { days: 1 }),
                 },
               ],
             },
@@ -800,6 +989,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 3,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 3' })],
+                            [expect.objectContaining({ value: 'Back 3' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -811,7 +1011,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -864,6 +1066,25 @@ describe('getNextReviews', () => {
                 },
               ],
             },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 2' },
+                { side: 1, position: 0, value: 'Back 2' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: add(new Date(), { days: 1 }),
+                  createdAt: sub(new Date(), { days: 3 }),
+                },
+                {
+                  due: add(new Date(), { days: 2 }),
+                  createdAt: sub(new Date(), { days: 4 }),
+                },
+              ],
+            },
           ],
         },
         expected:
@@ -879,6 +1100,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -890,7 +1122,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -921,6 +1155,21 @@ describe('getNextReviews', () => {
               fields: [
                 { side: 0, position: 0, value: 'Front 2' },
                 { side: 1, position: 0, value: 'Back 2' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: sub(new Date(), { days: 2 }),
+                  createdAt: sub(new Date(), { days: 2 }),
+                },
+              ],
+            },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -945,6 +1194,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 3,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 3' })],
+                            [expect.objectContaining({ value: 'Back 3' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -956,7 +1216,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with no snapshot'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -979,7 +1241,12 @@ describe('getNextReviews', () => {
                 { side: 1, position: 0, value: 'Back 1' },
               ],
               archived: false,
-              snapshots: [],
+              snapshots: [
+                {
+                  due: add(new Date(), { days: 1 }),
+                  createdAt: sub(new Date(), { days: 2 }),
+                },
+              ],
             },
             {
               id: 2,
@@ -989,12 +1256,17 @@ describe('getNextReviews', () => {
                 { side: 1, position: 0, value: 'Back 2' },
               ],
               archived: false,
-              snapshots: [
-                {
-                  due: add(new Date(), { days: 1 }),
-                  createdAt: sub(new Date(), { days: 2 }),
-                },
+              snapshots: [],
+            },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
               ],
+              archived: false,
+              snapshots: [],
             },
           ],
         },
@@ -1005,12 +1277,23 @@ describe('getNextReviews', () => {
             ? {
                 reviewables: [
                   expect.objectContaining({
-                    id: 1,
+                    id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 1' })],
-                      [expect.objectContaining({ value: 'Back 1' })],
+                      [expect.objectContaining({ value: 'Front 2' })],
+                      [expect.objectContaining({ value: 'Back 2' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 3,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 3' })],
+                            [expect.objectContaining({ value: 'Back 3' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -1022,7 +1305,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable where their latest snapshot has the oldest due date'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -1092,6 +1377,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 3' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 1,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 1' })],
+                            [expect.objectContaining({ value: 'Back 1' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },
@@ -1103,7 +1399,9 @@ describe('getNextReviews', () => {
           input.filter.collections?.length === 0 ||
           input.filter.collections?.includes(2)
             ? 'returns the reviewable with the oldest due date that is not archived'
-            : 'returns an empty array',
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by due date ascending'
+              : 'returns an empty array',
         fixture: {
           collections: [
             { id: 1, name: 'Collection Mock 1' },
@@ -1128,7 +1426,7 @@ describe('getNextReviews', () => {
               archived: false,
               snapshots: [
                 {
-                  due: sub(new Date(), { days: 1 }),
+                  due: sub(new Date(), { days: 2 }),
                   createdAt: sub(new Date(), { days: 2 }),
                 },
               ],
@@ -1148,6 +1446,21 @@ describe('getNextReviews', () => {
                 },
               ],
             },
+            {
+              id: 3,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 3' },
+                { side: 1, position: 0, value: 'Back 3' },
+              ],
+              archived: false,
+              snapshots: [
+                {
+                  due: sub(new Date(), { days: 1 }),
+                  createdAt: sub(new Date(), { days: 2 }),
+                },
+              ],
+            },
           ],
         },
         expected:
@@ -1163,6 +1476,17 @@ describe('getNextReviews', () => {
                       [expect.objectContaining({ value: 'Back 1' })],
                     ],
                   }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 3,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 3' })],
+                            [expect.objectContaining({ value: 'Back 3' })],
+                          ],
+                        }),
+                      ]
+                    : []),
                 ],
               }
             : { reviewables: [] },

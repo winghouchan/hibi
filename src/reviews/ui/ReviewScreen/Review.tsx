@@ -13,6 +13,7 @@ import useTimer from './useTimer'
 type Props = Awaited<
   ReturnType<typeof getNextReviews>
 >['reviewables'][number] & {
+  active: boolean
   onReview?: () => void
 }
 
@@ -22,11 +23,11 @@ const styles = StyleSheet.create(() => ({
   },
 }))
 
-export default function Review({ id, fields, onReview }: Props) {
+export default function Review({ active, id, fields, onReview }: Props) {
   const { t: translate } = useLingui()
   const { mutateAsync: review } = useMutation(createReviewMutation)
   const [side, setSide] = useState(0)
-  const { duration, stop } = useTimer({ start: true })
+  const { duration, stop } = useTimer({ start: active })
 
   const showAnswer = () => {
     setSide(1)

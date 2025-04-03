@@ -71,110 +71,111 @@ describe('<ReviewScreen />', () => {
   test.each([
     {
       name: 'when there is one reviewable, it can be reviewed with rating: forgot',
-      inputs: [
-        {
-          reviewable: {
+      fixture: {
+        reviewables: [
+          {
             id: 1,
             fields: [
               [{ side: 0, position: 0, value: 'Front 1' }],
               [{ side: 1, position: 0, value: 'Back 1' }],
             ],
           },
-          rating: Ratings[1],
-        },
-      ],
+        ],
+      },
+      input: {
+        ratings: [Ratings[1]],
+      },
     },
     {
       name: 'when there is one reviewable, it can be reviewed with rating: hard',
-      inputs: [
-        {
-          reviewable: {
+      fixture: {
+        reviewables: [
+          {
             id: 1,
             fields: [
               [{ side: 0, position: 0, value: 'Front 1' }],
               [{ side: 1, position: 0, value: 'Back 1' }],
             ],
           },
-          rating: Ratings[1],
-        },
-      ],
+        ],
+      },
+      input: {
+        ratings: [Ratings[1]],
+      },
     },
     {
       name: 'when there is one reviewable, it can be reviewed with rating: good',
-      inputs: [
-        {
-          reviewable: {
+      fixture: {
+        reviewables: [
+          {
             id: 1,
             fields: [
               [{ side: 0, position: 0, value: 'Front 1' }],
               [{ side: 1, position: 0, value: 'Back 1' }],
             ],
           },
-          rating: Ratings[1],
-        },
-      ],
+        ],
+      },
+      input: {
+        ratings: [Ratings[1]],
+      },
     },
     {
       name: 'when there is one reviewable, it can be reviewed with rating: easy',
-      inputs: [
-        {
-          reviewable: {
+      fixture: {
+        reviewables: [
+          {
             id: 1,
             fields: [
               [{ side: 0, position: 0, value: 'Front 1' }],
               [{ side: 1, position: 0, value: 'Back 1' }],
             ],
           },
-          rating: Ratings[1],
-        },
-      ],
+        ],
+      },
+      input: {
+        ratings: [Ratings[1]],
+      },
     },
     {
       name: 'when there are multiple reviewables, they can be reviewed with each rating',
-      inputs: [
-        {
-          reviewable: {
+      fixture: {
+        reviewables: [
+          {
             id: 1,
             fields: [
               [{ side: 0, position: 0, value: 'Front 1' }],
               [{ side: 1, position: 0, value: 'Back 1' }],
             ],
           },
-          rating: Ratings[1],
-        },
-        {
-          reviewable: {
+          {
             id: 2,
             fields: [
               [{ side: 0, position: 0, value: 'Front 2' }],
               [{ side: 1, position: 0, value: 'Back 2' }],
             ],
           },
-          rating: Ratings[2],
-        },
-        {
-          reviewable: {
+          {
             id: 3,
             fields: [
               [{ side: 0, position: 0, value: 'Front 3' }],
               [{ side: 1, position: 0, value: 'Back 3' }],
             ],
           },
-          rating: Ratings[3],
-        },
-        {
-          reviewable: {
+          {
             id: 4,
             fields: [
               [{ side: 0, position: 0, value: 'Front 4' }],
               [{ side: 1, position: 0, value: 'Back 4' }],
             ],
           },
-          rating: Ratings[4],
-        },
-      ],
+        ],
+      },
+      input: {
+        ratings: [Ratings[1], Ratings[2], Ratings[3], Ratings[4]],
+      },
     },
-  ])('$name', async ({ inputs }) => {
+  ])('$name', async ({ fixture, input }) => {
     /**
      * Simulates the amount of time in milliseconds it takes for the user to
      * recall an answer after seeing the prompt.
@@ -183,14 +184,14 @@ describe('<ReviewScreen />', () => {
 
     const user = userEvent.setup()
 
-    mockNextReviews({ reviewables: [inputs[0].reviewable] })
+    mockNextReviews(fixture)
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
       wrapper: mockAppRoot(),
     })
 
-    for (let index = 0; index < inputs.length; index++) {
+    for (let index = 0; index < fixture.reviewables.length; index++) {
       expect(
         await screen.findByText(new RegExp(`Front ${index + 1}`), {
           interval: 0,
@@ -205,27 +206,25 @@ describe('<ReviewScreen />', () => {
         })
       })
 
-      await user.press(screen.getByRole('button', { name: 'Show answer' }))
+      await user.press(
+        // @ts-ignore: "ts2345: Type 'undefined' is not assignable to type 'ReactTestInstance'"
+        // If there is no button (i.e. the value is `undefined`) the test should fail at run time.
+        screen.getAllByRole('button', { name: 'Show answer' }).at(0),
+      )
 
       expect(
         await screen.findByText(new RegExp(`Back ${index + 1}`)),
       ).toBeOnTheScreen()
 
-      mockNextReviews({
-        reviewables: inputs[index + 1]?.reviewable
-          ? [inputs[index + 1].reviewable]
-          : [],
-      })
-
       await user.press(
         // @ts-ignore: "ts2345: Type 'undefined' is not assignable to type 'ReactTestInstance'"
         // If there is no button (i.e. the value is `undefined`) the test should fail at run time.
-        screen.getAllByRole('button', { name: inputs[index].rating }).at(-1),
+        screen.getAllByRole('button', { name: input.ratings[index] }).at(-1),
       )
 
       expect(createReview).toHaveBeenCalledWith({
-        reviewable: inputs[index].reviewable.id,
-        rating: Ratings[inputs[index].rating as keyof typeof Ratings],
+        reviewable: fixture.reviewables[index].id,
+        rating: Ratings[input.ratings[index] as keyof typeof Ratings],
 
         /**
          * The duration is the total amount of time to:
@@ -253,68 +252,7 @@ describe('<ReviewScreen />', () => {
     expect(expoRouterMock.back).toHaveBeenCalledOnce()
   })
 
-  test('when the maximum number of reviews has been completed in a session, the review session can be finished', async () => {
-    /**
-     * Simulates the amount of time in milliseconds it takes for the user to
-     * recall an answer after seeing the prompt.
-     */
-    const recallTime = 2000
-
-    const user = userEvent.setup()
-
-    const mockReviewable = (id: number) => ({
-      id,
-      fields: [
-        [{ side: 0, position: 0, value: `Front ${id}` }],
-        [{ side: 1, position: 0, value: `Back ${id}` }],
-      ],
-    })
-
-    mockNextReviews({ reviewables: [mockReviewable(0)] })
-
-    renderRouter(routerMock, {
-      initialUrl: '(app)/review',
-      wrapper: mockAppRoot(),
-    })
-
-    for (let index = 0; index < 20; index++) {
-      expect(
-        await screen.findByText(new RegExp(`Front ${index}`), {
-          interval: 0,
-        }),
-      ).toBeOnTheScreen()
-
-      await act(async () => {
-        // Wait for `recallTime` to elapse
-        await new Promise((resolve) => {
-          setTimeout(resolve, recallTime)
-          jest.advanceTimersByTime(recallTime)
-        })
-      })
-
-      await user.press(screen.getByRole('button', { name: 'Show answer' }))
-
-      expect(
-        await screen.findByText(new RegExp(`Back ${index}`)),
-      ).toBeOnTheScreen()
-
-      mockNextReviews({ reviewables: [mockReviewable(index + 1)] })
-
-      await user.press(
-        // @ts-ignore: "ts2345: Type 'undefined' is not assignable to type 'ReactTestInstance'"
-        // If there is no button (i.e. the value is `undefined`) the test should fail at run time.
-        screen.getAllByRole('button', { name: Ratings[1] }).at(-1),
-      )
-    }
-
-    expect(await screen.findByText(/Finished/)).toBeOnTheScreen()
-
-    await user.press(screen.getByRole('button', { name: 'Finish' }))
-
-    expect(expoRouterMock.back).toHaveBeenCalledOnce()
-  })
-
-  test('when there is an error getting the initial reviewable, an error message is shown', async () => {
+  test('when there is an error getting the reviewables, an error message is shown', async () => {
     // Suppress console error from the error mock
     jest.spyOn(console, 'error').mockImplementation()
 
@@ -324,43 +262,6 @@ describe('<ReviewScreen />', () => {
       initialUrl: '(app)/review',
       wrapper: mockAppRoot(),
     })
-
-    expect(
-      await screen.findByTestId('error-boundary-fallback-mock'),
-    ).toBeOnTheScreen()
-  })
-
-  test('when there is an error getting the next reviewable, an error message is shown', async () => {
-    // Suppress console error from the error mock
-    jest.spyOn(console, 'error').mockImplementation()
-
-    const user = userEvent.setup()
-
-    const input = {
-      reviewable: {
-        id: 1,
-        fields: [
-          [{ side: 0, position: 0, value: 'Front 1' }],
-          [{ side: 1, position: 0, value: 'Back 1' }],
-        ],
-      },
-      rating: Ratings[1],
-    }
-
-    mockNextReviews({ reviewables: [input.reviewable] })
-
-    renderRouter(routerMock, {
-      initialUrl: '(app)/review',
-      wrapper: mockAppRoot(),
-    })
-
-    await screen.findByText(/Front/)
-
-    await user.press(screen.getByRole('button', { name: 'Show answer' }))
-
-    mockNextReviewsError(new Error('Mock Error'))
-
-    await user.press(screen.getByRole('button', { name: Ratings[1] }))
 
     expect(
       await screen.findByTestId('error-boundary-fallback-mock'),
@@ -371,7 +272,7 @@ describe('<ReviewScreen />', () => {
     const alertSpy = jest.spyOn(Alert, 'alert')
     const user = userEvent.setup()
 
-    const input = {
+    const fixture = {
       reviewable: {
         id: 1,
         fields: [
@@ -379,10 +280,13 @@ describe('<ReviewScreen />', () => {
           [{ side: 1, position: 0, value: 'Back 1' }],
         ],
       },
+    }
+
+    const input = {
       rating: Ratings[1],
     }
 
-    mockNextReviews({ reviewables: [input.reviewable] })
+    mockNextReviews({ reviewables: [fixture.reviewable] })
     mockCreateReviewError(new Error('Mock Error'))
 
     renderRouter(routerMock, {
@@ -393,7 +297,7 @@ describe('<ReviewScreen />', () => {
     await screen.findByText(/Front/)
 
     await user.press(screen.getByRole('button', { name: 'Show answer' }))
-    await user.press(screen.getByRole('button', { name: Ratings[1] }))
+    await user.press(screen.getByRole('button', { name: input.rating }))
 
     await waitFor(async () => expect(alertSpy).toHaveBeenCalledOnce())
   })
@@ -407,7 +311,7 @@ describe('<ReviewScreen />', () => {
 
     const user = userEvent.setup()
 
-    const input = {
+    const fixture = {
       reviewable: {
         id: 1,
         fields: [
@@ -415,10 +319,13 @@ describe('<ReviewScreen />', () => {
           [{ side: 1, position: 0, value: 'Back 1' }],
         ],
       },
+    }
+
+    const input = {
       rating: Ratings[1],
     }
 
-    mockNextReviews({ reviewables: [input.reviewable] })
+    mockNextReviews({ reviewables: [fixture.reviewable] })
 
     renderRouter(routerMock, {
       initialUrl: '(app)/review',
@@ -441,10 +348,10 @@ describe('<ReviewScreen />', () => {
 
     mockNextReviews({ reviewables: [] })
 
-    await user.press(screen.getByRole('button', { name: Ratings[1] }))
+    await user.press(screen.getByRole('button', { name: input.rating }))
 
     expect(createReview).toHaveBeenCalledWith({
-      reviewable: input.reviewable.id,
+      reviewable: fixture.reviewable.id,
       rating: Ratings[input.rating as keyof typeof Ratings],
       duration: recallTime + DEFAULT_MIN_PRESS_DURATION,
     })

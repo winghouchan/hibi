@@ -2,11 +2,17 @@ appId: ${appId}
 tags:
   - subflow
 ---
-- assertVisible:
-    id: review.screen
+- repeat:
+    while:
+      visible:
+        id: review.show-answer.button
 
-- tapOn:
-    id: review.show-answer.button
+    commands:
+      - assertVisible:
+          id: review.screen
 
-- tapOn:
-    id: review.rate.easy.button
+      - tapOn:
+          id: review.show-answer.button
+
+      - tapOn:
+          id: review.rate.easy.button
