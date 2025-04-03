@@ -131,14 +131,6 @@ export default forwardRef<Ref, Props>(function Text(
   { action = 'primary', pressed, priority = 'high', size, style, ...props },
   ref,
 ) {
-  /**
-   * Allows changes to variants to change the style
-   *
-   * @see {@link https://github.com/jpudysz/react-native-unistyles/issues/368}
-   */
-  // eslint-disable-next-line react-compiler/react-compiler
-  'use no memo'
-
   styles.useVariants({ action, pressed, priority, size })
 
   return <NativeText ref={ref} style={[styles.text, style]} {...props} />

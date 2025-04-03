@@ -39,16 +39,6 @@ export default forwardRef<Ref, Props>(function Pressable(
   },
   ref,
 ) {
-  /**
-   * Allows changes to variants to change the style
-   *
-   * @see {@link https://github.com/jpudysz/react-native-unistyles/issues/368}
-   */
-  // eslint-disable-next-line react-compiler/react-compiler
-  'use no memo'
-
-  styles.useVariants({ action, priority, size })
-
   const handlePressIn: PressableProps['onPressIn'] = (event) => {
     onPressIn?.(event)
 
@@ -56,6 +46,8 @@ export default forwardRef<Ref, Props>(function Pressable(
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
   }
+
+  styles.useVariants({ action, priority, size })
 
   return (
     <NativePressable

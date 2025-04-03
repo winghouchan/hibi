@@ -52,14 +52,6 @@ export default forwardRef<Ref, Props>(function TabTrigger(
   { children, icon, isFocused, label, onPressIn, style, ...props },
   ref,
 ) {
-  /*
-   * Allows changes to variants to change the style
-   *
-   * @see {@link https://github.com/jpudysz/react-native-unistyles/issues/368}
-   */
-  // eslint-disable-next-line react-compiler/react-compiler
-  'use no memo'
-
   const handlePressIn: PressableProps['onPressIn'] = (...args) => {
     onPressIn?.(...args)
 

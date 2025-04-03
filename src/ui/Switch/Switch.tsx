@@ -13,14 +13,6 @@ interface Props
 }
 
 export default function Switch({ label, onValueChange, testID, value }: Props) {
-  /**
-   * Allows changes to variants to change the style
-   *
-   * @see {@link https://github.com/jpudysz/react-native-unistyles/issues/368}
-   */
-  // eslint-disable-next-line react-compiler/react-compiler
-  'use no memo'
-
   const [pressed, setPressed] = useState(false)
 
   const handlePress = () => {
