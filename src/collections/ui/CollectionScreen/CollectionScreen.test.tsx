@@ -9,9 +9,9 @@ import { mockCollection, mockCollectionError } from '../../test'
 import CollectionScreen from './CollectionScreen'
 
 const routerMock = {
-  '(app)/_layout': () => <Stack />,
-  '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/collections/_layout': () => (
+  '(onboarded)/_layout': () => <Stack />,
+  '(onboarded)/(tabs)/_layout': () => <Stack />,
+  '(onboarded)/collections/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -22,7 +22,7 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/collections/[id]/index': CollectionScreen,
+  '(onboarded)/collections/[id]/index': CollectionScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<CollectionScreen />', () => {

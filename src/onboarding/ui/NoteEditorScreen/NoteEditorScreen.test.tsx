@@ -38,7 +38,7 @@ jest.mock('@/ui/RichTextInput/RichTextInput')
 
 const routerMock = {
   _layout: () => <Stack />,
-  '(app)/_layout': () => <Stack />,
+  '(onboarded)/_layout': () => <Stack />,
   'onboarding/_layout': () => (
     <Stack
       screenLayout={({ children }) => (

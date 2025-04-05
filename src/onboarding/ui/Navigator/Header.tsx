@@ -12,7 +12,7 @@ const onboardingProgress = {
   notes: 60,
 }
 
-export default function Header({ navigation, route, progress }: Props) {
+export default function Header({ layout, navigation, progress, route }: Props) {
   const { t: translate } = useLingui()
   const [{ textDirection }] = useLocales()
   const progressKey = route.name.includes('notes') ? 'notes' : 'collection'
@@ -23,8 +23,18 @@ export default function Header({ navigation, route, progress }: Props) {
       outputRange: [1, 0],
     }) ?? 1
 
+  const translateX =
+    route.name === 'onboarding/collection'
+      ? (progress.current?.interpolate({
+          inputRange: [0, 1],
+          outputRange: [layout.width, 0],
+        }) ?? 0)
+      : 0
+
   return (
-    <Animated.View style={[style.header, { opacity }]}>
+    <Animated.View
+      style={[style.header, { opacity, transform: [{ translateX }] }]}
+    >
       <View>
         <Pressable
           accessibilityRole="button"

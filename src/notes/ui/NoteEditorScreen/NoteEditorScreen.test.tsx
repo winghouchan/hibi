@@ -21,9 +21,9 @@ import { createNote, updateNote } from '@/notes/operations'
 jest.mock('@/ui/RichTextInput/RichTextInput')
 
 const routerMock = {
-  '(app)/_layout': () => <Stack />,
-  '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/notes/_layout': () => (
+  '(onboarded)/_layout': () => <Stack />,
+  '(onboarded)/(tabs)/_layout': () => <Stack />,
+  '(onboarded)/notes/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -34,13 +34,13 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/notes/[id]/_layout': {
+  '(onboarded)/notes/[id]/_layout': {
     unstable_settings: { initialRouteName: 'index' },
     default: () => <Stack />,
   },
-  '(app)/notes/[id]/edit': NoteEditorScreen,
-  '(app)/notes/[id]/index': () => null,
-  '(app)/notes/new': NoteEditorScreen,
+  '(onboarded)/notes/[id]/edit': NoteEditorScreen,
+  '(onboarded)/notes/[id]/index': () => null,
+  '(onboarded)/notes/new': NoteEditorScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<NoteEditorScreen />', () => {

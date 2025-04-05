@@ -54,6 +54,7 @@ export default function Navigator() {
   }
 
   const screenOptions: StackProps['screenOptions'] = {
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
     headerShown: false,
   }
 
@@ -95,15 +96,10 @@ export default function Navigator() {
         screenOptions={screenOptions}
       >
         <Stack.Screen
-          name="onboarding"
-          options={{
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
-          }}
-        />
-        <Stack.Screen
           name="storybook"
           options={({ navigation }) => ({
             animation: 'slide_from_bottom',
+            cardStyleInterpolator: undefined,
             title: translate`Storybook`,
             headerMode: 'screen',
             headerShown: true,

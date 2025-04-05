@@ -11,7 +11,7 @@ import style from './WelcomeScreen.styles'
 export default function WelcomeScreen() {
   const { t: translate } = useLingui()
   const navigation =
-    useNavigation<NavigationProp<{ onboarding: { screen: string } }>>()
+    useNavigation<NavigationProp<{ 'onboarding/collection': undefined }>>()
   const { data: isOnboardingComplete } = useSuspenseQuery(
     isOnboardingCompleteQuery,
   )
@@ -19,12 +19,12 @@ export default function WelcomeScreen() {
   useEffect(() => {
     if (!isOnboardingComplete) {
       // Resolves flash of blank screen when navigating to `/onboarding/collection`
-      navigation.preload('onboarding', { screen: 'collection' })
+      navigation.preload('onboarding/collection')
     }
   }, [isOnboardingComplete, navigation])
 
   if (isOnboardingComplete) {
-    return <Redirect href="/(app)/(tabs)" />
+    return <Redirect href="/(onboarded)/(tabs)" />
   }
 
   return (

@@ -5,10 +5,10 @@ import { mockAppRoot } from 'test/utils'
 import AppLayout from './App'
 
 const routerMock = {
-  '(app)/_layout': AppLayout,
-  '(app)/index': () => null,
-  '(app)/review': () => null,
-  index: () => null,
+  '(not-onboarded)/index': () => null,
+  '(onboarded)/_layout': AppLayout,
+  '(onboarded)/index': () => null,
+  '(onboarded)/review': () => null,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<AppLayout />', () => {
@@ -17,7 +17,7 @@ describe('<AppLayout />', () => {
       mockOnboardedState(false)
 
       renderRouter(routerMock, {
-        initialUrl: '(app)',
+        initialUrl: '(onboarded)',
         wrapper: mockAppRoot(),
       })
 
@@ -25,7 +25,9 @@ describe('<AppLayout />', () => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
             index: 0,
-            routes: [expect.objectContaining({ name: 'index' })],
+            routes: [
+              expect.objectContaining({ name: '(not-onboarded)/index' }),
+            ],
           }),
         )
       })
@@ -37,7 +39,7 @@ describe('<AppLayout />', () => {
       mockOnboardedState(true)
 
       renderRouter(routerMock, {
-        initialUrl: '(app)',
+        initialUrl: '(onboarded)',
         wrapper: mockAppRoot(),
       })
 
@@ -46,7 +48,7 @@ describe('<AppLayout />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: '(app)',
+                name: '(onboarded)',
                 state: expect.objectContaining({
                   routes: [expect.objectContaining({ name: 'index' })],
                 }),
@@ -68,11 +70,11 @@ describe('<AppLayout />', () => {
       renderRouter(
         {
           ...routerMock,
-          '(app)/index': () => {
+          '(onboarded)/index': () => {
             throw new Error('Mock Error')
           },
         },
-        { initialUrl: '(app)', wrapper: mockAppRoot() },
+        { initialUrl: '(onboarded)', wrapper: mockAppRoot() },
       )
 
       expect(await screen.findByText('Something went wrong')).toBeOnTheScreen()

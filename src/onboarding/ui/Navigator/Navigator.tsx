@@ -1,7 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
-import { CommonActions, type NavigationProp } from '@react-navigation/native'
+import { CommonActions } from '@react-navigation/native'
+import { type StackNavigatorProps } from '@react-navigation/stack'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Redirect, useFocusEffect, useNavigation } from 'expo-router'
+import { Redirect } from 'expo-router'
 import { Suspense } from 'react'
 import { View } from 'react-native'
 import { Button, CardStyleInterpolators, Stack } from '@/ui'
@@ -20,110 +21,97 @@ export default function OnboardingNavigator() {
   const { data: onboardingCollection } = useSuspenseQuery(
     onboardingCollectionQuery,
   )
-  const navigation = useNavigation<
-    NavigationProp<{
-      index: undefined
-      onboarding: undefined
-    }>
-  >()
 
-  const onFocus = () => {
-    const state = navigation.getState()
+  const screenLayout: StackNavigatorProps['screenLayout'] = ({ children }) => (
+    <ErrorBoundary>
+      <Suspense>{children}</Suspense>
+    </ErrorBoundary>
+  )
 
-    /**
-     * Name of the first screen in the onboarding navigator. If the screen was
-     * opened with a deep link, it will also be the current screen.
-     */
-    const routeName = state.routes[0].state?.routes[0].name ?? ''
+  const screenListeners: StackNavigatorProps['screenListeners'] = ({
+    navigation,
+    route,
+  }) => ({
+    state: ({ data: { state } }) => {
+      /**
+       * Did the navigation occur via a deep link?
+       *
+       * The navigation into the onboarding journey occurred via a deep link if
+       * the first item in the history is not the welcome screen (at `index`).
+       */
+      const isDeepLink = state.routes[0].name !== 'index'
 
-    /**
-     * Did the navigation occur via a deep link?
-     *
-     * The navigation into the onboarding journey occurred via a deep link if
-     * the first item in the history has the name `onboarding` as opposed to
-     * `index` which represents the welcome screen.
-     */
-    const isDeepLink = state.routes[0].name === 'onboarding'
+      if (isDeepLink && isOnboardingComplete === false) {
+        if (route.name === 'onboarding/collection') {
+          navigation.dispatch((state) => {
+            const routes = [{ name: 'index' }, ...state.routes]
 
-    if (isDeepLink && isOnboardingComplete === false) {
-      if (routeName === 'collection') {
-        navigation.dispatch((state) => {
-          const routes = [{ name: 'index' }, ...state.routes]
-
-          return CommonActions.reset({
-            ...state,
-            index: routes.length - 1,
-            routes,
+            return CommonActions.reset({
+              ...state,
+              index: routes.length - 1,
+              routes,
+            })
           })
-        })
-      } else if (onboardingCollection === null) {
-        /**
-         * All subsequent routes require an onboarding collection to exist.
-         * This block handles the case where the onboarding collection does not
-         * exist, sending the user to the welcome screen.
-         */
+        } else if (onboardingCollection === null) {
+          /**
+           * All subsequent routes require an onboarding collection to exist.
+           * This block handles the case where the onboarding collection does not
+           * exist, sending the user to the welcome screen.
+           */
+          navigation.reset({ index: 0, routes: [{ name: 'index' }] })
+        } else {
+          /**
+           * All subsequent routes require an onboarding collection to exist.
+           * This block handles the case where the onboarding collection does
+           * exist, updating the route history to allow for back navigation.
+           */
+          navigation.dispatch((state) => {
+            const noteEditorRoutes = [
+              'onboarding/notes/new',
+              'onboarding/notes/[id]/edit',
+            ]
 
-        navigation.reset({ index: 0, routes: [{ name: 'index' }] })
-      } else if (onboardingCollection) {
-        /**
-         * All subsequent routes require an onboarding collection to exist.
-         * This block handles the case where the onboarding collection does
-         * exist, updating the route history to allow for back navigation.
-         */
-
-        navigation.dispatch((state) => {
-          const routes = [
-            { name: 'collection' },
-            ...(routeName === 'notes/new' || routeName === 'notes/[id]/edit'
-              ? [{ name: 'notes/index' }]
-              : []),
-            ...(state.routes[0].state?.routes ?? []),
-          ]
-
-          const newState = {
-            ...state,
-            index: 1,
-            routes: [
+            const routes = [
               { name: 'index' },
-              {
-                ...state.routes[0],
-                state: {
-                  ...state.routes[0].state,
-                  stale: true,
-                  index: routes.length - 1,
-                  routes,
-                },
-              },
-            ],
-          }
+              { name: 'onboarding/collection' },
+              ...(noteEditorRoutes.includes(route.name)
+                ? [{ name: 'onboarding/notes/index' }]
+                : []),
+              ...state.routes,
+            ]
 
-          return CommonActions.reset(newState)
-        })
+            const newState = {
+              ...state,
+              index: routes.length - 1,
+              routes,
+            }
+
+            return CommonActions.reset(newState)
+          })
+        }
       }
-    }
+    },
+  })
+
+  const screenOptions: StackNavigatorProps['screenOptions'] = {
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
+    gestureEnabled: true,
+    headerMode: 'float',
+    header: (props) => <Header {...props} />,
   }
 
-  useFocusEffect(onFocus)
-
   if (isOnboardingComplete) {
-    return <Redirect href="/(app)/(tabs)" />
+    return <Redirect href="/(onboarded)/(tabs)" />
   } else {
     return (
       <Stack
-        screenOptions={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalSlide,
-          gestureEnabled: true,
-          headerMode: 'float',
-          header: (props) => <Header {...props} />,
-        }}
-        screenLayout={({ children }) => (
-          <ErrorBoundary>
-            <Suspense>{children}</Suspense>
-          </ErrorBoundary>
-        )}
+        screenLayout={screenLayout}
+        screenListeners={screenListeners}
+        screenOptions={screenOptions}
       >
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
-          name="notes/new"
+          name="onboarding/notes/new"
           options={({ navigation }) => ({
             animation: 'slide_from_bottom',
             cardStyleInterpolator: undefined,
@@ -149,7 +137,7 @@ export default function OnboardingNavigator() {
           })}
         />
         <Stack.Screen
-          name="notes/[id]/edit"
+          name="onboarding/notes/[id]/edit"
           options={({ navigation }) => ({
             animation: 'slide_from_bottom',
             cardStyleInterpolator: undefined,

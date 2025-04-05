@@ -27,7 +27,7 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/(tabs)/index': () => null,
+  '(onboarded)/(tabs)/index': () => null,
   'onboarding/collection': () => null,
   index: WelcomeScreen,
 } satisfies Parameters<typeof renderRouter>[0]
@@ -42,7 +42,9 @@ describe('<WelcomeScreen />', () => {
       await waitFor(() => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
-            routes: [expect.objectContaining({ name: '(app)/(tabs)/index' })],
+            routes: [
+              expect.objectContaining({ name: '(onboarded)/(tabs)/index' }),
+            ],
           }),
         )
       })

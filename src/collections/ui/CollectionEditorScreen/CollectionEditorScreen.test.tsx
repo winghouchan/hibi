@@ -15,9 +15,9 @@ import CollectionEditorScreen from './CollectionEditorScreen'
 import { updateCollection } from '../../operations'
 
 const routerMock = {
-  '(app)/_layout': () => <Stack />,
-  '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/collections/_layout': () => (
+  '(onboarded)/_layout': () => <Stack />,
+  '(onboarded)/(tabs)/_layout': () => <Stack />,
+  '(onboarded)/collections/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -28,13 +28,13 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/collections/[id]/_layout': {
+  '(onboarded)/collections/[id]/_layout': {
     unstable_settings: { initialRouteName: 'index' },
     default: () => <Stack />,
   },
-  '(app)/collections/[id]/edit': CollectionEditorScreen,
-  '(app)/collections/[id]/index': () => null,
-  '(app)/collections/new': CollectionEditorScreen,
+  '(onboarded)/collections/[id]/edit': CollectionEditorScreen,
+  '(onboarded)/collections/[id]/index': () => null,
+  '(onboarded)/collections/new': CollectionEditorScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<CollectionEditorScreen />', () => {

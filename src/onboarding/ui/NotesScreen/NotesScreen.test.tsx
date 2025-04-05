@@ -14,9 +14,9 @@ import { mockAppRoot } from 'test/utils'
 import NotesScreen from './NotesScreen'
 
 const routerMock = {
-  '(app)/_layout': () => null,
-  '(app)/(tabs)/_layout': () => null,
-  '(app)/(tabs)/index': () => null,
+  '(onboarded)/_layout': () => null,
+  '(onboarded)/(tabs)/_layout': () => null,
+  '(onboarded)/(tabs)/index': () => null,
   'onboarding/_layout': () => (
     <Stack
       screenLayout={({ children }) => (

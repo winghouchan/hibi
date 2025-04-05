@@ -42,7 +42,7 @@ enum Ratings {
 )
 
 const routerMock = {
-  '(app)/_layout': () => (
+  '(onboarded)/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -53,7 +53,7 @@ const routerMock = {
       )}
     />
   ),
-  '(app)/review': ReviewScreen,
+  '(onboarded)/review': ReviewScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<ReviewScreen />', () => {
@@ -61,7 +61,7 @@ describe('<ReviewScreen />', () => {
     mockNextReviews({ reviewables: [] })
 
     renderRouter(routerMock, {
-      initialUrl: '(app)/review',
+      initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
 
@@ -187,7 +187,7 @@ describe('<ReviewScreen />', () => {
     mockNextReviews(fixture)
 
     renderRouter(routerMock, {
-      initialUrl: '(app)/review',
+      initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
 
@@ -259,7 +259,7 @@ describe('<ReviewScreen />', () => {
     mockNextReviewsError(new Error('Mock Error'))
 
     renderRouter(routerMock, {
-      initialUrl: '(app)/review',
+      initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
 
@@ -290,7 +290,7 @@ describe('<ReviewScreen />', () => {
     mockCreateReviewError(new Error('Mock Error'))
 
     renderRouter(routerMock, {
-      initialUrl: '(app)/review',
+      initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
 
@@ -328,7 +328,7 @@ describe('<ReviewScreen />', () => {
     mockNextReviews({ reviewables: [fixture.reviewable] })
 
     renderRouter(routerMock, {
-      initialUrl: '(app)/review',
+      initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
 

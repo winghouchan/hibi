@@ -14,14 +14,14 @@ import OnboardingNavigator from '.'
 
 const routerMock = {
   _layout: () => <Stack />,
-  '(app)/_layout': () => <Stack />,
-  '(app)/(tabs)/_layout': () => <Stack />,
-  '(app)/(tabs)/index': () => null,
-  'onboarding/_layout': OnboardingNavigator,
-  'onboarding/index': () => null,
-  'onboarding/notes/[id]/edit': () => null,
-  'onboarding/notes/new': () => null,
-  index: () => null,
+  '(not-onboarded)/_layout': OnboardingNavigator,
+  '(not-onboarded)/index': () => null,
+  '(not-onboarded)/onboarding/index': () => null,
+  '(not-onboarded)/onboarding/notes/[id]/edit': () => null,
+  '(not-onboarded)/onboarding/notes/new': () => null,
+  '(onboarded)/_layout': () => <Stack />,
+  '(onboarded)/(tabs)/_layout': () => <Stack />,
+  '(onboarded)/(tabs)/index': () => null,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<OnboardingNavigator />', () => {
@@ -39,7 +39,7 @@ describe('<OnboardingNavigator />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: '(app)',
+                name: '(onboarded)',
                 params: {
                   screen: '(tabs)',
                   params: expect.objectContaining({ screen: 'index' }),
@@ -66,7 +66,14 @@ describe('<OnboardingNavigator />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: 'index',
+                name: '(not-onboarded)',
+                state: expect.objectContaining({
+                  routes: [
+                    expect.objectContaining({
+                      name: 'onboarding/index',
+                    }),
+                  ],
+                }),
               }),
             ],
           }),
@@ -158,12 +165,12 @@ describe('<OnboardingNavigator />', () => {
       renderRouter(
         {
           ...routerMock,
-          'onboarding/collection': () => {
+          '(not-onboarded)/onboarding/collection': () => {
             throw new Error('Mock Error')
           },
         },
         {
-          initialUrl: 'onboarding/collection',
+          initialUrl: '(not-onboarded)/onboarding/collection',
           wrapper: mockAppRoot(),
         },
       )

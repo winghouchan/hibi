@@ -24,7 +24,7 @@ export default function CollectionEditorScreen() {
       '(tabs)': undefined
       collection: undefined
     }>
-  >('/(app)')
+  >('/(onboarded)')
   const localSearchParams = useLocalSearchParams<{ id?: string }>()
   const collectionId =
     typeof localSearchParams.id !== 'undefined'

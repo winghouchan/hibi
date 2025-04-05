@@ -45,7 +45,8 @@ export default function NotesScreen() {
       },
     }),
   )
-  const navigation = useNavigation<NavigationProp<{ '(app)': undefined }>>()
+  const navigation =
+    useNavigation<NavigationProp<{ '(onboarded)': undefined }>>()
   const { mutateAsync: completeOnboarding } = useMutation(
     completeOnboardingMutation,
   )
@@ -63,7 +64,7 @@ export default function NotesScreen() {
         index: 0,
         routes: [
           {
-            name: '(app)',
+            name: '(onboarded)',
             state: {
               index: 0,
               routes: [

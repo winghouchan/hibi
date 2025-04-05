@@ -1,7 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
-import type { NavigationProp } from '@react-navigation/native'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Stack, useFocusEffect, useNavigation } from 'expo-router'
+import { Redirect, Stack } from 'expo-router'
 import { Suspense } from 'react'
 import { View } from 'react-native'
 import { isOnboardingCompleteQuery } from '@/onboarding'
@@ -10,19 +9,9 @@ import ErrorBoundary from './ErrorBoundary'
 
 export default function AppLayout() {
   const { t: translate } = useLingui()
-  const navigation = useNavigation<NavigationProp<{ index: undefined }>>()
   const { data: isOnboardingComplete } = useSuspenseQuery(
     isOnboardingCompleteQuery,
   )
-
-  useFocusEffect(() => {
-    if (!isOnboardingComplete) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'index' }],
-      })
-    }
-  })
 
   if (isOnboardingComplete) {
     return (
@@ -59,6 +48,6 @@ export default function AppLayout() {
       </Stack>
     )
   } else {
-    return null
+    return <Redirect href="/(not-onboarded)" />
   }
 }

@@ -56,7 +56,7 @@ export default function NoteEditorScreen() {
       collection: undefined
       note: undefined
     }>
-  >('/(app)')
+  >('/(onboarded)')
 
   const onSubmit: ComponentProps<typeof NoteEditor>['onSubmit'] = async (
     values,
