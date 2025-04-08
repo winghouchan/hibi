@@ -8,6 +8,8 @@
     "name": "Wing-Hou Chan"
   },
   "scripts": {
+    "bench": "NODE_OPTIONS=--disable-warning=DEP0040 yarn run reassure --testMatch=\"<rootDir>/**/*.bench.[jt]s?(x)\"",
+    "bench:ci": "./scripts/bench/ci.sh",
     "build:android:test": "yarn build:android:test:debug",
     "build:android:test:base": "cd android && ./gradlew assembleAndroidTest",
     "build:android:test:debug": "yarn build:android:test:base assembleEndToEndTestDebug -DtestBuildType=debug",
@@ -130,6 +132,7 @@
     "babel-plugin-react-compiler": "^19.0.0-beta-0dec889-20241115",
     "babel-plugin-require-context-hook": "^1.0.0",
     "concurrently": "^9.1.1",
+    "danger": "^12.3.4",
     "debug": "^4.4.0",
     "drizzle-kit": "~0.27.0",
     "eslint": "^8.57.0",
@@ -151,6 +154,7 @@
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "react-test-renderer": "18.2.0",
+    "reassure": "^1.4.0",
     "storybook": "^8.6.3",
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",

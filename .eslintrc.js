@@ -61,7 +61,7 @@ module.exports = {
       extends: ['plugin:testing-library/react'],
     },
     {
-      files: ['src/**/!(*.spec|*.test).{js,jsx,ts,tsx}'],
+      files: ['src/**/!(*.bench|*.spec|*.test).{js,jsx,ts,tsx}'],
       excludedFiles: ['src/ui/themes/**', '*.stories.*'],
       plugins: ['lingui'],
       rules: {
