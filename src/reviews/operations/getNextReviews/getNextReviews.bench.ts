@@ -1,5 +1,4 @@
 import { add, sub } from 'date-fns'
-import { InferInsertModel } from 'drizzle-orm'
 import { chunk, random } from 'lodash'
 import { measureAsyncFunction } from 'reassure'
 import { Grades } from 'ts-fsrs'
@@ -7,6 +6,7 @@ import { collection, collectionToNote } from '@/collections/schema'
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { note, noteField } from '@/notes/schema'
 import {
+  ReviewableFieldParameters,
   review,
   reviewable,
   reviewableField,
@@ -179,7 +179,7 @@ describe('getNextReviews', () => {
           noteFields.map(({ id: field, note, side }) => ({
             reviewable: reviewables.find(
               (reviewable) => reviewable.note === note,
-            )?.id as InferInsertModel<typeof reviewableField>['reviewable'],
+            )?.id as ReviewableFieldParameters['reviewable'],
             field,
             side,
           })),

@@ -1,7 +1,14 @@
 import hashNoteFieldValue from '@/notes/hashNoteFieldValue'
 import { note, noteField } from '@/notes/schema'
 import { mockDatabase } from 'test/utils'
-import { reviewable, reviewableField } from './reviewable'
+import {
+  Reviewable,
+  ReviewableField,
+  ReviewableFieldParameters,
+  ReviewableParameters,
+  reviewable,
+  reviewableField,
+} from './reviewable'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
 type Any<Type> = {
@@ -11,10 +18,8 @@ type Any<Type> = {
 describe('`reviewable` table', () => {
   let database: DatabaseMock['database'],
     resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
-    reviewableMock: Pick<typeof reviewable.$inferInsert, 'note'>,
-    insertReviewable: (
-      values: Any<typeof reviewable.$inferInsert>,
-    ) => Promise<typeof reviewable.$inferSelect>
+    reviewableMock: Pick<ReviewableParameters, 'note'>,
+    insertReviewable: (values: Any<ReviewableParameters>) => Promise<Reviewable>
 
   beforeEach(async () => {
     ;({ database, resetDatabaseMock } = await mockDatabase())
@@ -199,12 +204,12 @@ describe('`reviewable_field` table', () => {
   let database: DatabaseMock['database'],
     resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
     reviewableFieldMock: Pick<
-      typeof reviewableField.$inferInsert,
+      ReviewableFieldParameters,
       'reviewable' | 'field' | 'side'
     >,
     insertReviewableField: (
-      values: Any<typeof reviewableField.$inferInsert>,
-    ) => Promise<typeof reviewableField.$inferSelect>
+      values: Any<ReviewableFieldParameters>,
+    ) => Promise<ReviewableField>
 
   beforeEach(async () => {
     ;({ database, resetDatabaseMock } = await mockDatabase())
