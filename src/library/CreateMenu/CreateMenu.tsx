@@ -2,7 +2,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useLingui } from '@lingui/react/macro'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { LogBox } from 'react-native'
-import { collection } from '@/collections/schema'
+import { Collection } from '@/collections/schema'
 import { Text } from '@/ui'
 import Menu from './Menu'
 import Modal from './Modal'
@@ -12,7 +12,7 @@ type Ref = {
   open: BottomSheetModal['present']
 }
 type Props = {
-  collection?: (typeof collection.$inferSelect)['id']
+  collection?: Collection['id']
 }
 
 /**

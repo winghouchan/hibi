@@ -4,7 +4,7 @@ import { useTransition } from 'react'
 import { FlatList, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { collectionsQuery } from '@/collections/operations'
-import { collection } from '@/collections/schema'
+import { Collection } from '@/collections/schema'
 import { Text } from '@/ui'
 
 const styles = StyleSheet.create(
@@ -26,8 +26,8 @@ const styles = StyleSheet.create(
 )
 
 type Props = {
-  onChange?: (id?: typeof collection.$inferSelect.id) => void
-  value?: typeof collection.$inferSelect.id
+  onChange?: (id?: Collection['id']) => void
+  value?: Collection['id']
 }
 
 export default function CollectionFilter({ onChange, value }: Props) {

@@ -10,10 +10,8 @@ import {
   lt,
   lte,
 } from 'drizzle-orm'
-import { collection } from '@/collections/schema'
+import { Collection, collection } from '@/collections/schema'
 import { database, tracer } from '@/data/database'
-
-type Collection = typeof collection.$inferSelect
 
 function isValidColumn(column: string): column is keyof Collection {
   return column in collection

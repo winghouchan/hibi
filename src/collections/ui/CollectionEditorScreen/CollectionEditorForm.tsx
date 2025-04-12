@@ -9,12 +9,12 @@ import {
   updateCollectionMutation,
 } from '../../operations'
 import baseQueryKey from '../../operations/baseQueryKey'
-import { collection } from '../../schema'
+import { Collection } from '../../schema'
 import Layout from '../Layout'
 
 interface Props {
-  collection?: typeof collection.$inferSelect | null
-  onSubmit?: (arg: typeof collection.$inferSelect) => void
+  collection?: Collection | null
+  onSubmit?: (arg: Collection) => void
 }
 
 export default function CollectionEditorForm({ collection, onSubmit }: Props) {

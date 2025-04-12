@@ -1,5 +1,5 @@
 import { inArray } from 'drizzle-orm'
-import { collection, collectionToNote } from '@/collections/schema'
+import { Collection, collection, collectionToNote } from '@/collections/schema'
 import { database, tracer } from '@/data/database'
 import createReviewables from '@/reviews/operations/createReviewables'
 import { reviewable, reviewableField } from '@/reviews/schema/reviewable'
@@ -12,7 +12,7 @@ type Field = Omit<
 >
 
 interface CreateNoteParameters {
-  collections: (typeof collection.$inferSelect)['id'][]
+  collections: Collection['id'][]
   fields: Field[][]
   config: Parameters<typeof createReviewables>[0]['config']
 }

@@ -1,8 +1,8 @@
 import { database, tracer } from '@/data/database'
-import { collection } from '../../schema/collection'
+import { collection, CollectionParameters } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>
-  extends Omit<typeof collection.$inferInsert, 'id' | 'createdAt'> {
+  extends Omit<CollectionParameters, 'id' | 'createdAt'> {
   name: Name extends '' ? never : Name
 }
 

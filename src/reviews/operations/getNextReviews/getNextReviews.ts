@@ -10,7 +10,7 @@ import {
   or,
   sql,
 } from 'drizzle-orm'
-import { collection, collectionToNote } from '@/collections/schema'
+import { Collection, collectionToNote } from '@/collections/schema'
 import { database, tracer } from '@/data/database'
 import { note, noteField } from '@/notes/schema'
 import {
@@ -22,7 +22,7 @@ import MAX_REVIEW_COUNT from '../../maxReviewCount'
 
 interface Options {
   filter?: {
-    collections?: (typeof collection.$inferSelect)['id'][]
+    collections?: Collection['id'][]
     due?: boolean
   }
   pagination?: {

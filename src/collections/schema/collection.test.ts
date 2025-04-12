@@ -1,5 +1,5 @@
 import { mockDatabase } from 'test/utils'
-import { collection } from './collection'
+import { Collection, CollectionParameters, collection } from './collection'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
 type Any<Type> = {
@@ -13,9 +13,7 @@ const collectionMock = {
 describe('`collection` table', () => {
   let database: DatabaseMock['database'],
     resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
-    insertCollection: (
-      values: Any<typeof collection.$inferInsert>,
-    ) => Promise<typeof collection.$inferSelect>
+    insertCollection: (values: Any<CollectionParameters>) => Promise<Collection>
 
   beforeEach(async () => {
     ;({ database, resetDatabaseMock } = await mockDatabase())

@@ -1,8 +1,6 @@
 import { and, eq } from 'drizzle-orm'
 import { database, tracer } from '@/data/database'
-import { collection } from '../../schema/collection'
-
-type Collection = typeof collection.$inferSelect
+import { Collection, collection } from '../../schema/collection'
 
 function isValidColumn(column: string): column is keyof Collection {
   return column in collection

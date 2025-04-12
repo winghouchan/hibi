@@ -1,7 +1,6 @@
-import { InferSelectModel } from 'drizzle-orm'
 import { measureAsyncFunction } from 'reassure'
 import { mockDatabase } from 'test/utils'
-import { collection } from '../../schema'
+import { Collection, collection } from '../../schema'
 
 describe('getCollections', () => {
   test.each([
@@ -92,7 +91,7 @@ describe('getCollections', () => {
     const input = { filter: { id: [0] } } satisfies Parameters<
       typeof getCollections
     >[0]
-    let data: InferSelectModel<typeof collection>[]
+    let data: Collection[]
 
     if (fixture.collections) {
       data = await database

@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm'
 import { database, tracer } from '@/data/database'
-import { collection } from '../../schema/collection'
+import { CollectionParameters, collection } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>
-  extends Omit<typeof collection.$inferInsert, 'createdAt'> {
+  extends Omit<CollectionParameters, 'createdAt'> {
   id: number
   name: Name extends '' ? never : Name
 }

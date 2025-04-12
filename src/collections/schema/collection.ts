@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
 import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 
@@ -18,3 +18,6 @@ export const collection = sqliteTable(
     ),
   }),
 )
+
+export type Collection = InferSelectModel<typeof collection>
+export type CollectionParameters = InferInsertModel<typeof collection>

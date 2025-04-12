@@ -2,7 +2,7 @@ import { and, eq, inArray, notInArray } from 'drizzle-orm'
 import differenceWith from 'lodash/differenceWith'
 import isEqual from 'lodash/isEqual'
 import { RequireAtLeastOne } from 'type-fest'
-import { collection, collectionToNote } from '@/collections/schema'
+import { Collection, collectionToNote } from '@/collections/schema'
 import { database, tracer } from '@/data/database'
 import { createReviewables } from '@/reviews/operations'
 import { reviewable, reviewableField } from '@/reviews/schema'
@@ -18,7 +18,7 @@ type UpdateNoteParameters = {
   id: Exclude<Note['id'], undefined>
 } & RequireAtLeastOne<
   {
-    collections?: (typeof collection.$inferSelect)['id'][]
+    collections?: Collection['id'][]
     config?: Partial<Parameters<typeof createReviewables>[0]['config']>
     fields?: Field[][]
   },
