@@ -42,7 +42,8 @@ async function getNextReviews({ filter, pagination }: Options = {}) {
         row_number() over (
           partition by ${reviewableSnapshot.reviewable}
           order by ${desc(reviewableSnapshot.createdAt)}
-        )`.as('row'),
+        )
+      `.as('row'),
     })
     .from(reviewableSnapshot)
     .as('snapshots_by_reviewable')
@@ -69,14 +70,75 @@ async function getNextReviews({ filter, pagination }: Options = {}) {
     .as('latest_snapshot')
 
   /**
+   * Reviewable fields grouped by reviewable and side in a JSON array
+   *
+   * Example:
+   *
+   * | reviewable | fields                                                               |
+   * | ---------- | -------------------------------------------------------------------- |
+   * |          1 | [{ side: 0, position: 0, ... }, { side: 0, position: 1, ... }, ... ] |
+   * |          2 | [{ side: 0, position: 0, ... }, { side: 0, position: 1, ... }, ... ] |
+   * |          1 | [{ side: 1, position: 0, ... }, { side: 1, position: 1, ... }, ... ] |
+   * |          2 | [{ side: 1, position: 0, ... }, { side: 1, position: 1, ... }, ... ] |
+   */
+  const reviewableFieldsByReviewableAndSide = database
+    .select({
+      reviewable: reviewableField.reviewable,
+      fields: sql`
+        json_group_array(
+          json_object(
+            'reviewable', ${reviewableField.reviewable},
+            'side', ${reviewableField.side},
+            'position', ${noteField.position},
+            'value', ${noteField.value}
+          )
+        )
+      `.as('fields'),
+    })
+    .from(reviewableField)
+    .innerJoin(noteField, eq(reviewableField.field, noteField.id))
+    .groupBy(reviewableField.reviewable, reviewableField.side)
+    .orderBy(asc(reviewableField.side), asc(noteField.position))
+    .as('reviewable_fields_by_reviewable_and_side')
+
+  /**
+   * Reviewable fields grouped by reviewable in a JSON array
+   *
+   * Example:
+   *
+   * | reviewable | fields                                                                                                                             |
+   * | ---------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+   * |          1 | [[{ side: 0, position: 0 }, { side: 0, position: 1, ... }, ... ], [{ side: 1, position: 0 }, { side: 1, position: 1, ... }, ... ]] |
+   * |          2 | [[{ side: 0, position: 0 }, { side: 0, position: 1, ... }, ... ], [{ side: 1, position: 0 }, { side: 1, position: 1, ... }, ... ]] |
+   */
+  const reviewableFields = database
+    .select({
+      reviewable: reviewableFieldsByReviewableAndSide.reviewable,
+      fields:
+        sql`json_group_array(${reviewableFieldsByReviewableAndSide.fields})`
+          .mapWith({
+            mapFromDriverValue: (value) =>
+              (JSON.parse(value) as string[]).map((value) => JSON.parse(value)),
+          })
+          .as('fields'),
+    })
+    .from(reviewableFieldsByReviewableAndSide)
+    .groupBy(reviewableFieldsByReviewableAndSide.reviewable)
+    .as('reviewable_fields')
+
+  /**
    * Reviewables joined against their latest snapshots
    */
-  const nextReviewables = await database
-    .select()
+  const reviewables = await database
+    .select({
+      id: reviewable.id,
+      fields: reviewableFields.fields,
+    })
     .from(reviewable)
     .leftJoin(latestSnapshot, eq(reviewable.id, latestSnapshot.reviewable))
     .innerJoin(note, eq(reviewable.note, note.id))
     .innerJoin(collectionToNote, eq(note.id, collectionToNote.note))
+    .innerJoin(reviewableFields, eq(reviewable.id, reviewableFields.reviewable))
     .where(
       and(
         not(eq(reviewable.archived, true)),
@@ -103,41 +165,7 @@ async function getNextReviews({ filter, pagination }: Options = {}) {
     )
     .limit(pagination?.limit ?? MAX_REVIEW_COUNT)
 
-  const reviewables = await Promise.all(
-    nextReviewables.map(async ({ reviewable: nextReviewable }) => {
-      const fields = (
-        await database
-          .select({
-            side: reviewableField.side,
-            position: noteField.position,
-            value: noteField.value,
-          })
-          .from(reviewableField)
-          .where(eq(reviewableField.reviewable, nextReviewable.id))
-          .innerJoin(noteField, eq(reviewableField.field, noteField.id))
-          .orderBy(asc(reviewableField.side), asc(noteField.position))
-      ).reduce<
-        (Pick<typeof reviewableField.$inferSelect, 'side'> &
-          Pick<typeof noteField.$inferSelect, 'position' | 'value'>)[][]
-      >((state, field) => {
-        const newState = [...state]
-
-        if (newState[field.side]) {
-          newState[field.side].push(field)
-        } else {
-          newState[field.side] = [field]
-        }
-
-        return newState
-      }, [])
-
-      return { id: nextReviewable.id, fields }
-    }),
-  )
-
-  return {
-    reviewables,
-  }
+  return { reviewables }
 }
 
 export default tracer.withSpan({ name: 'getNextReviews' }, getNextReviews)
