@@ -12,11 +12,10 @@ import {
 } from 'drizzle-orm'
 import { collection, collectionToNote } from '@/collections/schema'
 import { database, tracer } from '@/data/database'
-import { note, noteField } from '../../schema'
+import { Note, note, noteField } from '../../schema'
 
 type Collection = typeof collection.$inferSelect
 type CollectionToNote = typeof collectionToNote.$inferSelect
-type Note = typeof note.$inferSelect
 
 function isNoteColumn(column: string): column is keyof Note {
   return column in note

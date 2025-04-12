@@ -1,5 +1,5 @@
 import { mockDatabase } from 'test/utils'
-import { note } from './note'
+import { Note, NoteParameters, note } from './note'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
 type Any<Type> = {
@@ -9,9 +9,7 @@ type Any<Type> = {
 describe('`note` table', () => {
   let database: DatabaseMock['database'],
     resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
-    insertNote: (
-      values?: Any<typeof note.$inferInsert>,
-    ) => Promise<typeof note.$inferSelect>
+    insertNote: (values?: Any<NoteParameters>) => Promise<Note>
 
   beforeEach(async () => {
     ;({ database, resetDatabaseMock } = await mockDatabase())

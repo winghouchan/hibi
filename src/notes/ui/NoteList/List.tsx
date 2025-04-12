@@ -1,9 +1,9 @@
 import { FlatList, FlatListProps, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
-import { note, noteField } from '@/notes/schema'
+import { Note, noteField } from '@/notes/schema'
 
 type Props = FlatListProps<{
-  id: (typeof note.$inferSelect)['id']
+  id: Note['id']
   fields: (typeof noteField.$inferSelect)[][]
 }>
 

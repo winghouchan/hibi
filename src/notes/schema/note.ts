@@ -1,3 +1,4 @@
+import { InferInsertModel, InferSelectModel } from 'drizzle-orm'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 
@@ -22,3 +23,6 @@ export const note = sqliteTable('note', {
 
   createdAt: createdAt(),
 })
+
+export type Note = InferSelectModel<typeof note>
+export type NoteParameters = InferInsertModel<typeof note>

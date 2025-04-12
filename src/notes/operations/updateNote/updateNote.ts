@@ -7,7 +7,7 @@ import { database, tracer } from '@/data/database'
 import { createReviewables } from '@/reviews/operations'
 import { reviewable, reviewableField } from '@/reviews/schema'
 import hashNoteFieldValue from '../../hashNoteFieldValue'
-import { note, noteField } from '../../schema'
+import { Note, note, noteField } from '../../schema'
 
 type Field = Omit<
   typeof noteField.$inferInsert,
@@ -15,7 +15,7 @@ type Field = Omit<
 >
 
 type UpdateNoteParameters = {
-  id: Exclude<(typeof note.$inferInsert)['id'], undefined>
+  id: Exclude<Note['id'], undefined>
 } & RequireAtLeastOne<
   {
     collections?: (typeof collection.$inferSelect)['id'][]
@@ -59,8 +59,8 @@ async function updateNote({
     }
 
     const newConfig = {
-      reversible: config?.reversible ?? (currentConfig?.reversible as boolean),
-      separable: config?.separable ?? (currentConfig?.separable as boolean),
+      reversible: config?.reversible ?? currentConfig.reversible,
+      separable: config?.separable ?? currentConfig.separable,
     }
 
     if (
