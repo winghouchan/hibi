@@ -2,7 +2,11 @@ import { note } from '@/notes/schema'
 import { mockDatabase } from 'test/utils'
 import { review } from './review'
 import { reviewable } from './reviewable'
-import { reviewableSnapshot } from './reviewableSnapshot'
+import {
+  ReviewableSnapshot,
+  ReviewableSnapshotParameters,
+  reviewableSnapshot,
+} from './reviewableSnapshot'
 
 type DatabaseMock = Awaited<ReturnType<typeof mockDatabase>>
 type Any<Type> = {
@@ -13,12 +17,12 @@ describe('`reviewable_snapshot` table', () => {
   let database: DatabaseMock['database'],
     resetDatabaseMock: DatabaseMock['resetDatabaseMock'],
     reviewableSnapshotMock: Pick<
-      typeof reviewableSnapshot.$inferSelect,
+      ReviewableSnapshot,
       'difficulty' | 'due' | 'review' | 'reviewable' | 'stability' | 'state'
     >,
     insertReviewableSnapshot: (
-      values: Any<typeof reviewableSnapshot.$inferInsert>,
-    ) => Promise<typeof reviewableSnapshot.$inferSelect>
+      values: Any<ReviewableSnapshotParameters>,
+    ) => Promise<ReviewableSnapshot>
 
   beforeEach(async () => {
     ;({ database, resetDatabaseMock } = await mockDatabase())

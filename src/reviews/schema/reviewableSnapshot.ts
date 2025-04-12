@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
 import { check, integer, real, sqliteTable } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 import { review } from './review'
@@ -67,3 +67,8 @@ export const reviewableSnapshot = sqliteTable(
     ),
   }),
 )
+
+export type ReviewableSnapshot = InferSelectModel<typeof reviewableSnapshot>
+export type ReviewableSnapshotParameters = InferInsertModel<
+  typeof reviewableSnapshot
+>
