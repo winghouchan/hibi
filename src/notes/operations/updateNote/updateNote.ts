@@ -74,7 +74,6 @@ async function updateNote({
           separable: newConfig.separable,
         })
         .where(eq(note.id, id))
-        .run()
     }
 
     if (collections && collections.length > 0) {
@@ -86,7 +85,6 @@ async function updateNote({
             notInArray(collectionToNote.collection, collections),
           ),
         )
-        .run()
 
       await transaction
         .insert(collectionToNote)
@@ -97,7 +95,6 @@ async function updateNote({
           })),
         )
         .onConflictDoNothing()
-        .run()
     }
 
     if (sides && sides.length > 0) {
@@ -105,7 +102,7 @@ async function updateNote({
         .select()
         .from(noteField)
         .where(eq(noteField.note, id))
-        .all()
+
       const currentFieldPositionsByHash = currentFields.reduce<
         Record<
           (typeof noteField.$inferSelect)['hash'],
@@ -166,21 +163,17 @@ async function updateNote({
               .update(noteField)
               .set({ archived: true })
               .where(and(eq(noteField.note, id), eq(noteField.hash, fieldHash)))
-              .run()
           } else if (!currentPositions) {
             // The field had no current positions (i.e. did not exist), so are inserted
-            await transaction
-              .insert(noteField)
-              .values(
-                newPositions.map(({ position, side }) => ({
-                  note: id,
-                  value: sides[side][position].value,
-                  hash: fieldHash,
-                  position,
-                  side,
-                })),
-              )
-              .run()
+            await transaction.insert(noteField).values(
+              newPositions.map(({ position, side }) => ({
+                note: id,
+                value: sides[side][position].value,
+                hash: fieldHash,
+                position,
+                side,
+              })),
+            )
           } else {
             // The field has positions in both the current and new states
 
@@ -193,7 +186,6 @@ async function updateNote({
                       .update(noteField)
                       .set({ archived: true })
                       .where(eq(noteField.id, id))
-                      .run()
                   }
 
                   if (
@@ -209,7 +201,6 @@ async function updateNote({
                         side: newPositions[index].side,
                       })
                       .where(eq(noteField.id, id))
-                      .run()
                   }
                 }),
               )
@@ -218,16 +209,13 @@ async function updateNote({
                 newPositions.map(async ({ position, side }, index) => {
                   if (index > currentPositions.length - 1) {
                     // The field exists at an index in the new state that does exist in the current state, so is inserted
-                    return await transaction
-                      .insert(noteField)
-                      .values({
-                        note: id,
-                        value: sides[side][position].value,
-                        hash: fieldHash,
-                        position,
-                        side,
-                      })
-                      .run()
+                    return await transaction.insert(noteField).values({
+                      note: id,
+                      value: sides[side][position].value,
+                      hash: fieldHash,
+                      position,
+                      side,
+                    })
                   }
 
                   // The field is at an index in both the current and new state
@@ -239,7 +227,6 @@ async function updateNote({
                       side,
                     })
                     .where(eq(noteField.id, currentPositions[index].id))
-                    .run()
                 }),
               )
             }
@@ -326,18 +313,14 @@ async function updateNote({
               note: id,
             })
             .returning()
-            .all()
 
-          await transaction
-            .insert(reviewableField)
-            .values(
-              fields.map(({ field, side }) => ({
-                reviewable: insertedReviewable.id,
-                field,
-                side,
-              })),
-            )
-            .run()
+          await transaction.insert(reviewableField).values(
+            fields.map(({ field, side }) => ({
+              reviewable: insertedReviewable.id,
+              field,
+              side,
+            })),
+          )
         }),
       )
 
@@ -350,7 +333,6 @@ async function updateNote({
             reviewablesToArchive.map(({ id }) => id),
           ),
         )
-        .run()
 
       await transaction
         .update(reviewable)
@@ -361,7 +343,6 @@ async function updateNote({
             reviewablesToUnarchive.map(({ id }) => id),
           ),
         )
-        .run()
     }
 
     const newState = await transaction.query.note.findFirst({
