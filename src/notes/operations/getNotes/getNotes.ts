@@ -4,10 +4,8 @@ import {
   desc,
   eq,
   getTableColumns,
-  gt,
   gte,
   inArray,
-  lt,
   lte,
 } from 'drizzle-orm'
 import { Collection, collectionToNote } from '@/collections/schema'
@@ -62,6 +60,8 @@ async function getNotes({ filter, order, pagination }: Options = {}) {
       )
     : []
 
+  const limit = pagination?.limit ?? PAGINATION_DEFAULT_LIMIT
+
   const notes = await database
     .select(getTableColumns(note))
     .from(note)
@@ -76,56 +76,40 @@ async function getNotes({ filter, order, pagination }: Options = {}) {
         ...filterConditions,
       ),
     )
-    .limit(pagination?.limit ?? PAGINATION_DEFAULT_LIMIT)
     .orderBy(order?.id === 'desc' ? desc(note.id) : asc(note.id))
+    .limit(limit + 1)
 
   return {
     cursor: {
-      next:
-        notes.length > 0
-          ? (
-              await database
-                .select({ id: note.id })
-                .from(note)
-                .innerJoin(collectionToNote, eq(note.id, collectionToNote.note))
-                .where(
-                  and(
-                    order?.id === 'desc'
-                      ? lt(note.id, notes[notes.length - 1].id)
-                      : gt(note.id, notes[notes.length - 1].id),
-                    ...filterConditions,
-                  ),
-                )
-                .orderBy(order?.id === 'desc' ? desc(note.id) : asc(note.id))
-                .limit(1)
-            ).at(0)?.id
-          : undefined,
+      next: notes.length < limit ? undefined : notes[notes.length - 1].id,
     },
     notes: await Promise.all(
-      notes.map(async (noteData) => {
-        const noteFieldData = await database
-          .select()
-          .from(noteField)
-          .where(eq(noteField.note, noteData.id))
+      notes
+        .toSpliced(notes.length < limit ? notes.length : -1)
+        .map(async (noteData) => {
+          const noteFieldData = await database
+            .select()
+            .from(noteField)
+            .where(eq(noteField.note, noteData.id))
 
-        return {
-          ...noteData,
-          fields: noteFieldData.reduce<(typeof noteFieldData)[]>(
-            (state, field) => {
-              const newState = [...state]
+          return {
+            ...noteData,
+            fields: noteFieldData.reduce<(typeof noteFieldData)[]>(
+              (state, field) => {
+                const newState = [...state]
 
-              if (newState[field.side]) {
-                newState[field.side].push(field)
-              } else {
-                newState[field.side] = [field]
-              }
+                if (newState[field.side]) {
+                  newState[field.side].push(field)
+                } else {
+                  newState[field.side] = [field]
+                }
 
-              return newState
-            },
-            [],
-          ),
-        }
-      }),
+                return newState
+              },
+              [],
+            ),
+          }
+        }),
     ),
   }
 }
