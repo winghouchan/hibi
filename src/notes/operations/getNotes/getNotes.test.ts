@@ -255,8 +255,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -265,8 +275,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -275,8 +295,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -285,8 +315,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -295,8 +335,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -305,8 +355,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -315,8 +375,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -325,8 +395,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -335,8 +415,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -345,8 +435,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -395,8 +495,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -480,8 +590,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -490,8 +610,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -540,8 +670,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -659,8 +799,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -753,8 +903,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -763,8 +923,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -833,8 +1003,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -843,8 +1023,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -913,8 +1103,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
           expect.objectContaining({
@@ -923,8 +1123,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -993,8 +1203,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -1063,8 +1283,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
@@ -1136,8 +1366,18 @@ describe('getNotes', () => {
             separable: false,
             createdAt: expect.any(Date),
             fields: [
-              [expect.objectContaining({ value: 'Front' })],
-              [expect.objectContaining({ value: 'Back' })],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Front',
+                }),
+              ],
+              [
+                expect.objectContaining({
+                  id: expect.any(Number),
+                  value: 'Back',
+                }),
+              ],
             ],
           }),
         ],
