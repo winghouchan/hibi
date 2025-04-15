@@ -7,6 +7,7 @@ import {
   gte,
   inArray,
   lte,
+  sql,
 } from 'drizzle-orm'
 import { Collection, collectionToNote } from '@/collections/schema'
 import { database, tracer } from '@/data/database'
@@ -62,55 +63,79 @@ async function getNotes({ filter, order, pagination }: Options = {}) {
 
   const limit = pagination?.limit ?? PAGINATION_DEFAULT_LIMIT
 
-  const notes = await database
-    .select(getTableColumns(note))
-    .from(note)
-    .innerJoin(collectionToNote, eq(note.id, collectionToNote.note))
-    .where(
-      and(
-        pagination?.cursor
-          ? order?.id === 'desc'
-            ? lte(note.id, pagination.cursor)
-            : gte(note.id, pagination.cursor)
-          : undefined,
-        ...filterConditions,
-      ),
-    )
-    .orderBy(order?.id === 'desc' ? desc(note.id) : asc(note.id))
-    .limit(limit + 1)
+  const notes = database.$with('notes').as(
+    database
+      .select(getTableColumns(note))
+      .from(note)
+      .innerJoin(collectionToNote, eq(note.id, collectionToNote.note))
+      .where(
+        and(
+          pagination?.cursor
+            ? order?.id === 'desc'
+              ? lte(note.id, pagination.cursor)
+              : gte(note.id, pagination.cursor)
+            : undefined,
+          ...filterConditions,
+        ),
+      )
+      .orderBy(order?.id === 'desc' ? desc(note.id) : asc(note.id))
+      .limit(limit + 1),
+  )
+
+  const noteFields = database.$with('note_fields').as(
+    database
+      .select({
+        note: noteField.note,
+        fields: sql`
+        json_group_array(
+          json_object(
+            'id', ${noteField.id},
+            'note', ${noteField.note},
+            'side', ${noteField.side},
+            'position', ${noteField.position},
+            'value', ${noteField.value}
+          )
+        )
+      `.as('fields'),
+      })
+      .from(noteField)
+      .where(
+        inArray(noteField.note, database.select({ id: notes.id }).from(notes)),
+      )
+      .groupBy(noteField.note, noteField.side)
+      .orderBy(asc(noteField.side), asc(noteField.position)),
+  )
+
+  const notesWithFields = await database
+    .with(notes, noteFields)
+    .select({
+      id: notes.id,
+      reversible: notes.reversible,
+      separable: notes.separable,
+      createdAt: notes.createdAt,
+      fields: sql`json_group_array(${noteFields.fields})`
+        .mapWith({
+          mapFromDriverValue: (value) =>
+            (JSON.parse(value) as string[]).map((value) => JSON.parse(value)),
+        })
+        .as('fields'),
+    })
+    .from(notes)
+    .innerJoin(noteFields, eq(notes.id, noteFields.note))
+    .groupBy(noteFields.note)
+    .orderBy(order?.id === 'desc' ? desc(notes.id) : asc(notes.id))
 
   return {
     cursor: {
-      next: notes.length < limit ? undefined : notes[notes.length - 1].id,
+      next:
+        notesWithFields.length <= limit
+          ? undefined
+          : notesWithFields[notesWithFields.length - 1].id,
     },
-    notes: await Promise.all(
-      notes
-        .toSpliced(notes.length < limit ? notes.length : -1)
-        .map(async (noteData) => {
-          const noteFieldData = await database
-            .select()
-            .from(noteField)
-            .where(eq(noteField.note, noteData.id))
-
-          return {
-            ...noteData,
-            fields: noteFieldData.reduce<(typeof noteFieldData)[]>(
-              (state, field) => {
-                const newState = [...state]
-
-                if (newState[field.side]) {
-                  newState[field.side].push(field)
-                } else {
-                  newState[field.side] = [field]
-                }
-
-                return newState
-              },
-              [],
-            ),
-          }
-        }),
-    ),
+    notes:
+      notesWithFields.length <= limit
+        ? notesWithFields
+        : notesWithFields.toSpliced(-1),
   }
 }
 
