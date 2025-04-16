@@ -1491,6 +1491,86 @@ describe('getNextReviews', () => {
               }
             : { reviewables: [] },
       },
+      {
+        and: 'there are many reviewables with the same due date',
+        then:
+          input.filter.collections === undefined ||
+          input.filter.collections?.length === 0 ||
+          input.filter.collections?.includes(2)
+            ? 'returns the reviewable with the lowest reviewable ID'
+            : input.pagination.limit === 2
+              ? 'returns reviewables up to the limit sorted by reviewable ID ascending'
+              : 'returns an empty array',
+        fixture: {
+          collections: [
+            { id: 1, name: 'Collection Mock 1' },
+            { id: 2, name: 'Collection Mock 2' },
+          ],
+          notes: [
+            {
+              id: 1,
+              collections: [2],
+              reversible: false,
+              separable: false,
+            },
+            {
+              id: 2,
+              collections: [2],
+              reversible: false,
+              separable: false,
+            },
+          ],
+          reviewables: [
+            {
+              id: 1,
+              note: 1,
+              fields: [
+                { side: 0, position: 0, value: 'Front 1' },
+                { side: 1, position: 0, value: 'Back 1' },
+              ],
+              archived: false,
+              snapshots: [{ createdAt: new Date(0), due: new Date(0) }],
+            },
+            {
+              id: 2,
+              note: 2,
+              fields: [
+                { side: 0, position: 0, value: 'Front 2' },
+                { side: 1, position: 0, value: 'Back 2' },
+              ],
+              archived: false,
+              snapshots: [{ createdAt: new Date(0), due: new Date(0) }],
+            },
+          ],
+        },
+        expected:
+          input.filter.collections === undefined ||
+          input.filter.collections?.length === 0 ||
+          input.filter.collections?.includes(2)
+            ? {
+                reviewables: [
+                  expect.objectContaining({
+                    id: 1,
+                    fields: [
+                      [expect.objectContaining({ value: 'Front 1' })],
+                      [expect.objectContaining({ value: 'Back 1' })],
+                    ],
+                  }),
+                  ...(input.pagination.limit === 2
+                    ? [
+                        expect.objectContaining({
+                          id: 2,
+                          fields: [
+                            [expect.objectContaining({ value: 'Front 2' })],
+                            [expect.objectContaining({ value: 'Back 2' })],
+                          ],
+                        }),
+                      ]
+                    : []),
+                ],
+              }
+            : { reviewables: [] },
+      },
     ])('and $and', ({ then, fixture, expected }) => {
       test(
         // eslint-disable-next-line jest/valid-title -- `then` is a string
