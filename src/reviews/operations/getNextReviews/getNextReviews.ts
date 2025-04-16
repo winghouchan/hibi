@@ -1,11 +1,11 @@
 import {
   and,
   asc,
-  desc,
   eq,
   inArray,
   isNull,
   lt,
+  max,
   not,
   or,
   sql,
@@ -32,46 +32,16 @@ interface Options {
 
 async function getNextReviews({ filter, pagination }: Options = {}) {
   /**
-   * Partitions by reviewable ordered by created dates descending
-   */
-  const snapshotsByReviewable = database.$with('snapshots_by_reviewable').as(
-    database
-      .select({
-        due: reviewableSnapshot.due,
-        reviewable: reviewableSnapshot.reviewable,
-        /**
-         * Creates partitions (i.e. groups) of snapshots based on the reviewable
-         * the snapshot is for.
-         *
-         * Using a combination of `group by` and `max(created_at)` might appear to
-         * work however the value of other columns will be from a row arbitrarily
-         * chosen from the group so will not be guaranteed to be from the row with
-         * the latest created date.
-         *
-         * @see {@link https://www.sqlite.org/lang_select.html#generation_of_the_set_of_result_rows | SQLite documentation}
-         */
-        row: sql<number>`
-          row_number() over (
-            partition by ${reviewableSnapshot.reviewable}
-            order by ${desc(reviewableSnapshot.createdAt)}
-          )
-        `.as('row'),
-      })
-      .from(reviewableSnapshot),
-  )
-
-  /**
    * Latest snapshot for each reviewable
    */
   const latestSnapshots = database.$with('latest_snapshots').as(
     database
-      .select()
-      .from(snapshotsByReviewable)
-      /**
-       * As snapshots by reviewable are ordered by created dates descending, the
-       * first row will be the latest snapshot, see `snapshotsByReviewable` above.
-       */
-      .where(eq(snapshotsByReviewable.row, 1)),
+      .select({
+        reviewable: reviewableSnapshot.reviewable,
+        due: max(reviewableSnapshot.due).as('due'),
+      })
+      .from(reviewableSnapshot)
+      .groupBy(reviewableSnapshot.reviewable),
   )
 
   /**
@@ -144,7 +114,7 @@ async function getNextReviews({ filter, pagination }: Options = {}) {
    * Reviewables joined against their fields
    */
   const reviewablesWithFields = await database
-    .with(snapshotsByReviewable, latestSnapshots, reviewables, reviewableFields)
+    .with(latestSnapshots, reviewables, reviewableFields)
     .select({
       id: reviewables.id,
       fields: sql`json_group_array(${reviewableFields.fields})`
