@@ -4,10 +4,8 @@ import {
   desc,
   eq,
   getTableColumns,
-  gt,
   gte,
   inArray,
-  lt,
   lte,
 } from 'drizzle-orm'
 import { Collection, collection } from '@/collections/schema'
@@ -51,6 +49,8 @@ async function getCollections({ filter, order, pagination }: Options = {}) {
       )
     : []
 
+  const limit = pagination?.limit ?? PAGINATION_DEFAULT_LIMIT
+
   const collections = await database
     .select(getTableColumns(collection))
     .from(collection)
@@ -64,41 +64,18 @@ async function getCollections({ filter, order, pagination }: Options = {}) {
         ...filterConditions,
       ),
     )
-    .limit(pagination?.limit ?? PAGINATION_DEFAULT_LIMIT)
     .orderBy(order?.id === 'desc' ? desc(collection.id) : asc(collection.id))
+    .limit(limit + 1)
 
   return {
     cursor: {
       next:
-        collections.length > 0
-          ? (
-              await database
-                .select({ id: collection.id })
-                .from(collection)
-                .where(
-                  and(
-                    order?.id === 'desc'
-                      ? lt(
-                          collection.id,
-                          collections[collections.length - 1].id,
-                        )
-                      : gt(
-                          collection.id,
-                          collections[collections.length - 1].id,
-                        ),
-                    ...filterConditions,
-                  ),
-                )
-                .orderBy(
-                  order?.id === 'desc'
-                    ? desc(collection.id)
-                    : asc(collection.id),
-                )
-                .limit(1)
-            ).at(0)?.id
-          : undefined,
+        collections.length <= limit
+          ? undefined
+          : collections[collections.length - 1].id,
     },
-    collections,
+    collections:
+      collections.length <= limit ? collections : collections.toSpliced(-1),
   }
 }
 
