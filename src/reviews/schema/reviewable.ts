@@ -19,12 +19,9 @@ export const reviewable = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ archived }) => ({
-    archivedIsBoolean: check(
-      'reviewable_archived_is_boolean',
-      sql`${archived} IN (true, false)`,
-    ),
-  }),
+  ({ archived }) => [
+    check('reviewable_archived_is_boolean', sql`${archived} IN (true, false)`),
+  ],
 )
 
 export type Reviewable = InferSelectModel<typeof reviewable>
@@ -47,7 +44,7 @@ export const reviewableField = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ side }) => ({
+  ({ side }) => [
     /**
      * A constraint to check the side is valid.
      *
@@ -59,11 +56,8 @@ export const reviewableField = sqliteTable(
      * does not handle more than 2 sides, however, in theory more sides could
      * be included.
      */
-    sideIsValid: check(
-      'reviewable_field_side_is_valid',
-      sql`${side} IN (0, 1)`,
-    ),
-  }),
+    check('reviewable_field_side_is_valid', sql`${side} IN (0, 1)`),
+  ],
 )
 
 export type ReviewableField = InferSelectModel<typeof reviewableField>

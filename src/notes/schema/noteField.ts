@@ -40,17 +40,14 @@ export const noteField = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ value, hash, side, position, archived }) => ({
-    valueNotEmpty: check(
-      'note_field_value_not_empty',
-      sql`length(${value}) > 0`,
-    ),
+  ({ value, hash, side, position, archived }) => [
+    check('note_field_value_not_empty', sql`length(${value}) > 0`),
 
     /**
      * A constraint to reduce the risk of the hash not being a base64 encoded
      * SHA-256 hash. Base64 encoded SHA-256 hashes have a length of 44 bytes.
      */
-    hashLength: check('note_field_hash_length', sql`length(${hash}) = 44`),
+    check('note_field_hash_length', sql`length(${hash}) = 44`),
 
     /**
      * A constraint to check the side is valid.
@@ -63,16 +60,10 @@ export const noteField = sqliteTable(
      * does not handle more than 2 sides, however, in theory more sides could
      * be included.
      */
-    sideIsValid: check('note_field_side_is_valid', sql`${side} IN (0, 1)`),
+    check('note_field_side_is_valid', sql`${side} IN (0, 1)`),
 
-    positionIsNotNegative: check(
-      'note_field_position_is_not_negative',
-      sql`${position} >= 0`,
-    ),
+    check('note_field_position_is_not_negative', sql`${position} >= 0`),
 
-    archivedIsBoolean: check(
-      'note_field_archived_is_boolean',
-      sql`${archived} IN (true, false)`,
-    ),
-  }),
+    check('note_field_archived_is_boolean', sql`${archived} IN (true, false)`),
+  ],
 )

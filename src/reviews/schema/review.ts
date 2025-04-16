@@ -99,7 +99,7 @@ export const review = sqliteTable(
     maxInterval,
     retention,
     weights,
-  }) => ({
+  }) => [
     /**
      * A constraint to check the rating is valid. Each number represents the
      * following rating:
@@ -112,32 +112,23 @@ export const review = sqliteTable(
      *
      * @see {@link https://open-spaced-repetition.github.io/ts-fsrs/enums/Rating.html | Documentation on ratings in the scheduler}
      */
-    ratingIsValid: check(
-      'review_rating_is_valid',
-      sql`${rating} IN (0, 1, 2, 3, 4)`,
-    ),
+    check('review_rating_is_valid', sql`${rating} IN (0, 1, 2, 3, 4)`),
 
-    durationGreaterThanZero: check(
-      'review_duration_greater_than_zero',
-      sql`${duration} > 0`,
-    ),
+    check('review_duration_greater_than_zero', sql`${duration} > 0`),
 
-    dueFuzzedIsBoolean: check(
+    check(
       'review_is_due_fuzzed_is_boolean',
       sql`${dueFuzzed} IN (true, false)`,
     ),
 
-    learningEnabledIsBoolean: check(
+    check(
       'review_is_learning_enabled_is_boolean',
       sql`${learningEnabled} IN (true, false)`,
     ),
 
-    maxIntervalGreaterThanZero: check(
-      'review_max_interval_greater_than_zero',
-      sql`${maxInterval} > 0`,
-    ),
+    check('review_max_interval_greater_than_zero', sql`${maxInterval} > 0`),
 
-    retentionInRange: check(
+    check(
       'review_retention_in_range',
       sql`${retention} >= 0 AND ${retention} <= 100`,
     ),
@@ -148,11 +139,8 @@ export const review = sqliteTable(
      *
      * @see {@link https://github.com/open-spaced-repetition/ts-fsrs/blob/65fd676414e23e21612b5344af947480f7dafa7e/src/fsrs/default.ts#L6-L10 | Source code for the default parameters}
      */
-    weightsIsValid: check(
-      'review_weights_is_valid',
-      sql`json_array_length(${weights}) >= 19`,
-    ),
-  }),
+    check('review_weights_is_valid', sql`json_array_length(${weights}) >= 19`),
+  ],
 )
 
 export type Review = InferSelectModel<typeof review>

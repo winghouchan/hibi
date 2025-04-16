@@ -11,12 +11,7 @@ export const collection = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ name }) => ({
-    nameNotEmptyString: check(
-      'collection_name_not_empty_string',
-      sql`${name} != ''`,
-    ),
-  }),
+  ({ name }) => [check('collection_name_not_empty_string', sql`${name} != ''`)],
 )
 
 export type Collection = InferSelectModel<typeof collection>

@@ -39,13 +39,13 @@ export const reviewableSnapshot = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ difficulty, stability, state }) => ({
-    difficultyGreaterThanZero: check(
+  ({ difficulty, stability, state }) => [
+    check(
       'reviewable_snapshot_difficulty_greater_than_zero',
       sql`${difficulty} > 0`,
     ),
 
-    stabilityGreaterThanZero: check(
+    check(
       'reviewable_snapshot_stability_greater_than_zero',
       sql`${stability} > 0`,
     ),
@@ -61,11 +61,8 @@ export const reviewableSnapshot = sqliteTable(
      *
      * @see {@link https://open-spaced-repetition.github.io/ts-fsrs/enums/State.html | Documentation on states in the scheduler}
      */
-    stateIsValid: check(
-      'reviewable_snapshot_state_is_valid',
-      sql`${state} IN (0, 1, 2, 3)`,
-    ),
-  }),
+    check('reviewable_snapshot_state_is_valid', sql`${state} IN (0, 1, 2, 3)`),
+  ],
 )
 
 export type ReviewableSnapshot = InferSelectModel<typeof reviewableSnapshot>
