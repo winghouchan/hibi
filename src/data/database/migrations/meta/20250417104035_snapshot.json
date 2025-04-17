@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "918d8416-4a41-4d08-9f89-451738e713b1",
+  "id": "6f59fc0d-f0de-4c00-a59e-149aca79f327",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "collection": {
@@ -452,7 +452,13 @@
           "default": "(unixepoch('now', 'subsec') * 1000)"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "index_reviewable_field_reviewable": {
+          "name": "index_reviewable_field_reviewable",
+          "columns": ["reviewable"],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "reviewable_field_reviewable_reviewable_id_fk": {
           "name": "reviewable_field_reviewable_reviewable_id_fk",
@@ -543,7 +549,13 @@
           "default": "(unixepoch('now', 'subsec') * 1000)"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "index_reviewable_snapshot_reviewable": {
+          "name": "index_reviewable_snapshot_reviewable",
+          "columns": ["reviewable"],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "reviewable_snapshot_reviewable_reviewable_id_fk": {
           "name": "reviewable_snapshot_reviewable_reviewable_id_fk",
