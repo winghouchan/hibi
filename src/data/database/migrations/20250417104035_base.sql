@@ -79,6 +79,7 @@ CREATE TABLE `reviewable_field` (
 	CONSTRAINT "reviewable_field_side_is_valid" CHECK("reviewable_field"."side" IN (0, 1))
 );
 --> statement-breakpoint
+CREATE INDEX `index_reviewable_field_reviewable` ON `reviewable_field` (`reviewable`);--> statement-breakpoint
 CREATE TABLE `reviewable_snapshot` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`reviewable` integer NOT NULL,
@@ -95,6 +96,7 @@ CREATE TABLE `reviewable_snapshot` (
 	CONSTRAINT "reviewable_snapshot_state_is_valid" CHECK("reviewable_snapshot"."state" IN (0, 1, 2, 3))
 );
 --> statement-breakpoint
+CREATE INDEX `index_reviewable_snapshot_reviewable` ON `reviewable_snapshot` (`reviewable`);--> statement-breakpoint
 CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`created_at` integer DEFAULT (unixepoch('now', 'subsec') * 1000) NOT NULL,

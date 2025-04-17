@@ -1,5 +1,11 @@
 import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
-import { check, integer, real, sqliteTable } from 'drizzle-orm/sqlite-core'
+import {
+  check,
+  index,
+  integer,
+  real,
+  sqliteTable,
+} from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 import { review } from './review'
 import { reviewable } from './reviewable'
@@ -39,7 +45,7 @@ export const reviewableSnapshot = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ difficulty, stability, state }) => [
+  ({ difficulty, reviewable, stability, state }) => [
     check(
       'reviewable_snapshot_difficulty_greater_than_zero',
       sql`${difficulty} > 0`,
@@ -62,6 +68,8 @@ export const reviewableSnapshot = sqliteTable(
      * @see {@link https://open-spaced-repetition.github.io/ts-fsrs/enums/State.html | Documentation on states in the scheduler}
      */
     check('reviewable_snapshot_state_is_valid', sql`${state} IN (0, 1, 2, 3)`),
+
+    index('index_reviewable_snapshot_reviewable').on(reviewable),
   ],
 )
 

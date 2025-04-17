@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
-import { check, integer, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { check, index, integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 import { note } from '@/notes/schema/note'
 import { noteField } from '@/notes/schema/noteField'
@@ -44,7 +44,7 @@ export const reviewableField = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ side }) => [
+  ({ reviewable, side }) => [
     /**
      * A constraint to check the side is valid.
      *
@@ -57,6 +57,8 @@ export const reviewableField = sqliteTable(
      * be included.
      */
     check('reviewable_field_side_is_valid', sql`${side} IN (0, 1)`),
+
+    index('index_reviewable_field_reviewable').on(reviewable),
   ],
 )
 
