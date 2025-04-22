@@ -4,11 +4,17 @@ import {
   QueryClientProvider,
   QueryClientProviderProps,
 } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import useDatabaseBrowser from '../useDatabaseBrowser'
+import useDatabaseMigrations from '../useDatabaseMigrations'
 
-type DataProviderProps = Pick<QueryClientProviderProps, 'children'>
+export type DataProviderProps = Pick<QueryClientProviderProps, 'children'> & {
+  onReady?: () => void
+}
 
-export default function DataProvider({ children }: DataProviderProps) {
+export default function DataProvider({ children, onReady }: DataProviderProps) {
+  const { success: databaseReady } = useDatabaseMigrations()
+
   const [client] = useState(
     () =>
       new QueryClient({
@@ -40,6 +46,14 @@ export default function DataProvider({ children }: DataProviderProps) {
       }),
   )
 
+  const onDatabaseReady = () => {
+    if (databaseReady) {
+      onReady?.()
+    }
+  }
+
+  useDatabaseBrowser()
+  useEffect(onDatabaseReady, [databaseReady, onReady])
   useReactQueryDevTools(client)
 
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>

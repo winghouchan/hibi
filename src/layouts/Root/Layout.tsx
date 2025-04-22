@@ -1,8 +1,8 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { SplashScreen } from 'expo-router'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { DataProvider, useDatabaseBrowser, useDatabaseMigrations } from '@/data'
+import { DataProvider } from '@/data'
 import { configureDevMenu } from '@/dev'
 import { IntlProvider } from '@/intl'
 import { log } from '@/telemetry'
@@ -16,21 +16,19 @@ SplashScreen.preventAutoHideAsync()
 configureDevMenu()
 
 export default function RootLayout() {
-  const { success: databaseReady } = useDatabaseMigrations() // @todo: Handle migration error
-
-  useDatabaseBrowser()
+  const [databaseReady, setDatabaseReady] = useState(false)
 
   return (
     <IntlProvider>
-      <DataProvider>
-        <GestureHandlerRootView>
-          <BottomSheetModalProvider>
-            <ErrorBoundary>
+      <ErrorBoundary>
+        <DataProvider onReady={() => setDatabaseReady(true)}>
+          <GestureHandlerRootView>
+            <BottomSheetModalProvider>
               <Suspense>{databaseReady && <Navigator />}</Suspense>
-            </ErrorBoundary>
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </DataProvider>
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </DataProvider>
+      </ErrorBoundary>
     </IntlProvider>
   )
 }

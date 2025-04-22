@@ -19,6 +19,7 @@ export default function useDatabaseMigrations() {
       log.info('Applied database migrations')
     } else if (error) {
       log.error('Applying database migrations failed:', error)
+      throw error
     }
   }, [error, success])
 

@@ -1,13 +1,14 @@
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { SplashScreen, useNavigationContainerRef } from 'expo-router'
+import { useNavigationContainerRef } from 'expo-router'
 import { ComponentProps, Suspense, useEffect, useState } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
-import { log, telemetryInstrumentation } from '@/telemetry'
+import { telemetryInstrumentation } from '@/telemetry'
 import { CardStyleInterpolators, Stack } from '@/ui'
 import ErrorBoundary from './ErrorBoundary'
+import hideSplashScreen from './hideSplashScreen'
 
 type StackProps = ComponentProps<typeof Stack>
 
@@ -58,11 +59,9 @@ export default function Navigator() {
     headerShown: false,
   }
 
-  const hideSplashScreen = () => {
+  const onNavigatorReady = () => {
     if (isNavigatorReady) {
-      SplashScreen.hideAsync().then(() => {
-        log.info('Splash screen hidden')
-      })
+      hideSplashScreen()
     }
   }
 
@@ -78,7 +77,7 @@ export default function Navigator() {
 
   useReactNavigationDevTools(navigationContainerRef)
 
-  useEffect(hideSplashScreen, [isNavigatorReady])
+  useEffect(onNavigatorReady, [isNavigatorReady])
 
   useEffect(() => {
     if (navigationContainerRef) {

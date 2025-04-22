@@ -1,7 +1,8 @@
-import { PropsWithChildren } from 'react'
+import { ComponentProps, PropsWithChildren, useEffect } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { Fault } from '@/ui'
+import hideSplashScreen from './hideSplashScreen'
 
 type Props = PropsWithChildren
 
@@ -15,16 +16,20 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   },
 }))
 
+function Fallback(props: ComponentProps<typeof Fault.Fallback>) {
+  useEffect(() => {
+    hideSplashScreen()
+  }, [])
+
+  return (
+    <View style={styles.fallback}>
+      <Fault.Fallback {...props} />
+    </View>
+  )
+}
+
 export default function ErrorBoundary({ children }: Props) {
   return (
-    <Fault.Boundary
-      fallbackRender={(props) => (
-        <View style={styles.fallback}>
-          <Fault.Fallback {...props} />
-        </View>
-      )}
-    >
-      {children}
-    </Fault.Boundary>
+    <Fault.Boundary FallbackComponent={Fallback}>{children}</Fault.Boundary>
   )
 }
