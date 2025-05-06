@@ -4,7 +4,7 @@ import { CollectionParameters, collection } from '../../schema/collection'
 
 export interface Collection<Name extends string = string>
   extends Omit<CollectionParameters, 'createdAt'> {
-  id: number
+  id: Exclude<CollectionParameters['id'], undefined>
   name: Name extends '' ? never : Name
 }
 

@@ -4,10 +4,11 @@ import {
   createCollectionMutation,
   updateCollectionMutation,
 } from '@/collections/operations'
+import { Collection } from '@/collections/schema'
 import { log } from '@/telemetry'
 import { onboardingCollectionQuery } from '../../operations'
 
-type Values = { id?: number; name: string }
+type Values = { id?: Collection['id']; name: Collection['name'] }
 
 interface Params {
   initialValues: Values

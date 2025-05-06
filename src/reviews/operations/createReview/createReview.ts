@@ -2,18 +2,16 @@ import { and, count, desc, eq } from 'drizzle-orm'
 import {
   fsrs,
   generatorParameters as schedulerParameters,
-  Grade,
   Rating,
   State,
 } from 'ts-fsrs'
 import { database, tracer } from '@/data/database'
-import { review, reviewableSnapshot } from '../../schema'
+import { ReviewParameters, review, reviewableSnapshot } from '../../schema'
 
-interface CreateReviewParameters {
-  reviewable: number
-  rating: Grade
-  duration: number
-}
+type CreateReviewParameters = Pick<
+  ReviewParameters,
+  'duration' | 'rating' | 'reviewable'
+>
 
 async function createReview({
   reviewable,

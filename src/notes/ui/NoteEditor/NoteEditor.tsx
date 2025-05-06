@@ -11,6 +11,7 @@ import {
 import { Pressable, View } from 'react-native'
 import { RichTextInput, Switch } from '@/ui'
 import { createNote, getNote, updateNote } from '../../operations'
+import { Note } from '../../schema'
 import CollectionPicker from './CollectionPicker'
 import styles from './NoteEditor.styles'
 
@@ -21,7 +22,7 @@ interface Ref {
 interface Props {
   value?: Partial<Awaited<ReturnType<typeof getNote>>>
   onSubmit: <T>(
-    ...args: T extends [{ id: number }]
+    ...args: T extends [{ id: Note['id'] }]
       ? Parameters<typeof updateNote>
       : Parameters<typeof createNote>
   ) => void

@@ -22,12 +22,13 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FullWindowOverlay } from 'react-native-screens'
 import { collectionsQuery } from '@/collections/operations'
+import { Collection } from '@/collections/schema'
 import { Button, Text } from '@/ui'
 import styles from './CollectionPicker.styles'
 
 interface Props {
-  onChange?: (value: number[]) => void
-  value?: number[]
+  onChange?: (value: Collection['id'][]) => void
+  value?: Collection['id'][]
 }
 
 function Backdrop(props: BottomSheetBackdropProps) {
@@ -61,7 +62,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
     enabled: isOpen,
   })
   const [selected, setSelected] = useState(
-    value.reduce<{ [key: number]: boolean }>(
+    value.reduce<{ [key: Collection['id']]: boolean }>(
       (obj, key) => ({ ...obj, [key]: true }),
       {},
     ),
@@ -85,7 +86,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
     close()
   }
 
-  const onPress = (id: number) => {
+  const onPress = (id: Collection['id']) => {
     setSelected((state) => ({ ...state, [id]: !state[id] }))
   }
 
@@ -93,7 +94,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
     if (index === -1) {
       setIsOpen(false)
       setSelected(
-        value.reduce<{ [key: number]: boolean }>(
+        value.reduce<{ [key: Collection['id']]: boolean }>(
           (obj, key) => ({ ...obj, [key]: true }),
           {},
         ),

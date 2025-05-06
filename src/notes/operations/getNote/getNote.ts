@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm'
 import { database, tracer } from '@/data/database'
-import { note } from '../../schema'
+import { Note, note } from '../../schema'
 
-async function getNote(id: number) {
+async function getNote(id: Note['id']) {
   const result = await database.query.note.findFirst({
     where: eq(note.id, id),
     with: {
