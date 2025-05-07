@@ -14,11 +14,15 @@ import useHandleNonExistentNote from './useHandleNonExistentNote'
 export default function NoteEditorScreen() {
   const noteEditorRef = useRef<ComponentRef<typeof NoteEditor>>(null)
   const { t: translate } = useLingui()
-  const { id: noteId } = useLocalSearchParams<{ id?: string }>()
+  const localSearchParams = useLocalSearchParams<{ id?: string }>()
+  const noteId =
+    typeof localSearchParams.id !== 'undefined'
+      ? Number(localSearchParams.id)
+      : undefined
   const isUpdatingNote = typeof noteId !== 'undefined'
   const router = useRouter()
   const { data: collection } = useSuspenseQuery(onboardingCollectionQuery)
-  const { data: note } = useSuspenseQuery(noteQuery(Number(noteId)))
+  const { data: note } = useSuspenseQuery(noteQuery(noteId))
 
   const { handleSubmit } = useForm({
     onSubmitSuccess: () => {
