@@ -1579,11 +1579,9 @@ describe('getNextReviews', () => {
           const { database, resetDatabaseMock } = await mockDatabase()
           const { default: getNextReviews } = await import('./getNextReviews')
 
-          await Promise.all(
-            fixture.collections?.map(
-              async (data) => await database.insert(collection).values(data),
-            ) ?? [],
-          )
+          if (fixture.collections) {
+            await database.insert(collection).values(fixture.collections)
+          }
 
           await Promise.all(
             fixture.notes?.map(async ({ collections, ...data }) => {
