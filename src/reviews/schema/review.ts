@@ -33,6 +33,19 @@ export const review = sqliteTable(
     createdAt: createdAt(),
 
     /**
+     * The offset between the local time and the UTC time of the `createdAt`
+     * timestamp.
+     *
+     * `timediff` returns a string in the format `±YYYY-MM-DD HH:MM:SS.mmm`
+     * however only the `±HH:MM` part is needed.
+     */
+    createdAtOffset: text('created_at_offset')
+      .notNull()
+      .default(
+        sql`(replace(replace(timediff(datetime('now', 'localtime'), datetime('now')), '0000-00-00 ', ''), ':00.000', ''))`,
+      ),
+
+    /**
      * Determines if a small pseudo-random delay is added to the due date of the
      * next review. This is to minimise groups of the same reviewables appearing
      * together in the same reviews. The delay is pseudo-random because the random
@@ -93,6 +106,7 @@ export const review = sqliteTable(
     weights: text({ mode: 'json' }).notNull(),
   },
   ({
+    createdAtOffset,
     rating,
     duration,
     dueFuzzed,
@@ -101,6 +115,13 @@ export const review = sqliteTable(
     retention,
     weights,
   }) => [
+    check(
+      'review_created_at_offset_is_valid',
+      sql`(
+        glob('[+-][0-1][0-9]:[0-5][0-9]', ${createdAtOffset}) or
+        glob('[+-]2[0-3]:[0-5][0-9]', ${createdAtOffset})
+      )`,
+    ),
     /**
      * A constraint to check the rating is valid. Each number represents the
      * following rating:

@@ -234,6 +234,67 @@ describe('`review` table', () => {
     })
   })
 
+  describe('`created_at_offset` column', () => {
+    it('is a string in the format `±HH:MM` where the `HH` value is less than 24 and the `mm` value is less than 60', async () => {
+      const checkConstraintFailed = expect.objectContaining({
+        message: expect.stringContaining('CHECK constraint failed'),
+      })
+
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '+00:00' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '-00:00' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '+19:00' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '-19:00' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '+19:59' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '-19:59' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '+23:59' }),
+      ).toResolve()
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '-23:59' }),
+      ).toResolve()
+
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '+00:60' }),
+      ).rejects.toEqual(checkConstraintFailed)
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '-00:60' }),
+      ).rejects.toEqual(checkConstraintFailed)
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '+24:00' }),
+      ).rejects.toEqual(checkConstraintFailed)
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: '-24:00' }),
+      ).rejects.toEqual(checkConstraintFailed)
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: 'alpha' }),
+      ).rejects.toEqual(checkConstraintFailed)
+    })
+
+    it('cannot be `null`', async () => {
+      await expect(
+        insertReview({ ...reviewMock, createdAtOffset: null }),
+      ).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.created_at_offset',
+          ),
+        }),
+      )
+    })
+  })
+
   describe('`is_due_fuzzed` column', () => {
     it('is a boolean', async () => {
       const insertReviewWithIsDueFuzzed = async (dueFuzzed: any) =>
