@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "6f59fc0d-f0de-4c00-a59e-149aca79f327",
+  "id": "bce4d377-db8b-44ac-9b17-9d0543ae477f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "collection": {
@@ -276,6 +276,14 @@
           "autoincrement": false,
           "default": "(unixepoch('now', 'subsec') * 1000)"
         },
+        "created_at_offset": {
+          "name": "created_at_offset",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(replace(replace(timediff(datetime('now', 'localtime'), datetime('now')), '0000-00-00 ', ''), ':00.000', ''))"
+        },
         "is_due_fuzzed": {
           "name": "is_due_fuzzed",
           "type": "integer",
@@ -327,6 +335,10 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {
+        "review_created_at_offset_is_valid": {
+          "name": "review_created_at_offset_is_valid",
+          "value": "(\n        glob('[+-][0-1][0-9]:[0-5][0-9]', \"review\".\"created_at_offset\") or\n        glob('[+-]2[0-3]:[0-5][0-9]', \"review\".\"created_at_offset\")\n      )"
+        },
         "review_rating_is_valid": {
           "name": "review_rating_is_valid",
           "value": "\"review\".\"rating\" IN (0, 1, 2, 3, 4)"

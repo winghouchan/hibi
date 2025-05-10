@@ -44,12 +44,17 @@ CREATE TABLE `review` (
 	`rating` integer NOT NULL,
 	`duration` integer NOT NULL,
 	`created_at` integer DEFAULT (unixepoch('now', 'subsec') * 1000) NOT NULL,
+	`created_at_offset` text DEFAULT (replace(replace(timediff(datetime('now', 'localtime'), datetime('now')), '0000-00-00 ', ''), ':00.000', '')) NOT NULL,
 	`is_due_fuzzed` integer NOT NULL,
 	`is_learning_enabled` integer NOT NULL,
 	`max_interval` integer NOT NULL,
 	`retention` integer NOT NULL,
 	`weights` text NOT NULL,
 	FOREIGN KEY (`reviewable`) REFERENCES `reviewable`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "review_created_at_offset_is_valid" CHECK((
+        glob('[+-][0-1][0-9]:[0-5][0-9]', "review"."created_at_offset") or
+        glob('[+-]2[0-3]:[0-5][0-9]', "review"."created_at_offset")
+      )),
 	CONSTRAINT "review_rating_is_valid" CHECK("review"."rating" IN (0, 1, 2, 3, 4)),
 	CONSTRAINT "review_duration_greater_than_zero" CHECK("review"."duration" > 0),
 	CONSTRAINT "review_is_due_fuzzed_is_boolean" CHECK("review"."is_due_fuzzed" IN (true, false)),

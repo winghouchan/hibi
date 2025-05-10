@@ -16,6 +16,9 @@ function mockReview() {
   }
 }
 
+const now = new Date()
+const offset = now.getTimezoneOffset()
+
 describe('getCurrentStreak', () => {
   test.each([
     {
@@ -41,8 +44,8 @@ describe('getCurrentStreak', () => {
             id: 1,
             note: 1,
             reviews: [
-              { createdAt: sub(new Date(), { days: 2 }) },
-              { createdAt: sub(new Date(), { days: 3 }) },
+              { createdAt: sub(now, { days: 2 }) },
+              { createdAt: sub(now, { days: 3 }) },
             ],
           },
         ],
@@ -57,7 +60,7 @@ describe('getCurrentStreak', () => {
           {
             id: 1,
             note: 1,
-            reviews: [{ createdAt: new Date() }],
+            reviews: [{ createdAt: now }],
           },
         ],
       },
@@ -71,7 +74,7 @@ describe('getCurrentStreak', () => {
           {
             id: 1,
             note: 1,
-            reviews: [{ createdAt: new Date() }, { createdAt: new Date() }],
+            reviews: [{ createdAt: now }, { createdAt: now }],
           },
         ],
       },
@@ -85,7 +88,7 @@ describe('getCurrentStreak', () => {
           {
             id: 1,
             note: 1,
-            reviews: [{ createdAt: sub(new Date(), { days: 1 }) }],
+            reviews: [{ createdAt: sub(now, { days: 1 }) }],
           },
         ],
       },
@@ -100,8 +103,8 @@ describe('getCurrentStreak', () => {
             id: 1,
             note: 1,
             reviews: [
-              { createdAt: sub(new Date(), { days: 1 }) },
-              { createdAt: sub(new Date(), { days: 1 }) },
+              { createdAt: sub(now, { days: 1 }) },
+              { createdAt: sub(now, { days: 1 }) },
             ],
           },
         ],
@@ -116,10 +119,7 @@ describe('getCurrentStreak', () => {
           {
             id: 1,
             note: 1,
-            reviews: [
-              { createdAt: new Date() },
-              { createdAt: sub(new Date(), { days: 1 }) },
-            ],
+            reviews: [{ createdAt: now }, { createdAt: sub(now, { days: 1 }) }],
           },
         ],
       },
@@ -134,8 +134,8 @@ describe('getCurrentStreak', () => {
             id: 1,
             note: 1,
             reviews: [
-              { createdAt: sub(new Date(), { days: 1 }) },
-              { createdAt: sub(new Date(), { days: 2 }) },
+              { createdAt: sub(now, { days: 1 }) },
+              { createdAt: sub(now, { days: 2 }) },
             ],
           },
         ],
@@ -151,10 +151,10 @@ describe('getCurrentStreak', () => {
             id: 1,
             note: 1,
             reviews: [
-              { createdAt: new Date() },
-              { createdAt: sub(new Date(), { days: 1 }) },
-              { createdAt: sub(new Date(), { days: 3 }) },
-              { createdAt: sub(new Date(), { days: 4 }) },
+              { createdAt: now },
+              { createdAt: sub(now, { days: 1 }) },
+              { createdAt: sub(now, { days: 3 }) },
+              { createdAt: sub(now, { days: 4 }) },
             ],
           },
         ],
@@ -170,10 +170,66 @@ describe('getCurrentStreak', () => {
             id: 1,
             note: 1,
             reviews: [
-              { createdAt: sub(new Date(), { days: 1 }) },
-              { createdAt: sub(new Date(), { days: 2 }) },
-              { createdAt: sub(new Date(), { days: 4 }) },
-              { createdAt: sub(new Date(), { days: 5 }) },
+              { createdAt: sub(now, { days: 1 }) },
+              { createdAt: sub(now, { days: 2 }) },
+              { createdAt: sub(now, { days: 4 }) },
+              { createdAt: sub(now, { days: 5 }) },
+            ],
+          },
+        ],
+      },
+      expected: 2,
+    },
+    {
+      name: 'when reviews are completed in consecutive localized days across timezones and the last review was completed today, returns the number of localized days reviews have been consecutively completed from today',
+      fixture: {
+        notes: [{ id: 1, collections: [1] }],
+        reviewables: [
+          {
+            id: 1,
+            note: 1,
+            reviews: [
+              { createdAt: now },
+              {
+                /**
+                 * Subtract approximately 2 days from now and add an offset of approximately 1 day.
+                 * This means, in UTC, there is a gap of approximately 2 days from the next review;
+                 * but, when the dates are localized, it appears to be 1 day.
+                 */
+                createdAt: sub(now, {
+                  days: 2,
+                  minutes: offset, // This accounts for the timezone of the system running the test
+                }),
+                createdAtOffset: '+23:59',
+              },
+            ],
+          },
+        ],
+      },
+      expected: 2,
+    },
+    {
+      name: 'when reviews are completed in consecutive localized days across timezones and the last review was completed yesterday, returns the number of localized days reviews have been consecutively completed from yesterday',
+      fixture: {
+        notes: [{ id: 1, collections: [1] }],
+        reviewables: [
+          {
+            id: 1,
+            note: 1,
+            reviews: [
+              { createdAt: sub(now, { days: 1 }) },
+              {
+                /**
+                 * Subtract approximately 3 days from now and add an offset of approximately 1 day.
+                 * This means, in UTC, there is a gap of approximately 2 days from the next review;
+                 * but, when the dates are localized, it appears to be 1 day.
+                 */
+                createdAt: sub(now, {
+                  days: 3,
+                  minutes: offset, // This accounts for the timezone of the system running the test
+                }),
+                createdAtOffset: '+23:59',
+              },
             ],
           },
         ],
