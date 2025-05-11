@@ -1,3 +1,6 @@
+# Works around an issue where the bottom sheet does not open when React's Strict Mode is enabled
+# See https://github.com/gorhom/react-native-bottom-sheet/issues/2155.
+
 diff --git a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetContainer/BottomSheetContainer.tsx b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetContainer/BottomSheetContainer.tsx
 index 0716ecd..061dace 100644
 --- a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheetContainer/BottomSheetContainer.tsx
