@@ -1,3 +1,6 @@
+# Fixes an issue where starting a transaction empties an in-memory database.
+# See https://github.com/tursodatabase/libsql-client-ts/issues/229.
+
 diff --git a/node_modules/@libsql/client/lib-cjs/sqlite3.js b/node_modules/@libsql/client/lib-cjs/sqlite3.js
 index f479612..5bb7f4d 100644
 --- a/node_modules/@libsql/client/lib-cjs/sqlite3.js
