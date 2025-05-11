@@ -4,5 +4,16 @@
   "semi": false,
   "singleQuote": true,
   "trailingComma": "all",
-  "useTabs": false
+  "useTabs": false,
+
+  "plugins": ["prettier-plugin-sql-cst"],
+  "overrides": [
+    {
+      "files": ["*.sql"],
+      "options": {
+        "sqlCanonicalSyntax": true,
+        "sqlKeywordCase": "lower"
+      }
+    }
+  ]
 }

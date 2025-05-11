@@ -153,6 +153,7 @@
     "jest-fail-on-console": "^3.3.1",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
+    "prettier-plugin-sql-cst": "^0.13.0",
     "react-test-renderer": "18.2.0",
     "reassure": "^1.4.0",
     "storybook": "^8.6.3",

@@ -1,0 +1,24 @@
+# SQLite does not support multiple DDL statements in a single transaction. As a result, Drizzle
+# inserts a comment (`--> statement-breakpoint`) between each DDL statement in the migration file
+# so that it can split the contents of the migration file and run each statement one-by-one. See
+# https://orm.drizzle.team/docs/drizzle-config-file#breakpoints.
+#
+# The linter inserts a space between the `--` and the `>` in the comment which causes migrations
+# to fail. This patch modifies Drizzle's CLI to insert a space between the `--` and the `>` in the
+# comment instead of relying on the linter to do so.
+#
+# Related: https://github.com/drizzle-team/drizzle-orm/issues/3218.
+
+diff --git a/node_modules/drizzle-kit/bin.cjs b/node_modules/drizzle-kit/bin.cjs
+index c795693..74cf475 100755
+--- a/node_modules/drizzle-kit/bin.cjs
++++ b/node_modules/drizzle-kit/bin.cjs
+@@ -34538,7 +34538,7 @@ var init_migrate = __esm({
+       result.deleted.push(...leftMissing);
+       return result;
+     };
+-    BREAKPOINT = "--> statement-breakpoint\n";
++    BREAKPOINT = "-- > statement-breakpoint\n";
+     writeResult = ({
+       cur,
+       sqlStatements,
