@@ -1,3 +1,3 @@
-CREATE TABLE `mock` (
-	`mock_column` integer PRIMARY KEY NOT NULL
+create table `mock` (
+  `mock_column` integer primary key not null
 );
