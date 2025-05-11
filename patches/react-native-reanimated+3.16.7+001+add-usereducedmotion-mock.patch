@@ -1,3 +1,5 @@
+# Adds a mock for `useReducedMotion`.
+
 diff --git a/node_modules/react-native-reanimated/src/mock.ts b/node_modules/react-native-reanimated/src/mock.ts
 index 3d8e3f8..0d5835e 100644
 --- a/node_modules/react-native-reanimated/src/mock.ts
