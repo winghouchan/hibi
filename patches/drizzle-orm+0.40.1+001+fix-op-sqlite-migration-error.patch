@@ -1,3 +1,6 @@
+# Fix "table already exists" error when applying migrations in OP SQLite.
+# See https://github.com/drizzle-team/drizzle-orm/issues/3821.
+
 diff --git a/node_modules/drizzle-orm/op-sqlite/migrator.js b/node_modules/drizzle-orm/op-sqlite/migrator.js
 index 02354ae..28f71a9 100644
 --- a/node_modules/drizzle-orm/op-sqlite/migrator.js
