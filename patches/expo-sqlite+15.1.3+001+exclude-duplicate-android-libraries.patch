@@ -1,3 +1,6 @@
+# Fixes Android build failing due to some duplicate library files being found.
+# See https://github.com/expo/expo/issues/28887.
+
 diff --git a/node_modules/expo-sqlite/android/build.gradle b/node_modules/expo-sqlite/android/build.gradle
 index a0827eb..606224d 100644
 --- a/node_modules/expo-sqlite/android/build.gradle
