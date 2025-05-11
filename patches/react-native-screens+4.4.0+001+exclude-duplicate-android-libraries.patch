@@ -1,3 +1,5 @@
+# Fixes Android build failing due to some duplicate library files being found.
+
 diff --git a/node_modules/react-native-screens/android/build.gradle b/node_modules/react-native-screens/android/build.gradle
 index 909ba77..5cb9568 100644
 --- a/node_modules/react-native-screens/android/build.gradle
