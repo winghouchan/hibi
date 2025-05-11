@@ -1,3 +1,5 @@
+# Adds support for OP SQLite.
+
 diff --git a/node_modules/expo-drizzle-studio-plugin/build/useDrizzleStudio.js b/node_modules/expo-drizzle-studio-plugin/build/useDrizzleStudio.js
 index de7b02d..511f317 100644
 --- a/node_modules/expo-drizzle-studio-plugin/build/useDrizzleStudio.js
