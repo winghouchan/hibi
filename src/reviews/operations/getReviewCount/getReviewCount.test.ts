@@ -1,3 +1,4 @@
+import { sub } from 'date-fns'
 import { random } from 'lodash'
 import { note } from '@/notes/schema'
 import { review, reviewable } from '@/reviews/schema'
@@ -31,7 +32,53 @@ describe('getReviewCount', () => {
       },
       expected: 1,
     },
-  ])('$name', async ({ expected, fixture }) => {
+    {
+      name: 'when the `from` filter is specified, returns the number of reviews completed after and including the `from` date',
+      fixture: {
+        reviews: [
+          { createdAt: sub(new Date(), { days: 2 }) },
+          { createdAt: sub(new Date(), { days: 1 }) },
+          { createdAt: new Date() },
+        ],
+      },
+      input: {
+        from: sub(new Date(), { days: 1 }),
+      },
+      expected: 2,
+    },
+    {
+      name: 'when the `to` filter is specified, returns the number of reviews completed before and excluding the `to` date',
+      fixture: {
+        reviews: [
+          { createdAt: sub(new Date(), { days: 2 }) },
+          { createdAt: sub(new Date(), { days: 1, seconds: 1 }) },
+          { createdAt: sub(new Date(), { days: 1 }) },
+          { createdAt: new Date() },
+        ],
+      },
+      input: {
+        to: sub(new Date(), { days: 1 }),
+      },
+      expected: 2,
+    },
+    {
+      name: 'when the `from` and `to` filters are specified, returns the number of reviews completed after and including the `from` date and before and excluding the `to` date',
+      fixture: {
+        reviews: [
+          { createdAt: sub(new Date(), { days: 3 }) },
+          { createdAt: sub(new Date(), { days: 2 }) },
+          { createdAt: sub(new Date(), { days: 1, seconds: 1 }) },
+          { createdAt: sub(new Date(), { days: 1 }) },
+          { createdAt: new Date() },
+        ],
+      },
+      input: {
+        from: sub(new Date(), { days: 2 }),
+        to: sub(new Date(), { days: 1 }),
+      },
+      expected: 2,
+    },
+  ])('$name', async ({ expected, fixture, input }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
     const { default: getReviewCount } = await import('./getReviewCount')
 
@@ -51,7 +98,7 @@ describe('getReviewCount', () => {
       )
     }
 
-    const output = await getReviewCount()
+    const output = await getReviewCount(input)
 
     expect(output).toEqual(expected)
 
