@@ -1,1 +1,1 @@
-export { HomeScreen as default } from '@/home'
+export { HomeScreen as default } from '@/home/ui'
