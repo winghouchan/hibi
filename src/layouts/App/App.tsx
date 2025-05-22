@@ -23,6 +23,7 @@ export default function AppLayout() {
           </ErrorBoundary>
         )}
       >
+        <Stack.Screen name="(modal)" options={{ presentation: 'modal' }} />
         <Stack.Screen
           name="review"
           options={({ navigation }) => ({

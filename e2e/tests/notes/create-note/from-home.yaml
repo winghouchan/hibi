@@ -2,7 +2,6 @@ name: '[Notes] When creating a note > it can be created via the home screen'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete
-  collectionName: Collection Name
   front: Front 1
   back: Back 1
   reversible: true
@@ -21,7 +20,6 @@ env:
 - runFlow:
     file: ../__subflows__/create-note.yaml
     env:
-      collection: ${collectionName}
       front: ${front}
       back: ${back}
       reversible: ${reversible}

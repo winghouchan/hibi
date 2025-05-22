@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
 import { View } from 'react-native'
-import { mockCollections, mockCollectionsError } from '@/collections/test'
+import { mockActiveCollection, mockActiveCollectionError } from '@/home/test'
 import { mockNextReviews, mockNextReviewsError } from '@/reviews/test'
 import { mockAppRoot } from 'test/utils'
 import HomeScreen from './HomeScreen'
@@ -28,9 +28,7 @@ describe('<HomeScreen />', () => {
     {
       name: 'when there are due reviewables, shows the link to start a review',
       fixture: {
-        collections: [
-          { id: 1, name: 'Collection Name', createdAt: new Date() },
-        ],
+        collection: { id: 1, name: 'Collection Name', createdAt: new Date() },
         reviewables: [
           {
             id: 1,
@@ -47,9 +45,7 @@ describe('<HomeScreen />', () => {
     {
       name: 'when there are no due reviewables, does not show the link to start a review',
       fixture: {
-        collections: [
-          { id: 1, name: 'Collection Name', createdAt: new Date() },
-        ],
+        collection: { id: 1, name: 'Collection Name', createdAt: new Date() },
         reviewables: [],
       },
       expected: async () => {
@@ -59,11 +55,8 @@ describe('<HomeScreen />', () => {
       },
     },
   ])('$name', async ({ expected, fixture }) => {
+    mockActiveCollection(fixture.collection)
     mockNextReviews({ reviewables: fixture.reviewables })
-    mockCollections({
-      cursor: { next: undefined },
-      collections: fixture.collections,
-    })
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
@@ -72,12 +65,16 @@ describe('<HomeScreen />', () => {
     await waitFor(expected)
   })
 
-  test('when there is an error getting the collections, an error message is shown', async () => {
+  test('when there is an error getting the next review, an error message is shown', async () => {
     // Suppress console error from the error mock
     jest.spyOn(console, 'error').mockImplementation()
 
-    mockCollectionsError(new Error('Mock Error'))
-    mockNextReviews({ reviewables: [] })
+    mockActiveCollection({
+      id: 1,
+      name: 'Collection Name',
+      createdAt: new Date(),
+    })
+    mockNextReviewsError(new Error('Mock Error'))
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
@@ -86,15 +83,12 @@ describe('<HomeScreen />', () => {
     ).toBeOnTheScreen()
   })
 
-  test('when there is an error getting the next review, an error message is shown', async () => {
+  test('when there is an error getting the active collection, an error message is shown', async () => {
     // Suppress console error from the error mock
     jest.spyOn(console, 'error').mockImplementation()
 
-    mockCollections({
-      cursor: { next: undefined },
-      collections: [{ id: 1, name: 'Collection Name', createdAt: new Date() }],
-    })
-    mockNextReviewsError(new Error('Mock Error'))
+    mockActiveCollectionError(new Error('Mock Error'))
+    mockNextReviews({ reviewables: [] })
 
     renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 

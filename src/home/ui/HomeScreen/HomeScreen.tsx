@@ -1,12 +1,11 @@
 import { useLingui } from '@lingui/react/macro'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
-import { useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
-import { CollectionFilter } from '@/collections/ui'
 import { nextReviewsQuery } from '@/reviews/operations'
-import { Button } from '@/ui'
+import { Button, Text } from '@/ui'
+import useActiveCollection from './useActiveCollection'
 
 const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }, { insets, screen }) => ({
@@ -35,11 +34,11 @@ const styles = StyleSheet.create(
 
 export default function HomeScreen() {
   const { t: translate } = useLingui()
-  const [collection, setCollection] = useState<number | undefined>(undefined)
+  const collection = useActiveCollection()
   const { data } = useSuspenseInfiniteQuery(
     nextReviewsQuery({
       filter: {
-        ...(collection && { collections: [collection] }),
+        collections: [collection.id],
         due: true,
       },
     }),
@@ -48,17 +47,20 @@ export default function HomeScreen() {
 
   return (
     <View testID="home.screen" style={styles.screen}>
-      <CollectionFilter onChange={setCollection} value={collection} />
       <View style={styles.padding}>
+        <Link
+          href="/(onboarded)/(modal)/collections"
+          testID="home.collection-menu.link"
+        >
+          <Text>{collection.name}</Text>
+        </Link>
         <View style={styles.callout}>
           {hasDueReview && (
             <Link
               testID="home.screen.cta"
               href={{
                 pathname: '/review',
-                params: {
-                  ...(collection && { collections: [collection] }),
-                },
+                params: { collections: [collection.id] },
               }}
               asChild
             >
@@ -69,11 +71,7 @@ export default function HomeScreen() {
         <Link
           href={{
             pathname: '/notes/new',
-            params: {
-              ...(typeof collection !== 'undefined' && {
-                collections: [collection],
-              }),
-            },
+            params: { collections: [collection.id] },
           }}
           testID="home.note.create"
           asChild
@@ -88,7 +86,7 @@ export default function HomeScreen() {
             href={{
               pathname: '/collections/[id]/edit',
               params: {
-                id: collection,
+                id: collection.id,
               },
             }}
             testID="home.collection.edit"

@@ -70,6 +70,7 @@ module.exports = {
           {
             ignore: [
               'use no memo', // React Compiler opt-out directive
+              'set null', // Foreign key action configuration option
             ],
             ignoreFunction: [
               'Error',

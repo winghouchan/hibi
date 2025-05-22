@@ -6,6 +6,7 @@ import AppLayout from './App'
 
 const routerMock = {
   '(not-onboarded)/index': () => null,
+  '(onboarded)/(modal)/_layout': () => null,
   '(onboarded)/_layout': AppLayout,
   '(onboarded)/index': () => null,
   '(onboarded)/review': () => null,

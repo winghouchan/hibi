@@ -154,5 +154,9 @@ create index `index_reviewable_snapshot_reviewable` on `reviewable_snapshot` (
 create table `user` (
   `id` integer primary key autoincrement not null,
   `created_at` integer default (unixepoch('now', 'subsec') * 1000) not null,
-  `is_onboarded` integer default false not null
+  `active_collection` integer,
+  `is_onboarded` integer default false not null,
+  foreign key (`active_collection`) references `collection` (`id`)
+    on update no action
+    on delete set null
 );

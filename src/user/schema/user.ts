@@ -1,6 +1,7 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
+import { activeCollection } from '@/home/schema'
 import { onboarded } from '@/onboarding/schema'
 
 export const user = sqliteTable('user', {
@@ -8,6 +9,7 @@ export const user = sqliteTable('user', {
 
   createdAt: createdAt(),
 
+  activeCollection,
   onboarded,
 })
 

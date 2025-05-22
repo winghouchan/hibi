@@ -1,0 +1,34 @@
+name: '[Home] When multiple collections exist, it is possible to switch between them'
+appId: ${appId}
+env:
+  databaseFixture: home/multiple-collections
+  collectionName: Test Collection 2
+---
+- runFlow:
+    file: ../../../fixtures/loadDatabaseFixture.yaml
+    env:
+      databaseFixture: ${databaseFixture}
+
+- launchApp
+
+- tapOn:
+    id: home.collection-menu.link
+
+- tapOn:
+    text: ${collectionName}
+
+- assertVisible:
+    id: home.screen
+
+- assertVisible:
+    text: ${collectionName}
+
+- stopApp
+
+- launchApp
+
+- assertVisible:
+    id: home.screen
+
+- assertVisible:
+    text: ${collectionName}

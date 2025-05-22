@@ -56,6 +56,20 @@ describe('`user` table', () => {
     })
   })
 
+  describe('`active_collection` column', () => {
+    test('when not `null`, must reference a collection', async () => {
+      await expect(insertUser({ activeCollection: 0 })).rejects.toEqual(
+        expect.objectContaining({
+          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+        }),
+      )
+    })
+
+    it('can be `null`', async () => {
+      await expect(insertUser({ activeCollection: null })).toResolve()
+    })
+  })
+
   describe('`is_onboarded` column', () => {
     it('is a boolean', async () => {
       const insertUserWithIsOnboarded = async (onboarded: any) =>

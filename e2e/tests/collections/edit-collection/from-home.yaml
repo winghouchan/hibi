@@ -13,9 +13,6 @@ env:
 - launchApp
 
 - tapOn:
-    text: ${oldCollectionName}
-
-- tapOn:
     id: home.collection.edit.button
 
 - runFlow:

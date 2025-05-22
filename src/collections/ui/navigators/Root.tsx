@@ -26,6 +26,7 @@ export default function RootCollectionNavigator() {
           ) : null,
       })}
     >
+      <Stack.Screen name="index" options={{ presentation: 'modal' }} />
       <Stack.Screen name="[id]" options={{ headerShown: false }} />
     </Stack>
   )

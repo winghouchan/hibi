@@ -1,0 +1,5 @@
+flows:
+  - '**'
+
+excludeTags:
+  - subflow

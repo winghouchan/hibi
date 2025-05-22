@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d302c940-0a93-4dc7-be14-e924cfb2815c",
+  "id": "7dc25c7f-9a70-4948-8d62-951339330136",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "collection": {
@@ -623,6 +623,13 @@
           "autoincrement": false,
           "default": "(unixepoch('now', 'subsec') * 1000)"
         },
+        "active_collection": {
+          "name": "active_collection",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "is_onboarded": {
           "name": "is_onboarded",
           "type": "integer",
@@ -633,7 +640,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_active_collection_collection_id_fk": {
+          "name": "user_active_collection_collection_id_fk",
+          "tableFrom": "user",
+          "tableTo": "collection",
+          "columnsFrom": ["active_collection"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
