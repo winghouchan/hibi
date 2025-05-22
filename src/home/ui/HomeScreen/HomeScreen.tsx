@@ -1,10 +1,10 @@
 import { useLingui } from '@lingui/react/macro'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
-import { View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { nextReviewsQuery } from '@/reviews/operations'
-import { Button, Text } from '@/ui'
+import { Button, Icon, Text } from '@/ui'
 import useActiveCollection from './useActiveCollection'
 
 const styles = StyleSheet.create(
@@ -48,12 +48,36 @@ export default function HomeScreen() {
   return (
     <View testID="home.screen" style={styles.screen}>
       <View style={styles.padding}>
-        <Link
-          href="/(onboarded)/(modal)/collections"
-          testID="home.collection-menu.link"
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
         >
-          <Text>{collection.name}</Text>
-        </Link>
+          <View>
+            <Link
+              href="/(onboarded)/(modal)/collections"
+              testID="home.collection-menu.link"
+            >
+              <Text>{collection.name}</Text>
+            </Link>
+          </View>
+          <View>
+            <Link
+              href={{
+                pathname: '/notes/new',
+                params: { collections: [collection.id] },
+              }}
+              testID="home.note.create.button"
+              asChild
+            >
+              <Pressable accessibilityLabel={translate`Add note`}>
+                <Icon name="plus" />
+              </Pressable>
+            </Link>
+          </View>
+        </View>
         <View style={styles.callout}>
           {hasDueReview && (
             <Link
@@ -68,19 +92,6 @@ export default function HomeScreen() {
             </Link>
           )}
         </View>
-        <Link
-          href={{
-            pathname: '/notes/new',
-            params: { collections: [collection.id] },
-          }}
-          testID="home.note.create"
-          asChild
-        >
-          <Button
-            action="neutral"
-            priority="medium"
-          >{translate`Add note`}</Button>
-        </Link>
         {typeof collection !== 'undefined' && (
           <Link
             href={{
