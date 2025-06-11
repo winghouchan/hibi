@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native-unistyles'
 
 const styles = StyleSheet.create((theme, { insets }) => ({
   view: {
-    paddingLeft: insets.left + theme.spacing[4],
-    paddingRight: insets.right + theme.spacing[4],
+    paddingLeft: insets.left + theme.spacing.normal,
+    paddingRight: insets.right + theme.spacing.normal,
     paddingBottom: insets.bottom,
   },
 }))

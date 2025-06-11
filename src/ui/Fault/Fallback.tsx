@@ -10,12 +10,12 @@ type Props = FallbackProps & Pick<ViewProps, 'testID'>
 const styles = StyleSheet.create(({ spacing }) => ({
   container: {
     flex: 1,
-    gap: spacing[4],
+    gap: spacing.normal,
     justifyContent: 'space-between',
   },
 
   description: {
-    gap: spacing[2],
+    gap: spacing.condensed,
   },
 }))
 

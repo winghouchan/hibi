@@ -13,7 +13,7 @@ const styles = StyleSheet.create(({ colors, radii, spacing }) => ({
     alignItems: 'baseline',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
+    paddingHorizontal: spacing.normal,
   },
   list: {
     flex: 1,

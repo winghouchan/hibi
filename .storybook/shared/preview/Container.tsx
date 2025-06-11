@@ -10,7 +10,7 @@ const style = StyleSheet.create(({ spacing }) => ({
     flex: 1,
   },
   content: {
-    gap: spacing[4],
+    gap: spacing.normal,
 
     variants: {
       /**
@@ -21,7 +21,7 @@ const style = StyleSheet.create(({ spacing }) => ({
        */
       layout: {
         default: {
-          padding: spacing[4],
+          padding: spacing.normal,
         },
 
         centered: {
@@ -31,11 +31,11 @@ const style = StyleSheet.create(({ spacing }) => ({
         },
 
         fullscreen: {
-          padding: spacing[0],
+          padding: spacing.none,
         },
 
         padded: {
-          padding: spacing[4],
+          padding: spacing.normal,
         },
       },
     },

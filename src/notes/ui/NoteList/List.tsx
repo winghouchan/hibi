@@ -22,8 +22,8 @@ function isSupportedBreakpoint(
 
 const styles = StyleSheet.create(({ spacing }) => ({
   contentContainer: {
-    paddingLeft: spacing[4] - spacing[3] / 2,
-    paddingRight: spacing[4] - spacing[3] / 2,
+    paddingLeft: spacing.normal - spacing.condensed / 2,
+    paddingRight: spacing.normal - spacing.condensed / 2,
   },
 
   item: {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create(({ spacing }) => ({
       medium: `${(1 / columnsByBreakpoint.medium) * 100}%`,
       large: `${(1 / columnsByBreakpoint.large) * 100}%`,
     },
-    padding: spacing[3] / 2,
+    padding: spacing.condensed / 2,
   },
 }))
 

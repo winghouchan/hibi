@@ -10,8 +10,8 @@ import { Text } from '@/ui'
 const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }) => ({
     container: {
-      gap: spacing[2],
-      paddingInline: spacing[4],
+      gap: spacing.condensed,
+      paddingInline: spacing.spacious,
     },
 
     chip: (selected: boolean) => ({
@@ -19,8 +19,8 @@ const styles = StyleSheet.create(
       borderColor: colors.neutral[0].border[selected ? 1 : 0],
       borderWidth: borderWidths[2],
       borderRadius: radii[4],
-      paddingHorizontal: spacing[4],
-      paddingVertical: spacing[2],
+      paddingHorizontal: spacing.spacious,
+      paddingVertical: spacing.condensed,
     }),
   }),
 )

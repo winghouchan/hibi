@@ -11,13 +11,13 @@ const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }, { insets, screen }) => ({
     screen: {
       flex: 1,
-      gap: spacing[4],
-      paddingTop: insets.top + spacing[2],
+      gap: spacing.spacious,
+      paddingTop: insets.top + spacing.condensed,
     },
 
     padding: {
-      gap: spacing[4],
-      paddingHorizontal: spacing[4],
+      gap: spacing.spacious,
+      paddingHorizontal: spacing.spacious,
     },
 
     callout: {
@@ -25,9 +25,9 @@ const styles = StyleSheet.create(
       borderColor: colors.neutral[0].border[0],
       borderWidth: borderWidths[2],
       borderRadius: radii[4],
-      height: (screen.height - insets.top - spacing[7] * 2) / 2,
+      height: (screen.height - insets.top - spacing.spacious * 2) / 2,
       justifyContent: 'flex-end',
-      padding: spacing[4],
+      padding: spacing.spacious,
     },
   }),
 )

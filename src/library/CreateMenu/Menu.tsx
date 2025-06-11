@@ -9,10 +9,10 @@ const styles = StyleSheet.create(({ colors, spacing }, { insets }) => ({
   view: {
     backgroundColor: colors.neutral[0].background,
     flex: 1,
-    gap: spacing[2],
+    gap: spacing.condensed,
     paddingBottom: insets.bottom,
-    paddingLeft: insets.left + spacing[4],
-    paddingRight: insets.right + spacing[4],
+    paddingLeft: insets.left + spacing.spacious,
+    paddingRight: insets.right + spacing.spacious,
   },
 }))
 

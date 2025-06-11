@@ -8,10 +8,10 @@ type Props = PropsWithChildren
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   fallback: {
     flex: 1,
-    paddingTop: spacing[4],
+    paddingTop: spacing.normal,
     paddingBottom: insets.bottom,
-    paddingLeft: insets.left + spacing[4],
-    paddingRight: insets.right + spacing[4],
+    paddingLeft: insets.left + spacing.normal,
+    paddingRight: insets.right + spacing.normal,
   },
 }))
 

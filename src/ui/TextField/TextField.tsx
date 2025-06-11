@@ -12,7 +12,7 @@ type Props = ComponentProps<typeof TextInput> & {
 
 const styles = StyleSheet.create(({ colors, spacing, text }) => ({
   view: {
-    gap: spacing[2],
+    gap: spacing.condensed,
     width: '100%',
   },
 

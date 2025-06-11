@@ -4,11 +4,11 @@ export default StyleSheet.create((theme, { insets }) => {
   return {
     header: {
       flexDirection: 'row',
-      gap: theme.spacing[3],
-      paddingTop: insets.top + theme.spacing[2],
-      paddingLeft: insets.left + theme.spacing[4],
-      paddingRight: insets.right + theme.spacing[4],
-      paddingBottom: theme.spacing[2],
+      gap: theme.spacing.normal,
+      paddingTop: insets.top + theme.spacing.condensed,
+      paddingLeft: insets.left + theme.spacing.normal,
+      paddingRight: insets.right + theme.spacing.normal,
+      paddingBottom: theme.spacing.condensed,
     },
 
     progress: {

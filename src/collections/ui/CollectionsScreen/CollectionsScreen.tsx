@@ -17,7 +17,7 @@ import { Text } from '@/ui'
 
 const styles = StyleSheet.create((theme) => ({
   list: {
-    padding: theme.spacing[4],
+    padding: theme.spacing.normal,
   },
 
   item: (selected: boolean) => ({

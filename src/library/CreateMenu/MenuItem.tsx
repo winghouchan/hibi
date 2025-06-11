@@ -12,12 +12,12 @@ const styles = StyleSheet.create(({ colors, radii, spacing }) => ({
   item: {
     backgroundColor: colors.neutral[1].background,
     borderRadius: radii[4],
-    padding: spacing[2],
+    padding: spacing.condensed,
     flex: 1,
   },
 
   content: {
-    gap: spacing[2],
+    gap: spacing.condensed,
     flexDirection: 'row',
   },
 

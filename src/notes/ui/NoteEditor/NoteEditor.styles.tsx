@@ -12,8 +12,8 @@ const styles = StyleSheet.create(
       borderColor: colors.neutral[0].border[0],
       borderWidth: borderWidths[2],
       borderRadius: radii[4],
-      gap: spacing[2],
-      padding: spacing[4],
+      gap: spacing.condensed,
+      padding: spacing.normal,
     },
   }),
 )

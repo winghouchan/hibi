@@ -11,11 +11,11 @@ const styles = StyleSheet.create((theme, { insets }) => ({
   },
 
   contentContainer: {
-    gap: theme.spacing[4],
-    paddingTop: theme.spacing[2],
-    paddingLeft: insets.left + theme.spacing[4],
-    paddingRight: insets.right + theme.spacing[4],
-    paddingBottom: theme.spacing[2],
+    gap: theme.spacing.normal,
+    paddingTop: theme.spacing.condensed,
+    paddingLeft: insets.left + theme.spacing.normal,
+    paddingRight: insets.right + theme.spacing.normal,
+    paddingBottom: theme.spacing.condensed,
   },
 }))
 

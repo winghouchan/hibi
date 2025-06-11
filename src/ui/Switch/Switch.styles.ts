@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create(({ colors, radii, sizes, spacing }) => {
+const styles = StyleSheet.create(({ colors, radii, spacing }) => {
   const size = 28
   const inset = 2
 
@@ -8,7 +8,7 @@ const styles = StyleSheet.create(({ colors, radii, sizes, spacing }) => {
     pressable: {
       alignItems: 'center',
       flexDirection: 'row',
-      gap: spacing[2],
+      gap: spacing.condensed,
       justifyContent: 'space-between',
     },
     track: {

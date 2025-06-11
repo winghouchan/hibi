@@ -10,16 +10,16 @@ import { NoteList } from '@/notes/ui'
 import { Icon, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
 
-const styles = StyleSheet.create(({ spacing }, { insets }) => ({
+const styles = StyleSheet.create(({ sizes, spacing }, { insets }) => ({
   screen: {
     flex: 1,
-    gap: spacing[4],
+    gap: spacing.normal,
     paddingTop: insets.top,
   },
 
   padding: {
-    paddingLeft: insets.left + spacing[4],
-    paddingRight: insets.right + spacing[4],
+    paddingLeft: insets.left + spacing.normal,
+    paddingRight: insets.right + spacing.normal,
   },
 
   header: {
@@ -30,11 +30,11 @@ const styles = StyleSheet.create(({ spacing }, { insets }) => ({
 
   headerInlineEnd: {
     flexDirection: 'row',
-    gap: spacing[3],
+    gap: spacing.normal,
   },
 
   listContent: {
-    paddingVertical: spacing[4],
+    paddingVertical: spacing.normal,
   },
 }))
 
