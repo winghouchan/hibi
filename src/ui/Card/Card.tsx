@@ -10,7 +10,7 @@ const styles = StyleSheet.create(
       backgroundColor: colors.neutral[1].background,
       borderColor: colors.neutral[0].border[0],
       borderRadius: radii[4],
-      borderWidth: borderWidths[2],
+      borderWidth: borderWidths.thick,
       boxShadow: [
         {
           blurRadius: 8,

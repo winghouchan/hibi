@@ -10,7 +10,7 @@ const styles = StyleSheet.create(
     settings: {
       backgroundColor: colors.neutral[1].background,
       borderColor: colors.neutral[0].border[0],
-      borderWidth: borderWidths[2],
+      borderWidth: borderWidths.thick,
       borderRadius: radii[4],
       gap: spacing.condensed,
       padding: spacing.normal,

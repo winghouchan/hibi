@@ -8,7 +8,7 @@ const styles = StyleSheet.create(
       backgroundColor: colors.neutral[1].background,
       borderColor: colors.neutral[0].border[0],
       borderRadius: radii[4],
-      borderWidth: borderWidths[2],
+      borderWidth: borderWidths.thick,
       color: colors.neutral[0].foreground,
       padding: spacing.normal,
       width: '100%',

@@ -25,7 +25,7 @@ const styles = StyleSheet.create(
 
     focusIndicator: {
       borderRadius: radii[8],
-      height: borderWidths[2],
+      height: borderWidths.thick,
       width: '100%',
 
       variants: {

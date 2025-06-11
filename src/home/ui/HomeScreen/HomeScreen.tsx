@@ -23,7 +23,7 @@ const styles = StyleSheet.create(
     callout: {
       backgroundColor: colors.neutral[1].background,
       borderColor: colors.neutral[0].border[0],
-      borderWidth: borderWidths[2],
+      borderWidth: borderWidths.thick,
       borderRadius: radii[4],
       height: (screen.height - insets.top - spacing.spacious * 2) / 2,
       justifyContent: 'flex-end',

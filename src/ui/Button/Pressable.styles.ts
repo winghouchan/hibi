@@ -14,7 +14,7 @@ export default StyleSheet.create(
             transform: [{ translateY: pressed ? boxShadows[1].offsetY : 0 }],
           },
           medium: {
-            borderWidth: borderWidths[2],
+            borderWidth: borderWidths.thick,
             transform: [{ translateY: pressed ? boxShadows[1].offsetY : 0 }],
           },
           low: {},

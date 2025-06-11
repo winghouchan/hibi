@@ -17,7 +17,7 @@ const styles = StyleSheet.create(
     chip: (selected: boolean) => ({
       backgroundColor: colors.neutral[1].background,
       borderColor: colors.neutral[0].border[selected ? 1 : 0],
-      borderWidth: borderWidths[2],
+      borderWidth: borderWidths.thick,
       borderRadius: radii[4],
       paddingHorizontal: spacing.spacious,
       paddingVertical: spacing.condensed,

@@ -1,7 +1,5 @@
 import * as typography from './typography'
 
-const borderWidths = [0, 1, 2, 4] as const
-
 const radii = [0, 4, 8, 12, 16, 20, 24, 28, 999, '50%'] as const
 
 const sizes = {
@@ -16,6 +14,12 @@ const sizes = {
   8: 24,
   9: 32,
   10: 40,
+} as const
+
+const borderWidths = {
+  none: sizes[0],
+  thin: sizes[1],
+  thick: sizes[2],
 } as const
 
 const boxShadows = [
