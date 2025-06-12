@@ -1,10 +1,10 @@
 import { PressableStateCallbackType } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export default StyleSheet.create(({ colors, radii, spacing }) => ({
+export default StyleSheet.create(({ colors, radius, spacing }) => ({
   pressable: ({ pressed }: PressableStateCallbackType) => ({
     alignItems: 'center',
-    borderRadius: radii[4],
+    borderRadius: radius[16],
     paddingInline: spacing.normal,
     width: '100%',
 

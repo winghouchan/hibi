@@ -7,15 +7,15 @@ import {
 import { forwardRef } from 'react'
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create(({ colors, radii }) => ({
+const styles = StyleSheet.create(({ colors, radius }) => ({
   background: {
     backgroundColor: colors.background.default,
-    borderRadius: radii[4],
+    borderRadius: radius[16],
   },
 
   handle: {
     backgroundColor: colors.background.default,
-    borderRadius: radii[4],
+    borderRadius: radius[16],
   },
 }))
 

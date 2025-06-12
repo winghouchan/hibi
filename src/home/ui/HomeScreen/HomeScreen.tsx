@@ -8,7 +8,7 @@ import { Button, Icon, Text } from '@/ui'
 import useActiveCollection from './useActiveCollection'
 
 const styles = StyleSheet.create(
-  ({ borderWidths, colors, radii, spacing }, { insets, screen }) => ({
+  ({ borderWidths, colors, radius, spacing }, { insets, screen }) => ({
     screen: {
       flex: 1,
       gap: spacing.spacious,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create(
       backgroundColor: colors.background.default,
       borderColor: colors.borders.default,
       borderWidth: borderWidths.thick,
-      borderRadius: radii[4],
+      borderRadius: radius[16],
       height: (screen.height - insets.top - spacing.spacious * 2) / 2,
       justifyContent: 'flex-end',
       padding: spacing.spacious,
