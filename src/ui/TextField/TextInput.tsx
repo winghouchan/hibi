@@ -3,13 +3,13 @@ import { TextInput as NativeTextInput, TextInputProps } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 const styles = StyleSheet.create(
-  ({ borderWidths, colors, radii, sizes, spacing, text }) => ({
+  ({ borderWidths, colors, radii, spacing, text }) => ({
     input: {
-      backgroundColor: colors.neutral[1].background,
-      borderColor: colors.neutral[0].border[0],
+      backgroundColor: colors.background.default,
+      borderColor: colors.borders.default,
       borderRadius: radii[4],
-      borderWidth: borderWidths.thick,
-      color: colors.neutral[0].foreground,
+      borderWidth: borderWidths.thin,
+      color: colors.foreground.default,
       padding: spacing.normal,
       width: '100%',
 
@@ -18,7 +18,7 @@ const styles = StyleSheet.create(
       variants: {
         focused: {
           true: {
-            borderColor: colors.neutral[0].border[1],
+            borderColor: colors.borders.emphasis,
           },
         },
       },

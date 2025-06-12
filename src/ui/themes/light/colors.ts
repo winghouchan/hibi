@@ -9,9 +9,16 @@ export default {
   },
 
   foreground: {
+    danger: colors.red[7],
     default: colors.neutral[10],
     inverse: colors.neutral[0],
     muted: colors.neutral[5],
+  },
+
+  borders: {
+    danger: colors.red[7],
+    default: colors.neutral[3],
+    emphasis: colors.neutral[4],
   },
 
   neutral: [
@@ -44,24 +51,6 @@ export default {
     {
       background: [colors.transparent, colors.neutral[2]],
       foreground: colors.neutral[8],
-    },
-  ],
-  danger: [
-    {
-      background: colors.red[7],
-      foreground: colors.neutral[1],
-      border: colors.red[9],
-      shadow: colors.red[9],
-    },
-    {
-      background: colors.neutral[0],
-      foreground: colors.red[7],
-      border: colors.red[7],
-      shadow: colors.red[7],
-    },
-    {
-      background: [colors.transparent, colors.red[0]],
-      foreground: colors.red[7],
     },
   ],
   success: [

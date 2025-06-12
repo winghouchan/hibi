@@ -17,7 +17,7 @@ const styles = StyleSheet.create(({ colors, spacing, text }) => ({
   },
 
   error: {
-    color: colors.danger[1].foreground,
+    color: colors.foreground.danger,
     ...text.label.medium,
   },
 
@@ -25,7 +25,7 @@ const styles = StyleSheet.create(({ colors, spacing, text }) => ({
     variants: {
       error: {
         true: {
-          borderColor: colors.danger[1].border,
+          borderColor: colors.borders.danger,
         },
       },
     },
