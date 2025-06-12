@@ -20,6 +20,8 @@ export const fontWeights = {
   black: 900,
 } as const
 
-export const letterSpacings = [0] as const
+export const letterSpacings = {
+  none: 0,
+} as const
 
 export const lineHeights = [1, 1.2, 1.4] as const
