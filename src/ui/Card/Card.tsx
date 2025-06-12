@@ -7,20 +7,10 @@ const styles = StyleSheet.create(
   ({ borderWidths, colors, radii, spacing }) => ({
     view: {
       alignItems: 'center',
-      backgroundColor: colors.neutral[1].background,
-      borderColor: colors.neutral[0].border[0],
+      backgroundColor: colors.background.default,
+      borderColor: colors.borders.default,
       borderRadius: radii[4],
-      borderWidth: borderWidths.thick,
-      boxShadow: [
-        {
-          blurRadius: 8,
-          color: colors.secondary[0].shadow,
-          inset: false,
-          offsetX: 0,
-          offsetY: 0,
-          spreadDistance: 0,
-        },
-      ],
+      borderWidth: borderWidths.thin,
       gap: spacing.condensed,
       height: '100%',
       overflow: 'hidden',
