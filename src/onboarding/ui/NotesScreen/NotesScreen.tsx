@@ -125,7 +125,7 @@ export default function NotesScreen() {
           {notes?.length ? (
             <View style={{ gap: 12 }}>
               <Link asChild href="/onboarding/notes/new">
-                <Button action="neutral" priority="medium">
+                <Button action="neutral" priority="low">
                   {translate`Add another note`}
                 </Button>
               </Link>

@@ -49,7 +49,7 @@ export const text = {
   label: {
     large: createTypeStyles({
       fontSize: fontSizes[2],
-      fontWeight: fontWeights.medium,
+      fontWeight: fontWeights.semiBold,
       letterSpacing: letterSpacings[0],
       lineHeight: lineHeights[2],
     }),

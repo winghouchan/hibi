@@ -22,23 +22,6 @@ const borderWidths = {
   thick: sizes[2],
 } as const
 
-const boxShadows = [
-  {
-    blurRadius: radii[0],
-    inset: false,
-    offsetX: 0,
-    offsetY: 0,
-    spreadDistance: 0,
-  },
-  {
-    blurRadius: radii[0],
-    inset: false,
-    offsetX: 0,
-    offsetY: 4,
-    spreadDistance: 0,
-  },
-] as const
-
 const spacing = {
   none: sizes[0],
   condensed: sizes[4],
@@ -48,7 +31,6 @@ const spacing = {
 
 export default {
   borderWidths,
-  boxShadows,
   radii,
   sizes,
   spacing,

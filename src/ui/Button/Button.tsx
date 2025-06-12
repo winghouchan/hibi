@@ -41,7 +41,6 @@ export default forwardRef<Ref, Props>(function Button(
         <Text
           action={action}
           numberOfLines={1}
-          pressed={state.pressed}
           priority={priority}
           ref={textRef}
           size={size}

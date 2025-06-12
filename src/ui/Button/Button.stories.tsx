@@ -18,7 +18,13 @@ export default {
     action: {
       control: {
         type: 'radio',
-        options: ['primary', 'neutral', 'success', 'danger'],
+        options: ['primary', 'neutral'],
+      },
+    },
+    size: {
+      control: {
+        type: 'radio',
+        options: ['small', 'medium', 'default'],
       },
     },
   },
@@ -38,35 +44,11 @@ export const Overview = {
       <Button priority="high" action="neutral">
         High: Neutral
       </Button>
-      <Button priority="high" action="success">
-        High: Success
-      </Button>
-      <Button priority="high" action="danger">
-        High: Danger
-      </Button>
-      <Button priority="medium" action="primary">
-        Medium: Primary
-      </Button>
-      <Button priority="medium" action="neutral">
-        Medium: Neutral
-      </Button>
-      <Button priority="medium" action="success">
-        Medium: Success
-      </Button>
-      <Button priority="medium" action="danger">
-        Medium: Danger
-      </Button>
       <Button priority="low" action="primary">
         Low: Primary
       </Button>
       <Button priority="low" action="neutral">
         Low: Neutral
-      </Button>
-      <Button priority="low" action="success">
-        Low: Success
-      </Button>
-      <Button priority="low" action="danger">
-        Low: Danger
       </Button>
     </>
   ),
@@ -75,13 +57,6 @@ export const Overview = {
 export const HighPriority = {
   args: {
     priority: 'high',
-    action: 'primary',
-  },
-} satisfies Story
-
-export const MediumPriority = {
-  args: {
-    priority: 'medium',
     action: 'primary',
   },
 } satisfies Story

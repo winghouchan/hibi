@@ -1,6 +1,19 @@
 import * as colors from '../../tokens/colors'
 
 export default {
+  background: {
+    default: colors.neutral[0],
+    inverse: colors.neutral[10],
+    muted: colors.neutral[1],
+    transparent: colors.transparent,
+  },
+
+  foreground: {
+    default: colors.neutral[10],
+    inverse: colors.neutral[0],
+    muted: colors.neutral[5],
+  },
+
   neutral: [
     {
       background: colors.neutral[1],
@@ -13,24 +26,6 @@ export default {
     },
     {
       background: colors.neutral[2],
-    },
-  ],
-  primary: [
-    {
-      background: colors.blue[7],
-      foreground: colors.neutral[0],
-      shadow: colors.blue[9],
-      border: colors.blue[9],
-    },
-    {
-      background: colors.neutral[0],
-      foreground: colors.blue[9],
-      shadow: colors.blue[9],
-      border: colors.blue[9],
-    },
-    {
-      background: [colors.transparent, colors.blue[0]],
-      foreground: colors.blue[8],
     },
   ],
   secondary: [

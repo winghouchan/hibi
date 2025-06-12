@@ -105,7 +105,7 @@ export default function HomeScreen() {
           >
             <Button
               action="neutral"
-              priority="medium"
+              priority="low"
             >{translate`Edit collection`}</Button>
           </Link>
         )}
