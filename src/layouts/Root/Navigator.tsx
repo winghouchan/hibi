@@ -69,7 +69,7 @@ export default function Navigator() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: theme.colors.neutral[0].background,
+      background: theme.colors.background.default,
     },
   }
 
