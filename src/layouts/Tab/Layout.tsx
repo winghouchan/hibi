@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import TabButton from './Button'
 import ErrorBoundary from './ErrorBoundary'
 
-const styles = StyleSheet.create(({ sizes, spacing }, { insets }) => ({
+const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   tabList: {
     gap: spacing.spacious,
     justifyContent: 'space-evenly',

@@ -20,7 +20,7 @@ import {
 } from '../../operations'
 import Layout from '../Layout'
 
-const styles = StyleSheet.create(({ sizes, spacing }, { insets }) => ({
+const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   padding: {
     paddingLeft: insets.left + spacing.normal,
     paddingRight: insets.right + spacing.normal,

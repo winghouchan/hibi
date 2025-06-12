@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create(({ sizes, spacing }, runtime) => ({
+const styles = StyleSheet.create(({ spacing }, runtime) => ({
   screen: {
     flex: 1,
     paddingLeft: runtime.insets.left + spacing.normal,

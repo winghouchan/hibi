@@ -10,7 +10,7 @@ import { NoteList } from '@/notes/ui'
 import { Icon, Text } from '@/ui'
 import CreateMenu from '../CreateMenu'
 
-const styles = StyleSheet.create(({ sizes, spacing }, { insets }) => ({
+const styles = StyleSheet.create(({ spacing }, { insets }) => ({
   screen: {
     flex: 1,
     gap: spacing.normal,
