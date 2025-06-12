@@ -21,6 +21,7 @@ export const fontWeights = {
 } as const
 
 export const letterSpacings = {
+  negative: -0.02,
   none: 0,
 } as const
 

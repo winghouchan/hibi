@@ -6,6 +6,7 @@ const styles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
+        display: theme.text.display,
         heading: theme.text.heading,
         subheading: theme.text.subheading,
         body: theme.text.body,

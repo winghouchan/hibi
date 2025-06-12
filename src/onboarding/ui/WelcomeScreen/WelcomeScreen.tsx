@@ -1,9 +1,9 @@
-import { Trans, useLingui } from '@lingui/react/macro'
+import { useLingui } from '@lingui/react/macro'
 import { type NavigationProp } from '@react-navigation/native'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
 import { useEffect } from 'react'
-import { Button } from '@/ui'
+import { Button, Text } from '@/ui'
 import { isOnboardingCompleteQuery } from '../../operations'
 import Layout from '../Layout'
 import style from './WelcomeScreen.styles'
@@ -30,7 +30,7 @@ export default function WelcomeScreen() {
   return (
     <Layout testID="onboarding.welcome.screen">
       <Layout.Main style={style.main}>
-        <Trans>Welcome</Trans>
+        <Text size="display">{translate`Welcome`}</Text>
       </Layout.Main>
       <Layout.Footer>
         <Link

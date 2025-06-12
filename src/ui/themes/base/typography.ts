@@ -29,6 +29,12 @@ function createTypeStyles<
 }
 
 export const text = {
+  display: createTypeStyles({
+    fontSize: fontSizes[32],
+    fontWeight: fontWeights.semiBold,
+    letterSpacing: letterSpacings.negative,
+    lineHeight: lineHeights[2],
+  }),
   heading: createTypeStyles({
     fontSize: fontSizes[20],
     fontWeight: fontWeights.medium,
