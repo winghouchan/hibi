@@ -4,12 +4,12 @@ import { StyleSheet } from 'react-native-unistyles'
 type Props = ViewProps
 
 const styles = StyleSheet.create(
-  ({ borderWidths, colors, radii, spacing }) => ({
+  ({ borderWidths, colors, radius, spacing }) => ({
     view: {
       alignItems: 'center',
       backgroundColor: colors.background.default,
       borderColor: colors.borders.default,
-      borderRadius: radii[4],
+      borderRadius: radius[16],
       borderWidth: borderWidths.thin,
       gap: spacing.condensed,
       height: '100%',

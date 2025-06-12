@@ -8,7 +8,7 @@ import { Collection } from '@/collections/schema'
 import { Text } from '@/ui'
 
 const styles = StyleSheet.create(
-  ({ borderWidths, colors, radii, spacing }) => ({
+  ({ borderWidths, colors, radius, spacing }) => ({
     container: {
       gap: spacing.condensed,
       paddingInline: spacing.spacious,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create(
       backgroundColor: colors.background.default,
       borderColor: selected ? colors.borders.emphasis : colors.borders.default,
       borderWidth: borderWidths.thick,
-      borderRadius: radii[4],
+      borderRadius: radius[16],
       paddingHorizontal: spacing.spacious,
       paddingVertical: spacing.condensed,
     }),

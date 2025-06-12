@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { Icon, Text } from '@/ui'
 
 const styles = StyleSheet.create(
-  ({ borderWidths, colors, radii, spacing }) => ({
+  ({ borderWidths, colors, radius, spacing }) => ({
     pressable: {
       alignItems: 'center',
       flex: 1,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create(
     },
 
     focusIndicator: {
-      borderRadius: radii[8],
+      borderRadius: radius[8],
       height: borderWidths.thick,
       width: '100%',
 

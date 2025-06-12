@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create(({ colors, radii, spacing }) => {
+const styles = StyleSheet.create(({ colors, radius, spacing }) => {
   const size = 28
   const inset = 2
 
@@ -12,7 +12,7 @@ const styles = StyleSheet.create(({ colors, radii, spacing }) => {
       justifyContent: 'space-between',
     },
     track: {
-      borderRadius: radii[2],
+      borderRadius: radius[8],
       height: size + inset * 2,
       width: size * 2,
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create(({ colors, radii, spacing }) => {
     },
     knob: {
       backgroundColor: colors.background.default,
-      borderRadius: radii[2],
+      borderRadius: radius[8],
       height: size,
       insetBlockStart: inset,
       position: 'absolute',
