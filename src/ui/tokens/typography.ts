@@ -1,4 +1,12 @@
-export const fontSizes = [12, 14, 16, 18, 20, 24, 28, 32, 36, 48] as const
+export const fontSizes = {
+  12: 12,
+  14: 14,
+  16: 16,
+  18: 18,
+  20: 20,
+  24: 24,
+  32: 32,
+} as const
 
 export const fontWeights = {
   thin: 100,
