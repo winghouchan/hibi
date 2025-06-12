@@ -15,8 +15,8 @@ const styles = StyleSheet.create(
     },
 
     chip: (selected: boolean) => ({
-      backgroundColor: colors.neutral[1].background,
-      borderColor: colors.neutral[0].border[selected ? 1 : 0],
+      backgroundColor: colors.background.default,
+      borderColor: selected ? colors.borders.emphasis : colors.borders.default,
       borderWidth: borderWidths.thick,
       borderRadius: radii[4],
       paddingHorizontal: spacing.spacious,

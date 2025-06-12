@@ -34,7 +34,7 @@ const styles = StyleSheet.create(
             backgroundColor: 'transparent',
           },
           true: {
-            backgroundColor: colors.neutral[0].foreground,
+            backgroundColor: colors.foreground.default,
           },
         },
       },

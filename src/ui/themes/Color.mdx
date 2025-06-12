@@ -27,29 +27,12 @@ export function createPalette(colors) {
   )
 }
 
-export const ordinals = ['Primary', 'Secondary', 'Tertiary']
-
 <Meta title="Theme / Colors" />
 
 # Colors
 
 <ColorPalette>
   {Object.entries(theme.colors).map(([key, value]) => (
-    <>
-      <h2>
-        {key.slice(0, 1).toUpperCase()}
-        {key.slice(1).toLowerCase()}
-      </h2>
-      {Array.isArray(value) ? (
-        value.map((subvalues, index) => (
-          <ColorItem
-            title={ordinals[index]}
-            colors={createPalette(subvalues)}
-          />
-        ))
-      ) : (
-        <ColorItem title={ordinals[0]} colors={createPalette(value)} />
-      )}
-    </>
+    <ColorItem title={key} colors={createPalette(value)} />
   ))}
 </ColorPalette>

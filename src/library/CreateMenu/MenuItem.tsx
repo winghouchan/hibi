@@ -10,7 +10,7 @@ type Props = LinkProps & {
 
 const styles = StyleSheet.create(({ colors, radii, spacing }) => ({
   item: {
-    backgroundColor: colors.neutral[1].background,
+    backgroundColor: colors.background.default,
     borderRadius: radii[4],
     padding: spacing.condensed,
     flex: 1,

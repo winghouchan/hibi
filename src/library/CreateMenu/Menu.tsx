@@ -7,7 +7,7 @@ type Props = ComponentProps<typeof BottomSheetView>
 
 const styles = StyleSheet.create(({ colors, spacing }, { insets }) => ({
   view: {
-    backgroundColor: colors.neutral[0].background,
+    backgroundColor: colors.background.default,
     flex: 1,
     gap: spacing.condensed,
     paddingBottom: insets.bottom,

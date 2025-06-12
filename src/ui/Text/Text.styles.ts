@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 const styles = StyleSheet.create((theme) => ({
   text: {
-    color: theme.colors.neutral[0].foreground,
+    color: theme.colors.foreground.default,
 
     variants: {
       size: {
