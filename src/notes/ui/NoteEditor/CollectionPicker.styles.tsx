@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create(({ colors, radius, spacing }) => ({
+const styles = StyleSheet.create(({ color, radius, spacing }) => ({
   background: {
-    backgroundColor: colors.background.default,
+    backgroundColor: color.background.default,
     borderRadius: radius[16],
   },
   handle: {
-    backgroundColor: colors.background.default,
+    backgroundColor: color.background.default,
     borderRadius: radius[16],
   },
   header: {

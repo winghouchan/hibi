@@ -1,4 +1,4 @@
-export const fontSizes = {
+export const fontSize = {
   12: 12,
   14: 14,
   16: 16,
@@ -8,7 +8,7 @@ export const fontSizes = {
   32: 32,
 } as const
 
-export const fontWeights = {
+export const fontWeight = {
   thin: 100,
   extraLight: 200,
   light: 300,
@@ -20,9 +20,9 @@ export const fontWeights = {
   black: 900,
 } as const
 
-export const letterSpacings = {
+export const letterSpacing = {
   negative: -0.02,
   none: 0,
 } as const
 
-export const lineHeights = [1, 1.2, 1.4] as const
+export const lineHeight = [1, 1.2, 1.4] as const

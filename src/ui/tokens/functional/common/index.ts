@@ -1,7 +1,7 @@
-import { radius, size } from '../../tokens'
+import { radius, size } from '../../base'
 import * as typography from './typography'
 
-const borderWidths = {
+const borderWidth = {
   none: size[0],
   thin: size[1],
   thick: size[2],
@@ -15,7 +15,7 @@ const spacing = {
 } as const
 
 export default {
-  borderWidths,
+  borderWidth,
   radius,
   size,
   spacing,

@@ -1,4 +1,4 @@
-import themes from '@/ui/themes'
+import * as themes from '@/ui/tokens/functional'
 
 const runtimeMock = {
   insets: {

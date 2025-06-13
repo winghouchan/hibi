@@ -32,7 +32,7 @@ export default function Icon({ name, size = 24, ...props }: Props) {
     <SvgXml
       uniProps={(theme, runtime) => ({
         xml: feather.icons[name].toSvg({
-          color: theme.colors.foreground.default,
+          color: theme.color.foreground.default,
           ...Object.entries(props).reduce(kebabCaseProperty, {}),
         }),
         height: size * runtime.fontScale,

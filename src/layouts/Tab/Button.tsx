@@ -5,42 +5,40 @@ import { Pressable, PressableProps, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { Icon, Text } from '@/ui'
 
-const styles = StyleSheet.create(
-  ({ borderWidths, colors, radius, spacing }) => ({
-    pressable: {
-      alignItems: 'center',
-      flex: 1,
-    },
+const styles = StyleSheet.create(({ borderWidth, color, radius, spacing }) => ({
+  pressable: {
+    alignItems: 'center',
+    flex: 1,
+  },
 
-    container: {
-      alignItems: 'center',
-      flex: 1,
-    },
+  container: {
+    alignItems: 'center',
+    flex: 1,
+  },
 
-    contentContainer: {
-      alignItems: 'center',
-      paddingTop: spacing.normal,
-      gap: spacing.condensed,
-    },
+  contentContainer: {
+    alignItems: 'center',
+    paddingTop: spacing.normal,
+    gap: spacing.condensed,
+  },
 
-    focusIndicator: {
-      borderRadius: radius[8],
-      height: borderWidths.thick,
-      width: '100%',
+  focusIndicator: {
+    borderRadius: radius[8],
+    height: borderWidth.thick,
+    width: '100%',
 
-      variants: {
-        isFocused: {
-          false: {
-            backgroundColor: 'transparent',
-          },
-          true: {
-            backgroundColor: colors.foreground.default,
-          },
+    variants: {
+      isFocused: {
+        false: {
+          backgroundColor: 'transparent',
+        },
+        true: {
+          backgroundColor: color.foreground.default,
         },
       },
     },
-  }),
-)
+  },
+}))
 
 type Ref = View
 type Props = TabTriggerSlotProps & {

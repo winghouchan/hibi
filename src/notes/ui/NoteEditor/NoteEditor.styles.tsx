@@ -1,16 +1,16 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 const styles = StyleSheet.create(
-  ({ borderWidths, colors, radius, spacing }, runtime) => ({
+  ({ borderWidth, color, radius, spacing }, runtime) => ({
     keyboardAvoidingView: {
       flex: 1,
       paddingBottom: runtime.insets.ime,
     },
 
     settings: {
-      backgroundColor: colors.background.default,
-      borderColor: colors.borders.default,
-      borderWidth: borderWidths.thick,
+      backgroundColor: color.background.default,
+      borderColor: color.borders.default,
+      borderWidth: borderWidth.thick,
       borderRadius: radius[16],
       gap: spacing.condensed,
       padding: spacing.normal,
