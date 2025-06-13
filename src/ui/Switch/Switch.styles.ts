@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create(({ colors, radius, spacing }) => {
+const styles = StyleSheet.create(({ color, radius, spacing }) => {
   const size = 28
   const inset = 2
 
@@ -19,16 +19,16 @@ const styles = StyleSheet.create(({ colors, radius, spacing }) => {
       variants: {
         value: {
           false: {
-            backgroundColor: colors.borders.default,
+            backgroundColor: color.borders.default,
           },
           true: {
-            backgroundColor: colors.borders.emphasis,
+            backgroundColor: color.borders.emphasis,
           },
         },
       },
     },
     knob: {
-      backgroundColor: colors.background.default,
+      backgroundColor: color.background.default,
       borderRadius: radius[8],
       height: size,
       insetBlockStart: inset,

@@ -5,9 +5,9 @@ import MenuItem from './MenuItem'
 
 type Props = ComponentProps<typeof BottomSheetView>
 
-const styles = StyleSheet.create(({ colors, spacing }, { insets }) => ({
+const styles = StyleSheet.create(({ color, spacing }, { insets }) => ({
   view: {
-    backgroundColor: colors.background.default,
+    backgroundColor: color.background.default,
     flex: 1,
     gap: spacing.condensed,
     paddingBottom: insets.bottom,

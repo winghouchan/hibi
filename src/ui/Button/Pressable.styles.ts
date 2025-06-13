@@ -1,7 +1,7 @@
 import { PressableStateCallbackType } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export default StyleSheet.create(({ colors, radius, spacing }) => ({
+export default StyleSheet.create(({ color, radius, spacing }) => ({
   pressable: ({ pressed }: PressableStateCallbackType) => ({
     alignItems: 'center',
     borderRadius: radius[16],
@@ -35,28 +35,28 @@ export default StyleSheet.create(({ colors, radius, spacing }) => ({
         priority: 'high',
         action: 'primary',
         styles: {
-          backgroundColor: colors.background.inverse,
+          backgroundColor: color.background.inverse,
         },
       },
       {
         priority: 'high',
         action: 'neutral',
         styles: {
-          backgroundColor: colors.background.inverse,
+          backgroundColor: color.background.inverse,
         },
       },
       {
         priority: 'low',
         action: 'primary',
         styles: {
-          backgroundColor: colors.background.transparent,
+          backgroundColor: color.background.transparent,
         },
       },
       {
         priority: 'low',
         action: 'neutral',
         styles: {
-          backgroundColor: colors.background.transparent,
+          backgroundColor: color.background.transparent,
         },
       },
     ],

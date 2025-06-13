@@ -1,6 +1,6 @@
 import { ColorItem, ColorPalette, Meta } from '@storybook/blocks'
 import chroma from 'chroma-js'
-import theme from './light'
+import theme from './index'
 
 export function toOklch(color) {
   return `oklch(${chroma(color)
@@ -27,12 +27,12 @@ export function createPalette(colors) {
   )
 }
 
-<Meta title="Theme / Colors" />
+<Meta title="Light Theme / Colors" />
 
 # Colors
 
 <ColorPalette>
-  {Object.entries(theme.colors).map(([key, value]) => (
+  {Object.entries(theme.color).map(([key, value]) => (
     <ColorItem title={key} colors={createPalette(value)} />
   ))}
 </ColorPalette>

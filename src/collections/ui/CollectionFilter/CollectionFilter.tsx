@@ -7,23 +7,21 @@ import { collectionsQuery } from '@/collections/operations'
 import { Collection } from '@/collections/schema'
 import { Text } from '@/ui'
 
-const styles = StyleSheet.create(
-  ({ borderWidths, colors, radius, spacing }) => ({
-    container: {
-      gap: spacing.condensed,
-      paddingInline: spacing.spacious,
-    },
+const styles = StyleSheet.create(({ borderWidth, color, radius, spacing }) => ({
+  container: {
+    gap: spacing.condensed,
+    paddingInline: spacing.spacious,
+  },
 
-    chip: (selected: boolean) => ({
-      backgroundColor: colors.background.default,
-      borderColor: selected ? colors.borders.emphasis : colors.borders.default,
-      borderWidth: borderWidths.thick,
-      borderRadius: radius[16],
-      paddingHorizontal: spacing.spacious,
-      paddingVertical: spacing.condensed,
-    }),
+  chip: (selected: boolean) => ({
+    backgroundColor: color.background.default,
+    borderColor: selected ? color.borders.emphasis : color.borders.default,
+    borderWidth: borderWidth.thick,
+    borderRadius: radius[16],
+    paddingHorizontal: spacing.spacious,
+    paddingVertical: spacing.condensed,
   }),
-)
+}))
 
 type Props = {
   onChange?: (id?: Collection['id']) => void

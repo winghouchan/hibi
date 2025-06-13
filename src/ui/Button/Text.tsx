@@ -5,7 +5,7 @@ import { StyleSheet, UnistylesVariants } from 'react-native-unistyles'
 type Ref = NativeText
 type Props = TextProps & UnistylesVariants<typeof styles>
 
-const styles = StyleSheet.create(({ colors, text }) => ({
+const styles = StyleSheet.create(({ color, text }) => ({
   text: {
     textAlign: 'center',
 
@@ -30,28 +30,28 @@ const styles = StyleSheet.create(({ colors, text }) => ({
         priority: 'high',
         action: 'primary',
         styles: {
-          color: colors.foreground.inverse,
+          color: color.foreground.inverse,
         },
       },
       {
         priority: 'high',
         action: 'neutral',
         styles: {
-          color: colors.foreground.inverse,
+          color: color.foreground.inverse,
         },
       },
       {
         priority: 'low',
         action: 'primary',
         styles: {
-          color: colors.foreground.default,
+          color: color.foreground.default,
         },
       },
       {
         priority: 'low',
         action: 'neutral',
         styles: {
-          color: colors.foreground.default,
+          color: color.foreground.default,
         },
       },
     ],

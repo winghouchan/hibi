@@ -8,9 +8,9 @@ type Props = LinkProps & {
   icon: ComponentProps<typeof Icon>['name']
 }
 
-const styles = StyleSheet.create(({ colors, radius, spacing }) => ({
+const styles = StyleSheet.create(({ color, radius, spacing }) => ({
   item: {
-    backgroundColor: colors.background.default,
+    backgroundColor: color.background.default,
     borderRadius: radius[16],
     padding: spacing.condensed,
     flex: 1,
