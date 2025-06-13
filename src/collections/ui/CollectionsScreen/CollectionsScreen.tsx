@@ -22,7 +22,7 @@ const styles = StyleSheet.create((theme) => ({
 
   item: (selected: boolean) => ({
     alignItems: 'center',
-    borderRadius: theme.radius[12],
+    borderRadius: theme.radius.medium,
     borderWidth: selected ? 1 : 0,
     height: 48,
     flexDirection: 'row',

@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export default StyleSheet.create(({ color, radius, spacing }) => ({
   pressable: ({ pressed }: PressableStateCallbackType) => ({
     alignItems: 'center',
-    borderRadius: radius[16],
+    borderRadius: radius.large,
     paddingInline: spacing.normal,
     width: '100%',
 

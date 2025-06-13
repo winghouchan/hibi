@@ -17,7 +17,7 @@ const styles = StyleSheet.create(({ borderWidth, color, radius, spacing }) => ({
     backgroundColor: color.background.default,
     borderColor: selected ? color.borders.emphasis : color.borders.default,
     borderWidth: borderWidth.thick,
-    borderRadius: radius[16],
+    borderRadius: radius.large,
     paddingHorizontal: spacing.spacious,
     paddingVertical: spacing.condensed,
   }),

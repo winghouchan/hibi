@@ -8,7 +8,7 @@ const styles = StyleSheet.create(({ borderWidth, color, radius, spacing }) => ({
     alignItems: 'center',
     backgroundColor: color.background.default,
     borderColor: color.borders.default,
-    borderRadius: radius[16],
+    borderRadius: radius.large,
     borderWidth: borderWidth.thin,
     gap: spacing.condensed,
     height: '100%',

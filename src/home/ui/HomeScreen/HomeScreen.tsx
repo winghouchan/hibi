@@ -24,7 +24,7 @@ const styles = StyleSheet.create(
       backgroundColor: color.background.default,
       borderColor: color.borders.default,
       borderWidth: borderWidth.thick,
-      borderRadius: radius[16],
+      borderRadius: radius.large,
       height: (screen.height - insets.top - spacing.spacious * 2) / 2,
       justifyContent: 'flex-end',
       padding: spacing.spacious,
