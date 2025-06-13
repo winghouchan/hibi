@@ -7,7 +7,7 @@ const styles = StyleSheet.create(
     input: {
       backgroundColor: color.background.default,
       borderColor: color.borders.default,
-      borderRadius: radius[16],
+      borderRadius: radius.large,
       borderWidth: borderWidth.thin,
       color: color.foreground.default,
       padding: spacing.normal,

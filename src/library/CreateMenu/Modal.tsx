@@ -10,12 +10,12 @@ import { StyleSheet } from 'react-native-unistyles'
 const styles = StyleSheet.create(({ color, radius }) => ({
   background: {
     backgroundColor: color.background.default,
-    borderRadius: radius[16],
+    borderRadius: radius.large,
   },
 
   handle: {
     backgroundColor: color.background.default,
-    borderRadius: radius[16],
+    borderRadius: radius.large,
   },
 }))
 

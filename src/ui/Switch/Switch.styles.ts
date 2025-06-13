@@ -12,7 +12,7 @@ const styles = StyleSheet.create(({ color, radius, spacing }) => {
       justifyContent: 'space-between',
     },
     track: {
-      borderRadius: radius[8],
+      borderRadius: radius.small,
       height: size + inset * 2,
       width: size * 2,
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create(({ color, radius, spacing }) => {
     },
     knob: {
       backgroundColor: color.background.default,
-      borderRadius: radius[8],
+      borderRadius: radius.small,
       height: size,
       insetBlockStart: inset,
       position: 'absolute',

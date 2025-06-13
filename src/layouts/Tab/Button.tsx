@@ -23,7 +23,7 @@ const styles = StyleSheet.create(({ borderWidth, color, radius, spacing }) => ({
   },
 
   focusIndicator: {
-    borderRadius: radius[8],
+    borderRadius: radius.small,
     height: borderWidth.thick,
     width: '100%',
 
