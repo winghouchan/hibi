@@ -66,19 +66,19 @@ export const text = {
       fontSize: fontSize[16],
       fontWeight: fontWeight.semiBold,
       letterSpacing: letterSpacing.none,
-      lineHeight: lineHeight.normal,
+      lineHeight: lineHeight.condensed,
     }),
     medium: createTypeStyles({
       fontSize: fontSize[14],
       fontWeight: fontWeight.medium,
       letterSpacing: letterSpacing.none,
-      lineHeight: lineHeight.normal,
+      lineHeight: lineHeight.condensed,
     }),
     small: createTypeStyles({
       fontSize: fontSize[12],
       fontWeight: fontWeight.medium,
       letterSpacing: letterSpacing.none,
-      lineHeight: lineHeight.normal,
+      lineHeight: lineHeight.condensed,
     }),
   },
 }
