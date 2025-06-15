@@ -108,7 +108,7 @@ export default function NotesScreen() {
       <Layout testID="onboarding.notes.screen">
         <Layout.Main scrollable={false}>
           <Text
-            size="heading"
+            size="heading.large"
             style={styles.padding}
           >{translate`What do you want to remember?`}</Text>
           <NoteList

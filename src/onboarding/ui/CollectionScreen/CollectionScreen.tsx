@@ -59,7 +59,7 @@ export default function CollectionScreen() {
   return (
     <Layout testID="onboarding.collection.screen">
       <Layout.Main>
-        <Text size="heading">{translate`What are you learning?`}</Text>
+        <Text size="heading.large">{translate`What are you learning?`}</Text>
         <TextField
           accessibilityLabel={translate`Enter a collection name`}
           autoFocus

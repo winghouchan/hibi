@@ -59,7 +59,7 @@ export default function LibraryScreen() {
       <CreateMenu collection={collection} ref={createMenuRef} />
       <View testID="library.screen" style={styles.screen}>
         <View style={[styles.header, styles.padding]}>
-          <Text size="heading">{translate`Library`}</Text>
+          <Text size="heading.medium">{translate`Library`}</Text>
           <View style={styles.headerInlineEnd}>
             {typeof collection !== 'undefined' && (
               <Link

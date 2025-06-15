@@ -7,7 +7,8 @@ const styles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         display: theme.text.display,
-        heading: theme.text.heading,
+        'heading.large': theme.text.heading.large,
+        'heading.medium': theme.text.heading.medium,
         subheading: theme.text.subheading,
         body: theme.text.body,
         'label.medium': theme.text.label.medium,
