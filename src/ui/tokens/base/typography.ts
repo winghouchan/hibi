@@ -25,4 +25,8 @@ export const letterSpacing = {
   none: 0,
 } as const
 
-export const lineHeight = [1, 1.2, 1.4] as const
+export const lineHeight = {
+  initial: 1,
+  condensed: 1.2,
+  normal: 1.4,
+} as const
