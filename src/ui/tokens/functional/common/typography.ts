@@ -35,12 +35,20 @@ export const text = {
     letterSpacing: letterSpacing.negative,
     lineHeight: lineHeight[2],
   }),
-  heading: createTypeStyles({
-    fontSize: fontSize[20],
-    fontWeight: fontWeight.medium,
-    letterSpacing: letterSpacing.none,
-    lineHeight: lineHeight[1],
-  }),
+  heading: {
+    large: createTypeStyles({
+      fontSize: fontSize[24],
+      fontWeight: fontWeight.semiBold,
+      letterSpacing: letterSpacing.none,
+      lineHeight: lineHeight[1],
+    }),
+    medium: createTypeStyles({
+      fontSize: fontSize[20],
+      fontWeight: fontWeight.medium,
+      letterSpacing: letterSpacing.none,
+      lineHeight: lineHeight[1],
+    }),
+  },
   subheading: createTypeStyles({
     fontSize: fontSize[18],
     fontWeight: fontWeight.medium,
