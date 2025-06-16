@@ -18,9 +18,7 @@ export default function AppLayout() {
             <Suspense>{children}</Suspense>
           </ErrorBoundary>
         )}
-      >
-        <Stack.Screen name="(modal)" options={{ presentation: 'modal' }} />
-      </Stack>
+      />
     )
   } else {
     return <Redirect href="/(not-onboarded)" />

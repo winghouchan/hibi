@@ -57,7 +57,7 @@ export default function HomeScreen() {
         >
           <View>
             <Link
-              href="/(onboarded)/(modal)/collections"
+              href="/(onboarded)/(fullscreen-modal)/collections"
               testID="home.collection-menu.link"
             >
               <Text>{collection.name}</Text>
