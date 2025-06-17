@@ -48,13 +48,13 @@ export const text = {
       letterSpacing: letterSpacing.none,
       lineHeight: lineHeight.normal,
     }),
+    small: createTypeStyles({
+      fontSize: fontSize[16],
+      fontWeight: fontWeight.semiBold,
+      letterSpacing: letterSpacing.none,
+      lineHeight: lineHeight.normal,
+    }),
   },
-  subheading: createTypeStyles({
-    fontSize: fontSize[18],
-    fontWeight: fontWeight.medium,
-    letterSpacing: letterSpacing.none,
-    lineHeight: lineHeight.normal,
-  }),
   body: createTypeStyles({
     fontSize: fontSize[16],
     fontWeight: fontWeight.regular,

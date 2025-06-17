@@ -9,7 +9,7 @@ const styles = StyleSheet.create((theme) => ({
         display: theme.text.display,
         'heading.large': theme.text.heading.large,
         'heading.medium': theme.text.heading.medium,
-        subheading: theme.text.subheading,
+        'heading.small': theme.text.heading.small,
         body: theme.text.body,
         'label.medium': theme.text.label.medium,
         'label.small': theme.text.label.small,
