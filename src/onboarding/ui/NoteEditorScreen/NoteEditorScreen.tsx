@@ -1,12 +1,13 @@
 import { useLingui } from '@lingui/react/macro'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
 import { ComponentRef, useRef } from 'react'
-import { Alert, View } from 'react-native'
+import { Alert, Pressable, View } from 'react-native'
 import { noteQuery } from '@/notes/operations'
 import { NoteEditor } from '@/notes/ui'
-import { Button } from '@/ui'
+import { Button, Icon, Stack, Text } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
+import Header from './Header'
 import styles from './NoteEditorScreen.styles'
 import useForm from './useForm'
 import useHandleNonExistentNote from './useHandleNonExistentNote'
@@ -49,18 +50,6 @@ export default function NoteEditorScreen() {
     },
   })
 
-  const SubmitButton = () => (
-    <Button
-      action="primary"
-      priority="low"
-      onPress={() => noteEditorRef.current?.submit()}
-      size="small"
-      testID="onboarding.note-editor.cta"
-    >
-      {typeof note?.id === 'undefined' ? translate`Add` : translate`Update`}
-    </Button>
-  )
-
   useHandleNonExistentNote(
     !Boolean(collection && isUpdatingNote && note === null),
     () => {
@@ -73,10 +62,36 @@ export default function NoteEditorScreen() {
       <>
         <Stack.Screen
           options={{
-            headerRight: () => (
-              <View>
-                <SubmitButton />
-              </View>
+            header: ({ navigation }) => (
+              <Header>
+                <Header.Item>
+                  {navigation.canGoBack() ? (
+                    <View>
+                      <Pressable
+                        accessibilityLabel={translate`Close`}
+                        accessibilityRole="button"
+                        onPress={() => navigation.goBack()}
+                      >
+                        <Icon name="x" size={32} />
+                      </Pressable>
+                    </View>
+                  ) : null}
+                  <Text size="heading.small">{collection.name}</Text>
+                </Header.Item>
+                <View>
+                  <Button
+                    action="primary"
+                    priority="high"
+                    onPress={() => noteEditorRef.current?.submit()}
+                    size="small"
+                    testID="onboarding.note-editor.cta"
+                  >
+                    {typeof note?.id === 'undefined'
+                      ? translate`Add`
+                      : translate`Update`}
+                  </Button>
+                </View>
+              </Header>
             ),
           }}
         />

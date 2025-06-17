@@ -1,11 +1,9 @@
-import { useLingui } from '@lingui/react/macro'
 import { CommonActions } from '@react-navigation/native'
 import { type StackNavigatorProps } from '@react-navigation/stack'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Redirect } from 'expo-router'
-import { Suspense } from 'react'
-import { View } from 'react-native'
-import { Button, CardStyleInterpolators, Stack } from '@/ui'
+import { ComponentProps, Suspense } from 'react'
+import { CardStyleInterpolators, Stack } from '@/ui'
 import {
   isOnboardingCompleteQuery,
   onboardingCollectionQuery,
@@ -13,8 +11,21 @@ import {
 import ErrorBoundary from './ErrorBoundary'
 import Header from './Header'
 
+/**
+ * Options for modal screens in the onboarding flow
+ *
+ * The onboarding navigator uses the JS based stack navigator which does not
+ * have a fullscreen modal presentation. `animation` set to `slide_from_bottom`
+ * replicates the fullscreen modal presentation style.
+ */
+const fullscreenModalOptions: ComponentProps<typeof Stack.Screen>['options'] = {
+  animation: 'slide_from_bottom',
+  cardStyleInterpolator: undefined,
+  headerMode: 'screen',
+  headerShown: true,
+}
+
 export default function OnboardingNavigator() {
-  const { t: translate } = useLingui()
   const { data: isOnboardingComplete } = useSuspenseQuery(
     isOnboardingCompleteQuery,
   )
@@ -112,55 +123,11 @@ export default function OnboardingNavigator() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
           name="onboarding/notes/new"
-          options={({ navigation }) => ({
-            animation: 'slide_from_bottom',
-            cardStyleInterpolator: undefined,
-            header: undefined,
-            headerMode: 'screen',
-            headerShown: true,
-            headerLeft: ({ canGoBack }) =>
-              canGoBack ? (
-                <View>
-                  <Button
-                    action="neutral"
-                    priority="low"
-                    onPress={() => {
-                      navigation.goBack()
-                    }}
-                    size="small"
-                  >
-                    {translate`Close`}
-                  </Button>
-                </View>
-              ) : null,
-            title: translate`Create note`,
-          })}
+          options={fullscreenModalOptions}
         />
         <Stack.Screen
           name="onboarding/notes/[id]/edit"
-          options={({ navigation }) => ({
-            animation: 'slide_from_bottom',
-            cardStyleInterpolator: undefined,
-            header: undefined,
-            headerMode: 'screen',
-            headerShown: true,
-            headerLeft: ({ canGoBack }) =>
-              canGoBack ? (
-                <View>
-                  <Button
-                    action="neutral"
-                    priority="low"
-                    onPress={() => {
-                      navigation.goBack()
-                    }}
-                    size="small"
-                  >
-                    {translate`Close`}
-                  </Button>
-                </View>
-              ) : null,
-            title: translate`Edit note`,
-          })}
+          options={fullscreenModalOptions}
         />
       </Stack>
     )
