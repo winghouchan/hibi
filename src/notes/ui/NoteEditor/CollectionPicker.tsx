@@ -97,13 +97,14 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
 
   return (
     <>
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        priority="low"
+        action="neutral"
         onPress={() => open()}
-        testID="note.note-editor.picker.button"
+        testID="note.note-editor.picker"
       >
-        <Trans>Add to collection</Trans>
-      </Pressable>
+        {translate`Add to\ncollection`}
+      </Button>
       <BottomSheetModal
         /**
          * Setting `accessibility` to `false` allows for the tapping of elements

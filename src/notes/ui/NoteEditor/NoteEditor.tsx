@@ -129,28 +129,34 @@ export default forwardRef<Ref, Props>(function NoteEditor(
         }}
         style={styles.settings}
       >
-        <Button
-          accessibilityRole="switch"
-          accessibilityState={{ checked: values.config.reversible }}
-          priority={values.config.reversible ? 'high' : 'low'}
-          onPress={() =>
-            setFieldValue('config.reversible', !values.config.reversible)
-          }
-          testID={testID && `${testID}.note-editor.reversible`}
-        >{translate`Make reversible`}</Button>
-        <Button
-          accessibilityRole="switch"
-          accessibilityState={{ checked: values.config.reversible }}
-          priority={values.config.separable ? 'high' : 'low'}
-          onPress={() =>
-            setFieldValue('config.separable', !values.config.separable)
-          }
-          testID={testID && `${testID}.note-editor.separable`}
-        >{translate`Make separable`}</Button>
-        <CollectionPicker
-          onChange={(value) => setFieldValue('collections', value)}
-          value={values.collections}
-        />
+        <View style={styles.setting}>
+          <Button
+            accessibilityRole="switch"
+            accessibilityState={{ checked: values.config.reversible }}
+            priority={values.config.reversible ? 'high' : 'low'}
+            onPress={() =>
+              setFieldValue('config.reversible', !values.config.reversible)
+            }
+            testID={testID && `${testID}.note-editor.reversible`}
+          >{translate`Make\nreversible`}</Button>
+        </View>
+        <View style={styles.setting}>
+          <Button
+            accessibilityRole="switch"
+            accessibilityState={{ checked: values.config.reversible }}
+            priority={values.config.separable ? 'high' : 'low'}
+            onPress={() =>
+              setFieldValue('config.separable', !values.config.separable)
+            }
+            testID={testID && `${testID}.note-editor.separable`}
+          >{translate`Make\nseparable`}</Button>
+        </View>
+        <View style={styles.setting}>
+          <CollectionPicker
+            onChange={(value) => setFieldValue('collections', value)}
+            value={values.collections}
+          />
+        </View>
       </Pressable>
     </View>
   )

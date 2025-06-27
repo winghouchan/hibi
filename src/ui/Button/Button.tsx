@@ -38,13 +38,7 @@ export default forwardRef<Ref, Props>(function Button(
       {...props}
     >
       {(state) => (
-        <Text
-          action={action}
-          numberOfLines={1}
-          priority={priority}
-          ref={textRef}
-          size={size}
-        >
+        <Text action={action} priority={priority} ref={textRef} size={size}>
           {typeof children === 'function' ? children(state) : children}
         </Text>
       )}
