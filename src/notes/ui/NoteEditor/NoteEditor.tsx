@@ -9,7 +9,7 @@ import {
   useRef,
 } from 'react'
 import { Pressable, View } from 'react-native'
-import { RichTextInput, Switch } from '@/ui'
+import { Button, RichTextInput } from '@/ui'
 import { createNote, getNote, updateNote } from '../../operations'
 import { Note } from '../../schema'
 import CollectionPicker from './CollectionPicker'
@@ -129,27 +129,27 @@ export default forwardRef<Ref, Props>(function NoteEditor(
         }}
         style={styles.settings}
       >
-        <CollectionPicker
-          onChange={(value) => {
-            setFieldValue('collections', value)
-          }}
-          value={values.collections}
-        />
-        <Switch
-          label={translate`Reversible`}
-          onValueChange={(value) => {
-            setFieldValue('config.reversible', value)
-          }}
+        <Button
+          accessibilityRole="switch"
+          accessibilityState={{ checked: values.config.reversible }}
+          priority={values.config.reversible ? 'high' : 'low'}
+          onPress={() =>
+            setFieldValue('config.reversible', !values.config.reversible)
+          }
           testID={testID && `${testID}.note-editor.reversible`}
-          value={values.config.reversible}
-        />
-        <Switch
-          label={translate`Separable`}
-          onValueChange={(value) => {
-            setFieldValue('config.separable', value)
-          }}
+        >{translate`Make reversible`}</Button>
+        <Button
+          accessibilityRole="switch"
+          accessibilityState={{ checked: values.config.reversible }}
+          priority={values.config.separable ? 'high' : 'low'}
+          onPress={() =>
+            setFieldValue('config.separable', !values.config.separable)
+          }
           testID={testID && `${testID}.note-editor.separable`}
-          value={values.config.separable}
+        >{translate`Make separable`}</Button>
+        <CollectionPicker
+          onChange={(value) => setFieldValue('collections', value)}
+          value={values.collections}
         />
       </Pressable>
     </View>
