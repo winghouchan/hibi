@@ -31,8 +31,6 @@ tags:
           text: ${collection}
       - tapOn:
           id: note.note-editor.picker.done.button
-      - assertVisible:
-          text: .*${collection}.*
 
 - runFlow:
     when:

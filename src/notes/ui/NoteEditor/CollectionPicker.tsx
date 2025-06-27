@@ -7,11 +7,8 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { Trans, useLingui } from '@lingui/react/macro'
-import {
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-} from '@tanstack/react-query'
-import { PropsWithChildren, useDeferredValue, useRef, useState } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { PropsWithChildren, useRef, useState } from 'react'
 import {
   Platform,
   Pressable,
@@ -49,10 +46,6 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const dimensions = useWindowDimensions()
   const safeAreaInsets = useSafeAreaInsets()
-  const deferredValue = useDeferredValue(value)
-  const { data: selectedCollections } = useSuspenseInfiniteQuery(
-    collectionsQuery({ filter: { id: deferredValue } }),
-  )
   const {
     data: collections,
     fetchNextPage: fetchMoreCollections,
@@ -109,10 +102,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
         onPress={() => open()}
         testID="note.note-editor.picker.button"
       >
-        <Trans>Select collections</Trans>
-        {selectedCollections?.map(({ id, name }) => (
-          <Text key={id}>{name}</Text>
-        ))}
+        <Trans>Add to collection</Trans>
       </Pressable>
       <BottomSheetModal
         /**
@@ -149,7 +139,7 @@ export default function CollectionPicker({ onChange, value = [] }: Props) {
               </Button>
             </View>
             <View>
-              <Trans>Select collections</Trans>
+              <Trans>Add to collection</Trans>
             </View>
             <View>
               <Button
