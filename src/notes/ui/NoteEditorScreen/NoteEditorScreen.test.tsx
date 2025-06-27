@@ -236,7 +236,7 @@ describe('<NoteEditorScreen />', () => {
       )
       await user.press(
         await screen.findByRole('button', {
-          name: 'Select collections',
+          name: 'Add to collection',
         }),
       )
       await user.press(
