@@ -20,10 +20,10 @@ tags:
 - inputText: ${back}
 
 - tapOn:
-    id: note.note-editor.reversible.switch
+    id: note.note-editor.reversible.button
 
 - tapOn:
-    id: note.note-editor.separable.switch
+    id: note.note-editor.separable.button
 
 - tapOn:
     id: note.note-editor.cta.button

@@ -39,14 +39,14 @@ tags:
       true: ${reversible}
     commands:
       - tapOn:
-          id: note.note-editor.reversible.switch
+          id: note.note-editor.reversible.button
 
 - runFlow:
     when:
       true: ${separable}
     commands:
       - tapOn:
-          id: note.note-editor.separable.switch
+          id: note.note-editor.separable.button
 
 - tapOn:
     id: note.note-editor.cta.button

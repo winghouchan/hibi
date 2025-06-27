@@ -99,10 +99,10 @@ describe('<NoteEditorScreen />', () => {
           input.note.fields[1][0].value,
         )
         await user.press(
-          await screen.findByRole('switch', { name: 'Reversible' }),
+          await screen.findByRole('switch', { name: 'Make reversible' }),
         )
         await user.press(
-          await screen.findByRole('switch', { name: 'Separable' }),
+          await screen.findByRole('switch', { name: 'Make separable' }),
         )
         await user.press(await screen.findByRole('button', { name: 'Add' }))
 
@@ -236,10 +236,10 @@ describe('<NoteEditorScreen />', () => {
         await user.clear(backEditor)
         await user.type(backEditor, input.note.fields[1][0].value)
         await user.press(
-          await screen.findByRole('switch', { name: 'Reversible' }),
+          await screen.findByRole('switch', { name: 'Make reversible' }),
         )
         await user.press(
-          await screen.findByRole('switch', { name: 'Separable' }),
+          await screen.findByRole('switch', { name: 'Make separable' }),
         )
         await user.press(await screen.findByRole('button', { name: 'Update' }))
 

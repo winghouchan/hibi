@@ -16,10 +16,10 @@ env:
 - inputText: ${back}
 
 - tapOn:
-    id: onboarding.note-editor.reversible.switch
+    id: onboarding.note-editor.reversible.button
 
 - tapOn:
-    id: onboarding.note-editor.separable.switch
+    id: onboarding.note-editor.separable.button
 
 - tapOn:
     id: onboarding.note-editor.cta.button
