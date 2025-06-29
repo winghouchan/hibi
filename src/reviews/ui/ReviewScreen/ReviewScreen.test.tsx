@@ -1,7 +1,7 @@
 import { act, screen, userEvent, waitFor } from '@testing-library/react-native'
 import { DEFAULT_MIN_PRESS_DURATION } from '@testing-library/react-native/build/user-event/press/press'
 import { addHours } from 'date-fns'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Alert, View } from 'react-native'
@@ -16,20 +16,6 @@ import ReviewScreen from '.'
 
 jest.mock('@/reviews/operations/createReview/createReview')
 
-const expoRouterMock = {
-  back: jest.fn(),
-  canDismiss: jest.fn(),
-  canGoBack: jest.fn(),
-  dismiss: jest.fn(),
-  dismissAll: jest.fn(),
-  dismissTo: jest.fn(),
-  navigate: jest.fn(),
-  push: jest.fn(),
-  reload: jest.fn(),
-  replace: jest.fn(),
-  setParams: jest.fn(),
-}
-
 enum Ratings {
   Forgot = 1,
   Hard = 2,
@@ -37,22 +23,24 @@ enum Ratings {
   Easy = 4,
 }
 
-;(useRouter as jest.MockedFunction<typeof useRouter>).mockReturnValue(
-  expoRouterMock,
-)
-
 const routerMock = {
-  '(onboarded)/_layout': () => (
-    <Stack
-      screenLayout={({ children }) => (
-        <ErrorBoundary
-          fallback={<View testID="error-boundary-fallback-mock" />}
-        >
-          {children}
-        </ErrorBoundary>
-      )}
-    />
-  ),
+  '(onboarded)/_layout': {
+    unstable_settings: {
+      initialRouteName: 'index',
+    },
+    default: () => (
+      <Stack
+        screenLayout={({ children }) => (
+          <ErrorBoundary
+            fallback={<View testID="error-boundary-fallback-mock" />}
+          >
+            {children}
+          </ErrorBoundary>
+        )}
+      />
+    ),
+  },
+  '(onboarded)/index': () => null,
   '(onboarded)/review': ReviewScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
@@ -249,7 +237,7 @@ describe('<ReviewScreen />', () => {
 
     await user.press(screen.getByRole('button', { name: 'Finish' }))
 
-    expect(expoRouterMock.back).toHaveBeenCalledOnce()
+    expect(screen).toHavePathname('/')
   })
 
   test('when there is an error getting the reviewables, an error message is shown', async () => {

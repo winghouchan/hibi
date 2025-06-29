@@ -1,5 +1,5 @@
 import { screen, userEvent, waitFor } from '@testing-library/react-native'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Alert, View } from 'react-native'
@@ -22,34 +22,27 @@ import NoteEditor from '.'
 import { createNote, updateNote } from '@/notes/operations'
 
 jest.mock('@/ui/RichTextInput/RichTextInput')
-;(useRouter as jest.MockedFunction<typeof useRouter>).mockReturnValue({
-  back: jest.fn(),
-  canDismiss: jest.fn(),
-  canGoBack: jest.fn(),
-  dismiss: jest.fn(),
-  dismissAll: jest.fn(),
-  dismissTo: jest.fn(),
-  navigate: jest.fn(),
-  push: jest.fn(),
-  reload: jest.fn(),
-  replace: jest.fn(),
-  setParams: jest.fn(),
-})
 
 const routerMock = {
   _layout: () => <Stack />,
   '(onboarded)/_layout': () => <Stack />,
-  'onboarding/_layout': () => (
-    <Stack
-      screenLayout={({ children }) => (
-        <ErrorBoundary
-          fallback={<View testID="error-boundary-fallback-mock" />}
-        >
-          {children}
-        </ErrorBoundary>
-      )}
-    />
-  ),
+  'onboarding/_layout': {
+    unstable_settings: {
+      initialRouteName: 'index',
+    },
+    default: () => (
+      <Stack
+        screenLayout={({ children }) => (
+          <ErrorBoundary
+            fallback={<View testID="error-boundary-fallback-mock" />}
+          >
+            {children}
+          </ErrorBoundary>
+        )}
+      />
+    ),
+  },
+  'onboarding/index': () => null,
   'onboarding/notes/[id]/edit': NoteEditor,
   'onboarding/notes/new': NoteEditor,
 } satisfies Parameters<typeof renderRouter>[0]
