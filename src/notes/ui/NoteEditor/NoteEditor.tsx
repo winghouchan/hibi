@@ -154,6 +154,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
         <View style={styles.setting}>
           <CollectionPicker
             onChange={(value) => setFieldValue('collections', value)}
+            testID={testID && `${testID}.note-editor.collection`}
             value={values.collections}
           />
         </View>

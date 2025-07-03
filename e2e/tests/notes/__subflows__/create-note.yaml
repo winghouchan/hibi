@@ -26,11 +26,11 @@ tags:
       true: ${collection}
     commands:
       - tapOn:
-          id: note.note-editor.picker.button
+          id: note.note-editor.collection.select.open.button
       - tapOn:
           text: ${collection}
       - tapOn:
-          id: note.note-editor.picker.done.button
+          id: note.note-editor.collection.select.done.button
 
 - runFlow:
     when:
