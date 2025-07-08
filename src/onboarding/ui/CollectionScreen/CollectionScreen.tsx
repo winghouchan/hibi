@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
 import { object, string } from 'yup'
-import { Button, Text, TextField } from '@/ui'
+import { Button, Heading, TextField } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 import Layout from '../Layout'
 import useForm from './useForm'
@@ -59,7 +59,7 @@ export default function CollectionScreen() {
   return (
     <Layout testID="onboarding.collection.screen">
       <Layout.Main>
-        <Text size="heading.large">{translate`What are you learning?`}</Text>
+        <Heading size="large">{translate`What are you learning?`}</Heading>
         <TextField
           accessibilityLabel={translate`Enter a collection name`}
           autoFocus
