@@ -7,7 +7,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { CollectionFilter } from '@/collections/ui'
 import { notesQuery } from '@/notes/operations'
 import { NoteList } from '@/notes/ui'
-import { Icon, Text } from '@/ui'
+import { Heading, Icon } from '@/ui'
 import CreateMenu from '../CreateMenu'
 
 const styles = StyleSheet.create(({ spacing }, { insets }) => ({
@@ -59,7 +59,7 @@ export default function LibraryScreen() {
       <CreateMenu collection={collection} ref={createMenuRef} />
       <View testID="library.screen" style={styles.screen}>
         <View style={[styles.header, styles.padding]}>
-          <Text size="heading.medium">{translate`Library`}</Text>
+          <Heading size="medium">{translate`Library`}</Heading>
           <View style={styles.headerInlineEnd}>
             {typeof collection !== 'undefined' && (
               <Link

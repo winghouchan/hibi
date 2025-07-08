@@ -12,7 +12,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { notesQuery } from '@/notes/operations'
 import { NoteList } from '@/notes/ui'
 import { log } from '@/telemetry'
-import { Button, Text } from '@/ui'
+import { Button, Heading } from '@/ui'
 import {
   completeOnboardingMutation,
   isOnboardingCompleteQuery,
@@ -107,10 +107,10 @@ export default function NotesScreen() {
     return (
       <Layout testID="onboarding.notes.screen">
         <Layout.Main scrollable={false}>
-          <Text
-            size="heading.large"
+          <Heading
+            size="large"
             style={styles.padding}
-          >{translate`What do you want to remember?`}</Text>
+          >{translate`What do you want to remember?`}</Heading>
           <NoteList
             data={notes}
             onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}

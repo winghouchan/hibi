@@ -5,7 +5,7 @@ import { ComponentRef, useRef } from 'react'
 import { Alert, Pressable, View } from 'react-native'
 import { noteQuery } from '@/notes/operations'
 import { NoteEditor } from '@/notes/ui'
-import { Button, Icon, Stack, Text } from '@/ui'
+import { Button, Heading, Icon, Stack } from '@/ui'
 import { onboardingCollectionQuery } from '../../operations'
 import Header from './Header'
 import styles from './NoteEditorScreen.styles'
@@ -76,7 +76,7 @@ export default function NoteEditorScreen() {
                       </Pressable>
                     </View>
                   ) : null}
-                  <Text size="heading.small">{collection.name}</Text>
+                  <Heading size="small">{collection.name}</Heading>
                 </Header.Item>
                 <View>
                   <Button
