@@ -1,16 +1,16 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export default StyleSheet.create((theme) => ({
+export default StyleSheet.create(({ color, radius, text }) => ({
   track: {
-    backgroundColor: theme.color.borders.default,
-    borderRadius: theme.radius.medium,
-    height: theme.text.label.small.fontSize,
+    backgroundColor: color.borders.default,
+    borderRadius: radius.medium,
+    height: text.label.small.fontSize,
     width: '100%',
   },
 
   indicator: (value: number) => ({
-    backgroundColor: theme.color.foreground.default,
-    borderRadius: theme.radius.medium,
+    backgroundColor: color.foreground.default,
+    borderRadius: radius.medium,
     height: '100%',
     width: `${value}%`,
   }),

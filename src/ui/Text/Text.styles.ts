@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create(({ color, text }) => ({
   text: {
-    color: theme.color.foreground.default,
+    color: color.foreground.default,
 
     variants: {
       size: {
-        display: theme.text.display,
-        'heading.large': theme.text.heading.large,
-        'heading.medium': theme.text.heading.medium,
-        'heading.small': theme.text.heading.small,
-        body: theme.text.body,
-        'label.medium': theme.text.label.medium,
-        'label.small': theme.text.label.small,
-        default: theme.text.body,
+        display: text.display,
+        'heading.large': text.heading.large,
+        'heading.medium': text.heading.medium,
+        'heading.small': text.heading.small,
+        body: text.body,
+        'label.medium': text.label.medium,
+        'label.small': text.label.small,
+        default: text.body,
       },
     },
   },
