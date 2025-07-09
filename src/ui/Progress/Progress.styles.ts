@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export default StyleSheet.create(({ color, radius, text }) => ({
+export default StyleSheet.create(({ color, radius, size }) => ({
   track: {
     backgroundColor: color.borders.default,
     borderRadius: radius.medium,
-    height: text.label.small.fontSize,
+    height: size[16],
     width: '100%',
   },
 
