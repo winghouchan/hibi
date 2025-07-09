@@ -15,14 +15,14 @@ import {
 } from '@/home/operations'
 import { Text } from '@/ui'
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create(({ radius, spacing }) => ({
   list: {
-    padding: theme.spacing.normal,
+    padding: spacing.normal,
   },
 
   item: (selected: boolean) => ({
     alignItems: 'center',
-    borderRadius: theme.radius.medium,
+    borderRadius: radius.medium,
     borderWidth: selected ? 1 : 0,
     height: 48,
     flexDirection: 'row',
