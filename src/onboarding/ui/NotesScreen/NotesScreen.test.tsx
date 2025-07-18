@@ -14,10 +14,13 @@ import { mockAppRoot } from 'test/utils'
 import NotesScreen from './NotesScreen'
 
 const routerMock = {
-  '(onboarded)/_layout': () => null,
-  '(onboarded)/(tabs)/_layout': () => null,
+  '(onboarded)/_layout': () => <Stack />,
+  '(onboarded)/(tabs)/_layout': () => <Stack />,
   '(onboarded)/(tabs)/index': () => null,
-  'onboarding/_layout': () => (
+  'onboarding/notes': NotesScreen,
+  'onboarding/notes/[id]/edit': () => null,
+  'onboarding/notes/new': () => null,
+  _layout: () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -28,9 +31,6 @@ const routerMock = {
       )}
     />
   ),
-  'onboarding/notes': NotesScreen,
-  'onboarding/notes/[id]/edit': () => null,
-  'onboarding/notes/new': () => null,
   index: () => null,
 } satisfies Parameters<typeof renderRouter>[0]
 
@@ -44,7 +44,7 @@ describe('<NotesScreen />', () => {
 
       mockOnboardingCollection(fixture.collection)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/notes',
         wrapper: mockAppRoot(),
       })
@@ -71,7 +71,7 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
           wrapper: mockAppRoot(),
         })
@@ -137,7 +137,7 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
           wrapper: mockAppRoot(),
         })
@@ -194,7 +194,7 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
           wrapper: mockAppRoot(),
         })
@@ -253,7 +253,7 @@ describe('<NotesScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes',
           wrapper: mockAppRoot(),
         })
@@ -261,7 +261,33 @@ describe('<NotesScreen />', () => {
         await user.press(await screen.findByRole('button', { name: 'Finish' }))
 
         await waitFor(() => {
-          expect(screen).toHavePathname('/')
+          expect(screen).toHaveRouterState(
+            expect.objectContaining({
+              routes: [
+                expect.objectContaining({
+                  state: expect.objectContaining({
+                    index: 0,
+                    routes: [
+                      expect.objectContaining({
+                        name: '(onboarded)',
+                        state: expect.objectContaining({
+                          index: 0,
+                          routes: [
+                            expect.objectContaining({
+                              name: '(tabs)',
+                              params: {
+                                screen: 'index',
+                              },
+                            }),
+                          ],
+                        }),
+                      }),
+                    ],
+                  }),
+                }),
+              ],
+            }),
+          )
         })
       })
     })
@@ -274,7 +300,7 @@ describe('<NotesScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/notes',
         wrapper: mockAppRoot(),
       })
@@ -336,7 +362,7 @@ describe('<NotesScreen />', () => {
       mockOnboardingCollection(fixture.collection)
       mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/notes',
         wrapper: mockAppRoot(),
       })

@@ -29,7 +29,7 @@ describe('<OnboardingNavigator />', () => {
     it('redirects to the home screen', async () => {
       mockOnboardedState(true)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding',
         wrapper: mockAppRoot(),
       })
@@ -39,11 +39,23 @@ describe('<OnboardingNavigator />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: '(onboarded)',
-                params: {
-                  screen: '(tabs)',
-                  params: expect.objectContaining({ screen: 'index' }),
-                },
+                state: expect.objectContaining({
+                  routes: [
+                    expect.objectContaining({
+                      name: '(onboarded)',
+                      state: expect.objectContaining({
+                        routes: [
+                          expect.objectContaining({
+                            name: '(tabs)',
+                            params: expect.objectContaining({
+                              screen: 'index',
+                            }),
+                          }),
+                        ],
+                      }),
+                    }),
+                  ],
+                }),
               }),
             ],
           }),
@@ -56,7 +68,7 @@ describe('<OnboardingNavigator />', () => {
     it('does not redirect to the home screen', async () => {
       mockOnboardedState(false)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding',
         wrapper: mockAppRoot(),
       })
@@ -66,11 +78,17 @@ describe('<OnboardingNavigator />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: '(not-onboarded)',
                 state: expect.objectContaining({
                   routes: [
                     expect.objectContaining({
-                      name: 'onboarding/index',
+                      name: '(not-onboarded)',
+                      state: expect.objectContaining({
+                        routes: [
+                          expect.objectContaining({
+                            name: 'index',
+                          }),
+                        ],
+                      }),
                     }),
                   ],
                 }),
@@ -89,7 +107,7 @@ describe('<OnboardingNavigator />', () => {
 
       const errorMock = mockOnboardedStateError(new Error('Mock Error'))
 
-      renderRouter(
+      await renderRouter(
         {
           ...routerMock,
           _layout: () => (
@@ -125,7 +143,7 @@ describe('<OnboardingNavigator />', () => {
 
       const errorMock = mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(
+      await renderRouter(
         {
           ...routerMock,
           _layout: () => (
@@ -162,7 +180,7 @@ describe('<OnboardingNavigator />', () => {
       mockOnboardedState(false)
       mockOnboardingCollection(null)
 
-      renderRouter(
+      await renderRouter(
         {
           ...routerMock,
           '(not-onboarded)/onboarding/collection': () => {

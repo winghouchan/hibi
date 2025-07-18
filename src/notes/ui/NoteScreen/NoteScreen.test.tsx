@@ -37,7 +37,7 @@ describe('<NoteScreen />', () => {
 
     mockGetNote(fixture.note)
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '/notes/1',
       wrapper: mockAppRoot(),
     })
@@ -55,7 +55,7 @@ describe('<NoteScreen />', () => {
 
     mockGetNote(fixture.note)
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '/notes/0',
       wrapper: mockAppRoot(),
     })
@@ -71,7 +71,7 @@ describe('<NoteScreen />', () => {
 
     mockGetNoteError(new Error('Mock Error'))
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '/notes/1',
       wrapper: mockAppRoot(),
     })

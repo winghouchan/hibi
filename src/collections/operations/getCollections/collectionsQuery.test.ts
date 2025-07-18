@@ -77,7 +77,7 @@ describe('collectionsQuery', () => {
       skipped: true,
     },
   ])('$name', async ({ input, skipped }) => {
-    renderHook(() => useInfiniteQuery(collectionsQuery(input)), {
+    await renderHook(() => useInfiniteQuery(collectionsQuery(input)), {
       wrapper: mockAppRoot(),
     })
 

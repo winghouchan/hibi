@@ -1,4 +1,4 @@
-import { screen, userEvent } from '@testing-library/react-native'
+import { act, screen, userEvent } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -76,7 +76,7 @@ describe('<LibraryScreen />', () => {
     })
     mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-    renderRouter(routerMock, { wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     expect(await screen.findByRole('tab', { name: 'All' })).toBeOnTheScreen()
     await Promise.all(
@@ -187,7 +187,7 @@ describe('<LibraryScreen />', () => {
     })
     mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-    renderRouter(routerMock, { wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     mockNotes({ cursor: { next: undefined }, notes: [fixture.notes[0]] })
 
@@ -215,7 +215,7 @@ describe('<LibraryScreen />', () => {
     mockCollectionsError(new Error('Mock Error'))
     mockNotes({ cursor: { next: undefined }, notes: [] })
 
-    renderRouter(routerMock, { wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     expect(
       await screen.findByTestId('error-boundary-fallback-mock'),
@@ -229,7 +229,7 @@ describe('<LibraryScreen />', () => {
     mockCollections({ cursor: { next: undefined }, collections: [] })
     mockNotesError(new Error('Mock Error'))
 
-    renderRouter(routerMock, { wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { wrapper: mockAppRoot() })
 
     expect(
       await screen.findByTestId('error-boundary-fallback-mock'),

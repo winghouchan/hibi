@@ -58,6 +58,8 @@ export default {
         backgroundColor: '#ffffff',
       },
     ],
+    'expo-web-browser',
+    'react-native-edge-to-edge',
     [
       './plugins/withAppVariants',
       {

@@ -1,0 +1,29 @@
+# Fixes type error when passing navigation container ref to `useReactNavigationDevTools` as the ref
+# may be `null` but the `RefObject` type from React no longer includes `null` in version 19.
+#
+# See https://github.com/expo/dev-plugins/issues/70.
+# See https://react.dev/blog/2024/04/25/react-19-upgrade-guide#useref-requires-argument.
+
+diff --git a/node_modules/@dev-plugins/react-navigation/build/useReactNavigationDevTools.d.ts b/node_modules/@dev-plugins/react-navigation/build/useReactNavigationDevTools.d.ts
+index bec27df..7c19082 100644
+--- a/node_modules/@dev-plugins/react-navigation/build/useReactNavigationDevTools.d.ts
++++ b/node_modules/@dev-plugins/react-navigation/build/useReactNavigationDevTools.d.ts
+@@ -1,3 +1,3 @@
+ import type { NavigationContainerRef } from '@react-navigation/core';
+-export declare function useReactNavigationDevTools(ref: React.RefObject<NavigationContainerRef<any>>): void;
++export declare function useReactNavigationDevTools(ref: React.RefObject<NavigationContainerRef<any> | null>): void;
+ //# sourceMappingURL=useReactNavigationDevTools.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/@dev-plugins/react-navigation/src/useReactNavigationDevTools.ts b/node_modules/@dev-plugins/react-navigation/src/useReactNavigationDevTools.ts
+index e51f64d..e069f1e 100644
+--- a/node_modules/@dev-plugins/react-navigation/src/useReactNavigationDevTools.ts
++++ b/node_modules/@dev-plugins/react-navigation/src/useReactNavigationDevTools.ts
+@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
+ 
+ import { ReduxExtensionAdapter } from './ReduxExtensionAdapter';
+ 
+-export function useReactNavigationDevTools(ref: React.RefObject<NavigationContainerRef<any>>) {
++export function useReactNavigationDevTools(ref: React.RefObject<NavigationContainerRef<any> | null>) {
+   const client = useDevToolsPluginClient('react-navigation');
+   const adapterRef = useRef(new ReduxExtensionAdapter());
+   // @ts-ignore: Override global

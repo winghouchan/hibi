@@ -1,4 +1,4 @@
-import { screen, userEvent } from '@testing-library/react-native'
+import { act, screen, userEvent } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Text } from 'react-native'
 import { mockAppRoot } from 'test/utils'
@@ -299,7 +299,7 @@ describe('<Select />', () => {
     const onClose = jest.fn()
 
     // The component needs a mock of the screen's safe area which `renderRouter` mocks
-    renderRouter(
+    await renderRouter(
       {
         index: () => (
           <Select onChange={onChange} value={fixture.value.map(({ id }) => id)}>
@@ -328,18 +328,17 @@ describe('<Select />', () => {
       expect(option).toBeSelected()
     })
 
-    await Promise.all([
-      ...input.selections.map(async (selection) => {
-        const option = screen.getByRole('button', { name: selection.text })
-        await user.press(option)
-        expect(option).toBeSelected()
-      }),
-      ...input.unselections.map(async (unselection) => {
-        const option = screen.getByRole('button', { name: unselection.text })
-        await user.press(option)
-        expect(option).not.toBeSelected()
-      }),
-    ])
+    for (const selection of input.selections) {
+      const option = screen.getByRole('button', { name: selection.text })
+      await user.press(option)
+      expect(option).toBeSelected()
+    }
+
+    for (const unselection of input.unselections) {
+      const option = screen.getByRole('button', { name: unselection.text })
+      await user.press(option)
+      expect(option).not.toBeSelected()
+    }
 
     const cancelButton = screen.getByRole('button', { name: 'Cancel' })
     const doneButton = screen.getByRole('button', { name: 'Done' })

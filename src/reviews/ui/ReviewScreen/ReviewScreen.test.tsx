@@ -48,7 +48,7 @@ describe('<ReviewScreen />', () => {
   test('when there are no reviewables, a message is shown', async () => {
     mockNextReviews({ reviewables: [] })
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
@@ -174,7 +174,7 @@ describe('<ReviewScreen />', () => {
 
     mockNextReviews(fixture)
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
@@ -246,7 +246,7 @@ describe('<ReviewScreen />', () => {
 
     mockNextReviewsError(new Error('Mock Error'))
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
@@ -277,7 +277,7 @@ describe('<ReviewScreen />', () => {
     mockNextReviews({ reviewables: [fixture.reviewable] })
     mockCreateReviewError(new Error('Mock Error'))
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })
@@ -315,7 +315,7 @@ describe('<ReviewScreen />', () => {
 
     mockNextReviews({ reviewables: [fixture.reviewable] })
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '(onboarded)/review',
       wrapper: mockAppRoot(),
     })

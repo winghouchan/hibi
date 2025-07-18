@@ -1,4 +1,3 @@
-import '@testing-library/react-native/extend-expect'
 import 'react-native-gesture-handler/jestSetup'
 import registerRequireContextHook from 'babel-plugin-require-context-hook/register'
 import * as matchers from 'jest-extended'

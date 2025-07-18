@@ -2,7 +2,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { createContext, Dispatch, RefObject, SetStateAction } from 'react'
 
 type Context = {
-  bottomSheetModalRef: RefObject<BottomSheetModal>
+  bottomSheetModalRef: RefObject<BottomSheetModal | null>
   isOpen: boolean
   open: () => void
   close: () => void

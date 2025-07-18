@@ -17,7 +17,7 @@ describe('<AppLayout />', () => {
     it('redirects to the welcome screen', async () => {
       mockOnboardedState(false)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: '(onboarded)',
         wrapper: mockAppRoot(),
       })
@@ -25,9 +25,14 @@ describe('<AppLayout />', () => {
       await waitFor(() => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
-            index: 0,
             routes: [
-              expect.objectContaining({ name: '(not-onboarded)/index' }),
+              expect.objectContaining({
+                state: expect.objectContaining({
+                  routes: [
+                    expect.objectContaining({ name: '(not-onboarded)/index' }),
+                  ],
+                }),
+              }),
             ],
           }),
         )
@@ -39,7 +44,7 @@ describe('<AppLayout />', () => {
     it('does not redirect to the welcome screen', async () => {
       mockOnboardedState(true)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: '(onboarded)',
         wrapper: mockAppRoot(),
       })
@@ -49,9 +54,15 @@ describe('<AppLayout />', () => {
           expect.objectContaining({
             routes: [
               expect.objectContaining({
-                name: '(onboarded)',
                 state: expect.objectContaining({
-                  routes: [expect.objectContaining({ name: 'index' })],
+                  routes: [
+                    expect.objectContaining({
+                      name: '(onboarded)',
+                      state: expect.objectContaining({
+                        routes: [expect.objectContaining({ name: 'index' })],
+                      }),
+                    }),
+                  ],
                 }),
               }),
             ],
@@ -68,7 +79,7 @@ describe('<AppLayout />', () => {
 
       mockOnboardedState(true)
 
-      renderRouter(
+      await renderRouter(
         {
           ...routerMock,
           '(onboarded)/index': () => {

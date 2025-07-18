@@ -11,8 +11,8 @@ import Pressable from './Pressable'
 import Text from './Text'
 
 type Ref = {
-  pressable: RefObject<NativeView>
-  text: RefObject<NativeText>
+  pressable: RefObject<NativeView | null>
+  text: RefObject<NativeText | null>
 }
 type Props = ComponentProps<typeof Pressable>
 

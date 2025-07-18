@@ -77,7 +77,7 @@ describe('notesQuery', () => {
       skipped: true,
     },
   ])('$name', async ({ input, skipped }) => {
-    renderHook(() => useInfiniteQuery(notesQuery(input)), {
+    await renderHook(() => useInfiniteQuery(notesQuery(input)), {
       wrapper: mockAppRoot(),
     })
 

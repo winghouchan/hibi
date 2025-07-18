@@ -15,13 +15,13 @@ describe('<RootLayout />', () => {
     // Suppress console error from the error mock
     jest.spyOn(console, 'error').mockImplementation()
 
-    NavigatorMock.mockImplementationOnce(() => {
+    NavigatorMock.mockImplementation(() => {
       throw new Error('Mock Error')
     })
 
     const { default: Layout } = await import('./Layout')
 
-    render(<Layout />)
+    await render(<Layout />)
 
     expect(screen.getByText('Something went wrong')).toBeOnTheScreen()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeOnTheScreen()

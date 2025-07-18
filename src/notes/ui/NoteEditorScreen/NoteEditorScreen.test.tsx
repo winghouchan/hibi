@@ -117,7 +117,7 @@ describe('<NoteEditorScreen />', () => {
         fields: [], // Empty because value is not significant for this test
       })
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'notes/1/edit',
         wrapper: mockAppRoot(),
       })
@@ -153,7 +153,7 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNote(null)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'notes/1/edit',
         wrapper: mockAppRoot(),
       })
@@ -169,7 +169,7 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNoteError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'notes/1/edit',
         wrapper: mockAppRoot(),
       })
@@ -221,7 +221,7 @@ describe('<NoteEditorScreen />', () => {
         ...input.note.config,
       })
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'notes/new',
         wrapper: mockAppRoot(),
       })
@@ -268,7 +268,7 @@ describe('<NoteEditorScreen />', () => {
 
       mockCreateNoteError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'notes/new',
         wrapper: mockAppRoot(),
       })

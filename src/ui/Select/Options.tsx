@@ -56,7 +56,7 @@ export default function Options<Option extends OptionConstraint<ID>, ID>({
   ...props
 }: Props<Option, ID>) {
   const { t: translate } = useLingui()
-  const previousIsOpen = useRef<boolean>()
+  const previousIsOpen = useRef<boolean>(undefined)
   const {
     bottomSheetModalRef,
     close,

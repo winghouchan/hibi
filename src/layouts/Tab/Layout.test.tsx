@@ -9,7 +9,7 @@ describe('<TabLayout />', () => {
       // Suppress console error from the error mock
       jest.spyOn(console, 'error').mockImplementation()
 
-      renderRouter(
+      await renderRouter(
         {
           _layout: Layout,
           index: () => {

@@ -38,7 +38,7 @@ describe('<CollectionScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/collection',
         wrapper: mockAppRoot(),
       })
@@ -62,7 +62,7 @@ describe('<CollectionScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/collection',
         wrapper: mockAppRoot(),
       })
@@ -83,7 +83,7 @@ describe('<CollectionScreen />', () => {
 
       mockCreateCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/collection',
         wrapper: mockAppRoot(),
       })
@@ -114,7 +114,7 @@ describe('<CollectionScreen />', () => {
 
       mockOnboardingCollection(fixture.collection)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/collection',
         wrapper: mockAppRoot(),
       })
@@ -153,7 +153,7 @@ describe('<CollectionScreen />', () => {
       mockOnboardingCollection(fixture.collection)
       mockUpdateCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/collection',
         wrapper: mockAppRoot(),
       })
@@ -183,7 +183,7 @@ describe('<CollectionScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/collection',
         wrapper: mockAppRoot(),
       })
