@@ -1,0 +1,18 @@
+# Fixes an issue where packages specified for exclusion from the Android build are not excluded.
+# See https://github.com/expo/expo/issues/38169.
+
+diff --git a/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt b/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt
+index 7629d8d..da749f8 100644
+--- a/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt
++++ b/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt
+@@ -71,7 +71,9 @@ class AutolinkigCommandBuilder {
+       autolinkingCommand +
+       platform +
+       useJson +
+-      optionsMap.map { (key, value) -> listOf("--$key", value) }.flatMap { it } +
++      optionsMap.flatMap { (key, value) ->
++        value.split(" ").filter { it.isNotEmpty() }.map { subvalue -> listOf("--$key", subvalue) }
++      }.flatMap { it } +
+       searchPaths
+     return Os.windowsAwareCommandLine(command)
+   }

@@ -55,7 +55,7 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCollection(fixture.collection)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: `collections/${fixture.collection.id}/edit`,
         wrapper: mockAppRoot(),
       })
@@ -95,7 +95,7 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCollection(fixture.collection)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'collections/0/edit',
         wrapper: mockAppRoot(),
       })
@@ -111,7 +111,7 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'collections/1/edit',
         wrapper: mockAppRoot(),
       })
@@ -129,7 +129,7 @@ describe('<CollectionEditorScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'collections/new',
         wrapper: mockAppRoot(),
       })
@@ -151,7 +151,7 @@ describe('<CollectionEditorScreen />', () => {
         collectionName: 'Collection Name',
       }
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'collections/new',
         wrapper: mockAppRoot(),
       })
@@ -171,7 +171,7 @@ describe('<CollectionEditorScreen />', () => {
 
       mockCreateCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'collections/new',
         wrapper: mockAppRoot(),
       })

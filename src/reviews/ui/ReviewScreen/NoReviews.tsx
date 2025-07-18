@@ -12,7 +12,7 @@ export default function NoReviews() {
         <Trans>No reviews due</Trans>
       </Layout.Main>
       <Layout.Footer>
-        <Link href="/" testID="review.no-reviews.cta" asChild>
+        <Link href="/" testID="review.no-reviews.cta" dismissTo asChild>
           <Button>{translate`Go home`}</Button>
         </Link>
       </Layout.Footer>

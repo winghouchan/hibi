@@ -58,7 +58,7 @@ describe('<HomeScreen />', () => {
     mockActiveCollection(fixture.collection)
     mockNextReviews({ reviewables: fixture.reviewables })
 
-    renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
     expect(await screen.findByTestId('home.screen')).toBeOnTheScreen()
 
@@ -76,7 +76,7 @@ describe('<HomeScreen />', () => {
     })
     mockNextReviewsError(new Error('Mock Error'))
 
-    renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
     expect(
       await screen.findByTestId('error-boundary-fallback-mock'),
@@ -90,7 +90,7 @@ describe('<HomeScreen />', () => {
     mockActiveCollectionError(new Error('Mock Error'))
     mockNextReviews({ reviewables: [] })
 
-    renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
+    await renderRouter(routerMock, { initialUrl: '/', wrapper: mockAppRoot() })
 
     expect(
       await screen.findByTestId('error-boundary-fallback-mock'),

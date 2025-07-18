@@ -95,7 +95,7 @@ describe('<CollectionsScreen />', () => {
       collections: fixture.collections,
     })
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '/collections',
       wrapper: mockAppRoot(),
     })
@@ -114,7 +114,7 @@ describe('<CollectionsScreen />', () => {
     })
     mockCollectionsError(new Error('Test Error'))
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '/collections',
       wrapper: mockAppRoot(),
     })
@@ -134,7 +134,7 @@ describe('<CollectionsScreen />', () => {
       collections: [],
     })
 
-    renderRouter(routerMock, {
+    await renderRouter(routerMock, {
       initialUrl: '/collections',
       wrapper: mockAppRoot(),
     })

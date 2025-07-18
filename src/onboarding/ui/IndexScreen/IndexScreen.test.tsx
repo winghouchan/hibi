@@ -36,7 +36,7 @@ describe('<IndexScreen />', () => {
         createdAt: new Date(),
       })
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding',
         wrapper: mockAppRoot(),
       })
@@ -51,7 +51,7 @@ describe('<IndexScreen />', () => {
     it('redirects to the welcome screen', async () => {
       mockOnboardingCollection(null)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding',
         wrapper: mockAppRoot(),
       })
@@ -69,7 +69,7 @@ describe('<IndexScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding',
         wrapper: mockAppRoot(),
       })

@@ -12,7 +12,7 @@ describe('<RootNavigator />', () => {
 
       mockOnboardedState(true)
 
-      renderRouter(
+      await renderRouter(
         {
           _layout: Navigator,
           index: () => {

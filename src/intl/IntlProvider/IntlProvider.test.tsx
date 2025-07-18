@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { Messages } from '@lingui/core'
+import { AllMessages } from '@lingui/core'
 import { act, render, screen } from '@testing-library/react-native'
 import { EventEmitter } from 'expo'
 import { type Locale } from 'expo-localization'
@@ -19,7 +19,7 @@ const messageKeyMock = 'message'
  */
 const defaultLocaleLanguageTagMock = 'en-x-default'
 
-function mockLocalizedMessages(mock: Messages) {
+function mockLocalizedMessages(mock: Partial<AllMessages>) {
   jest.doMock('@/intl/messages', () => ({
     __esModule: true,
     default: mock,
@@ -44,6 +44,7 @@ function createLocaleMock<LanguageTag extends string>(
     currencySymbol: '£',
     decimalSeparator: '.',
     digitGroupingSeparator: ',',
+    languageScriptCode: 'Latn',
     measurementSystem: 'uk',
     temperatureUnit: 'celsius',
     textDirection: 'ltr',
@@ -290,7 +291,7 @@ describe('<IntlProvider />', () => {
       const { Trans } = await import('@lingui/react')
       const { default: IntlProvider } = await import('./IntlProvider')
 
-      render(
+      await render(
         <IntlProvider>
           <Trans id={messageKeyMock} />
         </IntlProvider>,
@@ -313,7 +314,7 @@ describe('<IntlProvider />', () => {
 
       mockLocalePreference([supportedLocaleMock.data])
 
-      render(
+      await render(
         <IntlProvider>
           <Trans id={messageKeyMock} />
         </IntlProvider>,

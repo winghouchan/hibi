@@ -3,8 +3,8 @@ import { Text } from 'react-native'
 import Button from './Button'
 
 describe('<Button />', () => {
-  it('renders text children', () => {
-    render(
+  it('renders text children', async () => {
+    await render(
       <Button>
         <Text>Button</Text>
       </Button>,
@@ -13,8 +13,8 @@ describe('<Button />', () => {
     expect(screen.getByRole('button', { name: 'Button' })).toBeOnTheScreen()
   })
 
-  it('renders function children', () => {
-    render(<Button>{() => <Text>Button</Text>}</Button>)
+  it('renders function children', async () => {
+    await render(<Button>{() => <Text>Button</Text>}</Button>)
 
     expect(screen.getByRole('button', { name: 'Button' })).toBeOnTheScreen()
   })
@@ -27,7 +27,7 @@ describe('<Button />', () => {
     const onPressOut = jest.fn()
     const onLongPress = jest.fn()
 
-    render(
+    await render(
       <Button
         onPress={onPress}
         onPressIn={onPressIn}
@@ -49,8 +49,8 @@ describe('<Button />', () => {
     expect(onLongPress).toHaveBeenCalledOnce()
   })
 
-  it('can have a custom accessibility role', () => {
-    render(
+  it('can have a custom accessibility role', async () => {
+    await render(
       <Button accessibilityRole="link">
         <Text>Link</Text>
       </Button>,
@@ -60,8 +60,8 @@ describe('<Button />', () => {
     expect(screen.getByRole('link', { name: 'Link' })).toBeOnTheScreen()
   })
 
-  it('can have a custom role', () => {
-    render(
+  it('can have a custom role', async () => {
+    await render(
       <Button role="link">
         <Text>Link</Text>
       </Button>,
@@ -71,8 +71,8 @@ describe('<Button />', () => {
     expect(screen.getByRole('link', { name: 'Link' })).toBeOnTheScreen()
   })
 
-  test('when given a `testID`, it is appended with `.button`', () => {
-    render(
+  test('when given a `testID`, it is appended with `.button`', async () => {
+    await render(
       <Button testID="test">
         <Text>Button</Text>
       </Button>,

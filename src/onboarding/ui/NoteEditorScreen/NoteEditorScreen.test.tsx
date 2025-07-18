@@ -74,7 +74,7 @@ describe('<NoteEditorScreen />', () => {
         mockOnboardingCollection(fixture.collection)
         mockCollections({ cursor: { next: undefined }, collections: [] })
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/new',
           wrapper: mockAppRoot(),
         })
@@ -124,7 +124,7 @@ describe('<NoteEditorScreen />', () => {
 
         mockCreateNoteError(new Error('Mock Error'))
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/new',
           wrapper: mockAppRoot(),
         })
@@ -212,7 +212,7 @@ describe('<NoteEditorScreen />', () => {
           ...fixture.note.config,
         })
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/1/edit',
           wrapper: mockAppRoot(),
         })
@@ -302,7 +302,7 @@ describe('<NoteEditorScreen />', () => {
 
         mockUpdateNoteError(new Error('Mock Error'))
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/1/edit',
           wrapper: mockAppRoot(),
         })
@@ -333,7 +333,7 @@ describe('<NoteEditorScreen />', () => {
 
         mockGetNote(null)
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/1/edit',
           wrapper: mockAppRoot(),
         })
@@ -349,7 +349,7 @@ describe('<NoteEditorScreen />', () => {
     test('redirects to the welcome screen', async () => {
       mockOnboardingCollection(null)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/notes/new',
         wrapper: mockAppRoot(),
       })
@@ -365,7 +365,7 @@ describe('<NoteEditorScreen />', () => {
 
         mockOnboardingCollection(null)
 
-        renderRouter(routerMock, {
+        await renderRouter(routerMock, {
           initialUrl: 'onboarding/notes/1/edit',
           wrapper: mockAppRoot(),
         })
@@ -385,7 +385,7 @@ describe('<NoteEditorScreen />', () => {
 
       mockOnboardingCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/notes/new',
         wrapper: mockAppRoot(),
       })
@@ -410,7 +410,7 @@ describe('<NoteEditorScreen />', () => {
 
       mockGetNoteError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: 'onboarding/notes/1/edit',
         wrapper: mockAppRoot(),
       })

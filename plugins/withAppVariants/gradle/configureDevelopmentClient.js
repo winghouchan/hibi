@@ -25,7 +25,7 @@ function configureDevelopmentClient(settingsGradle, variants) {
        * [1]: https://docs.expo.dev/modules/autolinking/#exclude
        */
       .replace(
-        /useExpoModules\(\)/,
+        /expoAutolinking.useExpoModules\(\)/,
         `\n` +
           annotateGeneratedCode.begin('//') +
           `def variantsWithoutDevClient = [` +
@@ -47,10 +47,10 @@ function configureDevelopmentClient(settingsGradle, variants) {
           `if (gradle.startParameter.taskNames.any { taskName ->\n` +
           `  variantsWithoutDevClient.any { variant -> taskName.contains(variant) }\n` +
           `}) {\n` +
-          `  useExpoModules([exclude: ["expo-dev-client", "expo-dev-launcher", "expo-dev-menu", "expo-dev-menu-interface"] ])\n` +
-          `} else {\n` +
-          `  useExpoModules()\n` +
+          `  expoAutolinking.exclude = ["expo-dev-client", "expo-dev-launcher", "expo-dev-menu", "expo-dev-menu-interface"]\n` +
           `}\n` +
+          `\n` +
+          `expoAutolinking.useExpoModules()\n` +
           annotateGeneratedCode.end('//'),
       )
   )

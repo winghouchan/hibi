@@ -5,7 +5,7 @@ interface Options {
 }
 
 export default function useTimer(options?: Options) {
-  const interval = useRef<ReturnType<typeof setInterval>>()
+  const interval = useRef<ReturnType<typeof setInterval>>(undefined)
   const [duration, setDuration] = useState(0)
 
   const start = () => {

@@ -40,7 +40,7 @@ describe('<CollectionScreen />', () => {
       mockCollection(fixture.collection)
       mockNotes({ cursor: { next: undefined }, notes: fixture.notes })
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: `/collections/${fixture.collection.id}`,
         wrapper: mockAppRoot(),
       })
@@ -60,7 +60,7 @@ describe('<CollectionScreen />', () => {
 
       mockCollection(fixture.collection)
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: '/collections/0',
         wrapper: mockAppRoot(),
       })
@@ -76,7 +76,7 @@ describe('<CollectionScreen />', () => {
 
       mockCollectionError(new Error('Mock Error'))
 
-      renderRouter(routerMock, {
+      await renderRouter(routerMock, {
         initialUrl: '/collections/1',
         wrapper: mockAppRoot(),
       })

@@ -1,4 +1,4 @@
-import { userEvent, waitFor } from '@testing-library/react-native'
+import { act, userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -8,7 +8,8 @@ import { mockAppRoot } from 'test/utils'
 import WelcomeScreen from '.'
 
 const routerMock = {
-  _layout: () => (
+  '(onboarded)/(tabs)/index': () => null,
+  '(not-onboarded)/_layout': () => (
     <Stack
       screenLayout={({ children }) => (
         <ErrorBoundary
@@ -19,9 +20,8 @@ const routerMock = {
       )}
     />
   ),
-  '(onboarded)/(tabs)/index': () => null,
-  'onboarding/collection': () => null,
-  index: WelcomeScreen,
+  '(not-onboarded)/onboarding/collection': () => null,
+  '(not-onboarded)/index': WelcomeScreen,
 } satisfies Parameters<typeof renderRouter>[0]
 
 describe('<WelcomeScreen />', () => {
@@ -29,13 +29,24 @@ describe('<WelcomeScreen />', () => {
     it('redirects to the home screen', async () => {
       mockOnboardedState(true)
 
-      renderRouter(routerMock, { wrapper: mockAppRoot() })
+      await renderRouter(routerMock, {
+        initialUrl: '(not-onboarded)',
+        wrapper: mockAppRoot(),
+      })
 
       await waitFor(() => {
         expect(screen).toHaveRouterState(
           expect.objectContaining({
             routes: [
-              expect.objectContaining({ name: '(onboarded)/(tabs)/index' }),
+              expect.objectContaining({
+                state: expect.objectContaining({
+                  routes: [
+                    expect.objectContaining({
+                      name: '(onboarded)/(tabs)/index',
+                    }),
+                  ],
+                }),
+              }),
             ],
           }),
         )
@@ -47,7 +58,10 @@ describe('<WelcomeScreen />', () => {
     it('shows a button to start onboarding', async () => {
       mockOnboardedState(false)
 
-      renderRouter(routerMock, { wrapper: mockAppRoot() })
+      await renderRouter(routerMock, {
+        initialUrl: '(not-onboarded)',
+        wrapper: mockAppRoot(),
+      })
 
       expect(
         await screen.findByTestId('onboarding.welcome.cta.button'),
@@ -59,7 +73,10 @@ describe('<WelcomeScreen />', () => {
 
       mockOnboardedState(false)
 
-      renderRouter(routerMock, { wrapper: mockAppRoot() })
+      await renderRouter(routerMock, {
+        initialUrl: '(not-onboarded)',
+        wrapper: mockAppRoot(),
+      })
 
       await user.press(
         await screen.findByTestId('onboarding.welcome.cta.button'),
@@ -76,7 +93,10 @@ describe('<WelcomeScreen />', () => {
 
       mockOnboardedStateError(new Error('Mock Error'))
 
-      renderRouter(routerMock, { wrapper: mockAppRoot() })
+      await renderRouter(routerMock, {
+        initialUrl: '(not-onboarded)',
+        wrapper: mockAppRoot(),
+      })
 
       expect(
         await screen.findByTestId('error-boundary-fallback-mock'),
