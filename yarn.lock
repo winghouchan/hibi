@@ -1324,7 +1324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.19.0, @babel/types@npm:^7.20.0, @babel/types@npm:^7.21.2, @babel/types@npm:^7.25.2, @babel/types@npm:^7.25.9, @babel/types@npm:^7.26.0, @babel/types@npm:^7.3.3":
+"@babel/types@npm:^7.0.0, @babel/types@npm:^7.20.0, @babel/types@npm:^7.21.2, @babel/types@npm:^7.25.2, @babel/types@npm:^7.25.9, @babel/types@npm:^7.26.0, @babel/types@npm:^7.3.3":
   version: 7.26.0
   resolution: "@babel/types@npm:7.26.0"
   dependencies:
@@ -8051,12 +8051,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-react-compiler@npm:^19.0.0-beta-0dec889-20241115":
-  version: 19.0.0-beta-0dec889-20241115
-  resolution: "babel-plugin-react-compiler@npm:19.0.0-beta-0dec889-20241115"
+"babel-plugin-react-compiler@npm:^19.1.0-rc.2":
+  version: 19.1.0-rc.2
+  resolution: "babel-plugin-react-compiler@npm:19.1.0-rc.2"
   dependencies:
-    "@babel/types": "npm:^7.19.0"
-  checksum: 10c0/3691e2ff5957492cd0e185cadb93b2efbf80d378dc83a00ef387214efcfd8641d8540ef8106800a474afc05f62dde9e409acb8dfde2cf5130a33fe7bc2be9bec
+    "@babel/types": "npm:^7.26.0"
+  checksum: 10c0/d48f6f7956852730c3bb92630e166348bf1849830829cdaaae83cbc29769d1933260dbf4ba77be6dd511f0c0c0a0ad479022f2cad7534e744dc360ce9c8ad7a9
   languageName: node
   linkType: hard
 
@@ -12806,7 +12806,7 @@ __metadata:
     babel-loader: "npm:^8.4.1"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
     babel-plugin-inline-import: "npm:^3.0.0"
-    babel-plugin-react-compiler: "npm:^19.0.0-beta-0dec889-20241115"
+    babel-plugin-react-compiler: "npm:^19.1.0-rc.2"
     babel-plugin-require-context-hook: "npm:^1.0.0"
     chroma-js: "npm:^3.1.2"
     concurrently: "npm:^9.1.1"
