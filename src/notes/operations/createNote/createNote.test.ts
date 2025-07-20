@@ -28,7 +28,9 @@ describe('createNote', () => {
       expected: {
         databaseState: [],
         output: expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       },
     },
@@ -102,7 +104,9 @@ describe('createNote', () => {
       expected: {
         databaseState: [],
         output: expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       },
     },

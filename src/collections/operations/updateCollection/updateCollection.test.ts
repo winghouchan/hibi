@@ -25,7 +25,9 @@ describe('updateCollection', () => {
           },
         ],
         output: expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       },
     },

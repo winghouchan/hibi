@@ -71,7 +71,9 @@ describe('`reviewable_snapshot` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(
@@ -117,16 +119,20 @@ describe('`reviewable_snapshot` table', () => {
         insertReviewableSnapshot({ ...reviewableSnapshotMock, reviewable: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_snapshot.reviewable',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_snapshot.reviewable',
+          ),
+        }),
       })
 
       await expect(
@@ -150,16 +156,20 @@ describe('`reviewable_snapshot` table', () => {
         insertReviewableSnapshot({ ...reviewableSnapshotMock, review: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_snapshot.review',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_snapshot.review',
+          ),
+        }),
       })
 
       await expect(
@@ -183,7 +193,9 @@ describe('`reviewable_snapshot` table', () => {
         insertReviewableSnapshot({ ...reviewableSnapshotMock, difficulty: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
       await expect(
@@ -193,9 +205,11 @@ describe('`reviewable_snapshot` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_snapshot.difficulty',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_snapshot.difficulty',
+          ),
+        }),
       })
 
       await expect(
@@ -246,9 +260,11 @@ describe('`reviewable_snapshot` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_snapshot.due',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_snapshot.due',
+          ),
+        }),
       })
 
       await expect(
@@ -272,7 +288,9 @@ describe('`reviewable_snapshot` table', () => {
         insertReviewableSnapshot({ ...reviewableSnapshotMock, stability: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
       await expect(
@@ -282,9 +300,11 @@ describe('`reviewable_snapshot` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_snapshot.stability',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_snapshot.stability',
+          ),
+        }),
       })
 
       await expect(
@@ -308,7 +328,9 @@ describe('`reviewable_snapshot` table', () => {
         await insertReviewableSnapshot({ ...reviewableSnapshotMock, state })
 
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(insertReviewableSnapshotWithState(-1)).rejects.toEqual(
@@ -328,9 +350,11 @@ describe('`reviewable_snapshot` table', () => {
         await insertReviewableSnapshot({ ...reviewableSnapshotMock, state })
 
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_snapshot.state',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_snapshot.state',
+          ),
+        }),
       })
 
       await expect(
@@ -394,9 +418,11 @@ describe('`reviewable_snapshot` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: reviewable_snapshot.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: reviewable_snapshot.created_at',
+            ),
+          }),
         }),
       )
     })

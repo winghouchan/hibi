@@ -25,7 +25,9 @@ describe('`note` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(insertNote({ id: 'string' })).rejects.toEqual(
@@ -78,9 +80,11 @@ describe('`note` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: note.is_reversible',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: note.is_reversible',
+            ),
+          }),
         }),
       )
     })
@@ -118,9 +122,11 @@ describe('`note` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: note.is_separable',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: note.is_separable',
+            ),
+          }),
         }),
       )
     })
@@ -164,9 +170,11 @@ describe('`note` table', () => {
     it('cannot be `null`', async () => {
       await expect(insertNote({ createdAt: null })).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: note.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: note.created_at',
+            ),
+          }),
         }),
       )
     })

@@ -25,7 +25,9 @@ describe('`user` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(insertUser({ id: 'string' })).rejects.toEqual(
@@ -60,7 +62,9 @@ describe('`user` table', () => {
     test('when not `null`, must reference a collection', async () => {
       await expect(insertUser({ activeCollection: 0 })).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
@@ -92,9 +96,11 @@ describe('`user` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: user.is_onboarded',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: user.is_onboarded',
+            ),
+          }),
         }),
       )
     })
@@ -138,9 +144,11 @@ describe('`user` table', () => {
     it('cannot be `null`', async () => {
       await expect(insertUser({ createdAt: null })).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: user.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: user.created_at',
+            ),
+          }),
         }),
       )
     })

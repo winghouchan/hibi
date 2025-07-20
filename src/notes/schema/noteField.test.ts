@@ -50,7 +50,9 @@ describe('`note_field` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(
@@ -92,16 +94,20 @@ describe('`note_field` table', () => {
         insertNoteField({ ...generateNoteFieldMock(), note: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: note_field.note',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.note',
+          ),
+        }),
       })
 
       await expect(
@@ -150,9 +156,11 @@ describe('`note_field` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: note_field.value',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.value',
+          ),
+        }),
       })
 
       await expect(
@@ -174,7 +182,9 @@ describe('`note_field` table', () => {
         insertNoteField({ ...generateNoteFieldMock(), value: '' }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
     })
@@ -187,7 +197,9 @@ describe('`note_field` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
     })
@@ -196,7 +208,9 @@ describe('`note_field` table', () => {
   describe('`hash` column', () => {
     it('is a string with length 44', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(
@@ -218,9 +232,11 @@ describe('`note_field` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: note_field.hash',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.hash',
+          ),
+        }),
       })
 
       await expect(
@@ -241,7 +257,9 @@ describe('`note_field` table', () => {
   describe('`side` column', () => {
     it('is either 0 and 1', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(
@@ -261,9 +279,11 @@ describe('`note_field` table', () => {
     it('cannot be `null`', async () => {
       const { side, ...noteFieldMock } = generateNoteFieldMock()
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: note_field.side',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.side',
+          ),
+        }),
       })
 
       await expect(
@@ -281,7 +301,9 @@ describe('`note_field` table', () => {
         insertNoteField({ ...generateNoteFieldMock(), position: -1 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
       await expect(
@@ -295,9 +317,11 @@ describe('`note_field` table', () => {
     it('cannot be `null`', async () => {
       const { position, ...noteFieldMock } = generateNoteFieldMock()
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: note_field.position',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.position',
+          ),
+        }),
       })
 
       await expect(
@@ -333,9 +357,11 @@ describe('`note_field` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: note_field.is_archived',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: note_field.is_archived',
+            ),
+          }),
         }),
       )
     })
@@ -390,9 +416,11 @@ describe('`note_field` table', () => {
         insertNoteField({ ...generateNoteFieldMock(), createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: note_field.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: note_field.created_at',
+            ),
+          }),
         }),
       )
     })

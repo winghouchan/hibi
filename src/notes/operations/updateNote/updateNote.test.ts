@@ -28,7 +28,9 @@ describe('updateNote', () => {
       input: { collections: [-1] },
       expected: {
         output: expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       },
     },
@@ -77,7 +79,9 @@ describe('updateNote', () => {
       input: { id: 1, fields: [[{ value: '' }], [{ value: 'Back 1' }]] },
       expected: {
         output: expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       },
     },

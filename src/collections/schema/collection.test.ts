@@ -29,7 +29,9 @@ describe('`collection` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(
@@ -86,9 +88,11 @@ describe('`collection` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: collection.name',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: collection.name',
+          ),
+        }),
       })
 
       await expect(insertCollection({ name: undefined })).rejects.toEqual(
@@ -102,7 +106,9 @@ describe('`collection` table', () => {
     it('cannot be an empty string', async () => {
       await expect(insertCollection({ name: '' })).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
     })
@@ -146,9 +152,11 @@ describe('`collection` table', () => {
         insertCollection({ ...collectionMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: collection.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: collection.created_at',
+            ),
+          }),
         }),
       )
     })

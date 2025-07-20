@@ -10,10 +10,10 @@
 # Related: https://github.com/drizzle-team/drizzle-orm/issues/3218.
 
 diff --git a/node_modules/drizzle-kit/bin.cjs b/node_modules/drizzle-kit/bin.cjs
-index c795693..74cf475 100755
+index 27f1406..ccd6401 100755
 --- a/node_modules/drizzle-kit/bin.cjs
 +++ b/node_modules/drizzle-kit/bin.cjs
-@@ -34538,7 +34538,7 @@ var init_migrate = __esm({
+@@ -34594,7 +34594,7 @@ var init_migrate = __esm({
        result.deleted.push(...leftMissing);
        return result;
      };

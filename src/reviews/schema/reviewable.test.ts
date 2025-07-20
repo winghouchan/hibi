@@ -44,7 +44,9 @@ describe('`reviewable` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(
@@ -90,16 +92,20 @@ describe('`reviewable` table', () => {
         insertReviewable({ ...reviewableMock, note: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable.note',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable.note',
+          ),
+        }),
       })
 
       await expect(
@@ -134,9 +140,11 @@ describe('`reviewable` table', () => {
         }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: reviewable.is_archived',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: reviewable.is_archived',
+            ),
+          }),
         }),
       )
     })
@@ -191,9 +199,11 @@ describe('`reviewable` table', () => {
         insertReviewable({ ...reviewableMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: reviewable.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: reviewable.created_at',
+            ),
+          }),
         }),
       )
     })
@@ -254,7 +264,9 @@ describe('`reviewable_field` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(
@@ -300,16 +312,20 @@ describe('`reviewable_field` table', () => {
         insertReviewableField({ ...reviewableFieldMock, reviewable: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_field.reviewable',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_field.reviewable',
+          ),
+        }),
       })
 
       await expect(
@@ -330,16 +346,20 @@ describe('`reviewable_field` table', () => {
         insertReviewableField({ ...reviewableFieldMock, field: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_field.field',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_field.field',
+          ),
+        }),
       })
 
       await expect(
@@ -357,7 +377,9 @@ describe('`reviewable_field` table', () => {
   describe('`side` column', () => {
     it('is either 0 or 1', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(
@@ -376,9 +398,11 @@ describe('`reviewable_field` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: reviewable_field.side',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: reviewable_field.side',
+          ),
+        }),
       })
 
       await expect(
@@ -428,9 +452,11 @@ describe('`reviewable_field` table', () => {
         insertReviewableField({ ...reviewableFieldMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: reviewable_field.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: reviewable_field.created_at',
+            ),
+          }),
         }),
       )
     })

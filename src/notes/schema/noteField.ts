@@ -1,13 +1,28 @@
 import { sql } from 'drizzle-orm'
 import {
-  blob,
   check,
+  customType,
   integer,
   sqliteTable,
   text,
 } from 'drizzle-orm/sqlite-core'
 import { createdAt } from '@/data/database/utils'
 import { note } from './note'
+
+/**
+ * The built-in `blob` from Drizzle was updated to always return a buffer while
+ * SQLite stores data in the blob column exactly as input. We want our blob column
+ * to be able to store strings and blobs and return them as is. This custom type
+ * enables this behaviour.
+ *
+ * @see {@link https://github.com/drizzle-team/drizzle-orm/blob/027921fda2ba61fd6271e49a576e1abd76613fc1/drizzle-orm/src/sqlite-core/columns/blob.ts}
+ * @see {@link https://www.sqlite.org/datatype3.html}
+ */
+const blob = customType<{ data: string | Uint8Array }>({
+  dataType() {
+    return 'blob'
+  },
+})
 
 export const noteField = sqliteTable(
   'note_field',
@@ -18,7 +33,7 @@ export const noteField = sqliteTable(
       .references(() => note.id)
       .notNull(),
 
-    value: blob().notNull().$type<Uint8Array | string>(),
+    value: blob().notNull(),
 
     /**
      * A hash of the value of the field.

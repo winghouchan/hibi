@@ -60,7 +60,9 @@ describe('`review` table', () => {
   describe('`id` column', () => {
     it('is an integer', async () => {
       const datatypeMismatch = expect.objectContaining({
-        message: expect.stringContaining('datatype mismatch'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('datatype mismatch'),
+        }),
       })
 
       await expect(
@@ -104,16 +106,20 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, reviewable: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('FOREIGN KEY constraint failed'),
+          }),
         }),
       )
     })
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.reviewable',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.reviewable',
+          ),
+        }),
       })
 
       await expect(
@@ -128,7 +134,9 @@ describe('`review` table', () => {
   describe('`rating` column', () => {
     it('is a valid rating', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(insertReview({ ...reviewMock, rating: -1 })).rejects.toEqual(
@@ -146,9 +154,11 @@ describe('`review` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.rating',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.rating',
+          ),
+        }),
       })
 
       await expect(
@@ -166,7 +176,9 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, duration: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
       await expect(insertReview({ ...reviewMock, duration: 1 })).toResolve()
@@ -174,9 +186,11 @@ describe('`review` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.duration',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.duration',
+          ),
+        }),
       })
 
       await expect(
@@ -226,9 +240,11 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, createdAt: null }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: review.created_at',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: review.created_at',
+            ),
+          }),
         }),
       )
     })
@@ -237,7 +253,9 @@ describe('`review` table', () => {
   describe('`created_at_offset` column', () => {
     it('is a string in the format `±HH:MM` where the `HH` value is less than 24 and the `mm` value is less than 60', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(
@@ -287,9 +305,11 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, createdAtOffset: null }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining(
-            'NOT NULL constraint failed: review.created_at_offset',
-          ),
+          cause: expect.objectContaining({
+            message: expect.stringContaining(
+              'NOT NULL constraint failed: review.created_at_offset',
+            ),
+          }),
         }),
       )
     })
@@ -315,9 +335,11 @@ describe('`review` table', () => {
         (await insertReview({ ...reviewMock, dueFuzzed })).dueFuzzed
 
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.is_due_fuzzed',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.is_due_fuzzed',
+          ),
+        }),
       })
 
       await expect(insertReviewWithIsDueFuzzed(undefined)).rejects.toEqual(
@@ -353,9 +375,11 @@ describe('`review` table', () => {
         (await insertReview({ ...reviewMock, learningEnabled })).learningEnabled
 
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.is_learning_enabled',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.is_learning_enabled',
+          ),
+        }),
       })
 
       await expect(
@@ -373,7 +397,9 @@ describe('`review` table', () => {
         insertReview({ ...reviewMock, maxInterval: 0 }),
       ).rejects.toEqual(
         expect.objectContaining({
-          message: expect.stringContaining('CHECK constraint failed'),
+          cause: expect.objectContaining({
+            message: expect.stringContaining('CHECK constraint failed'),
+          }),
         }),
       )
       await expect(insertReview({ ...reviewMock, maxInterval: 1 })).toResolve()
@@ -381,9 +407,11 @@ describe('`review` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.max_interval',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.max_interval',
+          ),
+        }),
       })
 
       await expect(
@@ -398,7 +426,9 @@ describe('`review` table', () => {
   describe('`retention` column', () => {
     it('is a value between 0 and 100 (inclusive)', async () => {
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(
@@ -413,9 +443,11 @@ describe('`review` table', () => {
 
     it('cannot be `null`', async () => {
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.retention',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.retention',
+          ),
+        }),
       })
 
       await expect(
@@ -438,7 +470,9 @@ describe('`review` table', () => {
         await insertReview({ ...reviewMock, weights })
 
       const checkConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining('CHECK constraint failed'),
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
       })
 
       await expect(insertReviewWithWeights('string')).rejects.toEqual(
@@ -473,9 +507,11 @@ describe('`review` table', () => {
         await insertReview({ ...reviewMock, weights })
 
       const notNullConstraintFailed = expect.objectContaining({
-        message: expect.stringContaining(
-          'NOT NULL constraint failed: review.weights',
-        ),
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: review.weights',
+          ),
+        }),
       })
 
       await expect(insertReviewWithWeights(undefined)).rejects.toEqual(
