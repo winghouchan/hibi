@@ -52,7 +52,6 @@ export default forwardRef<Ref, Props>(function Pressable(
   return (
     <NativePressable
       accessibilityRole={accessibilityRole}
-      children={children}
       onPressIn={handlePressIn}
       ref={ref}
       role={role}
@@ -61,6 +60,8 @@ export default forwardRef<Ref, Props>(function Pressable(
         typeof style === 'function' ? style(state) : style,
       ]}
       {...props}
-    />
+    >
+      {children}
+    </NativePressable>
   )
 })
