@@ -66,7 +66,7 @@ describe('getReviewTime', () => {
       expected: 3000,
     },
     {
-      when: 'when the `from` and `to` filters are specified, returns the cumulative review time of reviews completed after and including the `from` date and before and excluding the `to` date',
+      name: 'when the `from` and `to` filters are specified, returns the cumulative review time of reviews completed after and including the `from` date and before and excluding the `to` date',
       fixture: {
         reviews: [
           { createdAt: sub(new Date(), { days: 3 }), duration: 1000 },
