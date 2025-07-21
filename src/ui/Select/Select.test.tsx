@@ -1,4 +1,4 @@
-import { act, screen, userEvent } from '@testing-library/react-native'
+import { screen, userEvent } from '@testing-library/react-native'
 import { renderRouter } from 'expo-router/testing-library'
 import { Text } from 'react-native'
 import { mockAppRoot } from 'test/utils'

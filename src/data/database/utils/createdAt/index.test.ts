@@ -25,7 +25,9 @@ jest.doMock('drizzle-orm/sqlite-core', () => ({
   integer,
 }))
 
-const { default: createdAt } = require('.') // `await import('.')` cannot be used because Jest does not support top-level `await`
+/* eslint-disable-next-line @typescript-eslint/no-require-imports --
+ * `await import('.')` cannot be used because Jest does not support top-level `await` */
+const { default: createdAt } = require('.')
 
 describe('createdAt', () => {
   afterEach(() => {

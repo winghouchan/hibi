@@ -6,7 +6,12 @@ type Breakpoints = typeof breakpoints
 type Themes = typeof themes
 
 declare module 'react-native-unistyles' {
+  /* eslint-disable-next-line @typescript-eslint/no-empty-object-type --
+   * `interface ... extends` is required for declaration merging */
   export interface UnistylesBreakpoints extends Breakpoints {}
+
+  /* eslint-disable-next-line @typescript-eslint/no-empty-object-type --
+   * `interface ... extends` is required for declaration merging */
   export interface UnistylesThemes extends Themes {}
 }
 

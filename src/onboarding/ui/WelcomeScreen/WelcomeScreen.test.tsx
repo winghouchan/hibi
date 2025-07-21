@@ -1,4 +1,4 @@
-import { act, userEvent, waitFor } from '@testing-library/react-native'
+import { userEvent, waitFor } from '@testing-library/react-native'
 import { Stack } from 'expo-router'
 import { renderRouter, screen } from 'expo-router/testing-library'
 import { ErrorBoundary } from 'react-error-boundary'
