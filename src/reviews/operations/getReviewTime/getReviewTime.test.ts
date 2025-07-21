@@ -14,6 +14,8 @@ function mockReview() {
   }
 }
 
+const now = new Date()
+
 describe('getReviewTime', () => {
   test.each([
     {
@@ -27,8 +29,8 @@ describe('getReviewTime', () => {
       name: 'when there is more than 0 reviews, should return the cumulative review time',
       fixture: {
         reviews: [
-          { createdAt: new Date(), duration: 1000 },
-          { createdAt: new Date(), duration: 1000 },
+          { createdAt: now, duration: 1000 },
+          { createdAt: now, duration: 1000 },
         ],
       },
       expected: 2000,
@@ -37,13 +39,13 @@ describe('getReviewTime', () => {
       name: 'when the `from` filter is specified, returns the cumulative review time of reviews completed after and including the `from` date',
       fixture: {
         reviews: [
-          { createdAt: sub(new Date(), { days: 2 }), duration: 1000 },
-          { createdAt: sub(new Date(), { days: 1 }), duration: 2000 },
-          { createdAt: new Date(), duration: 3000 },
+          { createdAt: sub(now, { days: 2 }), duration: 1000 },
+          { createdAt: sub(now, { days: 1 }), duration: 2000 },
+          { createdAt: now, duration: 3000 },
         ],
       },
       input: {
-        from: sub(new Date(), { days: 1 }),
+        from: sub(now, { days: 1 }),
       },
       expected: 5000,
     },
@@ -51,17 +53,17 @@ describe('getReviewTime', () => {
       name: 'when the `to` filter is specified, returns the cumulative review time of reviews completed before and excluding the `to` date',
       fixture: {
         reviews: [
-          { createdAt: sub(new Date(), { days: 2 }), duration: 1000 },
+          { createdAt: sub(now, { days: 2 }), duration: 1000 },
           {
-            createdAt: sub(new Date(), { days: 1, seconds: 1 }),
+            createdAt: sub(now, { days: 1, seconds: 1 }),
             duration: 2000,
           },
-          { createdAt: sub(new Date(), { days: 1 }), duration: 3000 },
-          { createdAt: new Date(), duration: 4000 },
+          { createdAt: sub(now, { days: 1 }), duration: 3000 },
+          { createdAt: now, duration: 4000 },
         ],
       },
       input: {
-        to: sub(new Date(), { days: 1 }),
+        to: sub(now, { days: 1 }),
       },
       expected: 3000,
     },
@@ -69,19 +71,19 @@ describe('getReviewTime', () => {
       name: 'when the `from` and `to` filters are specified, returns the cumulative review time of reviews completed after and including the `from` date and before and excluding the `to` date',
       fixture: {
         reviews: [
-          { createdAt: sub(new Date(), { days: 3 }), duration: 1000 },
-          { createdAt: sub(new Date(), { days: 2 }), duration: 2000 },
+          { createdAt: sub(now, { days: 3 }), duration: 1000 },
+          { createdAt: sub(now, { days: 2 }), duration: 2000 },
           {
-            createdAt: sub(new Date(), { days: 1, seconds: 1 }),
+            createdAt: sub(now, { days: 1, seconds: 1 }),
             duration: 3000,
           },
-          { createdAt: sub(new Date(), { days: 1 }), duration: 4000 },
-          { createdAt: new Date(), duration: 5000 },
+          { createdAt: sub(now, { days: 1 }), duration: 4000 },
+          { createdAt: now, duration: 5000 },
         ],
       },
       input: {
-        from: sub(new Date(), { days: 2 }),
-        to: sub(new Date(), { days: 1 }),
+        from: sub(now, { days: 2 }),
+        to: sub(now, { days: 1 }),
       },
       expected: 5000,
     },

@@ -16,6 +16,8 @@ function mockReview() {
   }
 }
 
+const now = new Date()
+
 describe('getReviewCount', () => {
   test.each([
     {
@@ -28,7 +30,7 @@ describe('getReviewCount', () => {
     {
       name: 'when there are more than 0 reviews, returns the number of reviews',
       fixture: {
-        reviews: [{ createdAt: new Date() }],
+        reviews: [{ createdAt: now }],
       },
       expected: 1,
     },
@@ -36,13 +38,13 @@ describe('getReviewCount', () => {
       name: 'when the `from` filter is specified, returns the number of reviews completed after and including the `from` date',
       fixture: {
         reviews: [
-          { createdAt: sub(new Date(), { days: 2 }) },
-          { createdAt: sub(new Date(), { days: 1 }) },
-          { createdAt: new Date() },
+          { createdAt: sub(now, { days: 2 }) },
+          { createdAt: sub(now, { days: 1 }) },
+          { createdAt: now },
         ],
       },
       input: {
-        from: sub(new Date(), { days: 1 }),
+        from: sub(now, { days: 1 }),
       },
       expected: 2,
     },
@@ -50,14 +52,14 @@ describe('getReviewCount', () => {
       name: 'when the `to` filter is specified, returns the number of reviews completed before and excluding the `to` date',
       fixture: {
         reviews: [
-          { createdAt: sub(new Date(), { days: 2 }) },
-          { createdAt: sub(new Date(), { days: 1, seconds: 1 }) },
-          { createdAt: sub(new Date(), { days: 1 }) },
-          { createdAt: new Date() },
+          { createdAt: sub(now, { days: 2 }) },
+          { createdAt: sub(now, { days: 1, seconds: 1 }) },
+          { createdAt: sub(now, { days: 1 }) },
+          { createdAt: now },
         ],
       },
       input: {
-        to: sub(new Date(), { days: 1 }),
+        to: sub(now, { days: 1 }),
       },
       expected: 2,
     },
@@ -65,16 +67,16 @@ describe('getReviewCount', () => {
       name: 'when the `from` and `to` filters are specified, returns the number of reviews completed after and including the `from` date and before and excluding the `to` date',
       fixture: {
         reviews: [
-          { createdAt: sub(new Date(), { days: 3 }) },
-          { createdAt: sub(new Date(), { days: 2 }) },
-          { createdAt: sub(new Date(), { days: 1, seconds: 1 }) },
-          { createdAt: sub(new Date(), { days: 1 }) },
-          { createdAt: new Date() },
+          { createdAt: sub(now, { days: 3 }) },
+          { createdAt: sub(now, { days: 2 }) },
+          { createdAt: sub(now, { days: 1, seconds: 1 }) },
+          { createdAt: sub(now, { days: 1 }) },
+          { createdAt: now },
         ],
       },
       input: {
-        from: sub(new Date(), { days: 2 }),
-        to: sub(new Date(), { days: 1 }),
+        from: sub(now, { days: 2 }),
+        to: sub(now, { days: 1 }),
       },
       expected: 2,
     },
