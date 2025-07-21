@@ -323,25 +323,29 @@ describe('<Select />', () => {
 
     expect(onOpen).toHaveBeenCalledOnce()
 
-    fixture.value.forEach((value) => {
-      const option = screen.getByRole('button', { name: value.text })
-      expect(option).toBeSelected()
-    })
+    await Promise.all(
+      fixture.value.map(async (value) => {
+        const option = await screen.findByRole('button', { name: value.text })
+        expect(option).toBeSelected()
+      }),
+    )
 
     for (const selection of input.selections) {
-      const option = screen.getByRole('button', { name: selection.text })
+      const option = await screen.findByRole('button', { name: selection.text })
       await user.press(option)
       expect(option).toBeSelected()
     }
 
     for (const unselection of input.unselections) {
-      const option = screen.getByRole('button', { name: unselection.text })
+      const option = await screen.findByRole('button', {
+        name: unselection.text,
+      })
       await user.press(option)
       expect(option).not.toBeSelected()
     }
 
-    const cancelButton = screen.getByRole('button', { name: 'Cancel' })
-    const doneButton = screen.getByRole('button', { name: 'Done' })
+    const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
+    const doneButton = await screen.findByRole('button', { name: 'Done' })
 
     if (!input.cancel) {
       await user.press(doneButton)
