@@ -18,6 +18,7 @@ config.resolver.sourceExts.push('sql')
 config.transformer.unstable_allowRequireContext = true
 
 module.exports = withStorybook(config, {
-  enabled: true,
   configPath: path.resolve(__dirname, './.storybook/native'),
+  enabled: __DEV__,
+  onDisabledRemoveStorybook: true,
 })

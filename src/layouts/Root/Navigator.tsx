@@ -94,25 +94,27 @@ export default function Navigator() {
         screenListeners={screenListeners}
         screenOptions={screenOptions}
       >
-        <Stack.Screen
-          name="storybook"
-          options={({ navigation }) => ({
-            animation: 'slide_from_bottom',
-            cardStyleInterpolator: undefined,
-            title: translate`Storybook`,
-            headerMode: 'screen',
-            headerShown: true,
-            headerLeft: ({ canGoBack }) =>
-              canGoBack ? (
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => navigation.goBack()}
-                >
-                  <Trans>Close</Trans>
-                </Pressable>
-              ) : null,
-          })}
-        />
+        <Stack.Protected guard={__DEV__}>
+          <Stack.Screen
+            name="storybook"
+            options={({ navigation }) => ({
+              animation: 'slide_from_bottom',
+              cardStyleInterpolator: undefined,
+              title: translate`Storybook`,
+              headerMode: 'screen',
+              headerShown: true,
+              headerLeft: ({ canGoBack }) =>
+                canGoBack ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Trans>Close</Trans>
+                  </Pressable>
+                ) : null,
+            })}
+          />
+        </Stack.Protected>
       </Stack>
     </ThemeProvider>
   )
