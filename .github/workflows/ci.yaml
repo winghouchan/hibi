@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  push:
+    paths:
+      - '**.jsx?'
+      - '**.tsx?'
+      - '**.sql'
+      - package.json
+      - yarn.lock
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.tool-versions'
+
+      - name: 📦 Enable Corepack
+        run: corepack enable
+
+      - name: 🧶 Set up Yarn
+        uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+
+      - name: 🚚 Install dependencies
+        run: yarn install
+
+      - name: 🌐 Compile message catalogs
+        run: |
+          yarn run build:intl:extract-template
+          yarn run build:intl:compile
+
+      - name: ✨ Run linter
+        run: yarn run lint
+
+      - name: 🧪 Run tests
+        run: yarn run test
