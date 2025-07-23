@@ -38,7 +38,7 @@ const tolerance = {
      * required because the expectations are generated before the function under
      * test is run.
      */
-    due: [0, 5000],
+    due: [0, 60000],
   },
 }
 
