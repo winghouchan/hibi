@@ -40,3 +40,38 @@ jobs:
 
       - name: 🧪 Run tests
         run: yarn run test
+
+  build-ios:
+    needs: [test]
+    runs-on: macos-15
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🏗️ Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: 🚚 Install dependencies
+        run: yarn install
+
+      - name: 🌐 Compile message catalogs
+        run: |
+          yarn run build:intl:extract-template
+          yarn run build:intl:compile
+
+      - name: 👷 Build app
+        run: |
+          yarn run expo prebuild --platform ios
+          yarn run build:ios:test:release
+
+      - name: 💾 Save app build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-ios
+          path: ./ios/build/Build/Products/Test-Release-iphonesimulator/Hibi.app
+          if-no-files-found: 'error'
