@@ -1,5 +1,5 @@
 # Bun is a JavaScript runtime environment. It is used to run the end-to-end test database fixture server.
-bun     1
+bun     latest
 
 # Java is a dependency for Android development. The version is dependent on the configuration from Expo.
 # See:

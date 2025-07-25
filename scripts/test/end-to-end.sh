@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 APP_ID=co.hibi.app.test
 E2E_ROOT_DIR="e2e/tests"

@@ -1,0 +1,8 @@
+name: '[Debug] App opens'
+appId: ${appId}
+---
+- runFlow:
+    file: ./__subflows__/launch-app.yaml
+
+- assertVisible:
+    id: onboarding.welcome.screen
