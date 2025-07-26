@@ -6,7 +6,9 @@ appId: ${appId}
     env:
       databaseFixture: onboarding/note-created
 
-- openLink:
-    link: hibi://onboarding
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://onboarding
 
 - runFlow: ../__subflows__/finish-onboarding.yaml

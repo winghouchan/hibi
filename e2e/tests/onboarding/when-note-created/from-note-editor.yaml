@@ -6,8 +6,10 @@ appId: ${appId}
     env:
       databaseFixture: onboarding/note-created
 
-- openLink:
-    link: hibi://onboarding/notes/1/edit
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://onboarding/notes/1/edit
 
 - tapOn:
     id: onboarding.note-editor.cta.button

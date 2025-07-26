@@ -3,8 +3,10 @@ appId: ${appId}
 ---
 - clearState
 
-- openLink:
-    link: hibi://library
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://library
 
 - assertVisible:
     id: onboarding.welcome.screen

@@ -1,0 +1,17 @@
+name: Launch app
+appId: ${appId}
+tags:
+  - subflow
+env:
+  clearState: false
+---
+- runFlow:
+    when:
+      true: ${clearState}
+    commands:
+      - clearState
+
+- launchApp
+
+- runFlow:
+    file: ./verify-app-open.yaml

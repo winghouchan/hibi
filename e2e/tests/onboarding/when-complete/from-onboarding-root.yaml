@@ -6,8 +6,10 @@ appId: ${appId}
     env:
       databaseFixture: onboarding/complete
 
-- openLink:
-    link: hibi://onboarding
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://onboarding
 
 - assertVisible:
     id: home.screen

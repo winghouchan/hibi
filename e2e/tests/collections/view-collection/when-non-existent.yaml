@@ -6,8 +6,10 @@ appId: ${appId}
     env:
       databaseFixture: onboarding/complete
 
-- openLink:
-    link: hibi://collections/0
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://collections/0
 
 - assertVisible:
     text: The collection doesn't exist

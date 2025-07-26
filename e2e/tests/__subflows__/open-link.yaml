@@ -1,0 +1,10 @@
+name: Launch app
+appId: ${appId}
+tags:
+  - subflow
+---
+- openLink:
+    link: ${link}
+
+- runFlow:
+    file: ./verify-app-open.yaml

@@ -1,0 +1,11 @@
+name: Verify app open
+appId: ${appId}
+tags:
+  - subflow
+---
+- runFlow:
+    when:
+      visible: '.*Open in.*Hibi.*'
+    commands:
+      - tapOn:
+          text: Open

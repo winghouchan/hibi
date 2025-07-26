@@ -6,7 +6,8 @@ appId: ${appId}
     env:
       databaseFixture: review/none-due
 
-- launchApp
+- runFlow:
+    file: ../../__subflows__/launch-app.yaml
 
 - assertNotVisible:
     id: home.screen.cta.button

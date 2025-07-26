@@ -6,8 +6,10 @@ appId: ${appId}
     env:
       databaseFixture: review/none-due
 
-- openLink:
-    link: hibi://review
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://review
 
 - assertVisible:
     id: review.no-reviews

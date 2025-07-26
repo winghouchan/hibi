@@ -6,8 +6,10 @@ appId: ${appId}
     env:
       databaseFixture: onboarding/collection-created
 
-- openLink:
-    link: hibi://onboarding/collection
+- runFlow:
+    file: ../../__subflows__/open-link.yaml
+    env:
+      link: hibi://onboarding/collection
 
 - runFlow: ../__subflows__/update-collection.yaml
 

@@ -8,7 +8,8 @@ env:
     env:
       databaseFixture: onboarding/complete
 
-- launchApp
+- runFlow:
+    file: ../../__subflows__/launch-app.yaml
 
 - runFlow: ../../library/__subflows__/view-library.yaml
 
