@@ -1,4 +1,4 @@
-name: '[Notes] When creating a note > it can be created from the library screen while a collection has been selected'
+name: '[Notes] When creating a note, it can be created from the library screen while a collection has been selected'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete

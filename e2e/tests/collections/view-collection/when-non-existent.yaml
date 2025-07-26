@@ -1,4 +1,4 @@
-name: "[Collections] When viewing a collection > and it doesn't exist > an alert is shown"
+name: "[Collections] When viewing a collection, and it doesn't exist, an alert is shown"
 appId: ${appId}
 ---
 - runFlow:

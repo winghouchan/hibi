@@ -1,4 +1,4 @@
-name: '[Notes] When creating a note > it can be created via a navigation from the library'
+name: '[Notes] When creating a note, it can be created via a navigation from the library'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete

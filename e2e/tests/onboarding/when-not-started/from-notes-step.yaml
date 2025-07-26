@@ -1,4 +1,4 @@
-name: '[Onboarding] When onboarding > and onboarding has not been started > and the app is opened in the new note creator > the user is redirected to the welcome screen'
+name: '[Onboarding] When onboarding, and onboarding has not been started, and the app is opened in the new note creator, the user is redirected to the welcome screen'
 appId: ${appId}
 ---
 - clearState

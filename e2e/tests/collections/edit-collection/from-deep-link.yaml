@@ -1,4 +1,4 @@
-name: '[Collections] When editing a collection > and it exists > it can be edited via a navigation from a deep link'
+name: '[Collections] When editing a collection, and it exists, it can be edited via a navigation from a deep link'
 appId: ${appId}
 ---
 - runFlow:

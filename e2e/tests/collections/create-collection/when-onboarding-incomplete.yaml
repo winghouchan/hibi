@@ -1,4 +1,4 @@
-name: '[Collections] When creating a collection > and onboarding has not been completed > there is a redirection to the welcome screen'
+name: '[Collections] When creating a collection, and onboarding has not been completed, there is a redirection to the welcome screen'
 appId: ${appId}
 ---
 - clearState

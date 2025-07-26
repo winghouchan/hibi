@@ -1,4 +1,4 @@
-name: '[Collections] When viewing a collection > and it exists > it can be viewed via a navigation from a deep link'
+name: '[Collections] When viewing a collection, and it exists, it can be viewed via a navigation from a deep link'
 appId: ${appId}
 ---
 - runFlow:

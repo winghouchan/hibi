@@ -1,4 +1,4 @@
-name: '[Notes] When creating a note > it can be created via the home screen'
+name: '[Notes] When creating a note, it can be created via the home screen'
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete

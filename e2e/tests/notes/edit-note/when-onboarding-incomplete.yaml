@@ -1,4 +1,4 @@
-name: '[Notes] When editing a note > and onboarding has not been completed > there is a redirection to the welcome screen'
+name: '[Notes] When editing a note, and onboarding has not been completed, there is a redirection to the welcome screen'
 appId: ${appId}
 ---
 - clearState

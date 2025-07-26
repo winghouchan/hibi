@@ -1,4 +1,4 @@
-name: "[Notes] When editing a note > and it doesn't exist > an alert is shown"
+name: "[Notes] When editing a note, and it doesn't exist, an alert is shown"
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete
