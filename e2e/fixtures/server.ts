@@ -4,7 +4,7 @@ import { mock } from 'bun:test'
 import debug from 'debug'
 import { drizzle } from 'drizzle-orm/libsql'
 import { migrate } from 'drizzle-orm/libsql/migrator'
-import { unlink } from 'node:fs/promises'
+import { mkdir, unlink } from 'node:fs/promises'
 import { parseArgs } from 'util'
 import schema from '@/data/database/schema'
 
@@ -152,7 +152,8 @@ export default {
 
   async fetch(request) {
     try {
-      const databasePath = `${import.meta.dir}/tmp/app.db`
+      const databaseDirectory = `${import.meta.dir}/tmp`
+      const databasePath = `${databaseDirectory}/app.db`
       const { appId, databaseFixture: name } = await request.json()
 
       if (!appId || !name) {
@@ -182,6 +183,8 @@ export default {
           throw error
         }
       }
+
+      await mkdir(databaseDirectory, { recursive: true })
 
       const nativeDatabase = createClient({ url: `file:${databasePath}` })
       const database = drizzle(nativeDatabase, {
