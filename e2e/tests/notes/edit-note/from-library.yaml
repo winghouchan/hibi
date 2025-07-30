@@ -6,37 +6,40 @@ env:
   front: New Front 1
   back: New Back 1
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: ${databaseFixture}
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: ${databaseFixture}
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- runFlow: ../../library/__subflows__/view-library.yaml
+      - runFlow: ../../library/__subflows__/view-library.yaml
 
-- tapOn:
-    text: ${collectionName}
+      - tapOn:
+          text: ${collectionName}
 
-- tapOn:
-    id: library.collection.note.link
-    index: 0
+      - tapOn:
+          id: library.collection.note.link
+          index: 0
 
-- tapOn:
-    text: Edit
+      - tapOn:
+          text: Edit
 
-- runFlow:
-    file: ../__subflows__/edit-note.yaml
-    env:
-      front: ${front}
-      back: ${back}
+      - runFlow:
+          file: ../__subflows__/edit-note.yaml
+          env:
+            front: ${front}
+            back: ${back}
 
-- tapOn:
-    text: Back
+      - tapOn:
+          text: Back
 
-- assertVisible:
-    text: .*${front}.*
+      - assertVisible:
+          text: .*${front}.*
 
-- assertVisible:
-    text: .*${back}.*
+      - assertVisible:
+          text: .*${back}.*

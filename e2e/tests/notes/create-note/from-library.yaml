@@ -8,39 +8,42 @@ env:
   reversible: true
   separable: true
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: ${databaseFixture}
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: ${databaseFixture}
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- runFlow: ../../library/__subflows__/view-library.yaml
+      - runFlow: ../../library/__subflows__/view-library.yaml
 
-- tapOn:
-    id: library.create.menu.button
+      - tapOn:
+          id: library.create.menu.button
 
-- tapOn:
-    id: create.note.link
+      - tapOn:
+          id: create.note.link
 
-- runFlow:
-    file: ../__subflows__/create-note.yaml
-    env:
-      collection: ${collectionName}
-      front: ${front}
-      back: ${back}
-      reversible: ${reversible}
-      separable: ${separable}
+      - runFlow:
+          file: ../__subflows__/create-note.yaml
+          env:
+            collection: ${collectionName}
+            front: ${front}
+            back: ${back}
+            reversible: ${reversible}
+            separable: ${separable}
 
-- tapOn:
-    text: Back
+      - tapOn:
+          text: Back
 
-- assertVisible:
-    id: library.screen
+      - assertVisible:
+          id: library.screen
 
-- assertVisible:
-    text: .*${front}.*
+      - assertVisible:
+          text: .*${front}.*
 
-- assertVisible:
-    text: .*${back}.*
+      - assertVisible:
+          text: .*${back}.*

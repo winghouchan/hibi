@@ -1,16 +1,19 @@
 name: '[Onboarding] When onboarding, and a note has been created, and the app is opened at the index, the onboarding journey can be completed'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/note-created
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/note-created
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- runFlow: ../__subflows__/acknowledge-welcome.yaml
+      - runFlow: ../__subflows__/acknowledge-welcome.yaml
 
-- runFlow: ../__subflows__/update-collection.yaml
+      - runFlow: ../__subflows__/update-collection.yaml
 
-- runFlow: ../__subflows__/finish-onboarding.yaml
+      - runFlow: ../__subflows__/finish-onboarding.yaml

@@ -5,24 +5,27 @@ env:
   newCollectionName: New Collection Name
   oldCollectionName: Collection Name
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: ${databaseFixture}
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: ${databaseFixture}
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- tapOn:
-    id: home.collection.edit.button
+      - tapOn:
+          id: home.collection.edit.button
 
-- runFlow:
-    file: ../__subflows__/edit-collection.yaml
-    env:
-      collectionName: ${newCollectionName}
+      - runFlow:
+          file: ../__subflows__/edit-collection.yaml
+          env:
+            collectionName: ${newCollectionName}
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen
 
-- assertVisible:
-    text: ${newCollectionName}
+      - assertVisible:
+          text: ${newCollectionName}

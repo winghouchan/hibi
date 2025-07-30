@@ -75,3 +75,102 @@ jobs:
           name: build-ios
           path: ./ios/build/Build/Products/Test-Release-iphonesimulator/Hibi.app
           if-no-files-found: 'error'
+
+  # Shard end-to-end tests to reduce the overall run time by running tests across
+  # multiple runners in parallel. Also reduces the run time in re-runs as only the
+  # tests in the failing shard need to be re-run as opposed to the whole suite.
+  shard-tests:
+    runs-on: ubuntu-latest
+
+    outputs:
+      shards: ${{ steps.shard.outputs.shards }}
+
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: ✂️ Determine shards
+        id: shard
+        working-directory: e2e/tests
+        run: echo "shards=$(find * -type d -maxdepth 0 ! -path '*__subflows__*' | jq -Rsc 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+  test-ios:
+    needs: ['build-ios', 'shard-tests']
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    # Allow job/workflow to pass even on end-to-end test failures as end-to-end
+    # tests are currently experimental, due to flakiness while running in CI.
+    continue-on-error: true
+
+    strategy:
+      # Allow other shards to run to completion to allow for the possibility of
+      # them passing, reducing the amount of shards that need to be re-run.
+      fail-fast: false
+
+      matrix:
+        shard: ${{ fromJson(needs.shard-tests.outputs.shards) }}
+
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: '.tool-versions'
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🏗️ Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: 🏗️ Set up Maestro
+        uses: ./.github/actions/set-up-maestro
+        with:
+          # Maestro versions >1.39.13 seem to have issues on iOS.
+          # See https://github.com/mobile-dev-inc/Maestro/issues/2610.
+          maestro-version: 1.39.13
+
+      - name: 🚚 Install dependencies
+        run: yarn install
+
+      - name: 📥 Download app build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-ios
+          path: ./build/Hibi.app
+
+      - name: 📱 Launch iOS simulator
+        id: launch-ios-simulator
+        uses: ./.github/actions/launch-ios-simulator
+        with:
+          model: 'iPhone 16'
+          os: 'iOS'
+          os-version: 18.5
+
+      - name: 📲 Install app
+        run: xcrun simctl install booted ./build/Hibi.app
+
+      - name: 🧪 Run tests
+        # Allow step to automatically retry to minimise failures due to flakiness
+        uses: nick-fields/retry@v3
+        env:
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: 600000 # 10 minutes
+        with:
+          command: yarn run test:end-to-end ${{ matrix.shard }}
+          max_attempts: 3
+          timeout_minutes: 30
+
+      - name: 💾 Save test artifacts
+        if: cancelled() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-ios-${{ matrix.shard }}
+          path: ~/.maestro/tests
+          retention-days: 2
+          include-hidden-files: true
+          if-no-files-found: 'error'

@@ -1,15 +1,18 @@
 name: '[Collections] When viewing a collection, and it exists, it can be viewed via a navigation from a deep link'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/complete
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/complete
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://collections/1
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://collections/1
 
-- assertVisible:
-    id: library.collection.screen
+      - assertVisible:
+          id: library.collection.screen

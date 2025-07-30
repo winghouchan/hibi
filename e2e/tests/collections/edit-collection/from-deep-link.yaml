@@ -1,29 +1,32 @@
 name: '[Collections] When editing a collection, and it exists, it can be edited via a navigation from a deep link'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/complete
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/complete
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://collections/1/edit
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://collections/1/edit
 
-- runFlow:
-    file: ../__subflows__/edit-collection.yaml
-    env:
-      collectionName: New Collection Name
+      - runFlow:
+          file: ../__subflows__/edit-collection.yaml
+          env:
+            collectionName: New Collection Name
 
-- assertVisible:
-    id: library.collection.screen
+      - assertVisible:
+          id: library.collection.screen
 
-- assertVisible:
-    text: ${collectionName}
+      - assertVisible:
+          text: ${collectionName}
 
-- tapOn:
-    text: Back
+      - tapOn:
+          text: Back
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen

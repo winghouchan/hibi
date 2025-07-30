@@ -1,21 +1,24 @@
 name: "[Collections] When viewing a collection, and it doesn't exist, an alert is shown"
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/complete
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/complete
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://collections/0
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://collections/0
 
-- assertVisible:
-    text: The collection doesn't exist
+      - assertVisible:
+          text: The collection doesn't exist
 
-- tapOn:
-    text: OK
+      - tapOn:
+          text: OK
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen

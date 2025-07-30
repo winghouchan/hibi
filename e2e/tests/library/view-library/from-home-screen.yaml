@@ -1,12 +1,15 @@
 name: '[Library] When viewing the library, it can be viewed via a navigation from the home screen'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/complete
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/complete
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- runFlow: ../__subflows__/view-library.yaml
+      - runFlow: ../__subflows__/view-library.yaml

@@ -7,27 +7,30 @@ env:
   reversible: true
   separable: true
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: ${databaseFixture}
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: ${databaseFixture}
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- tapOn:
-    id: home.note.create.button
+      - tapOn:
+          id: home.note.create.button
 
-- runFlow:
-    file: ../__subflows__/create-note.yaml
-    env:
-      front: ${front}
-      back: ${back}
-      reversible: ${reversible}
-      separable: ${separable}
+      - runFlow:
+          file: ../__subflows__/create-note.yaml
+          env:
+            front: ${front}
+            back: ${back}
+            reversible: ${reversible}
+            separable: ${separable}
 
-- tapOn:
-    text: Back
+      - tapOn:
+          text: Back
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen

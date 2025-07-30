@@ -1,17 +1,20 @@
 name: '[Onboarding] When onboarding, and onboarding has not been started, and the app is opened at the collection creation step, the onboarding journey can be completed'
 appId: ${appId}
 ---
-- clearState
+- retry:
+    maxRetries: 3
+    commands:
+      - clearState
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://onboarding/collection
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://onboarding/collection
 
-- runFlow: ../__subflows__/create-collection.yaml
+      - runFlow: ../__subflows__/create-collection.yaml
 
-- runFlow: ../__subflows__/open-note-creator.yaml
+      - runFlow: ../__subflows__/open-note-creator.yaml
 
-- runFlow: ../__subflows__/create-note.yaml
+      - runFlow: ../__subflows__/create-note.yaml
 
-- runFlow: ../__subflows__/finish-onboarding.yaml
+      - runFlow: ../__subflows__/finish-onboarding.yaml

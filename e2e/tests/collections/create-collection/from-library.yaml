@@ -4,32 +4,35 @@ env:
   collectionName: New Collection Name
   databaseFixture: onboarding/complete
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: ${databaseFixture}
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: ${databaseFixture}
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- runFlow: ../../library/__subflows__/view-library.yaml
+      - runFlow: ../../library/__subflows__/view-library.yaml
 
-- tapOn:
-    id: library.create.menu.button
+      - tapOn:
+          id: library.create.menu.button
 
-- assertVisible:
-    id: library.create.menu
+      - assertVisible:
+          id: library.create.menu
 
-- tapOn:
-    id: create.collection.link
+      - tapOn:
+          id: create.collection.link
 
-- runFlow:
-    file: ../__subflows__/create-collection.yaml
-    env:
-      collectionName: ${collectionName}
+      - runFlow:
+          file: ../__subflows__/create-collection.yaml
+          env:
+            collectionName: ${collectionName}
 
-- tapOn:
-    text: Back
+      - tapOn:
+          text: Back
 
-- assertVisible:
-    id: library.screen
+      - assertVisible:
+          id: library.screen

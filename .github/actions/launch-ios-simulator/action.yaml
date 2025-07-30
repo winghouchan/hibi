@@ -1,0 +1,35 @@
+name: 📱 Launch iOS simulator
+
+description: Launches an iOS simulator
+
+inputs:
+  model:
+    description: "Name of the device model (for example: 'iPhone 16')"
+    required: true
+  os:
+    description: "The name of the OS (for example: 'iOS')"
+    required: true
+  os-version:
+    description: "The OS version number (for example: '18.0')"
+    required: true
+
+outputs:
+  udid:
+    description: UDID of the launched device
+    value: ${{ steps.select-ios-simulator.outputs.udid }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Select iOS simulator
+      id: select-ios-simulator
+      shell: bash
+      env:
+        model: ${{ inputs.MODEL }}
+        os: ${{ inputs.OS }}
+        os_version: ${{ inputs.OS-VERSION }}
+      run: ${{ github.action_path }}/select-ios-simulator.sh
+
+    - name: Launch iOS simulator
+      shell: bash
+      run: xcrun simctl bootstatus ${{ steps.select-ios-simulator.outputs.udid }} -b
