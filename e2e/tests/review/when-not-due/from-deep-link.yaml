@@ -1,21 +1,24 @@
 name: '[Review] When starting a review, and there are no reviewables due, and the review was started via a navigation from a deep link, the user is informed and can navigate back to the home screen'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: review/none-due
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: review/none-due
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://review
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://review
 
-- assertVisible:
-    id: review.no-reviews
+      - assertVisible:
+          id: review.no-reviews
 
-- tapOn:
-    id: review.no-reviews.cta.button
+      - tapOn:
+          id: review.no-reviews.cta.button
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen

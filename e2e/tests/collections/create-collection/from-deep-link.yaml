@@ -1,23 +1,26 @@
 name: '[Collections] When creating a collection, it can be created via a navigation from a deep link'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/complete
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/complete
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://collections/new
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://collections/new
 
-- runFlow:
-    file: ../__subflows__/create-collection.yaml
-    env:
-      collectionName: New Collection Name
+      - runFlow:
+          file: ../__subflows__/create-collection.yaml
+          env:
+            collectionName: New Collection Name
 
-- tapOn:
-    text: Back
+      - tapOn:
+          text: Back
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen

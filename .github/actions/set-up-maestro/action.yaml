@@ -1,0 +1,19 @@
+name: 🏗️ Set up Maestro
+
+description: Sets up Maestro
+
+inputs:
+  maestro-version:
+    description: Version of Maestro to install
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Maestro
+      shell: bash
+      env:
+        MAESTRO_VERSION: ${{ inputs.MAESTRO-VERSION }}
+      run: |
+        curl -fsSL "https://get.maestro.mobile.dev" | bash
+        echo "$HOME/.maestro/bin" >> $GITHUB_PATH

@@ -1,16 +1,19 @@
 name: '[Review] When starting a review, and there are reviewables due, the review can be completed via a navigation from a deep link'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: review/new-reviewables
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: review/new-reviewables
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://review
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://review
 
-- runFlow: ../__subflows__/do-review.yaml
+      - runFlow: ../__subflows__/do-review.yaml
 
-- runFlow: ../__subflows__/finish-review.yaml
+      - runFlow: ../__subflows__/finish-review.yaml

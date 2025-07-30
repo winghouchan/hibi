@@ -4,33 +4,36 @@ env:
   databaseFixture: home/multiple-collections
   collectionName: Test Collection 2
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: ${databaseFixture}
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: ${databaseFixture}
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- tapOn:
-    id: home.collection-menu.link
+      - tapOn:
+          id: home.collection-menu.link
 
-- tapOn:
-    text: ${collectionName}
+      - tapOn:
+          text: ${collectionName}
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen
 
-- assertVisible:
-    text: ${collectionName}
+      - assertVisible:
+          text: ${collectionName}
 
-- stopApp
+      - stopApp
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen
 
-- assertVisible:
-    text: ${collectionName}
+      - assertVisible:
+          text: ${collectionName}

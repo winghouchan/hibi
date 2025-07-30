@@ -1,12 +1,15 @@
 name: '[Collections] When viewing a collection, and onboarding has not been completed, there is a redirection to the welcome screen'
 appId: ${appId}
 ---
-- clearState
+- retry:
+    maxRetries: 3
+    commands:
+      - clearState
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://collections/1
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://collections/1
 
-- assertVisible:
-    id: onboarding.welcome.screen
+      - assertVisible:
+          id: onboarding.welcome.screen

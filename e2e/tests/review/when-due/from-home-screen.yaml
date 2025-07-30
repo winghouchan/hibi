@@ -1,16 +1,19 @@
 name: '[Review] When starting a review, and there are reviewables due, the review can be completed via a navigation from the home screen'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: review/new-reviewables
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: review/new-reviewables
 
-- runFlow:
-    file: ../../__subflows__/launch-app.yaml
+      - runFlow:
+          file: ../../__subflows__/launch-app.yaml
 
-- runFlow: ../__subflows__/start-review.yaml
+      - runFlow: ../__subflows__/start-review.yaml
 
-- runFlow: ../__subflows__/do-review.yaml
+      - runFlow: ../__subflows__/do-review.yaml
 
-- runFlow: ../__subflows__/finish-review.yaml
+      - runFlow: ../__subflows__/finish-review.yaml

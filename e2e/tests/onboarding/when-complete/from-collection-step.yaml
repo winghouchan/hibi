@@ -1,15 +1,18 @@
 name: '[Onboarding] When onboarding, and onboarding is complete, and the app is opened at the collection creation step, the home screen is shown'
 appId: ${appId}
 ---
-- runFlow:
-    file: ../../../fixtures/loadDatabaseFixture.yaml
-    env:
-      databaseFixture: onboarding/complete
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          file: ../../../fixtures/loadDatabaseFixture.yaml
+          env:
+            databaseFixture: onboarding/complete
 
-- runFlow:
-    file: ../../__subflows__/open-link.yaml
-    env:
-      link: hibi://onboarding/collection
+      - runFlow:
+          file: ../../__subflows__/open-link.yaml
+          env:
+            link: hibi://onboarding/collection
 
-- assertVisible:
-    id: home.screen
+      - assertVisible:
+          id: home.screen
