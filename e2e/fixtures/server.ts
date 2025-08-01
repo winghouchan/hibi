@@ -63,78 +63,98 @@ interface IosDevice<
 }
 
 async function getIosDevices() {
-  const devices = Object.values<IosDevice<'Booted'>[]>(
-    (
+  try {
+    const devices = Object.values<IosDevice<'Booted'>[]>(
+      (
+        await new Response(
+          spawn([
+            'xcrun',
+            'simctl',
+            'list',
+            'devices',
+            'booted',
+            '--json',
+          ]).stdout,
+        ).json()
+      ).devices,
+    ).reduce((accumulator, value) => [...accumulator, ...value], [])
+
+    if (devices.length) {
+      log('Found iOS devices', {
+        devices: devices.map(({ udid }) => udid),
+      })
+    } else {
+      log('No iOS devices found')
+    }
+
+    return devices
+  } catch (error) {
+    log('Unable to get iOS devices. Reason:', error)
+
+    return undefined
+  }
+}
+
+async function getIosAppDataContainer(udid: string, appId: string) {
+  try {
+    return (
       await new Response(
         spawn([
           'xcrun',
           'simctl',
-          'list',
-          'devices',
-          'booted',
-          '--json',
+          'get_app_container',
+          udid,
+          appId,
+          'data',
         ]).stdout,
-      ).json()
-    ).devices,
-  ).reduce((accumulator, value) => [...accumulator, ...value], [])
+      ).text()
+    ).trimEnd()
+  } catch (error) {
+    log('Unable to get iOS app data container. Reason:', error)
 
-  if (devices.length) {
-    log('Found iOS devices', {
-      devices: devices.map(({ udid }) => udid),
-    })
-  } else {
-    log('No iOS devices found')
+    return undefined
   }
-
-  return devices
-}
-
-async function getIosAppDataContainer(udid: string, appId: string) {
-  return (
-    await new Response(
-      spawn([
-        'xcrun',
-        'simctl',
-        'get_app_container',
-        udid,
-        appId,
-        'data',
-      ]).stdout,
-    ).text()
-  ).trimEnd()
 }
 
 async function getAndroidDevices() {
-  /**
-   * List of attached Android device serial numbers.
-   *
-   * `adb devices` returns data in plaintext in the following format:
-   *
-   * ```text
-   * List of devices attached
-   * <serial 1>\t<state 1>
-   * ...
-   * <serial n>\t<state n>
-   *
-   * ```
-   */
-  const devices = (await new Response(spawn(['adb', 'devices']).stdout).text())
-    // Removes the line terminator
-    .trimEnd()
-    // Each device is separated by a line feed
-    .split('\n')
-    // Ignores first line of `adb devices` output which reads "List of devices attached"
-    .slice(1)
-    // Gets the device serial for each device, separating it from the device state
-    .map((value) => value.split('\t').slice(0, 1).join(''))
+  try {
+    /**
+     * List of attached Android device serial numbers.
+     *
+     * `adb devices` returns data in plaintext in the following format:
+     *
+     * ```text
+     * List of devices attached
+     * <serial 1>\t<state 1>
+     * ...
+     * <serial n>\t<state n>
+     *
+     * ```
+     */
+    const devices = (
+      await new Response(spawn(['adb', 'devices']).stdout).text()
+    )
+      // Removes the line terminator
+      .trimEnd()
+      // Each device is separated by a line feed
+      .split('\n')
+      // Ignores first line of `adb devices` output which reads "List of devices attached"
+      .slice(1)
+      // Gets the device serial for each device, separating it from the device state
+      .map((value) => value.split('\t').slice(0, 1).join(''))
 
-  if (devices.length) {
-    log('Found Android devices', { devices })
-  } else {
-    log('No Android devices found')
+    if (devices.length) {
+      log('Found Android devices', { devices })
+    } else {
+      log('No Android devices found')
+    }
+
+    return devices
+  } catch (error) {
+    log('Unable to get Android devices. Reason:', error)
+
+    return undefined
   }
-
-  return devices
 }
 
 function hasErrorCode(error: unknown): error is { code: string } {
@@ -166,6 +186,15 @@ export default {
           },
           { status: 422 },
         )
+      }
+
+      const iosDevices = await getIosDevices()
+      const androidDevices = await getAndroidDevices()
+
+      if (!androidDevices?.length && !iosDevices?.length) {
+        log('No devices to copy database to')
+
+        return Response.json({ message: 'OK' }, { status: 200 })
       }
 
       log('Loading database fixture', { name })
@@ -219,61 +248,64 @@ export default {
 
       log('Applied fixture')
 
-      const iosDevices = await getIosDevices()
-      const androidDevices = await getAndroidDevices()
-
       log('Copying database to devices')
 
-      await Promise.all(
-        iosDevices.map(
-          async ({ udid }) =>
-            await write(
-              file(
-                /**
-                 * ⚠️ Ensure this path matches the location the application creates
-                 * the database at.
-                 *
-                 * See `<projectRoot>/src/data/database/database.ts` for where
-                 * the database is opened. For the default location, see OP SQLite
-                 * documentation: https://ospfranco.notion.site/Configuration-6b8b9564afcc4ac6b6b377fe34475090#52a6cb4dd75542df8581e59f2804c063)
-                 */
-                `${await getIosAppDataContainer(udid, appId)}/Library/app.db`,
+      if (iosDevices) {
+        await Promise.all(
+          iosDevices.map(
+            async ({ udid }) =>
+              await write(
+                file(
+                  /**
+                   * ⚠️ Ensure this path matches the location the application creates
+                   * the database at.
+                   *
+                   * See `<projectRoot>/src/data/database/database.ts` for where
+                   * the database is opened. For the default location, see OP SQLite
+                   * documentation: https://ospfranco.notion.site/Configuration-6b8b9564afcc4ac6b6b377fe34475090#52a6cb4dd75542df8581e59f2804c063)
+                   */
+                  `${await getIosAppDataContainer(udid, appId)}/Library/app.db`,
+                ),
+                file(databasePath),
               ),
-              file(databasePath),
-            ),
-        ),
-      )
+          ),
+        )
 
-      await Promise.all(
-        androidDevices.map(async (device) => {
-          await spawn([
-            'adb',
-            '-s',
-            device,
-            'push',
-            databasePath,
-            '/data/local/tmp',
-          ]).exited
+        log('Copied database to iOS devices')
+      }
 
-          await spawn([
-            'adb',
-            '-s',
-            device,
-            'shell',
-            /**
-             * ⚠️ Ensure the path for the `cp` command's destination matches the
-             * location the application creates the database at.
-             *
-             * See `<projectRoot>/src/data/database/database.ts` for where
-             * the database is opened. For the default location, see OP SQLite
-             * documentation: https://ospfranco.notion.site/Configuration-6b8b9564afcc4ac6b6b377fe34475090#52a6cb4dd75542df8581e59f2804c063)
-             */
-            `run-as ${appId} sh -c 'mkdir -p ./databases && cp /data/local/tmp/app.db ./databases/app.db'`,
-          ]).exited
-        }),
-      )
+      if (androidDevices) {
+        await Promise.all(
+          androidDevices.map(async (device) => {
+            await spawn([
+              'adb',
+              '-s',
+              device,
+              'push',
+              databasePath,
+              '/data/local/tmp',
+            ]).exited
 
-      log('Copied database to devices')
+            await spawn([
+              'adb',
+              '-s',
+              device,
+              'shell',
+              /**
+               * ⚠️ Ensure the path for the `cp` command's destination matches the
+               * location the application creates the database at.
+               *
+               * See `<projectRoot>/src/data/database/database.ts` for where
+               * the database is opened. For the default location, see OP SQLite
+               * documentation: https://ospfranco.notion.site/Configuration-6b8b9564afcc4ac6b6b377fe34475090#52a6cb4dd75542df8581e59f2804c063)
+               */
+              `run-as ${appId} sh -c 'mkdir -p ./databases && cp /data/local/tmp/app.db ./databases/app.db'`,
+            ]).exited
+          }),
+        )
+
+        log('Copied database to Android devices')
+      }
 
       return Response.json({ message: 'OK' }, { status: 200 })
     } catch (error) {
