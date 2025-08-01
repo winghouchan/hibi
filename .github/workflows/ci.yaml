@@ -41,6 +41,52 @@ jobs:
       - name: 🧪 Run tests
         run: yarn run test
 
+  build-android:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+        # Fixes build failures due to running out of disk space
+        #
+        # Example error:
+        #
+        # > Unhandled exception. System.IO.IOException: No space left on device
+      - name: 🧹 Clean up disk
+        uses: ./.github/actions/clean-up-disk
+
+      - name: 🏗️ Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version-file: '.tool-versions'
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🚚 Install dependencies
+        run: yarn install
+
+      - name: 🌐 Compile message catalogs
+        run: |
+          yarn run build:intl:extract-template
+          yarn run build:intl:compile
+
+      - name: 👷 Build app
+        run: |
+          yarn run expo prebuild --platform android
+
+          # Build the Android test APK with increased JVM memory to avoid out-of-memory errors
+          yarn run build:android:test:debug -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
+
+      - name: 💾 Save app build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-android
+          path: ./android/app/build/outputs/apk/endToEndTest/debug/app-endToEndTest-debug.apk
+          if-no-files-found: 'error'
+
   build-ios:
     needs: [test]
     runs-on: macos-15
