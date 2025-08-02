@@ -13,7 +13,7 @@ import {
   useEffect,
   useImperativeHandle,
 } from 'react'
-import { View } from 'react-native'
+import { LogBox, View } from 'react-native'
 
 /**
  * Stops the web view over-scrolling
@@ -88,3 +88,9 @@ export default forwardRef<Ref, Props>(function RichTextInput(
     </View>
   )
 })
+
+/**
+ * Ignore editor warning that it isn't ready yet. It doesn't seem to have any
+ * end-user effect. The root cause is not understood yet.
+ */
+LogBox.ignoreLogs([`Editor isn't ready yet`])
