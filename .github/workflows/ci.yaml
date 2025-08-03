@@ -77,7 +77,9 @@ jobs:
         run: |
           yarn run expo prebuild --platform android
 
-          # Build the Android test APK with increased JVM memory to avoid out-of-memory errors
+          # Build the Android test APK with increased JVM memory to avoid out-of-memory errors.
+          # A debug build is built because the end-to-end tests executes `run-as <identifier>`
+          # in the ADB shell to write fixture data, which is only possible with debug builds.
           yarn run build:android:test:debug -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
 
       - name: 💾 Save app build
@@ -139,6 +141,101 @@ jobs:
         id: shard
         working-directory: e2e/tests
         run: echo "shards=$(find * -type d -maxdepth 0 ! -path '*__subflows__*' | jq -Rsc 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+  test-android:
+    needs: ['build-android', 'shard-tests']
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      # Allow other shards to run to completion to allow for the possibility of
+      # them passing, reducing the amount of shards that need to be re-run.
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.shard-tests.outputs.shards) }}
+
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🧹 Clean up disk
+        uses: ./.github/actions/clean-up-disk
+
+      - name: 🏗️ Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: '.tool-versions'
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🏗️ Set up Maestro
+        uses: ./.github/actions/set-up-maestro
+
+      - name: 🚚 Install dependencies
+        run: yarn install
+
+      - name: 📥 Download app build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-android
+          path: ./build
+
+      - name: 🌐 Compile message catalogs
+        run: |
+          yarn run build:intl:extract-template
+          yarn run build:intl:compile
+
+        # Speeds up tests
+        #
+        # See: https://github.com/ReactiveCircus/android-emulator-runner/blob/b68ca169d637f9b4902ca0bcd9ff339a105e5518/README.md?plain=1#L13-L23
+        # Hardware acceleration is available on larger (4-core runners): https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
+        # 4-core runners are available for open source repositories:  https://github.blog/news-insights/product-news/github-hosted-runners-double-the-power-for-open-source/
+      - name: 🏎️ Enable hardware acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: 🗄️ Start JavaScript bundle server
+        env:
+          EXPO_PUBLIC_TELEMETRY_DSN: http://spotlight@localhost:8969/0
+        run: |
+          # Start the JavaScript bundle server in the background and wait for it
+          # to be ready ("waiting on" logged) before allowing the run to continue
+          nohup yarn start:test > nohup.out 2>&1 & while ! test -f nohup.out; do :; done && tail -F nohup.out | grep -q 'Waiting on'
+
+          # Generate a JavaScript bundle. Allows the app to request a bundle from
+          # the cache instead of generating one from scratch. This minimises the
+          # risk of test failure due to assertions timing out while waiting for
+          # the bundle to load. The URL was determined by inspecting the sources
+          # via the Dev Tools.
+          curl 'http://localhost:8081/index.bundle?platform=android&dev=true&lazy=true&minify=false&app=co.hibi.app.test&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server&transform.routerRoot=src%2Fapp&transform.reactCompiler=true&transform.engine=hermes&transform.bytecode=1&unstable_transformProfile=hermes-stable' --output /dev/null
+
+      - name: 🧪 Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          # Android API level 32 and increased cores, disk, heap, RAM size seems to reduce test failures due to emulator problems
+          api-level: 32
+          arch: x86_64
+          cores: 4
+          disk-size: 4096M
+          heap-size: 1024M
+          ram-size: 8192M
+          target: default # Base Android image is faster than Android images with Google Play
+          script: |
+            adb install ./build/app-endToEndTest-debug.apk
+            yarn run test:end-to-end ${{ matrix.shard }}
+
+      - name: 💾 Save test artifacts
+        if: cancelled() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-android-${{ matrix.shard }}
+          path: ~/.maestro/tests
+          retention-days: 2
+          include-hidden-files: true
+          if-no-files-found: 'error'
 
   test-ios:
     needs: ['build-ios', 'shard-tests']
