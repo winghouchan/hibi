@@ -241,12 +241,11 @@ jobs:
           curl 'http://localhost:8081/index.bundle?platform=android&dev=true&lazy=true&minify=false&app=co.hibi.app.test&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server&transform.routerRoot=src%2Fapp&transform.reactCompiler=true&transform.engine=hermes&transform.bytecode=1&unstable_transformProfile=hermes-stable' --output /dev/null
 
       - name: 🧪 Run tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: ./.github/actions/launch-android-emulator
         with:
-          # Android API level 32 and increased cores, disk, heap, RAM size seems to reduce test failures due to emulator problems
+          # Android API level 32 and increased disk, heap, and RAM size seems to reduce test failures due to emulator problems
           api-level: 32
           arch: x86_64
-          cores: 4
           disk-size: 4096M
           heap-size: 1024M
           ram-size: 8192M
