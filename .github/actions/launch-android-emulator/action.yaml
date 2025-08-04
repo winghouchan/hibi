@@ -1,0 +1,199 @@
+name: 📱 Launch Android emulator
+
+description: Launch an Android emulator, creating a new one if none exists in the cache or restoring one from the cache if one exists.
+
+# Inputs inherit the inputs from `reactivecircus/android-emulator-runner`.
+# See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+inputs:
+  api-level:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: true
+  arch:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: x86
+    required: false
+  avd-name:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: test
+    required: false
+  channel:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: stable
+    required: false
+  cmake:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  cores:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: 2
+    required: false
+  disable-animations:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: true
+    required: false
+  disable-spellchecker:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: false
+    required: false
+  disable-linux-hw-accel:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: auto
+    required: false
+  emulator-boot-timeout:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: 600
+    required: false
+  emulator-build:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  emulator-port:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: 5554
+    required: false
+  emulator-options:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+    required: false
+  enable-hw-keyboard:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: false
+    required: false
+  force-avd-creation:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: false
+    required: false
+  disk-size:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  heap-size:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  ndk:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  pre-emulator-launch-script:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  profile:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  ram-size:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  sdcard-path-or-size:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  system-image-api-level:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: false
+  target:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: default
+    required: false
+  script:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    required: true
+  working-directory:
+    description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+    default: ./
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 🔣 Hash inputs
+      id: hash-inputs
+      shell: bash
+      run: |
+        # Hash the inputs to use as a cache key.
+        # Inputs inside `del` do not contribute to the hash as changing them
+        # does not change the emulator configuration.
+        hash=$(echo -n '${{ toJSON(inputs) }}' |
+          jq --compact-output --sort-keys 'del(."pre-emulator-launch-script", .script, ."working-directory")' |
+          sha256sum |
+          awk '{print $1}'
+        )
+
+        echo "hash=$hash" >> $GITHUB_OUTPUT
+
+    - name: ⚡️ Set up Android emulator cache
+      uses: actions/cache@v4
+      id: android-emulator-cache
+      with:
+        key: android-emulator-${{ steps.hash-inputs.outputs.hash }}
+        path: |
+          ~/.android/avd/${{ inputs.avd-name }}*
+          ~/.android/adb*
+
+      # The step that creates the Android emulator snapshot must not have any
+      # `-no-snapshot-*` options set otherwise a snapshot for caching will not
+      # be created. This step ensures any `-no-snapshot-*` options are unset.
+    - name: 🧽 Sanitise emulator options
+      id: sanitise-emulator-options
+      shell: bash
+      run: echo "options=$(echo '${{ inputs.emulator-options }}' | sed -r -e 's/-no-snapshot\S*\s?//g')" >> $GITHUB_OUTPUT
+
+      # Creates a snapshot of the Android emulator, if one doesn't exist in the cache
+    - name: 📱 Create Android emulator
+      if: ${{ steps.android-emulator-cache.outputs.cache-hit != 'true' || inputs.force-avd-creation == 'true' }}
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ inputs.api-level }}
+        arch: ${{ inputs.arch }}
+        avd-name: ${{ inputs.avd-name }}
+        channel: ${{ inputs.channel }}
+        cmake: ${{ inputs.cmake }}
+        cores: ${{ inputs.cores }}
+        disable-animations: ${{ inputs.disable-animations }}
+        disable-linux-hw-accel: ${{ inputs.disable-linux-hw-accel }}
+        disable-spellchecker: ${{ inputs.disable-spellchecker }}
+        disk-size: ${{ inputs.disk-size }}
+        emulator-boot-timeout: ${{ inputs.emulator-boot-timeout }}
+        emulator-build: ${{ inputs.emulator-build }}
+        emulator-options: ${{ steps.sanitise-emulator-options.outputs.options }}
+        emulator-port: ${{ inputs.emulator-port }}
+        enable-hw-keyboard: ${{ inputs.enable-hw-keyboard }}
+        force-avd-creation: ${{ inputs.force-avd-creation }}
+        heap-size: ${{ inputs.heap-size }}
+        ndk: ${{ inputs.ndk }}
+        profile: ${{ inputs.profile }}
+        ram-size: ${{ inputs.ram-size }}
+        script: echo "Created Android emulator snapshot"
+        sdcard-path-or-size: ${{ inputs.sdcard-path-or-size }}
+        system-image-api-level: ${{ inputs.system-image-api-level }}
+        target: ${{ inputs.target }}
+
+    - name: 📱 Launch Android emulator
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        emulator-options: -no-snapshot-save ${{ inputs.emulator-options }} # Do not save the emulator snapshot
+        force-avd-creation: false # The emulator should be created by the previous step or restored from the cache
+        pre-emulator-launch-script: ${{ inputs.pre-emulator-launch-script }}
+        script: ${{ inputs.script }}
+        working-directory: ${{ inputs.working-directory }}
+
+        # These options should match the ones used to create the emulator
+        #
+        # `disk-size`, `heap-size`, and `ram-size` are not set because they setting
+        # them seems to make the emulator think the configuration has changed from
+        # the last captured snapshot, logging the following message:
+        #
+        # > The emulator is starting from scratch. Reason: different AVD configuration
+        api-level: ${{ inputs.api-level }}
+        arch: ${{ inputs.arch }}
+        avd-name: ${{ inputs.avd-name }}
+        channel: ${{ inputs.channel }}
+        cmake: ${{ inputs.cmake }}
+        cores: ${{ inputs.cores }}
+        disable-animations: ${{ inputs.disable-animations }}
+        disable-linux-hw-accel: ${{ inputs.disable-linux-hw-accel }}
+        disable-spellchecker: ${{ inputs.disable-spellchecker }}
+        emulator-boot-timeout: ${{ inputs.emulator-boot-timeout }}
+        emulator-build: ${{ inputs.emulator-build }}
+        emulator-port: ${{ inputs.emulator-port }}
+        enable-hw-keyboard: ${{ inputs.enable-hw-keyboard }}
+        ndk: ${{ inputs.ndk }}
+        profile: ${{ inputs.profile }}
+        sdcard-path-or-size: ${{ inputs.sdcard-path-or-size }}
+        system-image-api-level: ${{ inputs.system-image-api-level }}
+        target: ${{ inputs.target }}
