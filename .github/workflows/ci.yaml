@@ -239,7 +239,7 @@ jobs:
 
   test-ios:
     needs: ['build-ios', 'shard-tests']
-    runs-on: macos-15
+    runs-on: macos-14
     timeout-minutes: 60
 
     # Allow job/workflow to pass even on end-to-end test failures as end-to-end
@@ -269,7 +269,7 @@ jobs:
       - name: 🏗️ Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: 15.0.1
 
       - name: 🏗️ Set up Maestro
         uses: ./.github/actions/set-up-maestro
@@ -291,9 +291,9 @@ jobs:
         id: launch-ios-simulator
         uses: ./.github/actions/launch-ios-simulator
         with:
-          model: 'iPhone 16'
+          model: 'iPhone 15'
           os: 'iOS'
-          os-version: 18.5
+          os-version: 17.0
 
       - name: 📲 Install app
         run: xcrun simctl install booted ./build/Hibi.app
