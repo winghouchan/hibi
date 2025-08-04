@@ -41,6 +41,14 @@ export default {
   plugins: [
     ['@sentry/react-native/expo'],
     [
+      'expo-build-properties',
+      {
+        ios: {
+          ccacheEnabled: true,
+        },
+      },
+    ],
+    [
       'expo-dev-client',
       {
         addGeneratedScheme: false,

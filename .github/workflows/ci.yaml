@@ -56,6 +56,10 @@ jobs:
       - name: 🧹 Clean up disk
         uses: ./.github/actions/clean-up-disk
 
+      - name: ⚡️ Set up build cache
+        id: build-cache
+        uses: ./.github/actions/set-up-ccache
+
       - name: 🏗️ Set up Java
         uses: actions/setup-java@v4
         with:
@@ -89,12 +93,29 @@ jobs:
           path: ./android/app/build/outputs/apk/endToEndTest/debug/app-endToEndTest-debug.apk
           if-no-files-found: 'error'
 
+      - name: 💾 Save build cache debug artifacts
+        if: runner.debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-android-build-cache-debug-artifacts
+          path: ${{ steps.build-cache.outputs.debug-directory }}
+
   build-ios:
     needs: [test]
     runs-on: macos-15
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
+
+      - name: ⚡️ Set up build cache
+        id: build-cache
+        uses: ./.github/actions/set-up-ccache
+        with:
+          # Values from https://github.com/facebook/react-native/blob/5936f29d6ae95ebdd217f7f89d1e77ae4e6e5294/packages/react-native/scripts/xcode/ccache.conf
+          depend-mode: true
+          file-clone: true
+          inode-cache: true
+          sloppiness: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
 
       - name: 🏗️ Set up Node.js
         uses: ./.github/actions/set-up-node-js
@@ -123,6 +144,13 @@ jobs:
           name: build-ios
           path: ./ios/build/Build/Products/Test-Release-iphonesimulator/Hibi.app
           if-no-files-found: 'error'
+
+      - name: 💾 Save build cache debug artifacts
+        if: runner.debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-ios-build-cache-debug-artifacts
+          path: ${{ steps.build-cache.outputs.debug-directory }}
 
   # Shard end-to-end tests to reduce the overall run time by running tests across
   # multiple runners in parallel. Also reduces the run time in re-runs as only the

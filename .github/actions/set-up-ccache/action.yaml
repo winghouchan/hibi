@@ -1,0 +1,140 @@
+name: ⚡️ Set up ccache
+
+description: Sets up ccache, a compiler cache, speeding up native builds
+
+# Inputs are a subset of ccache options. Only the options that need to be configured
+# are implemented – add additional ones as necessary. See: https://ccache.dev/manual/latest.html#_command_line_options.
+inputs:
+  depend-mode:
+    description: See https://ccache.dev/manual/latest.html#config_depend_mode.
+    required: false
+  file-clone:
+    description: See https://ccache.dev/manual/latest.html#config_file_clone.
+    required: false
+  inode-cache:
+    description: See https://ccache.dev/manual/latest.html#config_inode_cache.
+    required: false
+  sloppiness:
+    description: See https://ccache.dev/manual/latest.html#config_sloppiness.
+    required: false
+
+outputs:
+  debug-directory:
+    description: Directory where debug artifacts will be stored. Use with `actions/upload-artifact` to save.
+    value: ${{ steps.debug.outputs.directory }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 🐛 Enable debug mode
+      id: debug
+      if: runner.debug
+      shell: bash
+      env:
+        debug-directory: $GITHUB_WORKSPACE/.ccache/debug
+      run: |
+        echo "CCACHE_DEBUG=1" >> $GITHUB_ENV
+        echo "CCACHE_DEBUGDIR=${{ env.debug-directory }}" >> $GITHUB_ENV
+        echo "CCACHE_DEBUGLEVEL=1" >> $GITHUB_ENV
+
+        echo "directory=${{ env.debug-directory }}" >> $GITHUB_OUTPUT
+
+    - name: 🌲 Configure environment
+      shell: bash
+      env:
+        # React Native will use its own [ccache config][1] if one isn't defined.
+        # This [config][2] doesn't set a cache directory, so the [default][3]
+        # will be used. The default is different from the directory the ccache
+        # GitHub Action [sets][4] so when the GitHub Action attempts to save the
+        # ccache cache into the GitHub Actions cache, there is nothing to save.
+        #
+        # Configuring a cache directory ensures ccache and the GitHub Action both
+        # use the same location. Configuring a config path ensures React Native
+        # does not override our own configs.
+        #
+        # [1]: https://github.com/facebook/react-native/blob/288f6d9f483760e05607721890e6ebe8df0b3979/packages/react-native/scripts/xcode/ccache-clang.sh#L10-L12
+        # [2]: https://github.com/facebook/react-native/blob/288f6d9f483760e05607721890e6ebe8df0b3979/packages/react-native/scripts/xcode/ccache.conf
+        # [3]: https://ccache.dev/manual/latest.html#config_cache_dir
+        # [4]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/src/common.ts#L67-L75
+        cache-directory: $GITHUB_WORKSPACE/.ccache
+        config-path: $GITHUB_WORKSPACE/.config/ccache.conf
+
+        # ccache, by default, uses a hash of the compiler's size and modification
+        # time as part of the cache key, see [documentation][1]. However, this
+        # causes cache misses in Android builds because Expo defines a specific
+        # Android NDK version which may be installed from scratch, causing the
+        # compiler to have a fresh modification time. Hashing the compiler content
+        # instead increases the stability of the hash.
+        #
+        # [1]: https://ccache.dev/manual/latest.html#_common_hashed_information
+        compiler-check: content
+      run: |
+        echo "CCACHE_COMPILERCHECK=${{ env.compiler-check }}" >> $GITHUB_ENV
+        echo "CCACHE_CONFIGPATH=${{ env.config-path }}" >> $GITHUB_ENV
+        echo "CCACHE_DIR=${{ env.cache-directory }}" >> $GITHUB_ENV
+
+        ${{ inputs.depend-mode != '' && format('echo "{0}=1" >> $GITHUB_ENV', inputs.depend-mode == 'true' && 'CCACHE_DEPEND' || 'CCACHE_NODEPEND') || ''}}
+        ${{ inputs.file-clone != '' && format('echo "{0}=1" >> $GITHUB_ENV', inputs.file-clone == 'true' && 'CCACHE_FILECLONE' || 'CCACHE_NOFILECLONE') || ''}}
+        ${{ inputs.inode-cache != '' && format('echo "{0}=1" >> $GITHUB_ENV', inputs.inode-cache == 'true' && 'CCACHE_INODECACHE' || 'CCACHE_NOINODECACHE') || ''}}
+        ${{ inputs.sloppiness != '' && format('echo "CCACHE_SLOPPINESS={0}" >> $GITHUB_ENV', inputs.sloppiness) || ''}}
+
+    - name: ⚡️ Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        # Cache key will be automatically prefixed with `ccache`, see [source][1].
+        #
+        # ---
+        #
+        # Having a deterministic cache key is very difficult because the contents
+        # of the cache is a result of different factors including:
+        #
+        # - Native source files ('*.c', '*.cc', '*.cpp', '*.cxx', '*.m', etc)
+        # - Configuration files ('ccache.conf', '*.pbxproj', etc)
+        # - Environment variables
+        # - The specific build command and options used
+        #
+        # If the cache key only partially accounts for the variables listed above,
+        # changes in any unaccounted variables will mean the cache key does not
+        # change and the cache contents persisted into the GitHub Actions cache
+        # does not get updated, resulting in a stale cache. A stale cache results
+        # in cache misses, increasing the build time.
+        #
+        # To reduce the risk of a stale cache and cache misses, the commit SHA
+        # forms part of the cache key. This means the cache is always guaranteed
+        # to be up-to-date. However, it comes with certain costs:
+        #
+        # - The cache is updated on every commit. This is worth it as it only
+        #   takes a few seconds compared to the minutes saved in build time.
+        # - The cache storage contains unnecessary cache entries. This is worth
+        #   it as build time savings are worth the extra consumption in storage.
+        #   Cache entries older than the most recent one will never be reused and
+        #   be automatically evicted after 7 days or once the storage limit is
+        #   reached, see [GitHub documentation][2].
+        #
+        # The ccache GitHub Action, by default, uses the [timestamp of the run][3]
+        # to solve the above problem. However, the commit SHA is favoured because
+        # it is slightly more stable (it doesn't change on workflow re-runs with
+        # the same commit) while providing the same benefits.
+        #
+        # [1]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/src/restore.ts#L24
+        # [2]: https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#usage-limits-and-eviction-policy
+        # [3]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/action.yml#L27-L30
+        key: ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ github.sha }}
+
+        # Restore keys will be automatically prefixed with `ccache`, see [source][1].
+        # Note, there is a [bug][2] in the ccache GitHub Action where a dash (`-`)
+        # is unnecessarily appended – this means the restore keys below should not
+        # having a trailing dash.
+        #
+        # [1]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/src/restore.ts#L26C51-L26C60
+        # [2]: https://github.com/hendrikmuhs/ccache-action/issues/302
+        restore-keys: |
+          ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}
+          ${{ runner.os }}-${{ runner.arch }}
+          ${{ runner.os }}
+
+        append-timestamp: false
+
+        create-symlink: true
+
+        verbose: ${{ runner.debug && ('2' || '0') }}
