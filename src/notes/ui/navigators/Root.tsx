@@ -27,6 +27,7 @@ export default function RootNoteNavigator() {
       })}
     >
       <Stack.Screen name="[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="new" options={{ presentation: 'fullScreenModal' }} />
     </Stack>
   )
 }
