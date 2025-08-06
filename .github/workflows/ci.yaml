@@ -44,6 +44,13 @@ jobs:
   build-android:
     needs: [test]
     runs-on: ubuntu-latest
+
+    env:
+      architecture: x86_64
+
+    outputs:
+      architecture: ${{ env.architecture }}
+
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
@@ -81,10 +88,14 @@ jobs:
         run: |
           yarn run expo prebuild --platform android
 
-          # Build the Android test APK with increased JVM memory to avoid out-of-memory errors.
+          # Build the Android test APK with the specified architecture and increased JVM memory
+          # to avoid out-of-memory errors.
+          #
           # A debug build is built because the end-to-end tests executes `run-as <identifier>`
           # in the ADB shell to write fixture data, which is only possible with debug builds.
-          yarn run build:android:test:debug -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
+          yarn run build:android:test:debug \
+            -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' \
+            -PreactNativeArchitectures='${{ env.architecture }}'
 
       - name: 💾 Save app build
         uses: actions/upload-artifact@v4
@@ -245,7 +256,7 @@ jobs:
         with:
           # Android API level 32 and increased disk, heap, and RAM size seems to reduce test failures due to emulator problems
           api-level: 32
-          arch: x86_64
+          arch: ${{ needs.build-android.outputs.architecture }}
           disk-size: 4096M
           heap-size: 1024M
           ram-size: 8192M
