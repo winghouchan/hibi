@@ -1,0 +1,25 @@
+name: 🚚 Install Node modules
+
+description: Installs Node modules or restores them from the cache
+
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚡️ Set up cache
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('patches/**') }}-${{ hashFiles('yarn.lock') }}
+
+        # Do not use restore keys which don't include a hash of patches. When a
+        # patch changes there should be a cache miss with no fallback because the
+        # package manager needs to apply the patch changes which only happens on
+        # post-install. A fallback cache entry being restored will result in the
+        # package manager not having to install anything and will therefore not
+        # run the post-install applying the patch changes.
+        restore-keys: |
+          node-modules-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('patches/**') }}-
+
+    - name: 🚚 Install Node modules
+      shell: bash
+      run: yarn install

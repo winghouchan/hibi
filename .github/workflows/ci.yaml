@@ -27,8 +27,8 @@ jobs:
       - name: 🏗️ Set up Node.js
         uses: ./.github/actions/set-up-node-js
 
-      - name: 🚚 Install dependencies
-        run: yarn install
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
 
       - name: 🌐 Compile message catalogs
         run: |
@@ -79,8 +79,8 @@ jobs:
       - name: 🏗️ Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: 🚚 Install dependencies
-        run: yarn install
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
 
       - name: 🌐 Compile message catalogs
         run: |
@@ -139,8 +139,8 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: 🚚 Install dependencies
-        run: yarn install
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
 
       - name: 🌐 Compile message catalogs
         run: |
@@ -214,8 +214,8 @@ jobs:
       - name: 🏗️ Set up Maestro
         uses: ./.github/actions/set-up-maestro
 
-      - name: 🚚 Install dependencies
-        run: yarn install
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
 
       - name: 📥 Download app build
         uses: actions/download-artifact@v4
@@ -319,8 +319,8 @@ jobs:
           # See https://github.com/mobile-dev-inc/Maestro/issues/2610.
           maestro-version: 1.39.13
 
-      - name: 🚚 Install dependencies
-        run: yarn install
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
 
       - name: 📥 Download app build
         uses: actions/download-artifact@v4
