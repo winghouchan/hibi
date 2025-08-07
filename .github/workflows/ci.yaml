@@ -147,10 +147,14 @@ jobs:
           yarn run build:intl:extract-template
           yarn run build:intl:compile
 
+      - name: 🧰 Prepare build
+        run: yarn run expo prebuild --no-install --platform ios
+
+      - name: 🚚 Install Pods
+        uses: ./.github/actions/install-pods
+
       - name: 👷 Build app
-        run: |
-          yarn run expo prebuild --platform ios
-          yarn run build:ios:test:release
+        run: yarn run build:ios:test:release
 
       - name: 💾 Save app build
         uses: actions/upload-artifact@v4

@@ -1,0 +1,75 @@
+name: 🚚 Install Pods
+
+# This project uses Expo's [Continuous Native Generation (CNG)][1] process. This
+# means native code is not committed in the repository but instead is generated
+# by a pre-build command as necessary. Of these native files, one of them is the
+# `Podfile.lock`. As it is not committed in the repository, it cannot be used as
+# a cache key to restore Pods from the cache. To solve this problem, this action
+# caches the `Podfile.lock` and restores it, allowing it to be used as a key for
+# the Pods cache.
+#
+# [1]: https://docs.expo.dev/workflow/continuous-native-generation/
+description: Installs Pods or restores them from the cache
+
+runs:
+  using: 'composite'
+  steps:
+    - name: ♻️ Restore Podfile.lock
+      id: podfile-lock
+      uses: actions/cache/restore@v4
+      with:
+        # The `Podfile.lock` does not exist in the repository yet. Consequently,
+        # a key cannot be used to restore a specific cache entry, therefore the
+        # newest entry from the `Podfile.lock` cache is restored. If the cache
+        # is empty, the `Podfile.lock` will be created when `pod install` is run
+        # in the install pods step.
+        key: podfile-lock-
+        restore-keys: podfile-lock-
+        path: ios/Podfile.lock
+
+    - name: ♻️ Restore Pods
+      id: pods
+      # The `cache-hit` key is slightly misleading. Both `true` and `false` values
+      # signify the cache was hit, with `true` meaning the key was matched exactly
+      # and `false` meaning the key was not matched exactly. A value of an empty
+      # string signifies a cache miss. As a result, the following condition means
+      # 'if the Podfile.lock cache was not missed'.
+      #
+      # See: https://github.com/actions/cache/blob/0400d5f644dc74513175e3cd8d07132dd4860809/README.md#outputs
+      if: steps.podfile-lock.outputs.cache-hit != ''
+      uses: actions/cache/restore@v4
+      with:
+        path: ios/Pods
+        key: pods-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('ios/Podfile.lock') }}
+        restore-keys: |
+          pods-${{ runner.os }}-${{ runner.arch }}-
+
+      # There is no condition checking if the Pods were restored from the cache
+      # before running `pod install` because the `Podfile` may have changed which
+      # then necessitates updating the `Podfile.lock`.
+    - name: 🚚 Install Pods
+      shell: bash
+      working-directory: ios
+      run: pod install
+
+    - name: ⚡️ Cache Pods
+      if: steps.pods.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ios/Pods
+        key: pods-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('ios/Podfile.lock') }}
+
+    - name: 👀 Check Podfile.lock cache
+      id: podfile-lock-lookup
+      uses: actions/cache@v4
+      with:
+        key: podfile-lock-${{ hashFiles('ios/Podfile.lock') }}
+        path: ios/Podfile.lock
+        lookup-only: true
+
+    - name: ⚡️ Cache Podfile.lock
+      if: steps.podfile-lock-lookup.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ios/Podfile.lock
+        key: podfile-lock-${{ hashFiles('ios/Podfile.lock') }}
