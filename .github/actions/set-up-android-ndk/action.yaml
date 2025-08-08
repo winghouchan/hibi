@@ -1,0 +1,23 @@
+name: 🏗️ Set up Android NDK
+
+# The GitHub Runner may not have the configured Android NDK versions pre-installed
+# This action gets the Android NDK versions needed for the project and dependencies
+# and stores them in the cache for retrieval in subsequent runs.
+description: Restores the Android NDK from cache
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 👀 Get NDK version
+      id: ndk
+      shell: bash
+      working-directory: android
+      env:
+        GRADLE_ACTIONS_SKIP_BUILD_RESULT_CAPTURE: true
+      run: ${{ github.action_path }}/get-ndk-info.sh
+
+    - name: ⚡️ Cache Android NDK
+      uses: actions/cache@v4
+      with:
+        key: android-ndk-cache-${{ join(fromJSON(steps.ndk.outputs.versions), '-') }}
+        path: ${{ steps.ndk.outputs.paths }}
