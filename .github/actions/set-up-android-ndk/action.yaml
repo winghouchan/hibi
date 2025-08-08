@@ -1,0 +1,20 @@
+name: 🏗️ Set up Android NDK
+
+description: Restores the Android NDK from cache
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 👀 Get NDK version
+      id: ndk
+      shell: bash
+      working-directory: android
+      env:
+        GRADLE_ACTIONS_SKIP_BUILD_RESULT_CAPTURE: true
+      run: ${{ github.action_path }}/get-ndk-info.sh
+
+    - name: ⚡️ Cache Android NDK
+      uses: actions/cache@v4
+      with:
+        key: android-ndk-cache-${{ join(fromJSON(steps.ndk.outputs.versions), '-') }}
+        path: ${{ steps.ndk.outputs.paths }}
