@@ -87,15 +87,19 @@ jobs:
           yarn run build:intl:extract-template
           yarn run build:intl:compile
 
+      - name: 🧰 Prepare build
+        run: yarn run expo prebuild --platform android
+
+      - name: 🏗️ Set up Android NDK
+        uses: ./.github/actions/set-up-android-ndk
+
+        # Build the Android test APK with the specified architecture and increased
+        # JVM memory to avoid out-of-memory errors.
+        #
+        # A debug build is built because the end-to-end tests executes `run-as <identifier>`
+        # in the ADB shell to write fixture data, which is only possible with debug builds.
       - name: 👷 Build app
         run: |
-          yarn run expo prebuild --platform android
-
-          # Build the Android test APK with the specified architecture and increased JVM memory
-          # to avoid out-of-memory errors.
-          #
-          # A debug build is built because the end-to-end tests executes `run-as <identifier>`
-          # in the ADB shell to write fixture data, which is only possible with debug builds.
           yarn run build:android:test:debug \
             -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' \
             -PreactNativeArchitectures='${{ env.architecture }}'
