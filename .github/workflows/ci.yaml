@@ -67,6 +67,12 @@ jobs:
         id: build-cache
         uses: ./.github/actions/set-up-ccache
 
+      - name: 🏗️ Set up Android NDK
+        id: set-up-android-ndk
+        uses: ./.github/actions/set-up-android-ndk
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 🏗️ Set up Java
         uses: actions/setup-java@v4
         with:
@@ -75,9 +81,6 @@ jobs:
 
       - name: 🏗️ Set up Node.js
         uses: ./.github/actions/set-up-node-js
-
-      - name: 🏗️ Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
 
       - name: 🚚 Install Node modules
         uses: ./.github/actions/install-node-modules
@@ -90,8 +93,65 @@ jobs:
       - name: 🧰 Prepare build
         run: yarn run expo prebuild --platform android
 
-      - name: 🏗️ Set up Android NDK
-        uses: ./.github/actions/set-up-android-ndk
+        # The Gradle setup action restores a cache of various Gradle files into
+        # the `android/.gradle` directory. The `android` directory is generated
+        # by `expo prebuild`. As a result, the Gradle setup has to happen after
+        # `expo prebuild` has been run.
+      - name: 🏗️ Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+        # Built Gradle plugins need to exist to ensure a Gradle configuration
+        # cache hit. The cache restores files into `node_modules` so needs can
+        # only be run after Node modules have been installed/restored.
+      - name: ⚡️ Set up Gradle plugins
+        uses: actions/cache@v4
+        with:
+          key: gradle-plugins-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*gradle-plugin/**/src') }}
+          path: '**/*gradle-plugin/**/build'
+
+        # React Native generates some files during [auto-linking][1]:
+        #
+        # - `autolinking.json`: A file with some information about dependencies that are auto-linked.
+        # - `package.json.sha`: A hash of the `package.json`, to help indicate if the auto-linking information is out of date.
+        # - `yarn.lock.sha`: A hash of the `yarn.lock`, to help indicate if the auto-linking information is out of date.
+        #
+        # This part of auto-linking is performed in the `settings.gradle`, see
+        # calls to the `ex.autolinkLibrariesFromCommand` function. This, however,
+        # causes a problem when used in combination with the Gradle configuration
+        # cache in CI:
+        #
+        # 1. After `expo prebuild` has been run, the contents of the above files
+        #    is just a template. Auto-linking has not populated those files with
+        #    project-relevant data yet.
+        # 2. Once the build command is executed, calling Gradle assemble tasks,
+        #    `settings.gradle` is run, performing this part of the auto-linking
+        #    process. The state of the above files, before auto-linking, is
+        #    captured as inputs to the Gradle configuration cache.
+        # 3. In subsequent runs, there may be a Gradle configuration cache hit,
+        #    which stops `settings.gradle` from being run. This results in auto-
+        #    linking not being performed, causing runtime errors.
+        #
+        # To solve this problem, this step generates those files. The method has
+        # been determined by reading the [source][2] of the Gradle plugin that
+        # does this.
+        #
+        # [1]: https://docs.expo.dev/modules/autolinking/
+        # [2]: https://github.com/facebook/react-native/blob/b75031f3ddeb2034e219d0ec541914ccdc2b2c8c/packages/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt
+      - name: 🔗 Link native dependencies
+        run: |
+          # Gather native module information, strip ANSI escape sequences, convert to JSON and write to file
+          yarn run expo-modules-autolinking react-native-config --platform android |
+            sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' |
+            node -p 'JSON.stringify(eval(`(${require("fs").readFileSync(0, "utf8")})`))' \
+            > android/build/generated/autolinking/autolinking.json
+
+          # Hash `package.json`. `sha256sum` outputs in the format `<hash> <file name>\n` so the hash must be extracted.
+          echo -n $(sha256sum package.json | awk '{print $1}') > android/build/generated/autolinking/package.json.sha
+
+          # Hash `yarn.lock`. `sha256sum` outputs in the format `<hash> <file name>\n` so the hash must be extracted.
+          echo -n $(sha256sum yarn.lock | awk '{print $1}') > android/build/generated/autolinking/yarn.lock.sha
 
         # Build the Android test APK with the specified architecture and increased
         # JVM memory to avoid out-of-memory errors.
@@ -99,10 +159,16 @@ jobs:
         # A debug build is built because the end-to-end tests executes `run-as <identifier>`
         # in the ADB shell to write fixture data, which is only possible with debug builds.
       - name: 👷 Build app
+        id: build
         run: |
-          yarn run build:android:test:debug \
+          ndk_version=$(yarn run build:android:test:debug \
+            :properties --property ndkVersion \
             -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' \
-            -PreactNativeArchitectures='${{ env.architecture }}'
+            -PreactNativeArchitectures='${{ env.architecture }}' |
+          tee >(cat >&2) |
+          sed -En 's/ndkVersion: ([0-9]+\.[0-9]+\.[0-9]+)/\1/Ip')
+
+          echo "ndk_version=$ndk_version" >> $GITHUB_OUTPUT
 
       - name: 💾 Save app build
         uses: actions/upload-artifact@v4
@@ -117,6 +183,13 @@ jobs:
         with:
           name: build-android-build-cache-debug-artifacts
           path: ${{ steps.build-cache.outputs.debug-directory }}
+
+      - name: ⚡️ Cache Android NDK
+        if: steps.set-up-android-ndk.outputs.version != steps.build.outputs.ndk_version
+        uses: actions/cache/save@v4
+        with:
+          key: android-ndk-${{ steps.build.outputs.ndk_version }}
+          path: /usr/local/lib/android/sdk/ndk/${{ steps.build.outputs.ndk_version }}*
 
   build-ios:
     needs: [test]
