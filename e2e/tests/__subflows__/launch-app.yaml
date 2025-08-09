@@ -2,8 +2,6 @@ name: Launch app
 appId: ${appId}
 tags:
   - subflow
-env:
-  clearState: false
 ---
 - runFlow:
     when:
