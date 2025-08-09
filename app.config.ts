@@ -39,7 +39,6 @@ export default {
     bundleIdentifier: identifierByEnvironment.production,
   },
   plugins: [
-    ['@sentry/react-native/expo'],
     [
       'expo-build-properties',
       {
@@ -96,6 +95,8 @@ export default {
       },
     ],
     ['./plugins/withExpoUpdates'],
+    ['./plugins/withGradleConfigurationCache'],
+    ['@sentry/react-native/expo'],
   ],
   experiments: {
     reactCompiler: true,

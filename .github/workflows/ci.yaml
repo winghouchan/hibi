@@ -78,6 +78,8 @@ jobs:
 
       - name: 🏗️ Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: 🚚 Install Node modules
         uses: ./.github/actions/install-node-modules
