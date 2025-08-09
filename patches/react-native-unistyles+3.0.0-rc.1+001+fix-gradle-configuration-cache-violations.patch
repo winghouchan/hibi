@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native-unistyles/android/build.gradle b/node_modules/react-native-unistyles/android/build.gradle
+index 195954b..7b00627 100644
+--- a/node_modules/react-native-unistyles/android/build.gradle
++++ b/node_modules/react-native-unistyles/android/build.gradle
+@@ -87,10 +87,8 @@ dependencies {
+ }
+ 
+ tasks.register("checkNativeTurboUnistylesSpec") {
+-    doLast {
+-        if (!isNewArchitectureEnabled()) {
+-            throw new GradleException("Unistyles 3.0 requires your project to have New Architecture enabled.")
+-        }
++    if (!isNewArchitectureEnabled()) {
++        throw new GradleException("Unistyles 3.0 requires your project to have New Architecture enabled.")
+     }
+ }
+ 
