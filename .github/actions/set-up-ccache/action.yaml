@@ -137,4 +137,11 @@ runs:
 
         create-symlink: true
 
+        # The max size is not the size of the cache entry in GitHub Actions but
+        # the size of the ccache cache before compression. The default set by
+        # the ccache GitHub Action was 500 MB but iOS builds were producing a
+        # cache size of 1.4 GB, as shown by `ccache --show-stats`. 2 GB has been
+        # set to provide some tolerance to a growth in cache size.
+        max-size: 2G
+
         verbose: ${{ runner.debug && ('2' || '0') }}
