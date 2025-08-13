@@ -95,6 +95,7 @@ export default {
       },
     ],
     ['./plugins/withExpoUpdates'],
+    ['./plugins/withGradleBuildCache'],
     ['./plugins/withGradleConfigurationCache'],
     ['@sentry/react-native/expo'],
   ],
