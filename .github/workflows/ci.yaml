@@ -336,6 +336,7 @@ jobs:
           curl 'http://localhost:8081/index.bundle?platform=android&dev=true&lazy=true&minify=false&app=co.hibi.app.test&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server&transform.routerRoot=src%2Fapp&transform.reactCompiler=true&transform.engine=hermes&transform.bytecode=1&unstable_transformProfile=hermes-stable' --output /dev/null
 
       - name: 🧪 Run tests
+        id: tests
         uses: ./.github/actions/launch-android-emulator
         with:
           # Android API level 32 and increased disk, heap, and RAM size seems to reduce test failures due to emulator problems
@@ -346,16 +347,24 @@ jobs:
           ram-size: 8192M
           target: default # Base Android image is faster than Android images with Google Play
           script: |
+            adb logcat -v time > emulator.log &
             adb install ./build/app-endToEndTest-debug.apk
             yarn run test:end-to-end ${{ matrix.shard }}
 
-      - name: 💾 Save test artifacts
-        if: cancelled() || failure()
+      - name: 💾 Save emulator logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
-          name: test-android-${{ matrix.shard }}
+          name: test-android-${{ matrix.shard }}-emulator-logs
+          path: ./emulator.log
+          if-no-files-found: 'error'
+
+      - name: 💾 Save test logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-android-${{ matrix.shard }}-test-logs
           path: ~/.maestro/tests
-          retention-days: 2
           include-hidden-files: true
           if-no-files-found: 'error'
 
@@ -421,6 +430,7 @@ jobs:
         run: xcrun simctl install booted ./build/Hibi.app
 
       - name: 🧪 Run tests
+        id: tests
         # Allow step to automatically retry to minimise failures due to flakiness
         uses: nick-fields/retry@v3
         env:
@@ -430,12 +440,23 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
 
-      - name: 💾 Save test artifacts
-        if: cancelled() || failure()
+      - name: 📝 Capture simulator logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
+        run: xcrun simctl spawn booted log collect --output $PWD/simulator.logarchive
+
+      - name: 💾 Save simulator logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
-          name: test-ios-${{ matrix.shard }}
+          name: test-ios-${{ matrix.shard }}-simulator.logarchive
+          path: ./simulator.logarchive
+          if-no-files-found: 'error'
+
+      - name: 💾 Save test logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-ios-${{ matrix.shard }}-test-logs
           path: ~/.maestro/tests
-          retention-days: 2
           include-hidden-files: true
           if-no-files-found: 'error'
