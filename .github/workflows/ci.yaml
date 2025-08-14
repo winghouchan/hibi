@@ -362,10 +362,6 @@ jobs:
     runs-on: macos-14
     timeout-minutes: 60
 
-    # Allow job/workflow to pass even on end-to-end test failures as end-to-end
-    # tests are currently experimental, due to flakiness while running in CI.
-    continue-on-error: true
-
     strategy:
       # Allow other shards to run to completion to allow for the possibility of
       # them passing, reducing the amount of shards that need to be re-run.
