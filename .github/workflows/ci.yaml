@@ -55,14 +55,6 @@ jobs:
       - name: 👀 Checkout
         uses: actions/checkout@v4
 
-        # Fixes build failures due to running out of disk space
-        #
-        # Example error:
-        #
-        # > Unhandled exception. System.IO.IOException: No space left on device
-      - name: 🧹 Clean up disk
-        uses: ./.github/actions/clean-up-disk
-
       - name: ⚡️ Set up build cache
         id: build-cache
         uses: ./.github/actions/set-up-ccache
@@ -280,9 +272,6 @@ jobs:
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
-
-      - name: 🧹 Clean up disk
-        uses: ./.github/actions/clean-up-disk
 
       - name: 🏗️ Set up Bun
         uses: oven-sh/setup-bun@v2
