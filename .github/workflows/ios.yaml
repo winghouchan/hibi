@@ -14,6 +14,13 @@ permissions:
 jobs:
   build:
     runs-on: macos-15
+
+    env:
+      artifact-name: build-ios
+
+    outputs:
+      artifact-name: ${{ env.artifact-name }}
+
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
@@ -56,7 +63,7 @@ jobs:
       - name: 💾 Save app build
         uses: actions/upload-artifact@v4
         with:
-          name: build-ios
+          name: ${{ env.artifact-name }}
           path: ./ios/build/Build/Products/Test-Release-iphonesimulator/Hibi.app
           if-no-files-found: 'error'
 
@@ -64,7 +71,7 @@ jobs:
         if: runner.debug
         uses: actions/upload-artifact@v4
         with:
-          name: build-ios-build-cache-debug-artifacts
+          name: ${{ env.artifact-name }}-build-cache-debug-artifacts
           path: ${{ steps.build-cache.outputs.debug-directory }}
 
   test:
@@ -110,7 +117,7 @@ jobs:
       - name: 📥 Download app build
         uses: actions/download-artifact@v4
         with:
-          name: build-ios
+          name: ${{ needs.build.outputs.artifact-name }}
           path: ./build/Hibi.app
 
       - name: 📱 Launch iOS simulator

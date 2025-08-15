@@ -17,9 +17,11 @@ jobs:
 
     env:
       architecture: x86_64
+      artifact-name: build-android
 
     outputs:
       architecture: ${{ env.architecture }}
+      artifact-name: ${{ env.artifact-name }}
 
     steps:
       - name: 👀 Checkout
@@ -133,7 +135,7 @@ jobs:
       - name: 💾 Save app build
         uses: actions/upload-artifact@v4
         with:
-          name: build-android
+          name: ${{ env.artifact-name }}
           path: ./android/app/build/outputs/apk/endToEndTest/debug/app-endToEndTest-debug.apk
           if-no-files-found: 'error'
 
@@ -141,7 +143,7 @@ jobs:
         if: runner.debug
         uses: actions/upload-artifact@v4
         with:
-          name: build-android-build-cache-debug-artifacts
+          name: ${{ env.artifact-name }}-build-cache-debug-artifacts
           path: ${{ steps.build-cache.outputs.debug-directory }}
 
       - name: ⚡️ Cache Android NDK
@@ -184,7 +186,7 @@ jobs:
       - name: 📥 Download app build
         uses: actions/download-artifact@v4
         with:
-          name: build-android
+          name: ${{ needs.build.outputs.artifact-name }}
           path: ./build
 
       - name: 🌐 Compile message catalogs
