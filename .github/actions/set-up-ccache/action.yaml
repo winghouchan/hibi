@@ -119,7 +119,7 @@ runs:
         # [1]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/src/restore.ts#L24
         # [2]: https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#usage-limits-and-eviction-policy
         # [3]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/action.yml#L27-L30
-        key: ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ github.sha }}
+        key: ${{ runner.os }}-${{ runner.arch }}-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
 
         # Restore keys will be automatically prefixed with `ccache`, see [source][1].
         # Note, there is a [bug][2] in the ccache GitHub Action where a dash (`-`)
@@ -129,7 +129,7 @@ runs:
         # [1]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/src/restore.ts#L26C51-L26C60
         # [2]: https://github.com/hendrikmuhs/ccache-action/issues/302
         restore-keys: |
-          ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}
+          ${{ runner.os }}-${{ runner.arch }}-${{ github.workflow }}-${{ github.job }}
           ${{ runner.os }}-${{ runner.arch }}
           ${{ runner.os }}
 
