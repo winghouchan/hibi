@@ -79,6 +79,10 @@ jobs:
     runs-on: macos-14
     timeout-minutes: 60
 
+    env:
+      app-directory: ./build
+      app-name: Hibi.app
+
     strategy:
       # Allow other shards to run to completion to allow for the possibility of
       # them passing, reducing the amount of shards that need to be re-run.
@@ -118,7 +122,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build.outputs.artifact-name }}
-          path: ./build/Hibi.app
+          path: ${{ env.app-directory }}/${{ env.app-name }}
 
       - name: 📱 Launch iOS simulator
         id: launch-ios-simulator
@@ -129,7 +133,7 @@ jobs:
           os-version: 17.0
 
       - name: 📲 Install app
-        run: xcrun simctl install booted ./build/Hibi.app
+        run: xcrun simctl install booted ${{ env.app-directory }}/${{ env.app-name }}
 
       - name: 🧪 Run tests
         id: tests
