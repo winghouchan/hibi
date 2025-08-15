@@ -8,6 +8,10 @@ brew "ccache"
 # See https://www.maestro.dev/
 brew "maestro"
 
+# ShellCheck is a shell linter
+# See https://github.com/koalaman/shellcheck
+brew "shellcheck"
+
 # yamllint is a yaml linter
 # See https://yamllint.readthedocs.io/en/stable/index.html
 # See https://github.com/adrienverge/yamllint
