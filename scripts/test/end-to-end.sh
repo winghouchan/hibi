@@ -3,7 +3,7 @@
 APP_ID=co.hibi.app.test
 E2E_ROOT_DIR="e2e/tests"
 
-MAYBE_TEST_PATH="e2e/tests${1:+/$1}"
+MAYBE_TEST_PATH="$E2E_ROOT_DIR${1:+/$1}"
 MAYBE_TEST_FILE="${MAYBE_TEST_PATH}.yaml"
 
 if test -d "${MAYBE_TEST_PATH}"; then
