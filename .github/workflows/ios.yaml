@@ -1,0 +1,157 @@
+name: ios
+
+on:
+  workflow_call:
+    inputs:
+      test-shards:
+        required: true
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: ⚡️ Set up build cache
+        id: build-cache
+        uses: ./.github/actions/set-up-ccache
+        with:
+          # Values from https://github.com/facebook/react-native/blob/5936f29d6ae95ebdd217f7f89d1e77ae4e6e5294/packages/react-native/scripts/xcode/ccache.conf
+          depend-mode: true
+          file-clone: true
+          inode-cache: true
+          sloppiness: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🏗️ Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
+
+      - name: 🌐 Compile message catalogs
+        run: |
+          yarn run build:intl:extract-template
+          yarn run build:intl:compile
+
+      - name: 🧰 Prepare build
+        run: yarn run expo prebuild --no-install --platform ios
+
+      - name: 🚚 Install Pods
+        uses: ./.github/actions/install-pods
+
+      - name: 👷 Build app
+        run: yarn run build:ios:test:release
+
+      - name: 💾 Save app build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-ios
+          path: ./ios/build/Build/Products/Test-Release-iphonesimulator/Hibi.app
+          if-no-files-found: 'error'
+
+      - name: 💾 Save build cache debug artifacts
+        if: runner.debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-ios-build-cache-debug-artifacts
+          path: ${{ steps.build-cache.outputs.debug-directory }}
+
+  test:
+    needs: [build]
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    strategy:
+      # Allow other shards to run to completion to allow for the possibility of
+      # them passing, reducing the amount of shards that need to be re-run.
+      fail-fast: false
+
+      matrix:
+        shard: ${{ fromJson(inputs.test-shards) }}
+
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: '.tool-versions'
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🏗️ Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15.0.1
+
+      - name: 🏗️ Set up Maestro
+        uses: ./.github/actions/set-up-maestro
+        with:
+          # Maestro versions >1.39.13 seem to have issues on iOS.
+          # See https://github.com/mobile-dev-inc/Maestro/issues/2610.
+          maestro-version: 1.39.13
+
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
+
+      - name: 📥 Download app build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-ios
+          path: ./build/Hibi.app
+
+      - name: 📱 Launch iOS simulator
+        id: launch-ios-simulator
+        uses: ./.github/actions/launch-ios-simulator
+        with:
+          model: 'iPhone 15'
+          os: 'iOS'
+          os-version: 17.0
+
+      - name: 📲 Install app
+        run: xcrun simctl install booted ./build/Hibi.app
+
+      - name: 🧪 Run tests
+        id: tests
+        # Allow step to automatically retry to minimise failures due to flakiness
+        uses: nick-fields/retry@v3
+        env:
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: 600000 # 10 minutes
+        with:
+          command: yarn run test:end-to-end ${{ matrix.shard }}
+          max_attempts: 3
+          timeout_minutes: 30
+
+      - name: 📝 Capture simulator logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
+        run: xcrun simctl spawn booted log collect --output $PWD/simulator.logarchive
+
+      - name: 💾 Save simulator logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-ios-${{ matrix.shard }}-simulator.logarchive
+          path: ./simulator.logarchive
+          if-no-files-found: 'error'
+
+      - name: 💾 Save test logs
+        if: always() && (runner.debug || steps.tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-ios-${{ matrix.shard }}-test-logs
+          path: ~/.maestro/tests
+          include-hidden-files: true
+          if-no-files-found: 'error'

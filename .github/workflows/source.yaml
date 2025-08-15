@@ -1,0 +1,38 @@
+name: source
+
+on:
+  workflow_call:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set up Node.js
+        uses: ./.github/actions/set-up-node-js
+
+      - name: 🚚 Install Node modules
+        uses: ./.github/actions/install-node-modules
+
+      - name: 🌐 Compile message catalogs
+        run: |
+          yarn run build:intl:extract-template
+          yarn run build:intl:compile
+
+      - name: ✨ Run linter
+        run: yarn run lint
+
+      - name: 🧪 Run tests
+        run: yarn run test
+
+      - name: 🛑 Cancel workflow if not successful
+        if: ${{ !success() }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        uses: ./.github/actions/cancel-workflow
