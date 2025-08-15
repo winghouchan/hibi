@@ -1,4 +1,4 @@
-name: ci
+name: check
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - '**.jsx?'
       - '**.tsx?'
       - '**.sql'
+      - '.github/**/*.yaml'
       - package.json
       - yarn.lock
   workflow_dispatch:
