@@ -158,6 +158,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
+    env:
+      app-directory: ./build
+      app-name: app-endToEndTest-debug.apk
+
     strategy:
       # Allow other shards to run to completion to allow for the possibility of
       # them passing, reducing the amount of shards that need to be re-run.
@@ -187,7 +191,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build.outputs.artifact-name }}
-          path: ./build
+          path: ${{ env.app-directory }}
 
       - name: 🌐 Compile message catalogs
         run: |
@@ -233,7 +237,7 @@ jobs:
           target: default # Base Android image is faster than Android images with Google Play
           script: |
             adb logcat -v time > emulator.log &
-            adb install ./build/app-endToEndTest-debug.apk
+            adb install ${{ env.app-directory }}/${{ env.app-name }}
             yarn run test:end-to-end ${{ matrix.shard }}
 
       - name: 💾 Save emulator logs
