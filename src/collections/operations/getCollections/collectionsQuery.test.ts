@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { renderHook } from '@testing-library/react-native'
+import { renderHookAsync } from '@testing-library/react-native'
 import { mockAppRoot } from 'test/utils'
 import collectionsQuery from './collectionsQuery'
 import getCollections from './getCollections'
@@ -77,7 +77,7 @@ describe('collectionsQuery', () => {
       skipped: true,
     },
   ])('$name', async ({ input, skipped }) => {
-    await renderHook(() => useInfiniteQuery(collectionsQuery(input)), {
+    await renderHookAsync(() => useInfiniteQuery(collectionsQuery(input)), {
       wrapper: mockAppRoot(),
     })
 

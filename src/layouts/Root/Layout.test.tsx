@@ -21,7 +21,7 @@ describe('<RootLayout />', () => {
 
     const { default: Layout } = await import('./Layout')
 
-    await render(<Layout />)
+    render(<Layout />)
 
     expect(screen.getByText('Something went wrong')).toBeOnTheScreen()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeOnTheScreen()

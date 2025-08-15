@@ -291,7 +291,7 @@ describe('<IntlProvider />', () => {
       const { Trans } = await import('@lingui/react')
       const { default: IntlProvider } = await import('./IntlProvider')
 
-      await render(
+      render(
         <IntlProvider>
           <Trans id={messageKeyMock} />
         </IntlProvider>,
@@ -314,7 +314,7 @@ describe('<IntlProvider />', () => {
 
       mockLocalePreference([supportedLocaleMock.data])
 
-      await render(
+      render(
         <IntlProvider>
           <Trans id={messageKeyMock} />
         </IntlProvider>,
