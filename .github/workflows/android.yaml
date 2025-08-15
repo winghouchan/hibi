@@ -32,8 +32,6 @@ jobs:
       - name: 🏗️ Set up Android NDK
         id: set-up-android-ndk
         uses: ./.github/actions/set-up-android-ndk
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🏗️ Set up Java
         uses: actions/setup-java@v4

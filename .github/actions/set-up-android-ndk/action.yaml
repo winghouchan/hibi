@@ -6,7 +6,8 @@ description: Restores the Android NDK from cache
 inputs:
   github-token:
     description: A GitHub token
-    required: true
+    required: false
+    default: ${{ github.token }}
 
 outputs:
   version:
@@ -20,7 +21,7 @@ runs:
       id: cached-android-ndk
       shell: bash
       env:
-        GH_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
         version=$(gh cache list \
           --jq '.[0].key' \

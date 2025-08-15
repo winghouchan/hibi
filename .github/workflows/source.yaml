@@ -33,6 +33,4 @@ jobs:
 
       - name: 🛑 Cancel workflow if not successful
         if: ${{ !success() }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         uses: ./.github/actions/cancel-workflow

@@ -2,11 +2,19 @@ name: 🛑 Cancel workflow
 
 description: Cancels the workflow run
 
+inputs:
+  github-token:
+    description: A GitHub token
+    required: false
+    default: ${{ github.token }}
+
 runs:
   using: 'composite'
   steps:
     - name: 🛑 Cancel workflow run
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
         gh api \
           --method POST \
