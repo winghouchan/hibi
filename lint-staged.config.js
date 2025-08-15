@@ -2,7 +2,8 @@ const joinCommandWithFiles = (files) => (command) =>
   `${command} ${files.join(' ')}`
 
 const typeCheck = ['tsc --project tsconfig.json --noEmit']
-const lint = (files) => ['eslint --fix'].map(joinCommandWithFiles(files))
+const lintSource = (files) => ['eslint --fix'].map(joinCommandWithFiles(files))
+const lintYaml = (files) => ['yamllint'].map(joinCommandWithFiles(files))
 const prettier = (files) =>
   ['prettier --write --ignore-unknown'].map(joinCommandWithFiles(files))
 const test = (files) =>
@@ -10,7 +11,12 @@ const test = (files) =>
 
 module.exports = {
   '**/!(*.{js,jsx,ts,tsx})': (files) => [...prettier(files)],
-  '*.{js,jsx}': (files) => [...lint(files), ...prettier(files)],
-  '*.{ts,tsx}': (files) => [...typeCheck, ...lint(files), ...prettier(files)],
+  '*.{js,jsx}': (files) => [...lintSource(files), ...prettier(files)],
+  '*.{ts,tsx}': (files) => [
+    ...typeCheck,
+    ...lintSource(files),
+    ...prettier(files),
+  ],
   '*.{js,jsx,ts,tsx}': (files) => [...test(files)],
+  '*.{yaml,yml}': (files) => [...lintYaml(files)],
 }

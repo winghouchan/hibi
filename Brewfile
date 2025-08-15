@@ -8,6 +8,11 @@ brew "ccache"
 # See https://www.maestro.dev/
 brew "maestro"
 
+# yamllint is a yaml linter
+# See https://yamllint.readthedocs.io/en/stable/index.html
+# See https://github.com/adrienverge/yamllint
+brew "yamllint"
+
 # Watchman triggers re-bundling on source file changes
 # See https://github.com/facebook/watchman
 brew "watchman"
