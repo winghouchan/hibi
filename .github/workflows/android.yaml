@@ -161,6 +161,7 @@ jobs:
     env:
       app-directory: ./build
       app-name: app-endToEndTest-debug.apk
+      emulator-log-location: ./emulator.log
 
     strategy:
       # Allow other shards to run to completion to allow for the possibility of
@@ -236,7 +237,7 @@ jobs:
           ram-size: 8192M
           target: default # Base Android image is faster than Android images with Google Play
           script: |
-            adb logcat -v time > emulator.log &
+            adb logcat -v time > ${{ env.emulator-log-location }} &
             adb install ${{ env.app-directory }}/${{ env.app-name }}
             yarn run test:end-to-end ${{ matrix.shard }}
 
@@ -245,7 +246,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-android-${{ matrix.shard }}-emulator-logs
-          path: ./emulator.log
+          path: ${{ env.emulator-log-location }}
           if-no-files-found: 'error'
 
       - name: 💾 Save test logs

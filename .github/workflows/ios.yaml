@@ -82,6 +82,7 @@ jobs:
     env:
       app-directory: ./build
       app-name: Hibi.app
+      simulator-log-location: simulator.logarchive
 
     strategy:
       # Allow other shards to run to completion to allow for the possibility of
@@ -148,14 +149,14 @@ jobs:
 
       - name: 📝 Capture simulator logs
         if: always() && (runner.debug || steps.tests.outcome == 'failure')
-        run: xcrun simctl spawn booted log collect --output $PWD/simulator.logarchive
+        run: xcrun simctl spawn booted log collect --output $PWD/${{ env.simulator-log-location }}
 
       - name: 💾 Save simulator logs
         if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
           name: test-ios-${{ matrix.shard }}-simulator.logarchive
-          path: ./simulator.logarchive
+          path: ./${{ env.simulator-log-location }}
           if-no-files-found: 'error'
 
       - name: 💾 Save test logs
