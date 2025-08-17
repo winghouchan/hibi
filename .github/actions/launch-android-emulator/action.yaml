@@ -2,8 +2,11 @@ name: 📱 Launch Android emulator
 
 description: Launch an Android emulator, creating a new one if none exists in the cache or restoring one from the cache if one exists.
 
-# Inputs inherit the inputs from `reactivecircus/android-emulator-runner`.
-# See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
+# Inputs inherit the inputs from `reactivecircus/android-emulator-runner`. See
+# [documentation][1].
+#
+# yamllint disable-line rule:line-length
+# [1]: https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations
 inputs:
   api-level:
     description: See https://github.com/reactivecircus/android-emulator-runner?tab=readme-ov-file#configurations.
@@ -133,7 +136,8 @@ runs:
       shell: bash
       run: echo "options=$(echo '${{ inputs.emulator-options }}' | sed -r -e 's/-no-snapshot\S*\s?//g')" >> $GITHUB_OUTPUT
 
-      # Creates a snapshot of the Android emulator, if one doesn't exist in the cache
+      # Creates a snapshot of the Android emulator, if one doesn't exist in the
+      # cache.
     - name: 📱 Create Android emulator
       if: ${{ steps.android-emulator-cache.outputs.cache-hit != 'true' || inputs.force-avd-creation == 'true' }}
       uses: reactivecircus/android-emulator-runner@v2
@@ -166,19 +170,27 @@ runs:
     - name: 📱 Launch Android emulator
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        emulator-options: -no-snapshot-save ${{ inputs.emulator-options }} # Do not save the emulator snapshot
-        force-avd-creation: false # The emulator should be created by the previous step or restored from the cache
+        # Do not save the emulator snapshot
+        emulator-options: -no-snapshot-save ${{ inputs.emulator-options }}
+
+        # The emulator should be created by the previous step or restored from
+        # the cache.
+        force-avd-creation: false
+
         pre-emulator-launch-script: ${{ inputs.pre-emulator-launch-script }}
+
         script: ${{ inputs.script }}
+
         working-directory: ${{ inputs.working-directory }}
 
         # These options should match the ones used to create the emulator
         #
-        # `disk-size`, `heap-size`, and `ram-size` are not set because they setting
-        # them seems to make the emulator think the configuration has changed from
-        # the last captured snapshot, logging the following message:
+        # `disk-size`, `heap-size`, and `ram-size` are not set because setting
+        # them seems to make the emulator think the configuration has changed
+        # from the last captured snapshot, logging the following message:
         #
-        # > The emulator is starting from scratch. Reason: different AVD configuration
+        # > The emulator is starting from scratch.
+        # > Reason: different AVD configuration
         api-level: ${{ inputs.api-level }}
         arch: ${{ inputs.arch }}
         avd-name: ${{ inputs.avd-name }}

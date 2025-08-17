@@ -1,6 +1,7 @@
 name: 🏗️ Set up Android NDK
 
-# The GitHub Runner may not have the configured Android NDK versions pre-installed
+# The GitHub Runner may not have the configured Android NDK versions
+# pre-installed.
 description: Restores the Android NDK from cache
 
 inputs:

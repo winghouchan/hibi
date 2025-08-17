@@ -29,6 +29,7 @@ jobs:
         id: build-cache
         uses: ./.github/actions/set-up-ccache
         with:
+          # yamllint disable-line rule:line-length
           # Values from https://github.com/facebook/react-native/blob/5936f29d6ae95ebdd217f7f89d1e77ae4e6e5294/packages/react-native/scripts/xcode/ccache.conf
           depend-mode: true
           file-clone: true
@@ -138,10 +139,19 @@ jobs:
 
       - name: 🧪 Run tests
         id: tests
-        # Allow step to automatically retry to minimise failures due to flakiness
+        # Allow step to automatically retry to minimise failures due to test
+        # flakiness.
         uses: nick-fields/retry@v3
         env:
-          MAESTRO_DRIVER_STARTUP_TIMEOUT: 600000 # 10 minutes
+          # Reduces tests failures due to the Maestro driver startup timing out.
+          # 10 minutes seems to be sufficient. The default is 2 minutes, see the
+          # following locations in Maestro's source:
+          #
+          # yamllint disable rule:line-length
+          # 1. https://github.com/mobile-dev-inc/Maestro/blob/f8d58ebbc999f0ffe6fcd3d5caf2c78c91d99980/maestro-ios-driver/src/main/kotlin/xcuitest/installer/LocalXCTestInstaller.kt#L135-L137
+          # 2. https://github.com/mobile-dev-inc/Maestro/blob/f8d58ebbc999f0ffe6fcd3d5caf2c78c91d99980/maestro-ios-driver/src/main/kotlin/xcuitest/installer/LocalXCTestInstaller.kt#L260
+          # yamllint enable rule:line-length
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: 600000
         with:
           command: yarn run test:end-to-end ${{ matrix.shard }}
           max_attempts: 3

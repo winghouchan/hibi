@@ -29,12 +29,13 @@ runs:
 
     - name: ♻️ Restore Pods
       id: pods
-      # The `cache-hit` key is slightly misleading. Both `true` and `false` values
-      # signify the cache was hit, with `true` meaning the key was matched exactly
-      # and `false` meaning the key was not matched exactly. A value of an empty
-      # string signifies a cache miss. As a result, the following condition means
-      # 'if the Podfile.lock cache was not missed'.
+      # The `cache-hit` key is slightly misleading. Both `true` and `false`
+      # values signify the cache was hit, with `true` meaning the key was
+      # matched exactly and `false` meaning the key was not matched exactly.
+      # A value of an empty string signifies a cache miss. As a result, the
+      # following condition means 'if the Podfile.lock cache was not missed'.
       #
+      # yamllint disable-line rule:line-length
       # See: https://github.com/actions/cache/blob/0400d5f644dc74513175e3cd8d07132dd4860809/README.md#outputs
       if: steps.podfile-lock.outputs.cache-hit != ''
       uses: actions/cache/restore@v4
@@ -44,9 +45,9 @@ runs:
         restore-keys: |
           pods-${{ runner.os }}-${{ runner.arch }}-
 
-      # There is no condition checking if the Pods were restored from the cache
-      # before running `pod install` because the `Podfile` may have changed which
-      # then necessitates updating the `Podfile.lock`.
+      # There is no condition checking if the Pods were restored from the
+      # cache before running `pod install` because the `Podfile` may have
+      # changed which then necessitates updating the `Podfile.lock`.
     - name: 🚚 Install Pods
       shell: bash
       working-directory: ios

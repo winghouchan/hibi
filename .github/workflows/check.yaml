@@ -20,9 +20,10 @@ permissions:
   contents: read
 
 jobs:
-  # Shard end-to-end tests to reduce the overall run time by running tests across
-  # multiple runners in parallel. Also reduces the run time in re-runs as only the
-  # tests in the failing shard need to be re-run as opposed to the whole suite.
+  # Shard end-to-end tests to reduce the overall run time by running tests
+  # across multiple runners in parallel. Also reduces the run time in re-runs
+  # as only the tests in the failing shard need to be re-run as opposed to the
+  # whole suite.
   shard-tests:
     runs-on: ubuntu-latest
 
