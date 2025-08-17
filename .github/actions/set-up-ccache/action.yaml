@@ -32,56 +32,16 @@ runs:
       id: debug
       if: runner.debug
       shell: bash
-      env:
-        debug-directory: $GITHUB_WORKSPACE/.ccache/debug
-      run: |
-        echo "CCACHE_DEBUG=1" >> $GITHUB_ENV
-        echo "CCACHE_DEBUGDIR=${{ env.debug-directory }}" >> $GITHUB_ENV
-        echo "CCACHE_DEBUGLEVEL=1" >> $GITHUB_ENV
-
-        echo "directory=${{ env.debug-directory }}" >> $GITHUB_OUTPUT
+      run: ${{ github.action_path }}/enable-debug-mode.sh
 
     - name: 🌲 Configure environment
       shell: bash
       env:
-        # React Native will use its own [ccache config][1] if one isn't defined.
-        # This [config][2] doesn't set a cache directory, so the [default][3]
-        # will be used. The default is different from the directory the ccache
-        # GitHub Action [sets][4] so when the GitHub Action attempts to save the
-        # ccache cache into the GitHub Actions cache, there is nothing to save.
-        #
-        # Configuring a cache directory ensures ccache and the GitHub Action
-        # both use the same location. Configuring a config path ensures React
-        # Native does not override our own configs.
-        #
-        # yamllint disable rule:line-length
-        # [1]: https://github.com/facebook/react-native/blob/288f6d9f483760e05607721890e6ebe8df0b3979/packages/react-native/scripts/xcode/ccache-clang.sh#L10-L12
-        # [2]: https://github.com/facebook/react-native/blob/288f6d9f483760e05607721890e6ebe8df0b3979/packages/react-native/scripts/xcode/ccache.conf
-        # [3]: https://ccache.dev/manual/latest.html#config_cache_dir
-        # [4]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/src/common.ts#L67-L75
-        # yamllint enable rule:line-length
-        cache-directory: $GITHUB_WORKSPACE/.ccache
-        config-path: $GITHUB_WORKSPACE/.config/ccache.conf
-
-        # ccache, by default, uses a hash of the compiler's name, size and
-        # modification time as part of the cache key, see [documentation][1].
-        # However, this may cause cache misses in Android builds because Expo
-        # defines a specific Android NDK version which may be installed from
-        # scratch, causing the compiler to have a fresh modification time.
-        # Hashing the compiler content instead increases the stability of the
-        # hash.
-        #
-        # [1]: https://ccache.dev/manual/latest.html#_common_hashed_information
-        compiler-check: content
-      run: |
-        echo "CCACHE_COMPILERCHECK=${{ env.compiler-check }}" >> $GITHUB_ENV
-        echo "CCACHE_CONFIGPATH=${{ env.config-path }}" >> $GITHUB_ENV
-        echo "CCACHE_DIR=${{ env.cache-directory }}" >> $GITHUB_ENV
-
-        ${{ inputs.depend-mode != '' && format('echo "{0}=1" >> $GITHUB_ENV', inputs.depend-mode == 'true' && 'CCACHE_DEPEND' || 'CCACHE_NODEPEND') || ''}}
-        ${{ inputs.file-clone != '' && format('echo "{0}=1" >> $GITHUB_ENV', inputs.file-clone == 'true' && 'CCACHE_FILECLONE' || 'CCACHE_NOFILECLONE') || ''}}
-        ${{ inputs.inode-cache != '' && format('echo "{0}=1" >> $GITHUB_ENV', inputs.inode-cache == 'true' && 'CCACHE_INODECACHE' || 'CCACHE_NOINODECACHE') || ''}}
-        ${{ inputs.sloppiness != '' && format('echo "CCACHE_SLOPPINESS={0}" >> $GITHUB_ENV', inputs.sloppiness) || ''}}
+        depend_mode: ${{ inputs.depend-mode }}
+        file_clone: ${{ inputs.file-clone }}
+        inode_cache: ${{ inputs.inode-cache }}
+        sloppiness: ${{ inputs.sloppiness }}
+      run: ${{ github.action_path }}/configure-environment.sh
 
     - name: ⚡️ Set up ccache
       uses: hendrikmuhs/ccache-action@v1.2
