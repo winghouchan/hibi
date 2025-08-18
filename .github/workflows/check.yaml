@@ -1,14 +1,23 @@
 name: check
 
 on:
-  push:
-    paths-ignore:
+  pull_request:
+    branches:
+      - main
+    paths-ignore: &ignore-paths
       - '**.md'
       - '.storybook/**'
       - '.env.*'
       - '.gitignore'
       - Brewfile
       - LICENSE
+    types: [opened, reopened, synchronize]
+
+  push:
+    branches:
+      - '**'
+    paths-ignore: *ignore-paths
+
   workflow_dispatch:
 
 concurrency:
