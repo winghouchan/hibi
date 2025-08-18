@@ -120,4 +120,15 @@ runs:
         # set to provide some tolerance to a growth in cache size.
         max-size: 2G
 
+        # Do not save ccache cache on non-default branches. Reduces the risk of
+        # the main ccache cache being evicted.
+        #
+        # Pull requests will use the comparison with `head_ref` because the
+        # `ref_name` is for the merge branch, not the source branch. Non-pull
+        # requests will not have a `head_ref` so will use the comparison with
+        # `ref_name`.
+        save: >
+          ${{ github.head_ref == github.event.repository.default_branch ||
+          github.ref_name == github.event.repository.default_branch }}
+
         verbose: ${{ runner.debug && ('2' || '0') }}
