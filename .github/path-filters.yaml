@@ -1,0 +1,39 @@
+ci: &ci
+  - '.github/**'
+  - 'dangerfile.[jt]s'
+
+config: &config
+  - '*.config.[jt]s'
+  - 'app.json'
+  - 'tsconfig.json'
+
+dependencies: &dependencies
+  - 'patches/**'
+  - '.tool-versions'
+  - '.yarnrc.y?(a)ml'
+  - 'package.json'
+  - 'yarn.lock'
+
+native:
+  - *ci
+  - *config
+  - *dependencies
+  - 'assets/**'
+  - 'e2e/**'
+  - 'plugins/**'
+  - 'scripts/**'
+  - 'src/**/!(*.bench|*.spec|*.test).[jt]s?(x)'
+  - 'index.[jt]s?(x)'
+
+source:
+  - *ci
+  - *config
+  - *dependencies
+  - '__mocks__/**'
+  - 'src/**'
+  - 'test/**'
+  - 'types/**'
+  - '.commitlintrc'
+  - '.prettierrc'
+  - '.yamllint'
+  - 'index.[jt]s?(x)'

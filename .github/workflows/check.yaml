@@ -2,13 +2,13 @@ name: check
 
 on:
   push:
-    paths:
-      - '**.jsx?'
-      - '**.tsx?'
-      - '**.sql'
-      - '.github/**/*.yaml'
-      - package.json
-      - yarn.lock
+    paths-ignore:
+      - '**.md'
+      - '.storybook/**'
+      - '.env.*'
+      - '.gitignore'
+      - Brewfile
+      - LICENSE
   workflow_dispatch:
 
 concurrency:
@@ -20,39 +20,51 @@ permissions:
   contents: read
 
 jobs:
-  # Shard end-to-end tests to reduce the overall run time by running tests
-  # across multiple runners in parallel. Also reduces the run time in re-runs
-  # as only the tests in the failing shard need to be re-run as opposed to the
-  # whole suite.
-  shard-tests:
+  plan:
     runs-on: ubuntu-latest
 
     outputs:
-      shards: ${{ steps.shard.outputs.shards }}
+      native: ${{ steps.filter.outputs.native }}
+      source: ${{ steps.filter.outputs.source }}
+      test-shards: ${{ steps.shard-e2e-tests.outputs.shards }}
 
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
 
-      - name: ✂️ Determine shards
-        id: shard
+      - name: 🧑‍✈️ Determine jobs to run
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: ./.github/path-filters.yaml
+
+      # Shard end-to-end tests to reduce the overall run time by running tests
+      # across multiple runners in parallel. Also reduces the run time for
+      # re-runs as only the tests in the failing shard need to be re-run as
+      # opposed to the whole suite.
+      - name: ✂️ Determine end-to-end test shards
+        id: shard-e2e-tests
         working-directory: e2e/tests
         run: ${{ github.workspace }}/.github/scripts/shard-e2e-tests.sh
 
   source:
+    needs: [plan]
+    if: needs.plan.outputs.source == 'true'
     uses: ./.github/workflows/source.yaml
     secrets: inherit
 
   android:
-    needs: [shard-tests]
+    needs: [plan]
+    if: needs.plan.outputs.native == 'true'
     uses: ./.github/workflows/android.yaml
     with:
-      test-shards: ${{ needs.shard-tests.outputs.shards }}
+      test-shards: ${{ needs.plan.outputs.test-shards }}
     secrets: inherit
 
   ios:
-    needs: [shard-tests]
+    needs: [plan]
+    if: needs.plan.outputs.native == 'true'
     uses: ./.github/workflows/ios.yaml
     with:
-      test-shards: ${{ needs.shard-tests.outputs.shards }}
+      test-shards: ${{ needs.plan.outputs.test-shards }}
     secrets: inherit
