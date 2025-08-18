@@ -1,4 +1,5 @@
-name: '[Home] When multiple collections exist, it is possible to switch between them'
+name: >-
+  [Home] When multiple collections exist, it is possible to switch between them
 appId: ${appId}
 env:
   databaseFixture: home/multiple-collections

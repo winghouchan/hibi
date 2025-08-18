@@ -1,4 +1,8 @@
-name: '[Library] When viewing the library, and onboarding has not been completed, there is a redirection to the welcome screen'
+name: >-
+  [Library]
+  When viewing the library,
+  and onboarding has not been completed,
+  there is a redirection to the welcome screen
 appId: ${appId}
 ---
 - retry:

@@ -1,4 +1,8 @@
-name: '[Onboarding] When onboarding, and onboarding is complete, and the app is opened at the collection creation step, the home screen is shown'
+name: >-
+  [Onboarding]
+  When onboarding and onboarding is complete,
+  and the app is opened at the collection creation step,
+  the home screen is shown
 appId: ${appId}
 ---
 - retry:

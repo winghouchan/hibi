@@ -9,7 +9,11 @@ runs:
       uses: actions/cache@v4
       with:
         path: node_modules
-        key: node-modules-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('patches/**') }}-${{ hashFiles('yarn.lock') }}
+        key: "node-modules-\
+          ${{ runner.os }}-\
+          ${{ runner.arch }}-\
+          ${{ hashFiles('patches/**') }}-\
+          ${{ hashFiles('yarn.lock') }}"
 
         # Do not use restore keys which don't include a hash of patches. When a
         # patch changes there should be a cache miss with no fallback due to the

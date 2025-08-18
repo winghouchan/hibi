@@ -1,4 +1,8 @@
-name: '[Onboarding] When onboarding, and a note has been created, and the app is opened at the onboarding root, the onboarding journey can be completed'
+name: >-
+  [Onboarding]
+  When onboarding and a note has been created,
+  and the app is opened at the onboarding root,
+  the onboarding journey can be completed
 appId: ${appId}
 ---
 - retry:

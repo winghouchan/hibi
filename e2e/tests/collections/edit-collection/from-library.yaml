@@ -1,4 +1,7 @@
-name: '[Collections] When editing a collection, and it exists, it can be edited via a navigation from the library'
+name: >-
+  [Collections]
+  When editing a collection, and it exists,
+  it can be edited via a navigation from the library
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete

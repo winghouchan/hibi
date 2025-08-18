@@ -22,7 +22,9 @@ inputs:
 
 outputs:
   debug-directory:
-    description: Directory where debug artifacts will be stored. Use with `actions/upload-artifact` to save.
+    description: >
+      Directory where debug artifacts will be stored.
+      Use with `actions/upload-artifact` to save.
     value: ${{ steps.debug.outputs.directory }}
 
 runs:
@@ -87,7 +89,11 @@ runs:
         # [2]: https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#usage-limits-and-eviction-policy
         # [3]: https://github.com/hendrikmuhs/ccache-action/blob/4f314b2aaa5118b9e49eb811277df5b0906bce93/action.yml#L27-L30
         # yamllint enable rule:line-length
-        key: ${{ runner.os }}-${{ runner.arch }}-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+        key: "${{ runner.os }}-\
+          ${{ runner.arch }}-\
+          ${{ github.workflow }}-\
+          ${{ github.job }}-\
+          ${{ github.sha }}"
 
         # Restore keys are automatically prefixed with `ccache` ([source][1]).
         # Note, there is a [bug][2] in the ccache GitHub Action where a dash

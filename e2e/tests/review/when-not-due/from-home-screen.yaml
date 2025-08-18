@@ -1,4 +1,8 @@
-name: '[Review] When starting a review, and there are no reviewables due, and the review was started via a navigation from the home screen, the user is informed and can navigate back to the home screen'
+name: >-
+  [Review]
+  When starting a review, and there are no reviewables due,
+  and the review was started via a navigation from the home screen,
+  the user is informed and can navigate back to the home screen
 appId: ${appId}
 ---
 - retry:

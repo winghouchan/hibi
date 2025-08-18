@@ -1,4 +1,5 @@
-name: '[Notes] When viewing a note, and it exists, it can be viewed via a navigation from a deep link'
+name: >-
+  [Notes] When viewing a note, and it exists, it can be viewed via a navigation from a deep link
 appId: ${appId}
 ---
 - retry:

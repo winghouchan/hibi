@@ -1,4 +1,5 @@
-name: '[Notes] When creating a note, it can be created via a navigation from a deep link'
+name: >-
+  [Notes] When creating a note, it can be created via a navigation from a deep link
 appId: ${appId}
 env:
   databaseFixture: onboarding/complete

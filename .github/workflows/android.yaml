@@ -70,7 +70,10 @@ jobs:
       - name: ⚡️ Set up Gradle plugins
         uses: actions/cache@v4
         with:
-          key: gradle-plugins-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*gradle-plugin/**/src') }}
+          key: "gradle-plugins-\
+            ${{ runner.os }}-\
+            ${{ runner.arch }}-\
+            ${{ hashFiles('**/*gradle-plugin/**/src') }}"
           path: '**/*gradle-plugin/**/build'
 
       # Native dependencies need to be linked to ensure a Gradle configuration

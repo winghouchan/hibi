@@ -1,4 +1,5 @@
-name: '[Library] When viewing the library, it can be viewed via a navigation from the home screen'
+name: >-
+  [Library] When viewing the library, it can be viewed via a navigation from the home screen
 appId: ${appId}
 ---
 - retry:

@@ -1,4 +1,5 @@
-name: '[Collections] When creating a collection, it can be created via a navigation from a deep link'
+name: >-
+  [Collections] When creating a collection, it can be created via a navigation from a deep link
 appId: ${appId}
 ---
 - retry:

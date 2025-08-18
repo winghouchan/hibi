@@ -1,4 +1,10 @@
-extends: relaxed
+extends: default
 
 ignore: |
   node_modules/
+
+rules:
+  document-start: disable
+  line-length:
+    max: 120
+  truthy: disable
