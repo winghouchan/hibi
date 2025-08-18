@@ -6,10 +6,12 @@ on:
       - main
     paths-ignore: &ignore-paths
       - '**.md'
+      - '.github/dependabot.y?(a)ml'
       - '.storybook/**'
       - '.env.*'
       - '.gitignore'
       - Brewfile
+      - CODEOWNERS
       - LICENSE
     types: [opened, reopened, synchronize]
 
