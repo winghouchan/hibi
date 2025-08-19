@@ -108,7 +108,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.31.0",
     "@libsql/client": "^0.14.0",
-    "@lingui/babel-plugin-lingui-macro": "^5.3.2",
+    "@lingui/babel-plugin-lingui-macro": "^5.4.1",
     "@lingui/cli": "^5.3.2",
     "@react-native-async-storage/async-storage": "2.1.2",
     "@react-native-community/datetimepicker": "8.4.1",
