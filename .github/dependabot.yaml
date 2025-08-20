@@ -9,6 +9,9 @@ updates:
       prefix: chore
       include: scope
     groups:
+      commitlint:
+        patterns:
+          - '@commitlint/*'
       drizzle:
         patterns:
           - 'drizzle-*'
