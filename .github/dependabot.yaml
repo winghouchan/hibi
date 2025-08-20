@@ -8,6 +8,11 @@ updates:
     commit-message:
       prefix: chore
       include: scope
+    groups:
+      storybook:
+        patterns:
+          - '@storybook/*'
+          - storybook
     ignore:
       - dependency-name: '**'
         update-types:
