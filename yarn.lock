@@ -12406,13 +12406,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-stdin@npm:=8.0.0":
-  version: 8.0.0
-  resolution: "get-stdin@npm:8.0.0"
-  checksum: 10c0/b71b72b83928221052f713b3b6247ebf1ceaeb4ef76937778557537fd51ad3f586c9e6a7476865022d9394b39b74eed1dc7514052fa74d80625276253571b76f
-  languageName: node
-  linkType: hard
-
 "get-stdin@npm:^6.0.0":
   version: 6.0.0
   resolution: "get-stdin@npm:6.0.0"
@@ -12880,7 +12873,7 @@ __metadata:
     react-test-renderer: "npm:~19.0.0"
     reassure: "npm:^1.4.0"
     sha.js: "npm:^2.4.11"
-    sql-formatter: "npm:^15.4.10"
+    sql-formatter: "npm:^15.6.6"
     storybook: "npm:^8.6.3"
     ts-fsrs: "npm:^4.6.1"
     ts-jest: "npm:^29.2.4"
@@ -19442,16 +19435,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sql-formatter@npm:^15.4.10":
-  version: 15.4.10
-  resolution: "sql-formatter@npm:15.4.10"
+"sql-formatter@npm:^15.6.6":
+  version: 15.6.6
+  resolution: "sql-formatter@npm:15.6.6"
   dependencies:
     argparse: "npm:^2.0.1"
-    get-stdin: "npm:=8.0.0"
     nearley: "npm:^2.20.1"
   bin:
     sql-formatter: bin/sql-formatter-cli.cjs
-  checksum: 10c0/bc522ba288f1bfd0d634aa572972621cb77d91c63a403a98f5dd3fc61377b17cd2e2485e0ada02d007c67ce135be13d78f72e546ed4077a3a9ac91de19fd88ae
+  checksum: 10c0/32fc38574d9aa41adeb74f94d36f21259682617ed430311c39f44849c8049f8d1ec4b25a30c6ab51d933aaeb2f12ab22470b6536a6a0feb77b8d5414dfcb18e7
   languageName: node
   linkType: hard
 
