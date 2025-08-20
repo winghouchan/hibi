@@ -43,6 +43,10 @@ updates:
         patterns:
           - '@testing-library/react-native'
           - eslint-plugin-testing-library
+      react-test-renderer:
+        patterns:
+          - '@types/react-test-renderer'
+          - react-test-renderer
       storybook:
         patterns:
           - '@storybook/*'
