@@ -9,6 +9,9 @@ updates:
       prefix: chore
       include: scope
     groups:
+      drizzle:
+        patterns:
+          - 'drizzle-*'
       intl:
         patterns:
           - '@formatjs/intl-*'
