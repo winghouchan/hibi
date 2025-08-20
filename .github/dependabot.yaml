@@ -21,6 +21,14 @@ updates:
           - '@formatjs/intl-*'
           - '@lingui/*'
           - '*-lingui'
+      jest:
+        patterns:
+          - '@types/jest'
+          - eslint-plugin-jest-*
+          - jest
+          - jest-extended
+          - jest-fail-on-console
+          - ts-jest
       react-compiler:
         patterns:
           - '*-react-compiler'
