@@ -32,6 +32,10 @@ updates:
       react-compiler:
         patterns:
           - '*-react-compiler'
+      react-native-testing-library:
+        patterns:
+          - '@testing-library/react-native'
+          - eslint-plugin-testing-library
       storybook:
         patterns:
           - '@storybook/*'
