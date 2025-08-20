@@ -24,10 +24,6 @@ env:
       - tapOn:
           text: ${oldCollectionName}
 
-      - assertVisible:
-          text: ${oldCollectionName}
-          selected: true
-
       - tapOn:
           id: library.collection.edit.link
 

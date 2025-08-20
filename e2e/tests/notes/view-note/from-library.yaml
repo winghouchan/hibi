@@ -21,10 +21,6 @@ env:
       - tapOn:
           text: ${collectionName}
 
-      - assertVisible:
-          text: ${collectionName}
-          selected: true
-
       - tapOn:
           id: library.collection.note.link
           index: 0

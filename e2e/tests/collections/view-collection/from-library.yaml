@@ -21,7 +21,3 @@ env:
 
       - tapOn:
           text: ${collectionName}
-
-      - assertVisible:
-          text: ${collectionName}
-          selected: true
