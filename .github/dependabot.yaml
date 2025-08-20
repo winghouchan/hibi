@@ -17,6 +17,9 @@ updates:
           - '@formatjs/intl-*'
           - '@lingui/*'
           - '*-lingui'
+      react-compiler:
+        patterns:
+          - '*-react-compiler'
       storybook:
         patterns:
           - '@storybook/*'
