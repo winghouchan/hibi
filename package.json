@@ -97,7 +97,7 @@
     "react-native-web": "^0.20.0",
     "react-native-webview": "13.13.5",
     "sha.js": "^2.4.11",
-    "sql-formatter": "^15.4.10",
+    "sql-formatter": "^15.6.6",
     "ts-fsrs": "^4.6.1",
     "yup": "^1.6.1"
   },
