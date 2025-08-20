@@ -12,6 +12,10 @@ updates:
       drizzle:
         patterns:
           - 'drizzle-*'
+      eslint:
+        patterns:
+          - '@eslint/*'
+          - eslint
       intl:
         patterns:
           - '@formatjs/intl-*'
