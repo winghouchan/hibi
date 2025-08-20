@@ -32,6 +32,10 @@ updates:
           - jest-extended
           - jest-fail-on-console
           - ts-jest
+      react:
+        patterns:
+          - react
+          - '@types/react'
       react-compiler:
         patterns:
           - '*-react-compiler'
