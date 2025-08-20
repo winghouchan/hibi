@@ -26,7 +26,6 @@ updates:
           - '*-lingui'
       jest:
         patterns:
-          - '@types/jest'
           - eslint-plugin-jest-*
           - jest
           - jest-extended
@@ -37,10 +36,6 @@ updates:
           - prettier
           - prettier-*
           - '*-prettier'
-      react:
-        patterns:
-          - react
-          - '@types/react'
       react-compiler:
         patterns:
           - '*-react-compiler'
@@ -48,10 +43,6 @@ updates:
         patterns:
           - '@testing-library/react-native'
           - eslint-plugin-testing-library
-      react-test-renderer:
-        patterns:
-          - '@types/react-test-renderer'
-          - react-test-renderer
       storybook:
         patterns:
           - '@storybook/*'
