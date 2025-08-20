@@ -9,6 +9,11 @@ updates:
       prefix: chore
       include: scope
     groups:
+      intl:
+        patterns:
+          - '@formatjs/intl-*'
+          - '@lingui/*'
+          - '*-lingui'
       storybook:
         patterns:
           - '@storybook/*'
