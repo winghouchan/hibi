@@ -32,6 +32,11 @@ updates:
           - jest-extended
           - jest-fail-on-console
           - ts-jest
+      prettier:
+        patterns:
+          - prettier
+          - prettier-*
+          - '*-prettier'
       react:
         patterns:
           - react
