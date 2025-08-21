@@ -26,12 +26,11 @@ updates:
           - '*-lingui'
       jest:
         patterns:
-          - eslint-plugin-jest
-          - eslint-plugin-jest-*
           - jest
-          - jest-extended
-          - jest-fail-on-console
-          - ts-jest
+          - jest-*
+          - '*-jest'
+        exclude-patterns:
+          - jest-expo
       prettier:
         patterns:
           - prettier
