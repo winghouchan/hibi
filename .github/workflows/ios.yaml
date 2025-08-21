@@ -105,6 +105,14 @@ jobs:
       - name: 👀 Checkout
         uses: actions/checkout@v4
 
+      # The GitHub macOS runner's version of Bash is 3.x ([reference][1]). Some
+      # scripts require features from Bash >=4. This step upgrades Bash.
+      #
+      # yamllint disable-line rule:line-length
+      # [1]: https://github.com/actions/runner-images/blob/76fc2ceabfd74abd4afd113b77b22e82e23d5221/images/macos/macos-14-arm64-Readme.md?plain=1#L16
+      - name: 🏗️ Set up Bash
+        run: brew install bash
+
       - name: 🏗️ Set up Bun
         uses: oven-sh/setup-bun@v2
         with:

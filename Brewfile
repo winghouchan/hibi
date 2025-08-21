@@ -1,3 +1,10 @@
+# Bash is an interactive command interpreter and programming language
+#
+# It is usually already installed on Unix-like systems. However, some scripts
+# require features from Bash versions >=4, which some systems do not have – e.g.
+# macOS has Bash 3.x.
+brew "bash"
+
 # ccache is a compiler cache, speeding up native builds
 # See https://ccache.dev
 # See https://reactnative.dev/docs/0.79/build-speed#local-caches
