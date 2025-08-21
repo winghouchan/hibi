@@ -26,6 +26,7 @@ updates:
           - '*-lingui'
       jest:
         patterns:
+          - eslint-plugin-jest
           - eslint-plugin-jest-*
           - jest
           - jest-extended
