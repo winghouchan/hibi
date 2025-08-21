@@ -84,6 +84,7 @@ jobs:
           path: ${{ steps.build-cache.outputs.debug-directory }}
 
   test:
+    name: test (${{ matrix.shard.name }})
     needs: [build]
     runs-on: macos-14
     timeout-minutes: 60
@@ -169,7 +170,7 @@ jobs:
           # yamllint enable rule:line-length
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 600000
         with:
-          command: yarn run test:end-to-end ${{ matrix.shard }}
+          command: yarn run test:end-to-end ${{ matrix.shard.tests }}
           max_attempts: 3
           timeout_minutes: 30
 

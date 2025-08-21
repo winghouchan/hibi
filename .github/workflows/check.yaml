@@ -34,6 +34,9 @@ jobs:
   plan:
     runs-on: ubuntu-latest
 
+    env:
+      number-of-shards: 5
+
     outputs:
       native: ${{ steps.filter.outputs.native }}
       source: ${{ steps.filter.outputs.source }}
@@ -56,7 +59,9 @@ jobs:
       - name: ✂️ Determine end-to-end test shards
         id: shard-e2e-tests
         working-directory: e2e/tests
-        run: ${{ github.workspace }}/.github/scripts/shard-e2e-tests.sh
+        run: |
+          ${{ github.workspace }}/.github/scripts/shard-e2e-tests.sh \
+            --group ${{ env.number-of-shards }}
 
   source:
     needs: [plan]
