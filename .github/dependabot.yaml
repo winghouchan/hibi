@@ -43,6 +43,10 @@ updates:
         patterns:
           - '@testing-library/react-native'
           - eslint-plugin-testing-library
+      react-query:
+        patterns:
+          - '@tanstack/eslint-plugin-query'
+          - '@tanstack/react-query'
       storybook:
         patterns:
           - '@storybook/*'
