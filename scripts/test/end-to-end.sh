@@ -1,30 +1,30 @@
 #!/bin/bash
 
-APP_ID=co.hibi.app.test
-E2E_ROOT_DIR="e2e/tests"
+app_id=co.hibi.app.test
+test_root_directory="e2e/tests"
 
-MAYBE_TEST_PATH="$E2E_ROOT_DIR${1:+/$1}"
-MAYBE_TEST_FILE="${MAYBE_TEST_PATH}.yaml"
+maybe_test_path="$test_root_directory${1:+/$1}"
+maybe_test_file="${maybe_test_path}.yaml"
 
-if test -d "${MAYBE_TEST_PATH}"; then
-  TEST_PATH=$MAYBE_TEST_PATH
-elif test -f "${MAYBE_TEST_PATH}"; then
-  TEST_PATH=$MAYBE_TEST_PATH
-elif test -f "${MAYBE_TEST_FILE}"; then
-  TEST_PATH="${MAYBE_TEST_FILE}"
+if test -d "${maybe_test_path}"; then
+  test_path=$maybe_test_path
+elif test -f "${maybe_test_path}"; then
+  test_path=$maybe_test_path
+elif test -f "${maybe_test_file}"; then
+  test_path="${maybe_test_file}"
 else
-  >&2 echo "End-to-end tests not found in ${MAYBE_TEST_PATH} or ${MAYBE_TEST_FILE}"
+  >&2 echo "End-to-end tests not found in ${maybe_test_path} or ${maybe_test_file}"
   exit 1
 fi
 
-echo "Running end-to-end tests in ${TEST_PATH}"
+echo "Running end-to-end tests in ${test_path}"
 
-CONCURRENTLY_ARGS=(
+concurrently_args=(
   # Start the fixture server
   "bun ./e2e/fixtures/server.ts"
 
   # Run the end-to-end tests
-  "MAESTRO_USE_GRAALJS=true maestro test -e appId=${APP_ID} ${TEST_PATH}"
+  "MAESTRO_USE_GRAALJS=true maestro test -e appId=${app_id} ${test_path}"
 
   # Kill all commands if one dies
   #
@@ -45,4 +45,4 @@ CONCURRENTLY_ARGS=(
   --success=first
 )
 
-concurrently "${CONCURRENTLY_ARGS[@]}"
+concurrently "${concurrently_args[@]}"
