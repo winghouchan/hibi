@@ -96,7 +96,7 @@
     "react-native-unistyles": "^3.0.0-rc.1",
     "react-native-web": "^0.20.0",
     "react-native-webview": "13.13.5",
-    "sha.js": "^2.4.11",
+    "sha.js": "^2.4.12",
     "sql-formatter": "^15.6.6",
     "ts-fsrs": "^4.6.1",
     "yup": "^1.6.1"
