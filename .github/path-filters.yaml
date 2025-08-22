@@ -1,6 +1,9 @@
 ci: &ci
-  - '.github/**'
-  - 'dangerfile.[jt]s'
+  - '.github/actions/**'
+  - '.github/scripts/**'
+  - '.github/workflows/**'
+  - '.github/path-filters.y?(a)ml'
+  - 'scripts/**'
 
 config: &config
   - '*.config.[jt]s'
@@ -21,7 +24,6 @@ native:
   - 'assets/**'
   - 'e2e/**'
   - 'plugins/**'
-  - 'scripts/**'
   - 'src/**/!(*.bench|*.spec|*.test).[jt]s?(x)'
   - 'index.[jt]s?(x)'
 
