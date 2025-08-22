@@ -4,10 +4,12 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: monthly
+      interval: daily
     commit-message:
       prefix: chore
       include: scope
+    cooldown:
+      default-days: 7
     groups:
       commitlint:
         patterns:
@@ -61,5 +63,6 @@ updates:
           - version-update:semver-minor
     labels:
       - 'deps: node.js'
+    open-pull-requests-limit: 1
     pull-request-branch-name:
       separator: /
