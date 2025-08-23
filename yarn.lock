@@ -12794,7 +12794,7 @@ __metadata:
     react-native-unistyles: "npm:^3.0.0-rc.1"
     react-native-web: "npm:^0.20.0"
     react-native-webview: "npm:13.13.5"
-    react-test-renderer: "npm:~19.0.0"
+    react-test-renderer: "npm:19.0.0"
     reassure: "npm:^1.4.0"
     sha.js: "npm:^2.4.12"
     sql-formatter: "npm:^15.6.6"
@@ -18011,7 +18011,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:19.0.0, react-test-renderer@npm:~19.0.0":
+"react-test-renderer@npm:19.0.0":
   version: 19.0.0
   resolution: "react-test-renderer@npm:19.0.0"
   dependencies:
