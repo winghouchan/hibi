@@ -1,3 +1,13 @@
+# Enable checking for masked returns
+#
+# Why:
+#
+# - Reduces the chances of bugs due to error exit codes being masked in command
+#   substitutions.
+#
+# See: https://www.shellcheck.net/wiki/SC2312
+enable=check-extra-masked-returns
+
 # Enable requiring braces around variables all the time
 #
 # ✅ echo "${foo}"

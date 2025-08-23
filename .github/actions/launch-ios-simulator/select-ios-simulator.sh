@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-devices=$(xcrun simctl list devices --json | jq ".devices")
+devices_json=$(xcrun simctl list devices --json)
+devices=$(echo "${devices_json}" | jq ".devices")
 
 echo "Available devices: ${devices}"
 

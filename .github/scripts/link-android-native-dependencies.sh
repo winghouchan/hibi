@@ -59,10 +59,16 @@ convert_to_json() {
 get_checksum() {
   local file=$1
 
-  # `sha256sum` returns the checksum in the format `<checksum>  <file_name>\n`
-  # `awk '{print $1}'` extracts the checksum from the output of `sha256sum`
-  # `echo -n` outputs the checksum without a trailing new line
-  echo -n "$(sha256sum "${file}" | awk '{print $1}')"
+  # The checksum is output in the format `<checksum>  <file_name>\n`
+  local sha256sum_output
+  sha256sum_output=$(sha256sum "${file}")
+
+  # Extracts the checksum from the output of `sha256sum`
+  local checksum
+  checksum=$(echo "${sha256sum_output}" | awk '{print $1}')
+
+  # Outputs the checksum without a trailing new line
+  echo -n "${checksum}"
 }
 
 autolinking_directory=android/build/generated/autolinking
