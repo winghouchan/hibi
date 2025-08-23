@@ -43,6 +43,10 @@ updates:
           - prettier
           - prettier-*
           - '*-prettier'
+      react:
+        patterns:
+          - react
+          - react-test-renderer
       react-compiler:
         patterns:
           - '*-react-compiler'
