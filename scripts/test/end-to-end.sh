@@ -4,6 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+app_id=co.hibi.app.test
+test_root_directory=e2e/tests
+
 # Groups arguments by whether they are named or positional.
 #
 # Named arguments will be options for Maestro. Positional arguments will be
@@ -69,8 +72,6 @@ get_test_paths() {
   local -n _test_paths=$1
   shift 1
 
-  local test_root_directory="e2e/tests"
-
   for argument in "$@"; do
     local maybe_test_path="$test_root_directory/$argument"
     local maybe_test_file="$maybe_test_path.yaml"
@@ -85,13 +86,17 @@ get_test_paths() {
   done
 }
 
-app_id=co.hibi.app.test
 options=()
 maybe_paths=()
 test_paths=()
 
 group_arguments options maybe_paths "$@"
-get_test_paths test_paths "${maybe_paths[@]}"
+
+if (( ${#maybe_paths[@]} )); then
+  get_test_paths test_paths "${maybe_paths[@]}"
+else
+  test_paths=("$test_root_directory")
+fi
 
 echo "Running end-to-end tests in:"
 printf -- "- %s\n" "${test_paths[@]}"
