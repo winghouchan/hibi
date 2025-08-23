@@ -62,14 +62,14 @@ get_checksum() {
   # `sha256sum` returns the checksum in the format `<checksum>  <file_name>\n`
   # `awk '{print $1}'` extracts the checksum from the output of `sha256sum`
   # `echo -n` outputs the checksum without a trailing new line
-  echo -n "$(sha256sum "$file" | awk '{print $1}')"
+  echo -n "$(sha256sum "${file}" | awk '{print $1}')"
 }
 
 autolinking_directory=android/build/generated/autolinking
 
 get_autolinking_config | strip_ansi_codes | convert_to_json \
-  > $autolinking_directory/autolinking.json
+  > ${autolinking_directory}/autolinking.json
 
-get_checksum package.json > $autolinking_directory/package.json.sha
+get_checksum package.json > ${autolinking_directory}/package.json.sha
 
-get_checksum yarn.lock > $autolinking_directory/yarn.lock.sha
+get_checksum yarn.lock > ${autolinking_directory}/yarn.lock.sha

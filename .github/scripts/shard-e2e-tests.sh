@@ -40,16 +40,16 @@ shard_into_number_of_groups() {
   )
 
   local count
-  count=$(echo "$test_paths" | wc -l)
+  count=$(echo "${test_paths}" | wc -l)
 
   local group_size=$(((count + number_of_groups - 1) / number_of_groups))
 
-  echo "$test_paths" | xargs -n "$group_size"
+  echo "${test_paths}" | xargs -n "${group_size}"
 }
 
 shard() {
-  if [[ "$group" =~ ^[0-9]+$ ]] && [ "$group" -gt 0 ]; then
-    shard_into_number_of_groups "$group"
+  if [[ "${group}" =~ ^[0-9]+$ ]] && [ "${group}" -gt 0 ]; then
+    shard_into_number_of_groups "${group}"
   else
     shard_by_feature
   fi
@@ -68,7 +68,7 @@ to_json() {
 shards=$(shard | to_json)
 
 if [ "${CI:-}" == "true" ]; then
-  echo "shards=$shards" >> "$GITHUB_OUTPUT"
+  echo "shards=${shards}" >> "${GITHUB_OUTPUT}"
 else
-  echo "$shards"
+  echo "${shards}"
 fi

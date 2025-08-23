@@ -1,0 +1,18 @@
+# Enable requiring braces around variables all the time
+#
+# ✅ echo "${foo}"
+# ❌ echo "$foo"
+#
+# Why:
+#
+# - JavaScript string interpolation and Bash parameter expansion is similar.
+#   Using the same syntax reduces the mental overhead in reading and writing.
+# - Increases consistency as there are times where braces are required; for
+#   example, when a string is joined to a variable (`${var}string`), or when
+#   setting a default (`${var:=default}`).
+# - Smaller diff when adding/removing a substitution, extraction, replacement,
+#   etc to a parameter expansion.
+#
+# See: https://www.shellcheck.net/wiki/SC2250
+# See: https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
+enable=require-variable-braces

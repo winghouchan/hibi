@@ -7,7 +7,7 @@ BASELINE_BRANCH=${GITHUB_BASE_REF:="main"}
 git fetch origin
 
 # Gather baseline perf measurements
-git switch "$BASELINE_BRANCH"
+git switch "${BASELINE_BRANCH}"
 
 yarn install
 yarn run bench --baseline

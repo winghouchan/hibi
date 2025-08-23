@@ -73,17 +73,17 @@ get_test_paths() {
   shift 1
 
   for argument in "$@"; do
-    local maybe_test_path="$test_root_directory/$argument"
-    local maybe_test_file="$maybe_test_path.yaml"
+    local maybe_test_path="${test_root_directory}/${argument}"
+    local maybe_test_file="${maybe_test_path}.yaml"
 
-    if test -d "$maybe_test_path"; then
-      _test_paths+=("$maybe_test_path")
-    elif test -f "$maybe_test_path"; then
-      _test_paths+=("$maybe_test_path")
-    elif test -f "$maybe_test_file"; then
-      _test_paths+=("$maybe_test_file")
+    if test -d "${maybe_test_path}"; then
+      _test_paths+=("${maybe_test_path}")
+    elif test -f "${maybe_test_path}"; then
+      _test_paths+=("${maybe_test_path}")
+    elif test -f "${maybe_test_file}"; then
+      _test_paths+=("${maybe_test_file}")
     else
-      >&2 echo "End-to-end tests not found in $maybe_test_path or $maybe_test_file"
+      >&2 echo "End-to-end tests not found in ${maybe_test_path} or ${maybe_test_file}"
     fi
   done
 }
@@ -97,7 +97,7 @@ group_arguments options maybe_paths "$@"
 if (( ${#maybe_paths[@]} )); then
   get_test_paths test_paths "${maybe_paths[@]}"
 else
-  test_paths=("$test_root_directory")
+  test_paths=("${test_root_directory}")
 fi
 
 if (( ${#test_paths[@]} )); then
