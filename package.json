@@ -136,7 +136,7 @@
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
     "babel-plugin-require-context-hook": "^1.0.0",
     "concurrently": "^9.1.1",
-    "danger": "^12.3.4",
+    "danger": "^13.0.0",
     "debug": "^4.4.0",
     "drizzle-kit": "~0.31.4",
     "eslint": "^9.33.0",
