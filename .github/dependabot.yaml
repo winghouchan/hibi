@@ -21,6 +21,11 @@ updates:
         patterns:
           - '@eslint/*'
           - eslint
+      expo:
+        patterns:
+          - '@expo/*'
+          - 'expo'
+          - 'expo-*'
       intl:
         patterns:
           - '@formatjs/intl-*'
