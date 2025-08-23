@@ -90,6 +90,8 @@ jobs:
       - name: 👷 Build app
         id: build
         run: |
+          set -o pipefail
+
           ndk_version=$(yarn run build:android:test:debug \
             :properties --property ndkVersion \
             -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' \
