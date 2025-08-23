@@ -80,7 +80,7 @@
     "lodash": "^4.17.21",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
-    "react": "19.0.0",
+    "react": "19.1.1",
     "react-dom": "19.0.0",
     "react-error-boundary": "^5.0.0",
     "react-native": "0.79.5",
@@ -127,7 +127,7 @@
     "@types/feather-icons": "^4.29.4",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.7",
-    "@types/react": "~19.0.10",
+    "@types/react": "~19.1.10",
     "@types/react-test-renderer": "^19",
     "@types/sha.js": "^2.4.4",
     "babel-loader": "^8.4.1",
@@ -158,7 +158,7 @@
     "lint-staged": "^15.2.7",
     "prettier": "^3.6.2",
     "prettier-plugin-sql-cst": "^0.13.0",
-    "react-test-renderer": "19.0.0",
+    "react-test-renderer": "19.1.1",
     "reassure": "^1.4.0",
     "storybook": "^8.6.14",
     "ts-jest": "^29.4.1",
@@ -169,7 +169,7 @@
     "xmlbuilder": "^15.1.1"
   },
   "resolutions": {
-    "react": "19.0.0"
+    "react": "19.1.1"
   },
   "private": true,
   "packageManager": "yarn@4.9.2"
