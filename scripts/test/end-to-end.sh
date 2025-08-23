@@ -82,6 +82,8 @@ get_test_paths() {
       _test_paths+=("$maybe_test_path")
     elif test -f "$maybe_test_file"; then
       _test_paths+=("$maybe_test_file")
+    else
+      >&2 echo "End-to-end tests not found in $maybe_test_path or $maybe_test_file"
     fi
   done
 }
