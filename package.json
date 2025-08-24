@@ -54,7 +54,7 @@
     "@formatjs/intl-pluralrules": "^5.4.4",
     "@gorhom/bottom-sheet": "^5",
     "@lingui/react": "^5.4.1",
-    "@op-engineering/op-sqlite": "^11.4.4",
+    "@op-engineering/op-sqlite": "^11.4.9",
     "@react-navigation/stack": "^7.2.2",
     "@sentry/react-native": "~6.14.0",
     "@tanstack/react-query": "^5.85.5",

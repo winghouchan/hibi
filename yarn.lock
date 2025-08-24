@@ -4067,13 +4067,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@op-engineering/op-sqlite@npm:^11.4.4":
-  version: 11.4.4
-  resolution: "@op-engineering/op-sqlite@npm:11.4.4"
+"@op-engineering/op-sqlite@npm:^11.4.9":
+  version: 11.4.9
+  resolution: "@op-engineering/op-sqlite@npm:11.4.9"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/e7d4417a77c10fc0f6873775054925e6e40feb964ed71d1b29ef9604b9ec8429b51834a3130121aa902a13c6bfd5eaad0152243e91d48a4cdda7e9508859ea84
+  checksum: 10c0/4c8d04638c61e26ff38572a3ea483794bb17db6e500c9449036c73e1b49aa62d8e929cc26d739a32906c564894a4c83bc91059487a76ac4e057e37dd7a945faf
   languageName: node
   linkType: hard
 
@@ -12684,7 +12684,7 @@ __metadata:
     "@lingui/babel-plugin-lingui-macro": "npm:^5.4.1"
     "@lingui/cli": "npm:^5.4.1"
     "@lingui/react": "npm:^5.4.1"
-    "@op-engineering/op-sqlite": "npm:^11.4.4"
+    "@op-engineering/op-sqlite": "npm:^11.4.9"
     "@react-native-async-storage/async-storage": "npm:2.1.2"
     "@react-native-community/datetimepicker": "npm:8.4.1"
     "@react-native-community/slider": "npm:^4.5.6"
