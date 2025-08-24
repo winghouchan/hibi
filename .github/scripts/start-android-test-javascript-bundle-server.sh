@@ -7,16 +7,16 @@ set -o pipefail
 bundle_server_output=nohup.out
 
 # Start the JavaScript bundle server in the background
-nohup yarn start:test > ${bundle_server_output} 2>&1 &
+nohup yarn start:test > "${bundle_server_output}" 2>&1 &
 server_pid=$!
 
 # Wait for output file to be created
-while ! test -f ${bundle_server_output}; do
+while ! test -f "${bundle_server_output}"; do
   sleep 0.1
 done
 
 # Wait for server to be ready
-while ! grep -q 'Waiting on' ${bundle_server_output}; do
+while ! grep -q 'Waiting on' "${bundle_server_output}"; do
   if ! kill -0 "${server_pid}" 2>/dev/null; then
     echo "Server process died" >&2
     exit 1

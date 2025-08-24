@@ -8,6 +8,22 @@
 # See: https://www.shellcheck.net/wiki/SC2312
 enable=check-extra-masked-returns
 
+# Enable requiring quotes for all variable references
+#
+# ✅ echo "${foo}"
+# ❌ echo ${foo}
+#
+# Why:
+#
+# - Increases consistency of references to variables – now they all have quotes.
+# - Reduces the mental overhead of deciding whether to quote or not.
+# – Reduce the risk of bugs in cases where ShellCheck does not have enough
+#   information about the contents of a variable so does not raise a warning
+#   about requiring quotes.
+#
+# See: https://www.shellcheck.net/wiki/SC2248
+enable=quote-safe-variables
+
 # Enable requiring braces around variables all the time
 #
 # ✅ echo "${foo}"

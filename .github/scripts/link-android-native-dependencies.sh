@@ -74,8 +74,8 @@ get_checksum() {
 autolinking_directory=android/build/generated/autolinking
 
 get_autolinking_config | strip_ansi_codes | convert_to_json \
-  > ${autolinking_directory}/autolinking.json
+  > "${autolinking_directory}/autolinking.json"
 
-get_checksum package.json > ${autolinking_directory}/package.json.sha
+get_checksum package.json > "${autolinking_directory}/package.json.sha"
 
-get_checksum yarn.lock > ${autolinking_directory}/yarn.lock.sha
+get_checksum yarn.lock > "${autolinking_directory}/yarn.lock.sha"
