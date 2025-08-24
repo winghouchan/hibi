@@ -48,6 +48,7 @@ updates:
           - react
           - react-dom
           - react-native
+          - react-native-web
           - react-test-renderer
       react-compiler:
         patterns:
@@ -77,6 +78,10 @@ updates:
           - version-update:semver-major
           - version-update:semver-minor
       - dependency-name: react-native
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+      - dependency-name: react-native-web
         update-types:
           - version-update:semver-major
           - version-update:semver-minor
