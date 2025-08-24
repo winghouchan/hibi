@@ -46,6 +46,7 @@ updates:
       react:
         patterns:
           - react
+          - react-dom
           - react-native
           - react-test-renderer
       react-compiler:
@@ -68,6 +69,10 @@ updates:
         update-types:
           - version-update:semver-major
       - dependency-name: react
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+      - dependency-name: react-dom
         update-types:
           - version-update:semver-major
           - version-update:semver-minor
