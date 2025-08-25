@@ -28,12 +28,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -48,12 +50,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -68,12 +72,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -88,12 +94,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -108,12 +116,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -128,12 +138,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -148,12 +160,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -168,12 +182,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -188,12 +204,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -208,12 +226,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -228,12 +248,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -258,12 +280,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -278,12 +302,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -298,12 +324,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -318,12 +346,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -338,12 +368,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -358,12 +390,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -378,12 +412,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -398,12 +434,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -418,12 +456,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -438,12 +478,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -464,12 +506,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -498,12 +542,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -539,12 +585,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -559,12 +607,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -593,12 +643,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -613,12 +665,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -639,12 +693,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -673,12 +729,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -748,12 +806,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -768,12 +828,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -802,12 +864,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -832,12 +896,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -852,12 +918,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -872,12 +940,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -906,12 +976,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -926,12 +998,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -952,12 +1026,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -972,12 +1048,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1006,12 +1084,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1026,12 +1106,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1052,12 +1134,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1072,12 +1156,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1106,12 +1192,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1126,12 +1214,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1152,12 +1242,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1172,12 +1264,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1206,12 +1300,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1232,12 +1328,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1252,12 +1350,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1286,12 +1386,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1312,12 +1414,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1332,12 +1436,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1369,12 +1475,14 @@ describe('getNotes', () => {
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Front',
                 }),
               ],
               [
                 expect.objectContaining({
                   id: expect.any(Number),
+                  type: 'text/plain',
                   value: 'Back',
                 }),
               ],
@@ -1395,12 +1503,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1415,12 +1525,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1456,12 +1568,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,
@@ -1476,12 +1590,14 @@ describe('getNotes', () => {
             separable: false,
             fields: [
               {
+                type: 'text/plain',
                 value: 'Front',
                 hash: hashNoteFieldValue('Front'),
                 side: 0,
                 position: 0,
               },
               {
+                type: 'text/plain',
                 value: 'Back',
                 hash: hashNoteFieldValue('Back'),
                 side: 1,

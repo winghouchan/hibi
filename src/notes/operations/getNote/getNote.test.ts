@@ -25,12 +25,14 @@ describe('getNote', () => {
           separable: false,
           fields: [
             {
+              type: 'text/plain',
               value: 'Front',
               hash: hashNoteFieldValue('Front'),
               side: 0,
               position: 0,
             },
             {
+              type: 'text/plain',
               value: 'Back',
               hash: hashNoteFieldValue('Back'),
               side: 1,
@@ -47,8 +49,8 @@ describe('getNote', () => {
         createdAt: expect.any(Date),
         collections: [1],
         fields: [
-          [expect.objectContaining({ value: 'Front' })],
-          [expect.objectContaining({ value: 'Back' })],
+          [expect.objectContaining({ type: 'text/plain', value: 'Front' })],
+          [expect.objectContaining({ type: 'text/plain', value: 'Back' })],
         ],
       }),
     },

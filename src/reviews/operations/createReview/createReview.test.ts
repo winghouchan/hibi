@@ -75,7 +75,10 @@ describe('createReview', () => {
             separable: false,
           },
           collections: [collectionMock.id],
-          fields: [[{ value: 'Field Mock 1' }], [{ value: 'Field Mock 2' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Field Mock 1' }],
+            [{ type: 'text/plain', value: 'Field Mock 2' }],
+          ],
         })
         const input = {
           reviewable: noteMock.reviewables[0].id,
@@ -210,7 +213,10 @@ describe('createReview', () => {
             separable: false,
           },
           collections: [collectionMock.id],
-          fields: [[{ value: 'Field Mock 1' }], [{ value: 'Field Mock 2' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Field Mock 1' }],
+            [{ type: 'text/plain', value: 'Field Mock 2' }],
+          ],
         })
         await database.transaction(async (transaction) => {
           await transaction.insert(review).values(
@@ -379,7 +385,10 @@ describe('createReview', () => {
             separable: false,
           },
           collections: [collectionMock.id],
-          fields: [[{ value: 'Field Mock 1' }], [{ value: 'Field Mock 2' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Field Mock 1' }],
+            [{ type: 'text/plain', value: 'Field Mock 2' }],
+          ],
         })
         await database.transaction(async (transaction) => {
           await transaction.insert(review).values(

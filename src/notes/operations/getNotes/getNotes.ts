@@ -93,6 +93,7 @@ async function getNotes({ filter, order, pagination }: Options = {}) {
             'note', ${noteField.note},
             'side', ${noteField.side},
             'position', ${noteField.position},
+            'type', ${noteField.type},
             'value', ${noteField.value}
           )
         )

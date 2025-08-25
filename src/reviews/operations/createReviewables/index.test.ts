@@ -4,9 +4,11 @@ import { mockDatabase } from 'test/utils'
 
 function generateFieldMocks(length: number) {
   return Array.from({ length }, () => {
+    const type = 'text/plain'
     const value = 'Field Mock'
 
     return {
+      type,
       value,
       hash: hashNoteFieldValue(value),
     }

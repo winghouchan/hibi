@@ -33,6 +33,13 @@ export const noteField = sqliteTable(
       .references(() => note.id)
       .notNull(),
 
+    /**
+     * The media type of the value of the field.
+     *
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types}
+     */
+    type: text().notNull(),
+
     value: blob().notNull(),
 
     /**
@@ -55,7 +62,15 @@ export const noteField = sqliteTable(
 
     createdAt: createdAt(),
   },
-  ({ value, hash, side, position, archived }) => [
+  ({ type, value, hash, side, position, archived }) => [
+    /**
+     * A constraint to reduce the risk of an invalid media type. Media types
+     * come in the form `<type>/<subtype`.
+     *
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types}
+     */
+    check('note_field_type_is_valid', sql`${type} LIKE '%/%'`),
+
     check('note_field_value_not_empty', sql`length(${value}) > 0`),
 
     /**

@@ -11,12 +11,18 @@ describe('updateNote', () => {
           name: 'Collection Name',
         },
         note: {
-          fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Front' }],
+            [{ type: 'text/plain', value: 'Back' }],
+          ],
           config: { reversible: false, separable: false },
         },
       },
       input: {
-        fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
+        fields: [
+          [{ type: 'text/plain', value: 'New Front' }],
+          [{ type: 'text/plain', value: 'New Back' }],
+        ],
         config: { reversible: true, separable: true },
       },
     },

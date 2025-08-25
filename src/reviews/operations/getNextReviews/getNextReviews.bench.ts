@@ -143,6 +143,7 @@ describe('getNextReviews', () => {
             notes.flatMap(({ id: note }) => [
               {
                 note,
+                type: 'text/plain',
                 value: `Note ${note} Front`,
                 hash: hashNoteFieldValue(`Note ${note} Front`),
                 side: 0,
@@ -151,6 +152,7 @@ describe('getNextReviews', () => {
               },
               {
                 note,
+                type: 'text/plain',
                 value: `Note ${note} Back`,
                 hash: hashNoteFieldValue(`Note ${note} Back`),
                 side: 1,

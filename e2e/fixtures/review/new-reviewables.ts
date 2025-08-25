@@ -10,7 +10,10 @@ async function fixture() {
 
   await createNote({
     collections: [id],
-    fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+    fields: [
+      [{ type: 'text/plain', value: 'Front 1' }],
+      [{ type: 'text/plain', value: 'Back 1' }],
+    ],
     config: {
       reversible: true,
       separable: true,

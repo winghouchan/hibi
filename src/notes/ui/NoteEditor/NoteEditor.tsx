@@ -29,6 +29,19 @@ interface Props {
   testID?: string
 }
 
+function isTextField(
+  type: Exclude<
+    Exclude<Props['value'], null | undefined>['fields'],
+    undefined
+  >[number][number]['type'],
+  value: Exclude<
+    Exclude<Props['value'], null | undefined>['fields'],
+    undefined
+  >[number][number]['value'],
+): value is string {
+  return type === 'text/plain'
+}
+
 export default forwardRef<Ref, Props>(function NoteEditor(
   { value, onSubmit, testID },
   ref,
@@ -41,7 +54,10 @@ export default forwardRef<Ref, Props>(function NoteEditor(
   const initialValues = {
     id: value?.id ?? undefined,
     collections: value?.collections ?? [],
-    fields: value?.fields ?? [[{ value: '' }], [{ value: '' }]],
+    fields: value?.fields ?? [
+      [{ type: 'text/plain', value: '' }],
+      [{ type: 'text/plain', value: '' }],
+    ],
     config: {
       reversible: value?.reversible ?? false,
       separable: value?.separable ?? false,
@@ -75,6 +91,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
         setFieldValue(
           name,
           value.content?.map(({ content }) => ({
+            type: 'text/plain',
             value: content?.[0].text ?? '',
           })),
         )
@@ -98,7 +115,7 @@ export default forwardRef<Ref, Props>(function NoteEditor(
             >(
               (accumulator, field) =>
                 // @todo: Handle other types of fields
-                typeof field.value === 'string'
+                isTextField(field.type, field.value)
                   ? [
                       ...accumulator,
                       {

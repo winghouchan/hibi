@@ -16,7 +16,7 @@ describe('`note_field` table', () => {
     ) => Promise<typeof noteField.$inferSelect>,
     generateNoteFieldMock: () => Pick<
       typeof noteField.$inferSelect,
-      'hash' | 'note' | 'value' | 'position' | 'side'
+      'hash' | 'note' | 'type' | 'value' | 'position' | 'side'
     >
 
   beforeEach(async () => {
@@ -29,9 +29,11 @@ describe('`note_field` table', () => {
 
     generateNoteFieldMock = () => {
       const value = 'Note Field Value'
+      const type = 'text/plain'
 
       return {
         note: noteId,
+        type,
         value,
         hash: hashNoteFieldValue(value),
         position: 0,
@@ -119,6 +121,38 @@ describe('`note_field` table', () => {
     })
   })
 
+  describe('`type` column', () => {
+    it('contains a valid a mime type', async () => {
+      const checkConstraintFailed = expect.objectContaining({
+        cause: expect.objectContaining({
+          message: expect.stringContaining('CHECK constraint failed'),
+        }),
+      })
+
+      await expect(insertNoteField(generateNoteFieldMock())).toResolve()
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), type: 'invalid' }),
+      ).rejects.toEqual(checkConstraintFailed)
+    })
+
+    it('cannot be `null`', async () => {
+      const notNullConstraintFailed = expect.objectContaining({
+        cause: expect.objectContaining({
+          message: expect.stringContaining(
+            'NOT NULL constraint failed: note_field.type',
+          ),
+        }),
+      })
+
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), type: undefined }),
+      ).rejects.toEqual(notNullConstraintFailed)
+      await expect(
+        insertNoteField({ ...generateNoteFieldMock(), type: null }),
+      ).rejects.toEqual(notNullConstraintFailed)
+    })
+  })
+
   describe('`value` column', () => {
     it('is the type that was inserted', async () => {
       await expect(
@@ -166,6 +200,7 @@ describe('`note_field` table', () => {
       await expect(
         insertNoteField({
           note: generateNoteFieldMock().note,
+          type: 'text/plain',
           hash: '',
           value: undefined,
           position: 0,
@@ -242,6 +277,7 @@ describe('`note_field` table', () => {
       await expect(
         insertNoteField({
           note: generateNoteFieldMock().note,
+          type: 'text/plain',
           value: generateNoteFieldMock().value,
           hash: undefined,
           position: 0,

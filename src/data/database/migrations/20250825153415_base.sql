@@ -29,6 +29,7 @@ create table `note` (
 create table `note_field` (
   `id` integer primary key autoincrement not null,
   `note` integer not null,
+  `type` text not null,
   `value` blob not null,
   `hash` text not null,
   `side` integer not null,
@@ -38,6 +39,7 @@ create table `note_field` (
   foreign key (`note`) references `note` (`id`)
     on update no action
     on delete no action,
+  constraint "note_field_type_is_valid" check ("note_field"."type" like '%/%'),
   constraint "note_field_value_not_empty"
     check (length("note_field"."value") > 0),
   constraint "note_field_hash_length" check (length("note_field"."hash") = 44),

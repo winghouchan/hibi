@@ -8,7 +8,10 @@ describe('createNote', () => {
       name: 'when an empty list of collection IDs is provided, throws an error and does not alter the database state',
       input: {
         collections: [],
-        fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+        fields: [
+          [{ type: 'text/plain', value: 'Front 1' }],
+          [{ type: 'text/plain', value: 'Back 1' }],
+        ],
         config: { reversible: false, separable: false },
       },
       expected: {
@@ -22,7 +25,10 @@ describe('createNote', () => {
       name: 'when the collection ID references a non-existent collection, throws an error and does not alter the database state',
       input: {
         collections: [-1],
-        fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+        fields: [
+          [{ type: 'text/plain', value: 'Front 1' }],
+          [{ type: 'text/plain', value: 'Back 1' }],
+        ],
         config: { reversible: false, separable: false },
       },
       expected: {
@@ -52,7 +58,7 @@ describe('createNote', () => {
       name: 'when less than two sides are provided, throws an error and does not alter the database state',
       input: {
         collections: [1],
-        fields: [[{ value: 'Front 1' }]],
+        fields: [[{ type: 'text/plain', value: 'Front 1' }]],
         config: { reversible: false, separable: false },
       },
       expected: {
@@ -82,7 +88,7 @@ describe('createNote', () => {
       name: 'when a side has no fields, throws an error and does not alter the database state',
       input: {
         collections: [1],
-        fields: [[{ value: 'Front 1' }], []],
+        fields: [[{ type: 'text/plain', value: 'Front 1' }], []],
         config: { reversible: false, separable: false },
       },
       expected: {
@@ -98,7 +104,10 @@ describe('createNote', () => {
       name: 'when a field value is an empty string, throws an error and does not alter the database state',
       input: {
         collections: [1],
-        fields: [[{ value: '' }], [{ value: 'Back 1' }]],
+        fields: [
+          [{ type: 'text/plain', value: '' }],
+          [{ type: 'text/plain', value: 'Back 1' }],
+        ],
         config: { reversible: false, separable: false },
       },
       expected: {
@@ -139,7 +148,10 @@ describe('createNote', () => {
       {
         name: 'and there is 1 field on each side with unique values, the correct state is produced and returned',
         input: {
-          fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Front 1' }],
+            [{ type: 'text/plain', value: 'Back 1' }],
+          ],
           config,
         },
         expected: {
@@ -158,6 +170,7 @@ describe('createNote', () => {
             {
               id: 1,
               note: 1,
+              type: 'text/plain',
               value: 'Front 1',
               hash: hashNoteFieldValue('Front 1'),
               side: 0,
@@ -168,6 +181,7 @@ describe('createNote', () => {
             {
               id: 2,
               note: 1,
+              type: 'text/plain',
               value: 'Back 1',
               hash: hashNoteFieldValue('Back 1'),
               side: 1,
@@ -235,7 +249,10 @@ describe('createNote', () => {
       {
         name: 'and there is 1 field on each side with non-unique values, the correct state is produced and returned',
         input: {
-          fields: [[{ value: 'Field value' }], [{ value: 'Field value' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Field value' }],
+            [{ type: 'text/plain', value: 'Field value' }],
+          ],
           config,
         },
         expected: {
@@ -254,6 +271,7 @@ describe('createNote', () => {
             {
               id: 1,
               note: 1,
+              type: 'text/plain',
               value: 'Field value',
               hash: hashNoteFieldValue('Field value'),
               side: 0,
@@ -264,6 +282,7 @@ describe('createNote', () => {
             {
               id: 2,
               note: 1,
+              type: 'text/plain',
               value: 'Field value',
               hash: hashNoteFieldValue('Field value'),
               side: 1,
@@ -332,8 +351,14 @@ describe('createNote', () => {
         name: 'and there is more than 1 field on each side with unique values, the correct state is produced and returned',
         input: {
           fields: [
-            [{ value: 'Front 1' }, { value: 'Front 2' }],
-            [{ value: 'Back 1' }, { value: 'Back 2' }],
+            [
+              { type: 'text/plain', value: 'Front 1' },
+              { type: 'text/plain', value: 'Front 2' },
+            ],
+            [
+              { type: 'text/plain', value: 'Back 1' },
+              { type: 'text/plain', value: 'Back 2' },
+            ],
           ],
           config,
         },
@@ -353,6 +378,7 @@ describe('createNote', () => {
             {
               id: 1,
               note: 1,
+              type: 'text/plain',
               value: 'Front 1',
               hash: hashNoteFieldValue('Front 1'),
               side: 0,
@@ -363,6 +389,7 @@ describe('createNote', () => {
             {
               id: 2,
               note: 1,
+              type: 'text/plain',
               value: 'Front 2',
               hash: hashNoteFieldValue('Front 2'),
               side: 0,
@@ -373,6 +400,7 @@ describe('createNote', () => {
             {
               id: 3,
               note: 1,
+              type: 'text/plain',
               value: 'Back 1',
               hash: hashNoteFieldValue('Back 1'),
               side: 1,
@@ -383,6 +411,7 @@ describe('createNote', () => {
             {
               id: 4,
               note: 1,
+              type: 'text/plain',
               value: 'Back 2',
               hash: hashNoteFieldValue('Back 2'),
               side: 1,
@@ -717,8 +746,14 @@ describe('createNote', () => {
         name: 'and there is more than 1 field on each side with non-unique values, the correct state is produced and returned',
         input: {
           fields: [
-            [{ value: 'Field value' }, { value: 'Field value' }],
-            [{ value: 'Field value' }, { value: 'Field value' }],
+            [
+              { type: 'text/plain', value: 'Field value' },
+              { type: 'text/plain', value: 'Field value' },
+            ],
+            [
+              { type: 'text/plain', value: 'Field value' },
+              { type: 'text/plain', value: 'Field value' },
+            ],
           ],
           config,
         },
@@ -738,6 +773,7 @@ describe('createNote', () => {
             {
               id: 1,
               note: 1,
+              type: 'text/plain',
               value: 'Field value',
               hash: hashNoteFieldValue('Field value'),
               side: 0,
@@ -748,6 +784,7 @@ describe('createNote', () => {
             {
               id: 2,
               note: 1,
+              type: 'text/plain',
               value: 'Field value',
               hash: hashNoteFieldValue('Field value'),
               side: 0,
@@ -758,6 +795,7 @@ describe('createNote', () => {
             {
               id: 3,
               note: 1,
+              type: 'text/plain',
               value: 'Field value',
               hash: hashNoteFieldValue('Field value'),
               side: 1,
@@ -768,6 +806,7 @@ describe('createNote', () => {
             {
               id: 4,
               note: 1,
+              type: 'text/plain',
               value: 'Field value',
               hash: hashNoteFieldValue('Field value'),
               side: 1,

@@ -81,8 +81,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front' },
-                { side: 1, position: 0, value: 'Back' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back' },
               ],
               archived: true,
               snapshots: [],
@@ -117,8 +117,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front' },
-                { side: 1, position: 0, value: 'Back' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back' },
               ],
               archived: false,
               snapshots: [],
@@ -134,8 +134,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front' })],
-                      [expect.objectContaining({ value: 'Back' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back',
+                        }),
+                      ],
                     ],
                   }),
                 ],
@@ -168,8 +178,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front' },
-                { side: 1, position: 0, value: 'Back' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back' },
               ],
               archived: false,
               snapshots: [
@@ -190,8 +200,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front' })],
-                      [expect.objectContaining({ value: 'Back' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back',
+                        }),
+                      ],
                     ],
                   }),
                 ],
@@ -224,8 +244,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front' },
-                { side: 1, position: 0, value: 'Back' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back' },
               ],
               archived: false,
               snapshots: [
@@ -246,8 +266,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front' })],
-                      [expect.objectContaining({ value: 'Back' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back',
+                        }),
+                      ],
                     ],
                   }),
                 ],
@@ -280,8 +310,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front' },
-                { side: 1, position: 0, value: 'Back' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back' },
               ],
               archived: false,
               snapshots: [
@@ -306,8 +336,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front' })],
-                      [expect.objectContaining({ value: 'Back' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back',
+                        }),
+                      ],
                     ],
                   }),
                 ],
@@ -340,8 +380,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front' },
-                { side: 1, position: 0, value: 'Back' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back' },
               ],
               archived: false,
               snapshots: [
@@ -366,8 +406,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front' })],
-                      [expect.objectContaining({ value: 'Back' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back',
+                        }),
+                      ],
                     ],
                   }),
                 ],
@@ -402,8 +452,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -417,8 +467,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -432,8 +482,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -454,8 +504,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -463,8 +523,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -501,8 +571,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -516,8 +586,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -531,8 +601,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -553,8 +623,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -562,8 +642,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -600,8 +690,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -615,8 +705,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -630,8 +720,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -652,8 +742,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -661,8 +761,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -699,8 +809,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -718,8 +828,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -737,8 +847,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -763,8 +873,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -772,8 +892,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -810,8 +940,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -829,8 +959,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -848,8 +978,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -874,8 +1004,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -883,8 +1023,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -921,8 +1071,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -940,8 +1090,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -959,8 +1109,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -985,8 +1135,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -994,8 +1154,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 3,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 3' })],
-                            [expect.objectContaining({ value: 'Back 3' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 3',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 3',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1032,8 +1202,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -1051,8 +1221,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -1070,8 +1240,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -1096,8 +1266,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -1105,8 +1285,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1143,8 +1333,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [],
@@ -1153,8 +1343,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -1168,8 +1358,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -1190,8 +1380,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -1199,8 +1399,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 3,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 3' })],
-                            [expect.objectContaining({ value: 'Back 3' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 3',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 3',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1237,8 +1447,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -1252,8 +1462,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [],
@@ -1262,8 +1472,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [],
@@ -1279,8 +1489,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 2,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 2' })],
-                      [expect.objectContaining({ value: 'Back 2' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 2',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 2',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -1288,8 +1508,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 3,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 3' })],
-                            [expect.objectContaining({ value: 'Back 3' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 3',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 3',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1326,8 +1556,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [],
@@ -1336,8 +1566,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [
@@ -1351,8 +1581,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -1373,8 +1603,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 3,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 3' })],
-                      [expect.objectContaining({ value: 'Back 3' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 3',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 3',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -1382,8 +1622,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 1,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 1' })],
-                            [expect.objectContaining({ value: 'Back 1' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 1',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 1',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1420,8 +1670,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [
@@ -1435,8 +1685,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: true,
               snapshots: [
@@ -1450,8 +1700,8 @@ describe('getNextReviews', () => {
               id: 3,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 3' },
-                { side: 1, position: 0, value: 'Back 3' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 3' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 3' },
               ],
               archived: false,
               snapshots: [
@@ -1472,8 +1722,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 1' })],
-                      [expect.objectContaining({ value: 'Back 1' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 1',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 1',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -1481,8 +1741,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 3,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 3' })],
-                            [expect.objectContaining({ value: 'Back 3' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 3',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 3',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1525,8 +1795,8 @@ describe('getNextReviews', () => {
               id: 1,
               note: 1,
               fields: [
-                { side: 0, position: 0, value: 'Front 1' },
-                { side: 1, position: 0, value: 'Back 1' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 1' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 1' },
               ],
               archived: false,
               snapshots: [{ createdAt: new Date(0), due: new Date(0) }],
@@ -1535,8 +1805,8 @@ describe('getNextReviews', () => {
               id: 2,
               note: 2,
               fields: [
-                { side: 0, position: 0, value: 'Front 2' },
-                { side: 1, position: 0, value: 'Back 2' },
+                { side: 0, position: 0, type: 'text/plain', value: 'Front 2' },
+                { side: 1, position: 0, type: 'text/plain', value: 'Back 2' },
               ],
               archived: false,
               snapshots: [{ createdAt: new Date(0), due: new Date(0) }],
@@ -1552,8 +1822,18 @@ describe('getNextReviews', () => {
                   expect.objectContaining({
                     id: 1,
                     fields: [
-                      [expect.objectContaining({ value: 'Front 1' })],
-                      [expect.objectContaining({ value: 'Back 1' })],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Front 1',
+                        }),
+                      ],
+                      [
+                        expect.objectContaining({
+                          type: 'text/plain',
+                          value: 'Back 1',
+                        }),
+                      ],
                     ],
                   }),
                   ...(input.pagination.limit === 2
@@ -1561,8 +1841,18 @@ describe('getNextReviews', () => {
                         expect.objectContaining({
                           id: 2,
                           fields: [
-                            [expect.objectContaining({ value: 'Front 2' })],
-                            [expect.objectContaining({ value: 'Back 2' })],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Front 2',
+                              }),
+                            ],
+                            [
+                              expect.objectContaining({
+                                type: 'text/plain',
+                                value: 'Back 2',
+                              }),
+                            ],
                           ],
                         }),
                       ]
@@ -1684,10 +1974,10 @@ describe('getNextReviews', () => {
         },
         note: {
           fields: [
-            { side: 0, position: 0, value: 'A' },
-            { side: 0, position: 1, value: 'B' },
-            { side: 1, position: 0, value: 'C' },
-            { side: 1, position: 1, value: 'D' },
+            { side: 0, position: 0, type: 'text/plain', value: 'A' },
+            { side: 0, position: 1, type: 'text/plain', value: 'B' },
+            { side: 1, position: 0, type: 'text/plain', value: 'C' },
+            { side: 1, position: 1, type: 'text/plain', value: 'D' },
           ],
         },
       }
@@ -1742,11 +2032,13 @@ describe('getNextReviews', () => {
                 expect.objectContaining({
                   side: 0,
                   position: 0,
+                  type: 'text/plain',
                   value: 'C',
                 }),
                 expect.objectContaining({
                   side: 0,
                   position: 1,
+                  type: 'text/plain',
                   value: 'D',
                 }),
               ],
@@ -1754,11 +2046,13 @@ describe('getNextReviews', () => {
                 expect.objectContaining({
                   side: 1,
                   position: 0,
+                  type: 'text/plain',
                   value: 'A',
                 }),
                 expect.objectContaining({
                   side: 1,
                   position: 1,
+                  type: 'text/plain',
                   value: 'B',
                 }),
               ],

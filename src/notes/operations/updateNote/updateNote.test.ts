@@ -45,7 +45,7 @@ describe('updateNote', () => {
     },
     {
       name: 'when less than two sides are provided, throws an error and does not alter the database state',
-      input: { id: 1, fields: [[{ value: 'Front 1' }]] },
+      input: { id: 1, fields: [[{ type: 'text/plain', value: 'Front 1' }]] },
       expected: {
         output: expect.objectContaining({
           message: expect.stringContaining('2 sides are required'),
@@ -65,7 +65,10 @@ describe('updateNote', () => {
     },
     {
       name: 'when a side has no fields, throws an error and does not alter the database state',
-      input: { id: 1, fields: [[{ value: 'Front 1' }], []] },
+      input: {
+        id: 1,
+        fields: [[{ type: 'text/plain', value: 'Front 1' }], []],
+      },
       expected: {
         output: expect.objectContaining({
           message: expect.stringContaining(
@@ -76,7 +79,13 @@ describe('updateNote', () => {
     },
     {
       name: 'when a field value is an empty string, throws an error and does not alter the database state',
-      input: { id: 1, fields: [[{ value: '' }], [{ value: 'Back 1' }]] },
+      input: {
+        id: 1,
+        fields: [
+          [{ type: 'text/plain', value: '' }],
+          [{ type: 'text/plain', value: 'Back 1' }],
+        ],
+      },
       expected: {
         output: expect.objectContaining({
           cause: expect.objectContaining({
@@ -95,7 +104,10 @@ describe('updateNote', () => {
       .returning({ collectionId: collection.id })
     const { id: noteId } = await createNote({
       collections: [collectionId],
-      fields: [[{ value: '1' }], [{ value: '2' }]],
+      fields: [
+        [{ type: 'text/plain', value: '1' }],
+        [{ type: 'text/plain', value: '2' }],
+      ],
       config: { reversible: false, separable: false },
     })
     const getDatabaseState = async () =>
@@ -225,21 +237,31 @@ describe('updateNote', () => {
         name: 'replaces a single field on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
-        input: { fields: [[{ value: '1a' }], [{ value: '2' }]] },
+        input: {
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [{ type: 'text/plain', value: '2' }],
+          ],
+        },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
@@ -251,18 +273,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
@@ -309,21 +334,31 @@ describe('updateNote', () => {
         name: 'replaces a single field on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
-        input: { fields: [[{ value: '1' }], [{ value: '2a' }]] },
+        input: {
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
+        },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -335,18 +370,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -393,29 +431,44 @@ describe('updateNote', () => {
         name: 'replaces multiple fields on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1b' },
+              ],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1A' }, { value: '1B' }], [{ value: '2' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: '1A' },
+              { type: 'text/plain', value: '1B' },
+            ],
+            [{ type: 'text/plain', value: '2' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1A',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1B',
                 side: 0,
                 position: 1,
@@ -427,30 +480,35 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1A',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1B',
                   side: 0,
                   position: 1,
@@ -507,29 +565,44 @@ describe('updateNote', () => {
         name: 'replaces multiple fields on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2a' }, { value: '2b' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }], [{ value: '2A' }, { value: '2B' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [
+              { type: 'text/plain', value: '2A' },
+              { type: 'text/plain', value: '2B' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2A',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2B',
                 side: 1,
                 position: 1,
@@ -541,30 +614,35 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2A',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2B',
                   side: 1,
                   position: 1,
@@ -621,29 +699,41 @@ describe('updateNote', () => {
         name: 'prepends a note field on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: 'a' }, { value: '1' }], [{ value: '2' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: 'a' },
+              { type: 'text/plain', value: '1' },
+            ],
+            [{ type: 'text/plain', value: '2' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: 'a',
                 side: 0,
                 position: 0,
@@ -655,18 +745,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: 'a',
                   side: 0,
                   position: 0,
@@ -718,29 +811,41 @@ describe('updateNote', () => {
         name: 'prepends a note field on the first side with a value of an existing note field, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '2' }, { value: '1' }], [{ value: '2' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: '2' },
+              { type: 'text/plain', value: '1' },
+            ],
+            [{ type: 'text/plain', value: '2' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
@@ -752,18 +857,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
@@ -815,29 +923,41 @@ describe('updateNote', () => {
         name: 'prepends a note field on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }], [{ value: 'a' }, { value: '2' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [
+              { type: 'text/plain', value: 'a' },
+              { type: 'text/plain', value: '2' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: 'a',
                 side: 1,
                 position: 0,
@@ -849,18 +969,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: 'a',
                   side: 1,
                   position: 0,
@@ -912,29 +1035,41 @@ describe('updateNote', () => {
         name: 'prepends a note field on the second side with a value of an existing note field, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }], [{ value: '1' }, { value: '2' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [
+              { type: 'text/plain', value: '1' },
+              { type: 'text/plain', value: '2' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 1,
                 position: 0,
@@ -946,18 +1081,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 1,
                   position: 0,
@@ -1009,29 +1147,41 @@ describe('updateNote', () => {
         name: 'appends a note field on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: '1a' },
+              { type: 'text/plain', value: '1b' },
+            ],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 0,
                 position: 1,
@@ -1043,18 +1193,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
@@ -1106,29 +1259,41 @@ describe('updateNote', () => {
         name: 'appends a note field on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [
+              { type: 'text/plain', value: '2a' },
+              { type: 'text/plain', value: '2b' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 1,
@@ -1140,18 +1305,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
@@ -1203,29 +1371,41 @@ describe('updateNote', () => {
         name: 'appends a note field on the first side with a value of an existing note field, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }, { value: '1' }], [{ value: '2' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: '1' },
+              { type: 'text/plain', value: '1' },
+            ],
+            [{ type: 'text/plain', value: '2' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 1,
@@ -1237,18 +1417,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 1,
@@ -1300,29 +1483,41 @@ describe('updateNote', () => {
         name: 'appends a note field on the second side with a value  of an existing note field, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }], [{ value: '2' }, { value: '2' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [
+              { type: 'text/plain', value: '2' },
+              { type: 'text/plain', value: '2' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 1,
@@ -1334,18 +1529,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 1,
@@ -1397,23 +1595,34 @@ describe('updateNote', () => {
         name: 'removes the first note field on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1b' },
+              ],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1b' }], [{ value: '2a' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1b' }],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -1425,18 +1634,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -1488,23 +1700,34 @@ describe('updateNote', () => {
         name: 'removes the first note field on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }], [{ value: '2b' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [{ type: 'text/plain', value: '2b' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 0,
@@ -1516,18 +1739,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 0,
@@ -1579,23 +1805,34 @@ describe('updateNote', () => {
         name: 'removes the last note field on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1b' },
+              ],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }], [{ value: '2a' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -1607,18 +1844,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -1670,23 +1910,34 @@ describe('updateNote', () => {
         name: 'removes the last note field on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }], [{ value: '2a' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -1698,18 +1949,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
@@ -1762,31 +2016,44 @@ describe('updateNote', () => {
         fixture: {
           note: {
             fields: [
-              [{ value: '1a' }, { value: '1b' }, { value: '1c' }],
-              [{ value: '2a' }],
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1b' },
+                { type: 'text/plain', value: '1c' },
+              ],
+              [{ type: 'text/plain', value: '2a' }],
             ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }, { value: '1c' }], [{ value: '2a' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: '1a' },
+              { type: 'text/plain', value: '1c' },
+            ],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1c',
                 side: 0,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -1798,24 +2065,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1c',
                   side: 0,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -1878,31 +2149,44 @@ describe('updateNote', () => {
         fixture: {
           note: {
             fields: [
-              [{ value: '1a' }],
-              [{ value: '2a' }, { value: '2b' }, { value: '2c' }],
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+                { type: 'text/plain', value: '2c' },
+              ],
             ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2c' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [
+              { type: 'text/plain', value: '2a' },
+              { type: 'text/plain', value: '2c' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2c',
                 side: 1,
                 position: 1,
@@ -1914,24 +2198,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2c',
                   side: 1,
                   position: 1,
@@ -1993,23 +2281,34 @@ describe('updateNote', () => {
         name: 'removes a note field on the first side that has the same value as another field, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }, { value: '1' }], [{ value: '2' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1' },
+                { type: 'text/plain', value: '1' },
+              ],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }], [{ value: '2' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [{ type: 'text/plain', value: '2' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
@@ -2021,18 +2320,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 1,
                   archived: true,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
@@ -2084,23 +2386,34 @@ describe('updateNote', () => {
         name: 'removes a note field on the second side that has the same value as another field, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }, { value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [
+                { type: 'text/plain', value: '2' },
+                { type: 'text/plain', value: '2' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1' }], [{ value: '2' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1' }],
+            [{ type: 'text/plain', value: '2' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
@@ -2112,18 +2425,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 1,
@@ -2175,38 +2491,52 @@ describe('updateNote', () => {
         name: 'inserts a new note field between two fields on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }, { value: '1c' }], [{ value: '2a' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1c' },
+              ],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
           fields: [
-            [{ value: '1a' }, { value: '1b' }, { value: '1c' }],
-            [{ value: '2a' }],
+            [
+              { type: 'text/plain', value: '1a' },
+              { type: 'text/plain', value: '1b' },
+              { type: 'text/plain', value: '1c' },
+            ],
+            [{ type: 'text/plain', value: '2a' }],
           ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1c',
                 side: 0,
                 position: 2,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 0,
                 position: 1,
@@ -2218,24 +2548,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1c',
                   side: 0,
                   position: 2,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
@@ -2297,38 +2631,52 @@ describe('updateNote', () => {
         name: 'inserts a new note field between two fields on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2c' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2c' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
           fields: [
-            [{ value: '1a' }],
-            [{ value: '2a' }, { value: '2b' }, { value: '2c' }],
+            [{ type: 'text/plain', value: '1a' }],
+            [
+              { type: 'text/plain', value: '2a' },
+              { type: 'text/plain', value: '2b' },
+              { type: 'text/plain', value: '2c' },
+            ],
           ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2c',
                 side: 1,
                 position: 2,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 1,
@@ -2340,24 +2688,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2c',
                   side: 1,
                   position: 2,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
@@ -2419,38 +2771,52 @@ describe('updateNote', () => {
         name: 'inserts a new note field with a value of an existing note field between two fields on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }, { value: '2' }], [{ value: '3' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1' },
+                { type: 'text/plain', value: '2' },
+              ],
+              [{ type: 'text/plain', value: '3' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
           fields: [
-            [{ value: '1' }, { value: '1' }, { value: '2' }],
-            [{ value: '3' }],
+            [
+              { type: 'text/plain', value: '1' },
+              { type: 'text/plain', value: '1' },
+              { type: 'text/plain', value: '2' },
+            ],
+            [{ type: 'text/plain', value: '3' }],
           ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 0,
                 position: 2,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '3',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 1,
@@ -2462,24 +2828,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 0,
                   position: 2,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '3',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 1,
@@ -2541,38 +2911,52 @@ describe('updateNote', () => {
         name: 'inserts a new note field  with a value of an existing note field between two fields on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }, { value: '3' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [
+                { type: 'text/plain', value: '2' },
+                { type: 'text/plain', value: '3' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
           fields: [
-            [{ value: '1' }],
-            [{ value: '2' }, { value: '2' }, { value: '3' }],
+            [{ type: 'text/plain', value: '1' }],
+            [
+              { type: 'text/plain', value: '2' },
+              { type: 'text/plain', value: '2' },
+              { type: 'text/plain', value: '3' },
+            ],
           ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '3',
                 side: 1,
                 position: 2,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 1,
@@ -2584,24 +2968,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '3',
                   side: 1,
                   position: 2,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 1,
@@ -2663,29 +3051,44 @@ describe('updateNote', () => {
         name: 'swaps positions of note fields on the first side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+            fields: [
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1b' },
+              ],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1b' }, { value: '1a' }], [{ value: '2a' }]],
+          fields: [
+            [
+              { type: 'text/plain', value: '1b' },
+              { type: 'text/plain', value: '1a' },
+            ],
+            [{ type: 'text/plain', value: '2a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -2697,18 +3100,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -2745,29 +3151,44 @@ describe('updateNote', () => {
         name: 'swaps positions of note fields on the second side, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '1a' }], [{ value: '2b' }, { value: '2a' }]],
+          fields: [
+            [{ type: 'text/plain', value: '1a' }],
+            [
+              { type: 'text/plain', value: '2b' },
+              { type: 'text/plain', value: '2a' },
+            ],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 0,
@@ -2779,18 +3200,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 0,
@@ -2827,23 +3251,31 @@ describe('updateNote', () => {
         name: 'swaps sides with a single note field each, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [{ type: 'text/plain', value: '2a' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
-          fields: [[{ value: '2a' }], [{ value: '1a' }]],
+          fields: [
+            [{ type: 'text/plain', value: '2a' }],
+            [{ type: 'text/plain', value: '1a' }],
+          ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 0,
                 position: 0,
@@ -2855,12 +3287,14 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 0,
                   position: 0,
@@ -2908,40 +3342,56 @@ describe('updateNote', () => {
         fixture: {
           note: {
             fields: [
-              [{ value: '1a' }, { value: '1b' }],
-              [{ value: '2a' }, { value: '2b' }],
+              [
+                { type: 'text/plain', value: '1a' },
+                { type: 'text/plain', value: '1b' },
+              ],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
             ],
             config: { reversible: false, separable: false },
           },
         },
         input: {
           fields: [
-            [{ value: '2a' }, { value: '2b' }],
-            [{ value: '1a' }, { value: '1b' }],
+            [
+              { type: 'text/plain', value: '2a' },
+              { type: 'text/plain', value: '2b' },
+            ],
+            [
+              { type: 'text/plain', value: '1a' },
+              { type: 'text/plain', value: '1b' },
+            ],
           ],
         },
         expected: {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 1,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 0,
                 position: 1,
@@ -2953,24 +3403,28 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 1,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 0,
                   position: 1,
@@ -3074,11 +3528,20 @@ describe('updateNote', () => {
         fixture: {
           note: [
             {
-              fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+              fields: [
+                [
+                  { type: 'text/plain', value: '1a' },
+                  { type: 'text/plain', value: '1b' },
+                ],
+                [{ type: 'text/plain', value: '2a' }],
+              ],
               config: { reversible: false, separable: false },
             },
             {
-              fields: [[{ value: '1b' }], [{ value: '2a' }]],
+              fields: [
+                [{ type: 'text/plain', value: '1b' }],
+                [{ type: 'text/plain', value: '2a' }],
+              ],
               config: { reversible: false, separable: false },
             },
           ],
@@ -3087,18 +3550,21 @@ describe('updateNote', () => {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 0,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -3110,18 +3576,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -3174,11 +3643,20 @@ describe('updateNote', () => {
         fixture: {
           note: [
             {
-              fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+              fields: [
+                [{ type: 'text/plain', value: '1a' }],
+                [
+                  { type: 'text/plain', value: '2a' },
+                  { type: 'text/plain', value: '2b' },
+                ],
+              ],
               config: { reversible: false, separable: false },
             },
             {
-              fields: [[{ value: '1a' }], [{ value: '2b' }]],
+              fields: [
+                [{ type: 'text/plain', value: '1a' }],
+                [{ type: 'text/plain', value: '2b' }],
+              ],
               config: { reversible: false, separable: false },
             },
           ],
@@ -3187,18 +3665,21 @@ describe('updateNote', () => {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 1,
@@ -3210,18 +3691,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
@@ -3274,11 +3758,20 @@ describe('updateNote', () => {
         fixture: {
           note: [
             {
-              fields: [[{ value: '1a' }, { value: '1b' }], [{ value: '2a' }]],
+              fields: [
+                [
+                  { type: 'text/plain', value: '1a' },
+                  { type: 'text/plain', value: '1b' },
+                ],
+                [{ type: 'text/plain', value: '2a' }],
+              ],
               config: { reversible: false, separable: false },
             },
             {
-              fields: [[{ value: '1a' }], [{ value: '2a' }]],
+              fields: [
+                [{ type: 'text/plain', value: '1a' }],
+                [{ type: 'text/plain', value: '2a' }],
+              ],
               config: { reversible: false, separable: false },
             },
           ],
@@ -3287,18 +3780,21 @@ describe('updateNote', () => {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1b',
                 side: 0,
                 position: 1,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
@@ -3310,18 +3806,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1b',
                   side: 0,
                   position: 1,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
@@ -3374,11 +3873,20 @@ describe('updateNote', () => {
         fixture: {
           note: [
             {
-              fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+              fields: [
+                [{ type: 'text/plain', value: '1a' }],
+                [
+                  { type: 'text/plain', value: '2a' },
+                  { type: 'text/plain', value: '2b' },
+                ],
+              ],
               config: { reversible: false, separable: false },
             },
             {
-              fields: [[{ value: '1a' }], [{ value: '2a' }]],
+              fields: [
+                [{ type: 'text/plain', value: '1a' }],
+                [{ type: 'text/plain', value: '2a' }],
+              ],
               config: { reversible: false, separable: false },
             },
           ],
@@ -3387,18 +3895,21 @@ describe('updateNote', () => {
           output: expect.objectContaining({
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 1,
@@ -3410,18 +3921,21 @@ describe('updateNote', () => {
             expect.objectContaining({
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
@@ -3515,7 +4029,10 @@ describe('updateNote', () => {
         name: 'updates the note from not reversible to reversible, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: false, separable: false },
           },
         },
@@ -3528,12 +4045,14 @@ describe('updateNote', () => {
             separable: false,
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
@@ -3547,12 +4066,14 @@ describe('updateNote', () => {
               separable: false,
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
@@ -3599,7 +4120,10 @@ describe('updateNote', () => {
         name: 'updates the note from reversible to not reversible, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1' }], [{ value: '2' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1' }],
+              [{ type: 'text/plain', value: '2' }],
+            ],
             config: { reversible: true, separable: false },
           },
         },
@@ -3612,12 +4136,14 @@ describe('updateNote', () => {
             separable: false,
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2',
                 side: 1,
                 position: 0,
@@ -3631,12 +4157,14 @@ describe('updateNote', () => {
               separable: false,
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2',
                   side: 1,
                   position: 0,
@@ -3683,7 +4211,13 @@ describe('updateNote', () => {
         name: 'updates the note from not separable to separable, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
+            ],
             config: { reversible: false, separable: false },
           },
         },
@@ -3696,18 +4230,21 @@ describe('updateNote', () => {
             separable: true,
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 1,
@@ -3721,18 +4258,21 @@ describe('updateNote', () => {
               separable: true,
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,
@@ -3799,7 +4339,13 @@ describe('updateNote', () => {
         name: 'updates the note from separable to not separable, the correct state is produced and returned',
         fixture: {
           note: {
-            fields: [[{ value: '1a' }], [{ value: '2a' }, { value: '2b' }]],
+            fields: [
+              [{ type: 'text/plain', value: '1a' }],
+              [
+                { type: 'text/plain', value: '2a' },
+                { type: 'text/plain', value: '2b' },
+              ],
+            ],
             config: { reversible: false, separable: true },
           },
         },
@@ -3812,18 +4358,21 @@ describe('updateNote', () => {
             separable: false,
             fields: [
               expect.objectContaining({
+                type: 'text/plain',
                 value: '1a',
                 side: 0,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2a',
                 side: 1,
                 position: 0,
                 archived: false,
               }),
               expect.objectContaining({
+                type: 'text/plain',
                 value: '2b',
                 side: 1,
                 position: 1,
@@ -3837,18 +4386,21 @@ describe('updateNote', () => {
               separable: false,
               fields: [
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '1a',
                   side: 0,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2a',
                   side: 1,
                   position: 0,
                   archived: false,
                 }),
                 expect.objectContaining({
+                  type: 'text/plain',
                   value: '2b',
                   side: 1,
                   position: 1,

@@ -168,6 +168,7 @@ async function updateNote({
             await transaction.insert(noteField).values(
               newPositions.map(({ position, side }) => ({
                 note: id,
+                type: sides[side][position].type,
                 value: sides[side][position].value,
                 hash: fieldHash,
                 position,
@@ -211,6 +212,7 @@ async function updateNote({
                     // The field exists at an index in the new state that does exist in the current state, so is inserted
                     return await transaction.insert(noteField).values({
                       note: id,
+                      type: sides[side][position].type,
                       value: sides[side][position].value,
                       hash: fieldHash,
                       position,

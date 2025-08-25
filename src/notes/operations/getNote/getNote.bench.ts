@@ -105,8 +105,8 @@ describe('getNote', () => {
             await createNote({
               collections: [collectionId],
               fields: [
-                [{ value: `Front ${index}` }],
-                [{ value: `Back ${index}` }],
+                [{ type: 'text/plain', value: `Front ${index}` }],
+                [{ type: 'text/plain', value: `Back ${index}` }],
               ],
               config: {
                 reversible: true,

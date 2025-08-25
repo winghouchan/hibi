@@ -12,7 +12,10 @@ describe('createNote', () => {
         },
       },
       input: {
-        fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+        fields: [
+          [{ type: 'text/plain', value: 'Front' }],
+          [{ type: 'text/plain', value: 'Back' }],
+        ],
         config: {
           reversible: true,
           separable: true,

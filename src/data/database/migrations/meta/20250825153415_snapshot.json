@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7dc25c7f-9a70-4948-8d62-951339330136",
+  "id": "e05d0c07-aa7d-4c87-a5a9-502eed00b6a7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "collection": {
@@ -155,6 +155,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "value": {
           "name": "value",
           "type": "blob",
@@ -215,6 +222,10 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {
+        "note_field_type_is_valid": {
+          "name": "note_field_type_is_valid",
+          "value": "\"note_field\".\"type\" LIKE '%/%'"
+        },
         "note_field_value_not_empty": {
           "name": "note_field_value_not_empty",
           "value": "length(\"note_field\".\"value\") > 0"

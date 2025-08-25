@@ -98,6 +98,7 @@ async function getNextReviews({ filter, pagination }: Options = {}) {
               'reviewable', ${reviewableField.reviewable},
               'side', ${reviewableField.side},
               'position', ${noteField.position},
+              'type', ${noteField.type},
               'value', ${noteField.value}
             )
           )

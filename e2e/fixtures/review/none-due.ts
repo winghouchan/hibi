@@ -12,7 +12,10 @@ async function fixture() {
 
   const { reviewables } = await createNote({
     collections: [collectionId],
-    fields: [[{ value: 'Front 1' }], [{ value: 'Back 1' }]],
+    fields: [
+      [{ type: 'text/plain', value: 'Front 1' }],
+      [{ type: 'text/plain', value: 'Back 1' }],
+    ],
     config: {
       reversible: false,
       separable: false,

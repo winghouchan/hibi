@@ -68,6 +68,7 @@ describe('<NoteEditorScreen />', () => {
         fields: [
           [
             {
+              type: 'text/plain',
               value: fixture.note.fields[0][0].value,
               id: 1,
               createdAt: new Date(),
@@ -80,6 +81,7 @@ describe('<NoteEditorScreen />', () => {
           ],
           [
             {
+              type: 'text/plain',
               value: fixture.note.fields[1][0].value,
               id: 2,
               createdAt: new Date(),
@@ -97,7 +99,10 @@ describe('<NoteEditorScreen />', () => {
       const user = userEvent.setup()
       const input = {
         note: {
-          fields: [[{ value: 'New Front' }], [{ value: 'New Back' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'New Front' }],
+            [{ type: 'text/plain', value: 'New Back' }],
+          ],
           config: {
             reversible: true,
             separable: true,
@@ -196,7 +201,10 @@ describe('<NoteEditorScreen />', () => {
       const input = {
         note: {
           collections: [fixture.collections[0].id],
-          fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+          fields: [
+            [{ type: 'text/plain', value: 'Front' }],
+            [{ type: 'text/plain', value: 'Back' }],
+          ],
           config: {
             reversible: true,
             separable: true,

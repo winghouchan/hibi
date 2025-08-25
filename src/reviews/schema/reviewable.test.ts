@@ -239,6 +239,7 @@ describe('`reviewable_field` table', () => {
       .values(
         ['Field 1'].map((value, position) => ({
           note: noteId,
+          type: 'text/plain',
           value,
           hash: hashNoteFieldValue(value),
           position,

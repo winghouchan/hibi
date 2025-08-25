@@ -27,7 +27,10 @@ const fixture = {
     name: 'Collection Name',
   },
   note: {
-    fields: [[{ value: 'Front' }], [{ value: 'Back' }]],
+    fields: [
+      [{ type: 'text/plain', value: 'Front' }],
+      [{ type: 'text/plain', value: 'Back' }],
+    ],
     config: { reversible: false, separable: false },
   },
 }
