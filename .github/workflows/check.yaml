@@ -28,19 +28,32 @@ jobs:
       number-of-shards: 5
 
     outputs:
-      native: ${{ steps.filter.outputs.native }}
-      source: ${{ steps.filter.outputs.source }}
+      dependency-changes: ${{ steps.filter.outputs.dependencies }}
+      native-changes: ${{ steps.filter.outputs.native }}
+      source-changes: ${{ steps.filter.outputs.source }}
+      test-artifact-workflow-run-ids: ${{ steps.test-artifact-workflow-run.outputs.ids }}
       test-shards: ${{ steps.shard-e2e-tests.outputs.shards }}
 
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
 
-      - name: 🧑‍✈️ Determine jobs to run
+      - name: 🧑‍✈️ Determine workflows to run
         id: filter
         uses: dorny/paths-filter@v3
         with:
           filters: ./.github/path-filters.yaml
+
+      # If there are no native changes, a past build can be used with a new
+      # JavaScript bundle for running end-to-end tests, saving time from the
+      # overall workflow run by removing the build step. This step gets the
+      # workflow run ID for that past build so a workflow's download artifact
+      # step can download the artifact from the correct workflow run.
+      - name: 👷 Get workflow run IDs of most recent test builds
+        id: test-artifact-workflow-run
+        run: ./.github/scripts/get-test-artifact-workflow-run-ids.sh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       # Shard end-to-end tests to reduce the overall run time by running tests
       # across multiple runners in parallel. Also reduces the run time for
@@ -55,21 +68,24 @@ jobs:
 
   source:
     needs: [plan]
-    if: needs.plan.outputs.source == 'true'
+    if: needs.plan.outputs.source-changes == 'true'
     uses: ./.github/workflows/source.yaml
     secrets: inherit
 
   android:
     needs: [plan]
-    if: needs.plan.outputs.native == 'true'
+    if: needs.plan.outputs.native-changes == 'true'
     uses: ./.github/workflows/android.yaml
     with:
+      # yamllint disable-line rule:line-length
+      build: ${{ needs.plan.outputs.dependency-changes == 'true' || fromJson(needs.plan.outputs.test-artifact-workflow-run-ids).android == '' }}
+      test-artifact-workflow-run-id: ${{ fromJson(needs.plan.outputs.test-artifact-workflow-run-ids).android }}
       test-shards: ${{ needs.plan.outputs.test-shards }}
     secrets: inherit
 
   ios:
     needs: [plan]
-    if: needs.plan.outputs.native == 'true'
+    if: needs.plan.outputs.native-changes == 'true'
     uses: ./.github/workflows/ios.yaml
     with:
       test-shards: ${{ needs.plan.outputs.test-shards }}
