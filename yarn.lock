@@ -4878,24 +4878,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/elements@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@react-navigation/elements@npm:2.3.0"
-  dependencies:
-    color: "npm:^4.2.3"
-  peerDependencies:
-    "@react-native-masked-view/masked-view": ">= 0.2.0"
-    "@react-navigation/native": ^7.0.18
-    react: ">= 18.2.0"
-    react-native: "*"
-    react-native-safe-area-context: ">= 4.0.0"
-  peerDependenciesMeta:
-    "@react-native-masked-view/masked-view":
-      optional: true
-  checksum: 10c0/8c16398e95f6a4e5b33a6574d6f144e3d6edcf8ff626d5064dfe26bec40b4b055c3b9dc8aa09095843d9ed0b56d6d7063463faf3abdd62f3e518927ef410e47f
-  languageName: node
-  linkType: hard
-
 "@react-navigation/elements@npm:^2.5.2":
   version: 2.5.2
   resolution: "@react-navigation/elements@npm:2.5.2"
@@ -4913,6 +4895,26 @@ __metadata:
     "@react-native-masked-view/masked-view":
       optional: true
   checksum: 10c0/d019665639ba3510fd7cebf7ba67bfc9b64e8041ae4e7e7dfb8fef280ac37884c9e9620e20e1c448e828231779216fb34caf9d53c43b49a9f679e60cbe171b05
+  languageName: node
+  linkType: hard
+
+"@react-navigation/elements@npm:^2.6.3":
+  version: 2.6.3
+  resolution: "@react-navigation/elements@npm:2.6.3"
+  dependencies:
+    color: "npm:^4.2.3"
+    use-latest-callback: "npm:^0.2.4"
+    use-sync-external-store: "npm:^1.5.0"
+  peerDependencies:
+    "@react-native-masked-view/masked-view": ">= 0.2.0"
+    "@react-navigation/native": ^7.1.17
+    react: ">= 18.2.0"
+    react-native: "*"
+    react-native-safe-area-context: ">= 4.0.0"
+  peerDependenciesMeta:
+    "@react-native-masked-view/masked-view":
+      optional: true
+  checksum: 10c0/961c60f738eb5a9d7830cebdb536f8deeb1890a6e8ebc302916191857fe4e421d84aadb3b3e3720da27d924f0cfbe2d3f090dfef38d2ef9485d033d79974e244
   languageName: node
   linkType: hard
 
@@ -4957,20 +4959,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/stack@npm:^7.2.2":
-  version: 7.2.2
-  resolution: "@react-navigation/stack@npm:7.2.2"
+"@react-navigation/stack@npm:^7.4.7":
+  version: 7.4.7
+  resolution: "@react-navigation/stack@npm:7.4.7"
   dependencies:
-    "@react-navigation/elements": "npm:^2.3.0"
+    "@react-navigation/elements": "npm:^2.6.3"
     color: "npm:^4.2.3"
   peerDependencies:
-    "@react-navigation/native": ^7.0.18
+    "@react-navigation/native": ^7.1.17
     react: ">= 18.2.0"
     react-native: "*"
     react-native-gesture-handler: ">= 2.0.0"
     react-native-safe-area-context: ">= 4.0.0"
     react-native-screens: ">= 4.0.0"
-  checksum: 10c0/79093634d15b6d3c59f61b04194485d9c3fb70dccbe3bb185c9571913dfdc1cce1001009e812f170f365ec775b3c93a39613acccc9628d518d32e8176e40c9cd
+  checksum: 10c0/b21e9169a28969375dde3cdc09aebaf80564d82ee4202269fb51543bd96c6830fb90e96995d69a30a890c6fd40866f433f450f4369bd9729ea3882d292f936b6
   languageName: node
   linkType: hard
 
@@ -12702,7 +12704,7 @@ __metadata:
     "@react-native-async-storage/async-storage": "npm:2.1.2"
     "@react-native-community/datetimepicker": "npm:8.4.1"
     "@react-native-community/slider": "npm:^4.5.6"
-    "@react-navigation/stack": "npm:^7.2.2"
+    "@react-navigation/stack": "npm:^7.4.7"
     "@sentry/react-native": "npm:~6.14.0"
     "@spotlightjs/spotlight": "npm:^2.12.0"
     "@storybook/addon-essentials": "npm:^8.6.14"
