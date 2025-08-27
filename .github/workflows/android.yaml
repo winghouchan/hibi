@@ -160,6 +160,8 @@ jobs:
 
       - name: 🏗️ Set up Maestro
         uses: ./.github/actions/set-up-maestro
+        with:
+          maestro-version: 1.41.0
 
       - name: 🚚 Install Node modules
         uses: ./.github/actions/install-node-modules
