@@ -210,7 +210,7 @@ jobs:
         if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
-          name: test-android-${{ matrix.shard }}-emulator-logs
+          name: test-android-${{ matrix.shard.name }}-emulator-logs
           path: ${{ env.emulator-log-location }}
           if-no-files-found: 'error'
 
@@ -218,7 +218,7 @@ jobs:
         if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
-          name: test-android-${{ matrix.shard }}-test-logs
+          name: test-android-${{ matrix.shard.name }}-test-logs
           path: ~/.maestro/tests
           include-hidden-files: true
           if-no-files-found: 'error'

@@ -182,7 +182,7 @@ jobs:
         if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
-          name: test-ios-${{ matrix.shard }}-simulator.logarchive
+          name: test-ios-${{ matrix.shard.name }}-simulator.logarchive
           path: ./${{ env.simulator-log-location }}
           if-no-files-found: 'error'
 
@@ -190,7 +190,7 @@ jobs:
         if: always() && (runner.debug || steps.tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
-          name: test-ios-${{ matrix.shard }}-test-logs
+          name: test-ios-${{ matrix.shard.name }}-test-logs
           path: ~/.maestro/tests
           include-hidden-files: true
           if-no-files-found: 'error'
