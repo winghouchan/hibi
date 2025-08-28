@@ -38,6 +38,12 @@ export default {
     supportsTablet: true,
     bundleIdentifier: identifierByEnvironment.production,
   },
+  runtimeVersion: {
+    policy: 'fingerprint',
+  },
+  updates: {
+    url: process.env.UPDATES_URL,
+  },
   plugins: [
     [
       'expo-build-properties',

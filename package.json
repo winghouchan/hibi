@@ -74,6 +74,7 @@
     "expo-splash-screen": "~0.30.10",
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.10",
+    "expo-updates": "~0.28.17",
     "expo-web-browser": "~14.2.0",
     "feather-icons": "^4.29.2",
     "formik": "^2.4.6",
