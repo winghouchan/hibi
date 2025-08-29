@@ -9,6 +9,11 @@ tags:
     commands:
       - clearState
 
+- runFlow:
+    when:
+      true: ${loadBundle}
+    file: ../../bundle/loadBundle.yaml
+
 - launchApp
 
 - runFlow:

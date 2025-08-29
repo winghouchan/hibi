@@ -1,0 +1,23 @@
+name: 🧳 Create update bundle
+
+description: Creates an update bundle
+
+inputs:
+  app:
+    description: Path to the app to create the bundle for
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 🌐 Compile message catalogs
+      shell: bash
+      run: |
+        yarn run build:intl:extract-template
+        yarn run build:intl:compile
+
+    - name: 🧳 Create update bundle
+      shell: bash
+      run: >
+        ${{ github.action_path }}/create-ios-update-bundle.sh
+        $(plutil -extract CFBundleIdentifier raw ${{ inputs.APP }}/Info.plist)

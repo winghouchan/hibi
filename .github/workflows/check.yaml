@@ -88,5 +88,8 @@ jobs:
     if: needs.plan.outputs.native-changes == 'true'
     uses: ./.github/workflows/ios.yaml
     with:
+      # yamllint disable-line rule:line-length
+      build: ${{ needs.plan.outputs.dependency-changes == 'true' || fromJson(needs.plan.outputs.test-artifact-workflow-run-ids).ios == '' }}
+      test-artifact-workflow-run-id: ${{ fromJson(needs.plan.outputs.test-artifact-workflow-run-ids).ios }}
       test-shards: ${{ needs.plan.outputs.test-shards }}
     secrets: inherit

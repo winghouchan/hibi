@@ -3,6 +3,11 @@ appId: ${appId}
 tags:
   - subflow
 ---
+- runFlow:
+    when:
+      true: ${loadBundle}
+    file: ../../bundle/loadBundle.yaml
+
 - openLink:
     link: ${link}
 

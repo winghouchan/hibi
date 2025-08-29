@@ -88,6 +88,13 @@ get_test_paths() {
   done
 }
 
+array_contains() {
+  local -n array=$1
+  local item=$2
+
+  printf '%s\0' "${array[@]}" | grep -Fzxq -- "${item}"
+}
+
 options=()
 maybe_paths=()
 test_paths=()
@@ -104,7 +111,16 @@ if (( ${#test_paths[@]} )); then
   echo "Running end-to-end tests in:"
   printf -- "- %s\n" "${test_paths[@]}"
 
-  concurrently_args=(
+  concurrently_args=()
+
+  if array_contains options 'loadBundle=true'; then
+    concurrently_args+=(
+      # Start the bundle server
+      "bun ./e2e/bundle/server.ts"
+    )
+  fi
+
+  concurrently_args+=(
     # Start the fixture server
     "bun ./e2e/fixtures/server.ts"
 

@@ -3,6 +3,13 @@ name: ios
 on:
   workflow_call:
     inputs:
+      build:
+        required: false
+        default: true
+        type: boolean
+      test-artifact-workflow-run-id:
+        required: false
+        type: number
       test-shards:
         required: true
         type: string
@@ -11,12 +18,15 @@ permissions:
   actions: write
   contents: read
 
+env:
+  UPDATES_URL: 'http://localhost:8800/manifest'
+  artifact-name: build-ios
+
 jobs:
   build:
     runs-on: macos-15
 
-    env:
-      artifact-name: build-ios
+    if: inputs.build == true
 
     outputs:
       artifact-name: ${{ env.artifact-name }}
@@ -86,6 +96,7 @@ jobs:
   test:
     name: test (${{ matrix.shard.name }})
     needs: [build]
+    if: always() && (inputs.build && needs.build.result == 'success') || inputs.test-artifact-workflow-run-id
     runs-on: macos-14
     timeout-minutes: 60
 
@@ -140,8 +151,10 @@ jobs:
       - name: 📥 Download app build
         uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.build.outputs.artifact-name }}
+          name: ${{ env.artifact-name }}
           path: ${{ env.app-directory }}/${{ env.app-name }}
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.build && github.run_id || inputs.test-artifact-workflow-run-id }}
 
       - name: 📱 Launch iOS simulator
         id: launch-ios-simulator
@@ -153,6 +166,12 @@ jobs:
 
       - name: 📲 Install app
         run: xcrun simctl install booted ${{ env.app-directory }}/${{ env.app-name }}
+
+      - name: 🧳 Create update bundle
+        if: ${{ !inputs.build }}
+        uses: ./.github/actions/create-update-bundle
+        with:
+          app: ${{ env.app-directory }}/${{ env.app-name }}
 
       - name: 🧪 Run tests
         id: tests

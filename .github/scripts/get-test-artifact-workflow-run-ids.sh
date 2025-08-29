@@ -35,6 +35,13 @@ android_artifact_workflow_run_id=$(gh api \
   --field "name=build-android" \
   --jq "${filter}")
 
-ids="{ \"android\": ${android_artifact_workflow_run_id} }"
+ios_artifact_workflow_run_id=$(gh api \
+  "${artifacts_endpoint}" \
+  --method GET \
+  --header 'Accept: application/vnd.github+json' \
+  --field "name=build-ios" \
+  --jq "${filter}")
+
+ids="{ \"android\": ${android_artifact_workflow_run_id}, \"ios\": ${ios_artifact_workflow_run_id} }"
 
 echo "ids=${ids}" >> "${GITHUB_OUTPUT}"

@@ -1,0 +1,7 @@
+name: Load bundle
+appId: ${appId}
+tags:
+  - subflow
+---
+- runScript:
+    file: loadBundle.js
