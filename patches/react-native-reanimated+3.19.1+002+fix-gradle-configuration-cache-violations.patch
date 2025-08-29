@@ -1,5 +1,8 @@
+# Fixes a violation in the requirements for the Gradle configuration cache.
+# See https://docs.gradle.org/8.13/userguide/configuration_cache.html#config_cache:requirements.
+
 diff --git a/node_modules/react-native-reanimated/android/build.gradle b/node_modules/react-native-reanimated/android/build.gradle
-index 2de3ca1..7df90e5 100644
+index e102f43..24c2a2f 100644
 --- a/node_modules/react-native-reanimated/android/build.gradle
 +++ b/node_modules/react-native-reanimated/android/build.gradle
 @@ -77,7 +77,12 @@ def resolveReactNativeDirectory() {
@@ -7,12 +10,12 @@ index 2de3ca1..7df90e5 100644
  
      // Fallback to node resolver for custom directory structures like monorepos.
 -    def reactNativePackage = file(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim())
-+    def reactNativePackage = providers.exec {
-+        commandLine "node", "--print", "require.resolve('react-native/package.json')"
-+        workingDir rootDir
-+    }.standardOutput.asText.map { path ->
-+        file(path.trim())
-+    }.get()
++    def reactNativePackage = file(
++        providers.exec {
++            workingDir(rootDir)
++            commandLine("node", "--print", "require.resolve('react-native/package.json')")
++        }.standardOutput.asText.get().trim()
++    )
      if(reactNativePackage.exists()) {
          return reactNativePackage.parentFile
      }
