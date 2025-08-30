@@ -12823,7 +12823,7 @@ __metadata:
     react-native-gesture-handler: "npm:~2.28.0"
     react-native-logs: "npm:^5.3.0"
     react-native-nitro-modules: "npm:0.25.2"
-    react-native-pager-view: "npm:6.7.1"
+    react-native-pager-view: "npm:6.9.1"
     react-native-reanimated: "npm:~3.19.1"
     react-native-safe-area-context: "npm:5.6.0"
     react-native-screens: "npm:~4.11.1"
@@ -17861,13 +17861,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-pager-view@npm:6.7.1":
-  version: 6.7.1
-  resolution: "react-native-pager-view@npm:6.7.1"
+"react-native-pager-view@npm:6.9.1":
+  version: 6.9.1
+  resolution: "react-native-pager-view@npm:6.9.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/1459f3c487d50b1ecba41a4b24c51ab9ad17026b30e66c109dd1df32afe7cc6726d8fcae8a3495f93a240e5781bbae7653c7d56d53e724e929312b30234616e9
+  checksum: 10c0/c5229d230734ad9dad0b1e296168f0eebc5cff1b4b63201266ee7d5ecadc2e9c584b426b4ef146718c2e581dfcf63914174133b3ed1657294ccd437c22dbbc05
   languageName: node
   linkType: hard
 
