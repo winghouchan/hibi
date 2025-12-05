@@ -73,6 +73,8 @@ get_checksum() {
 
 autolinking_directory=android/build/generated/autolinking
 
+mkdir -p "${autolinking_directory}"
+
 get_autolinking_config | strip_ansi_codes | convert_to_json \
   > "${autolinking_directory}/autolinking.json"
 
