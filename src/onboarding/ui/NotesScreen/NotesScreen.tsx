@@ -7,7 +7,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import { Link, Redirect, useNavigation } from 'expo-router'
-import { Alert, View } from 'react-native'
+import { Alert, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { notesQuery } from '@/notes/operations'
 import { NoteList } from '@/notes/ui'
@@ -115,8 +115,14 @@ export default function NotesScreen() {
             data={notes}
             onEndReached={() => !isFetchingMoreNotes && fetchMoreNotes()}
             renderItem={({ item: note }) => (
-              <Link key={note.id} href={`/onboarding/notes/${note.id}/edit`}>
-                <NoteList.Item fields={note.fields} />
+              <Link
+                key={note.id}
+                href={`/onboarding/notes/${note.id}/edit`}
+                asChild
+              >
+                <Pressable accessibilityRole="link">
+                  <NoteList.Item fields={note.fields} />
+                </Pressable>
               </Link>
             )}
           />

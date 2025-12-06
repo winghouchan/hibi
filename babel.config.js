@@ -40,7 +40,7 @@ module.exports = function (api) {
              * @see {@link https://www.unistyl.es/v3/start/how-unistyles-works}
              * @see {@link https://www.unistyl.es/v3/other/babel-plugin}
              */
-            ['react-native-unistyles/plugin', { autoProcessRoot: 'src' }],
+            ['react-native-unistyles/plugin', { root: 'src' }],
           ]
         : []),
 
