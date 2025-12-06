@@ -2,10 +2,10 @@
 # See https://github.com/expo/expo/issues/38169.
 
 diff --git a/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt b/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt
-index 7629d8d..da749f8 100644
+index 455e9e0..e72f2d1 100644
 --- a/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt
 +++ b/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/src/main/kotlin/expo/modules/plugin/AutolinkigCommandBuilder.kt
-@@ -71,7 +71,9 @@ class AutolinkigCommandBuilder {
+@@ -71,7 +71,9 @@ class AutolinkingCommandBuilder {
        autolinkingCommand +
        platform +
        useJson +

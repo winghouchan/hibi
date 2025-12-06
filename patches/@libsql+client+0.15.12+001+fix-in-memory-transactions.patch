@@ -2,10 +2,10 @@
 # See https://github.com/tursodatabase/libsql-client-ts/issues/229.
 
 diff --git a/node_modules/@libsql/client/lib-cjs/sqlite3.js b/node_modules/@libsql/client/lib-cjs/sqlite3.js
-index f479612..5bb7f4d 100644
+index 8527e61..a5a2dc3 100644
 --- a/node_modules/@libsql/client/lib-cjs/sqlite3.js
 +++ b/node_modules/@libsql/client/lib-cjs/sqlite3.js
-@@ -145,7 +145,11 @@ class Sqlite3Client {
+@@ -150,7 +150,11 @@ class Sqlite3Client {
      async transaction(mode = "write") {
          const db = this.#getDb();
          executeStmt(db, (0, util_1.transactionModeToBegin)(mode), this.#intMode);
@@ -19,10 +19,10 @@ index f479612..5bb7f4d 100644
      }
      async executeMultiple(sql) {
 diff --git a/node_modules/@libsql/client/lib-esm/sqlite3.js b/node_modules/@libsql/client/lib-esm/sqlite3.js
-index 8aa7047..22b6781 100644
+index d9a4f01..242acc7 100644
 --- a/node_modules/@libsql/client/lib-esm/sqlite3.js
 +++ b/node_modules/@libsql/client/lib-esm/sqlite3.js
-@@ -123,7 +123,11 @@ export class Sqlite3Client {
+@@ -128,7 +128,11 @@ export class Sqlite3Client {
      async transaction(mode = "write") {
          const db = this.#getDb();
          executeStmt(db, transactionModeToBegin(mode), this.#intMode);

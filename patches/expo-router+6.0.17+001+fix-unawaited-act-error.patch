@@ -2,21 +2,21 @@
 # See https://github.com/expo/expo/issues/38046.
 
 diff --git a/node_modules/expo-router/build/testing-library/index.js b/node_modules/expo-router/build/testing-library/index.js
-index 107725c..55c4925 100644
+index a6dd8db..153292b 100644
 --- a/node_modules/expo-router/build/testing-library/index.js
 +++ b/node_modules/expo-router/build/testing-library/index.js
-@@ -31,12 +31,12 @@ const router_store_1 = require("../global-state/router-store");
- const imperative_api_1 = require("../imperative-api");
- // re-export everything
- __exportStar(require("@testing-library/react-native"), exports);
+@@ -34,12 +34,12 @@ Object.defineProperty(exports, 'screen', {
+         return rnTestingLibrary.screen;
+     },
+ });
 -function renderRouter(context = './app', { initialUrl = '/', linking, ...options } = {}) {
 +async function renderRouter(context = './app', { initialUrl = '/', linking, ...options } = {}) {
      jest.useFakeTimers();
      const mockContext = (0, mock_config_1.getMockContext)(context);
      // Force the render to be synchronous
      process.env.EXPO_ROUTER_IMPORT_MODE = 'sync';
--    const result = (0, react_native_1.render)(<ExpoRoot_1.ExpoRoot context={mockContext} location={initialUrl} linking={linking}/>, options);
-+    const result = await (0, react_native_1.renderAsync)(<ExpoRoot_1.ExpoRoot context={mockContext} location={initialUrl} linking={linking}/>, options);
+-    const result = rnTestingLibrary.render(<ExpoRoot_1.ExpoRoot context={mockContext} location={initialUrl} linking={linking}/>, options);
++    const result = await rnTestingLibrary.renderAsync(<ExpoRoot_1.ExpoRoot context={mockContext} location={initialUrl} linking={linking}/>, options);
      /**
       * This is a hack to ensure that React Navigation's state updates are processed before we run assertions.
       * Some updates are async and we need to wait for them to complete, otherwise will we get a false positive.

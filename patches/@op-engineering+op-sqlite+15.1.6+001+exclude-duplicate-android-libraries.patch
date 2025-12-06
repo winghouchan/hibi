@@ -1,0 +1,18 @@
+diff --git a/node_modules/@op-engineering/op-sqlite/android/build.gradle b/node_modules/@op-engineering/op-sqlite/android/build.gradle
+index 7df016d..e09c79e 100644
+--- a/node_modules/@op-engineering/op-sqlite/android/build.gradle
++++ b/node_modules/@op-engineering/op-sqlite/android/build.gradle
+@@ -202,6 +202,13 @@ android {
+     targetCompatibility JavaVersion.VERSION_1_8
+   }
+ 
++  packagingOptions {
++    exclude "**/libc++_shared.so"
++    exclude "**/libfbjni.so"
++    exclude "**/libjsi.so"
++    exclude "**/libreactnative.so"
++  }
++
+   externalNativeBuild {
+     cmake {
+       path "CMakeLists.txt"
