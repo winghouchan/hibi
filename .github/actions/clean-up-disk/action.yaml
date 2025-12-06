@@ -1,0 +1,10 @@
+name: Clean up disk
+
+description: Removes unnecessary packages to free up disk space
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 🧹 Clean up disk
+      shell: bash
+      run: ${{ github.action_path }}/clean-up-disk.sh
