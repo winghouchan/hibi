@@ -91,8 +91,11 @@ export default function LibraryScreen() {
               key={note.id}
               href={`/notes/${note.id}`}
               testID="library.collection.note.link"
+              asChild
             >
-              <NoteList.Item fields={note.fields} />
+              <Pressable accessibilityRole="link">
+                <NoteList.Item fields={note.fields} />
+              </Pressable>
             </Link>
           )}
         />

@@ -41,7 +41,7 @@ set -o pipefail
 #
 # See: https://docs.expo.dev/modules/autolinking/#react-native-config
 get_autolinking_config() {
-  yarn run expo-modules-autolinking react-native-config --platform android
+  yarn run expo-modules-autolinking react-native-config --json --platform android
 }
 
 strip_ansi_codes() {

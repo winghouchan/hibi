@@ -1,8 +1,8 @@
 diff --git a/node_modules/@sentry/react-native/sentry.gradle b/node_modules/@sentry/react-native/sentry.gradle
-index 587f8e0..942330b 100644
+index a461813..253894f 100644
 --- a/node_modules/@sentry/react-native/sentry.gradle
 +++ b/node_modules/@sentry/react-native/sentry.gradle
-@@ -300,7 +300,12 @@ project.afterEvaluate {
+@@ -296,7 +296,12 @@ project.afterEvaluate {
  def resolveSentryReactNativeSDKPath(reactRoot) {
      def resolvedSentryPath = null
      try {

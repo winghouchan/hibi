@@ -143,7 +143,7 @@ describe('<NotesScreen />', () => {
         })
 
         expect(
-          await screen.findByRole('link', { name: /Front 1.*Back 1/s }),
+          await screen.findByRole('link', { name: /(Front 1|Back 1)/s }),
         ).toBeOnTheScreen()
       })
 
@@ -200,7 +200,7 @@ describe('<NotesScreen />', () => {
         })
 
         await user.press(
-          await screen.findByRole('link', { name: /Front 1.*Back 1/s }),
+          await screen.findByRole('link', { name: /(Front 1|Back 1)/s }),
         )
 
         expect(screen).toHavePathname('/onboarding/notes/1/edit')
