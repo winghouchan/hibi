@@ -96,7 +96,8 @@ jobs:
   test:
     name: test (${{ matrix.shard.name }})
     needs: [build]
-    if: always() && (inputs.build && needs.build.result == 'success') || inputs.test-artifact-workflow-run-id
+    # yamllint disable-line rule:line-length
+    if: always() && (inputs.build && needs.build.result == 'success') || (!inputs.build && inputs.test-artifact-workflow-run-id)
     runs-on: macos-14
     timeout-minutes: 60
 
