@@ -61,9 +61,8 @@ describe('createReview', () => {
       'and rating is $input.rating, the correct review and snapshot are generated',
       async ({ expected, input: { duration, rating } }) => {
         const { database, resetDatabaseMock } = await mockDatabase()
-        const { createCollection } = await import(
-          '@/collections/operations/createCollection'
-        )
+        const { createCollection } =
+          await import('@/collections/operations/createCollection')
         const { createNote } = await import('@/notes/operations')
         const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({
@@ -199,9 +198,8 @@ describe('createReview', () => {
       'and rating is $input.rating, the correct review and snapshot are generated',
       async ({ expected, data, input: { duration, rating } }) => {
         const { database, resetDatabaseMock } = await mockDatabase()
-        const { createCollection } = await import(
-          '@/collections/operations/createCollection'
-        )
+        const { createCollection } =
+          await import('@/collections/operations/createCollection')
         const { createNote } = await import('@/notes/operations')
         const { default: createReview } = await import('./createReview')
         const collectionMock = await createCollection({

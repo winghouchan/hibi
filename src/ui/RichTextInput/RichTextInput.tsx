@@ -42,7 +42,8 @@ export interface Ref {
 }
 
 export interface Props
-  extends Pick<ComponentProps<typeof RichText>, 'testID'>,
+  extends
+    Pick<ComponentProps<typeof RichText>, 'testID'>,
     Pick<
       Exclude<Parameters<typeof useEditorBridge>[0], undefined>,
       'autofocus'

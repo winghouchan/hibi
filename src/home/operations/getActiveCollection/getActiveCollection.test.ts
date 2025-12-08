@@ -5,9 +5,8 @@ import { mockDatabase } from 'test/utils'
 describe('getActiveCollection', () => {
   test('when an active collection has been set, returns the active collection', async () => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: getActiveCollection } = await import(
-      './getActiveCollection'
-    )
+    const { default: getActiveCollection } =
+      await import('./getActiveCollection')
 
     const fixture = { collection: { name: 'Test Collection' } }
 
@@ -27,9 +26,8 @@ describe('getActiveCollection', () => {
 
   test('when no active collection has been set, returns the first collection', async () => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: getActiveCollection } = await import(
-      './getActiveCollection'
-    )
+    const { default: getActiveCollection } =
+      await import('./getActiveCollection')
 
     const fixture = {
       collections: [

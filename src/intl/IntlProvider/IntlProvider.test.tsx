@@ -192,9 +192,10 @@ describe('<IntlProvider />', () => {
       },
     }))
 
-    const { getLocales } = (await import(
-      'expo-localization'
-    )) as unknown as jest.Mocked<typeof import('expo-localization')>
+    const { getLocales } =
+      (await import('expo-localization')) as unknown as jest.Mocked<
+        typeof import('expo-localization')
+      >
 
     mockLocalePreference = getLocales.mockReturnValue
 
