@@ -8789,13 +8789,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"await-lock@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "await-lock@npm:2.2.2"
-  checksum: 10c0/bedf00dad44c6325a655bf3bd523ab9e1ce41023da6a8c379990c76ac1d942ac7e5301627ab84ba37917ab5247506ba429b7f6e4bf77074093f255571b9ad5ee
-  languageName: node
-  linkType: hard
-
 "babel-jest@npm:^29.2.1, babel-jest@npm:^29.7.0":
   version: 29.7.0
   resolution: "babel-jest@npm:29.7.0"
@@ -12277,14 +12270,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-drizzle-studio-plugin@npm:~0.2.0":
-  version: 0.2.0
-  resolution: "expo-drizzle-studio-plugin@npm:0.2.0"
-  dependencies:
-    expo-sqlite: "npm:^15.2.9"
+"expo-drizzle-studio-plugin@npm:~0.2.1":
+  version: 0.2.1
+  resolution: "expo-drizzle-studio-plugin@npm:0.2.1"
   peerDependencies:
-    expo: ^53.0.5
-  checksum: 10c0/f3bef9e890f94ca53192cc711c72479a9bdd0f1fdfe7db228b9e6ab06d379d5225e023d5da7ef55e24b07fd3bf67a83a253e0ae62e66c4a848532ad7d5c4ede2
+    expo: ">=53.0.5"
+    expo-sqlite: ">=15.2.9"
+  checksum: 10c0/b6aee4e52db45a2a5a88b4af252bce3f472cf99c711f2abe7fa04d01bf729be9db753068c664feb3ae10b1a3e81226a56c1da5b97d0f9edd9bf766ec35f43242
   languageName: node
   linkType: hard
 
@@ -12485,19 +12477,6 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10c0/67fbf5e411f65feb3b2e81662df60bbe8b4f8e0b23f9e56f669f9fcace640a0ab13b61835b62465b96159b1f3640094f15fd4ffa00c1925f1af37019b3de2021
-  languageName: node
-  linkType: hard
-
-"expo-sqlite@npm:^15.2.9":
-  version: 15.2.14
-  resolution: "expo-sqlite@npm:15.2.14"
-  dependencies:
-    await-lock: "npm:^2.2.2"
-  peerDependencies:
-    expo: "*"
-    react: "*"
-    react-native: "*"
-  checksum: 10c0/0748f48b3219d595474a8b345e5f4cad9089791ac26c3bf5d0a4778298843d6c839b817f0ac220914e4e24d949e0845506dcb7b84ee8fd9f6d42333979f23ffb
   languageName: node
   linkType: hard
 
@@ -13712,7 +13691,7 @@ __metadata:
     expo-build-properties: "npm:~1.0.10"
     expo-constants: "npm:~18.0.11"
     expo-dev-client: "npm:~6.0.20"
-    expo-drizzle-studio-plugin: "npm:~0.2.0"
+    expo-drizzle-studio-plugin: "npm:~0.2.1"
     expo-font: "npm:~14.0.10"
     expo-haptics: "npm:~15.0.8"
     expo-linking: "npm:~8.0.10"
