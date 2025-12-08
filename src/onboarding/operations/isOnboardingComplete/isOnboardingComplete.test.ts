@@ -23,9 +23,8 @@ describe('isOnboardingComplete', () => {
     },
   ])('$name', async ({ fixture, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: isOnboardingComplete } = await import(
-      './isOnboardingComplete'
-    )
+    const { default: isOnboardingComplete } =
+      await import('./isOnboardingComplete')
 
     await database.insert(user).values(fixture.user)
 

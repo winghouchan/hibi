@@ -1,8 +1,10 @@
 import { database, tracer } from '@/data/database'
 import { collection, CollectionParameters } from '../../schema/collection'
 
-export interface Collection<Name extends string = string>
-  extends Omit<CollectionParameters, 'id' | 'createdAt'> {
+export interface Collection<Name extends string = string> extends Omit<
+  CollectionParameters,
+  'id' | 'createdAt'
+> {
   name: Name extends '' ? never : Name
 }
 

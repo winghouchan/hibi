@@ -46,9 +46,8 @@ const PORT = args.port ? Number(args.port) : 9004
  */
 interface IosDevice<
   State extends 'Booted' | 'Shutdown' = 'Booted' | 'Shutdown',
-  Availability extends State extends 'Booted'
-    ? true
-    : boolean = State extends 'Booted' ? true : boolean,
+  Availability extends State extends 'Booted' ? true : boolean =
+    State extends 'Booted' ? true : boolean,
 > {
   dataPath: string
   dataPathSize: number
@@ -67,14 +66,8 @@ async function getIosDevices() {
     const devices = Object.values<IosDevice<'Booted'>[]>(
       (
         await new Response(
-          spawn([
-            'xcrun',
-            'simctl',
-            'list',
-            'devices',
-            'booted',
-            '--json',
-          ]).stdout,
+          spawn(['xcrun', 'simctl', 'list', 'devices', 'booted', '--json'])
+            .stdout,
         ).json()
       ).devices,
     ).reduce((accumulator, value) => [...accumulator, ...value], [])
@@ -99,14 +92,8 @@ async function getIosAppDataContainer(udid: string, appId: string) {
   try {
     return (
       await new Response(
-        spawn([
-          'xcrun',
-          'simctl',
-          'get_app_container',
-          udid,
-          appId,
-          'data',
-        ]).stdout,
+        spawn(['xcrun', 'simctl', 'get_app_container', udid, appId, 'data'])
+          .stdout,
       ).text()
     ).trimEnd()
   } catch (error) {

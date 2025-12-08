@@ -4,11 +4,10 @@ import { SvgXml as NativeSvgXml } from 'react-native-svg'
 import { withUnistyles } from 'react-native-unistyles'
 import { CamelCasedProperties } from 'type-fest'
 
-interface Props
-  extends Omit<
-    Partial<CamelCasedProperties<FeatherAttributes>>,
-    'height' | 'width'
-  > {
+interface Props extends Omit<
+  Partial<CamelCasedProperties<FeatherAttributes>>,
+  'height' | 'width'
+> {
   name: keyof typeof feather.icons
   size?: number
 }

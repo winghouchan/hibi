@@ -22,9 +22,8 @@ describe('getOnboardingCollection', () => {
     },
   ])('$name', async ({ fixture, expected }) => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: getOnboardingCollection } = await import(
-      './getOnboardingCollection'
-    )
+    const { default: getOnboardingCollection } =
+      await import('./getOnboardingCollection')
 
     if (fixture.collection) {
       await database.insert(collection).values(fixture.collection)

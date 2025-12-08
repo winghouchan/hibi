@@ -5,9 +5,8 @@ import { mockDatabase } from 'test/utils'
 describe('setActiveCollection', () => {
   test(`sets the user's active collection`, async () => {
     const { database, resetDatabaseMock } = await mockDatabase()
-    const { default: setActiveCollection } = await import(
-      './setActiveCollection'
-    )
+    const { default: setActiveCollection } =
+      await import('./setActiveCollection')
 
     const fixture = { collection: { name: 'Test Collection' } }
 

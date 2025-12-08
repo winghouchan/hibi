@@ -17,8 +17,10 @@ import useSelectContext from './useSelectContext'
 
 type OptionConstraint<T> = { id: T; selected?: boolean }
 
-interface Props<Option extends OptionConstraint<ID>, ID>
-  extends FlatListProps<Option> {
+interface Props<
+  Option extends OptionConstraint<ID>,
+  ID,
+> extends FlatListProps<Option> {
   title: string
   onClose?: () => void
   onOpen?: () => void
