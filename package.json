@@ -164,7 +164,7 @@
     "react-test-renderer": "19.1.0",
     "reassure": "^1.4.0",
     "storybook": "^8.6.14",
-    "ts-jest": "^29.4.1",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "type-fest": "^4.41.0",
     "typescript": "~5.9.2",
