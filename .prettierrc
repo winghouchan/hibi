@@ -12,7 +12,8 @@
       "files": ["*.sql"],
       "options": {
         "sqlCanonicalSyntax": true,
-        "sqlKeywordCase": "lower"
+        "sqlKeywordCase": "lower",
+        "sqlLiteralCase": "lower"
       }
     }
   ]
