@@ -3382,15 +3382,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/ecma402-abstract@npm:2.3.4":
-  version: 2.3.4
-  resolution: "@formatjs/ecma402-abstract@npm:2.3.4"
+"@formatjs/ecma402-abstract@npm:2.3.6":
+  version: 2.3.6
+  resolution: "@formatjs/ecma402-abstract@npm:2.3.6"
   dependencies:
     "@formatjs/fast-memoize": "npm:2.2.7"
-    "@formatjs/intl-localematcher": "npm:0.6.1"
+    "@formatjs/intl-localematcher": "npm:0.6.2"
     decimal.js: "npm:^10.4.3"
     tslib: "npm:^2.8.0"
-  checksum: 10c0/2644bc618a34dc610ef9691281eeb45ae6175e6982cf19f1bd140672fc95c748747ce3c85b934649ea7e4a304f7ae0060625fd53d5df76f92ca3acf743e1eb0a
+  checksum: 10c0/63be2a73d3168bf45ab5d50db58376e852db5652d89511ae6e44f1fa03ad96ebbfe9b06a1dfaa743db06e40eb7f33bd77530b9388289855cca79a0e3fc29eacf
   languageName: node
   linkType: hard
 
@@ -3403,55 +3403,55 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/intl-enumerator@npm:1.8.10":
-  version: 1.8.10
-  resolution: "@formatjs/intl-enumerator@npm:1.8.10"
+"@formatjs/intl-enumerator@npm:1.8.12":
+  version: 1.8.12
+  resolution: "@formatjs/intl-enumerator@npm:1.8.12"
   dependencies:
-    "@formatjs/ecma402-abstract": "npm:2.3.4"
+    "@formatjs/ecma402-abstract": "npm:2.3.6"
     tslib: "npm:^2.8.0"
-  checksum: 10c0/6c801131669a0b0962a7f3e63a7722a3ebb52a7c6aedf725e8ab601a77616c4896a26b81852bfda89bd83eed298f6b85e701349f15b8b7e5fdd8c79eb2209d96
+  checksum: 10c0/b9bab6cfa24d4d669dc395be677499b7e942d3e203cee43f62a5a37bf4b9e3506d47f516c3fadbd2c1cfb13747bc40d7a3741ecbeb7dfefb2ced63d11bf8d37c
   languageName: node
   linkType: hard
 
-"@formatjs/intl-getcanonicallocales@npm:2.5.5":
-  version: 2.5.5
-  resolution: "@formatjs/intl-getcanonicallocales@npm:2.5.5"
+"@formatjs/intl-getcanonicallocales@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@formatjs/intl-getcanonicallocales@npm:2.5.6"
   dependencies:
     tslib: "npm:^2.8.0"
-  checksum: 10c0/c7693c0823eeaf96bd1af32f84ec0c18db451862135205ccc671cf1e4250e162da31b57220d2bcc0754c55433a92e92e7b59ab42458fc0ff6a1d62312f8ddc54
+  checksum: 10c0/3a776ddc9893982f52f9f1540da2a205af8cf1533b7a40b791496e41ad263b3d3e019d37cf100cb531779f42ec48f4f566ddbded4625fa56362c78b918bcad06
   languageName: node
   linkType: hard
 
-"@formatjs/intl-locale@npm:^4.2.11":
-  version: 4.2.11
-  resolution: "@formatjs/intl-locale@npm:4.2.11"
+"@formatjs/intl-locale@npm:^4.2.13":
+  version: 4.2.13
+  resolution: "@formatjs/intl-locale@npm:4.2.13"
   dependencies:
-    "@formatjs/ecma402-abstract": "npm:2.3.4"
-    "@formatjs/intl-enumerator": "npm:1.8.10"
-    "@formatjs/intl-getcanonicallocales": "npm:2.5.5"
+    "@formatjs/ecma402-abstract": "npm:2.3.6"
+    "@formatjs/intl-enumerator": "npm:1.8.12"
+    "@formatjs/intl-getcanonicallocales": "npm:2.5.6"
     tslib: "npm:^2.8.0"
-  checksum: 10c0/072aa50fcf8bc1baba1cf16f1bc80f46999d030ce12aef53f08cdb946177e75e59f7f329de7dfca8223c2bac80d3713ec8492e36c15d537ffad0e730e566dc3b
+  checksum: 10c0/19898e008459e5ad68f631fb18ae2accb9e4ab444bb94fbe52b1b427996968357f986e7effabf463e5d99eed9fc79eb7feccaae0eeda3608a19ff6e13a0829ef
   languageName: node
   linkType: hard
 
-"@formatjs/intl-localematcher@npm:0.6.1, @formatjs/intl-localematcher@npm:^0.6.1":
-  version: 0.6.1
-  resolution: "@formatjs/intl-localematcher@npm:0.6.1"
+"@formatjs/intl-localematcher@npm:0.6.2, @formatjs/intl-localematcher@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@formatjs/intl-localematcher@npm:0.6.2"
   dependencies:
     tslib: "npm:^2.8.0"
-  checksum: 10c0/bacbedd508519c1bb5ca2620e89dc38f12101be59439aa14aa472b222915b462cb7d679726640f6dcf52a05dd218b5aa27ccd60f2e5010bb96f1d4929848cde0
+  checksum: 10c0/22a17a4c67160b6c9f52667914acfb7b79cd6d80630d4ac6d4599ce447cb89d2a64f7d58fa35c3145ddb37fef893f0a45b9a55e663a4eb1f2ae8b10a89fac235
   languageName: node
   linkType: hard
 
-"@formatjs/intl-pluralrules@npm:^5.4.4":
-  version: 5.4.4
-  resolution: "@formatjs/intl-pluralrules@npm:5.4.4"
+"@formatjs/intl-pluralrules@npm:^5.4.6":
+  version: 5.4.6
+  resolution: "@formatjs/intl-pluralrules@npm:5.4.6"
   dependencies:
-    "@formatjs/ecma402-abstract": "npm:2.3.4"
-    "@formatjs/intl-localematcher": "npm:0.6.1"
+    "@formatjs/ecma402-abstract": "npm:2.3.6"
+    "@formatjs/intl-localematcher": "npm:0.6.2"
     decimal.js: "npm:^10.4.3"
     tslib: "npm:^2.8.0"
-  checksum: 10c0/8a8ec9f2fad40d9fa654a68de06fb18aaa6f0eafa908f41397f057366740625c12da627c6de68e0396fcd67ceaaa2c5c20a4b102f71ac8694abd9e76cceca949
+  checksum: 10c0/95dd6fb3e9bd84ce44cc194f6f815d690703bd60b75bf2ae895535d2d9a1a675765879de9b54f854882fc1335cbfac6a535873d5b2d75cc5ca93c6ca172aa272
   languageName: node
   linkType: hard
 
@@ -4115,47 +4115,47 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lingui/babel-plugin-extract-messages@npm:5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/babel-plugin-extract-messages@npm:5.4.1"
-  checksum: 10c0/2d8b7bb5e1c2d10cf0c89dd57c48d2af35706fc8719bfbe81304b78d5cf63eb4f8d5dc8e4c34478573dc7bf24417aa454face3c8efa7aeadd5ea6e9869f9e68e
+"@lingui/babel-plugin-extract-messages@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/babel-plugin-extract-messages@npm:5.6.1"
+  checksum: 10c0/aca406d1f58f66ad6fea7d1a494f1ab308b34930c994f83a364431f0cedc1b380417cb16a77bd905df584f777f5fcb5a985505ea6da42759bdccb7e24ad42ffc
   languageName: node
   linkType: hard
 
-"@lingui/babel-plugin-lingui-macro@npm:5.4.1, @lingui/babel-plugin-lingui-macro@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/babel-plugin-lingui-macro@npm:5.4.1"
+"@lingui/babel-plugin-lingui-macro@npm:5.6.1, @lingui/babel-plugin-lingui-macro@npm:^5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/babel-plugin-lingui-macro@npm:5.6.1"
   dependencies:
     "@babel/core": "npm:^7.20.12"
     "@babel/runtime": "npm:^7.20.13"
     "@babel/types": "npm:^7.20.7"
-    "@lingui/conf": "npm:5.4.1"
-    "@lingui/core": "npm:5.4.1"
-    "@lingui/message-utils": "npm:5.4.1"
+    "@lingui/conf": "npm:5.6.1"
+    "@lingui/core": "npm:5.6.1"
+    "@lingui/message-utils": "npm:5.6.1"
   peerDependencies:
     babel-plugin-macros: 2 || 3
   peerDependenciesMeta:
     babel-plugin-macros:
       optional: true
-  checksum: 10c0/6cd023bd3455cd212d02115203a5b69e44aa0b6e85321a4621d22b15f94d2db67fd98476f1af82e8d39174752d249044726e296ca7d73352e57021a12d0e541a
+  checksum: 10c0/9e9be50d4326d768750cb09a8cfb5b45542171506e5a4dfa34e0d5533a143e5d78a5a1e7f23533f4636f871f75ae4c1b1aee96293948630428d341664b37f42f
   languageName: node
   linkType: hard
 
-"@lingui/cli@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/cli@npm:5.4.1"
+"@lingui/cli@npm:^5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/cli@npm:5.6.1"
   dependencies:
     "@babel/core": "npm:^7.21.0"
     "@babel/generator": "npm:^7.21.1"
     "@babel/parser": "npm:^7.22.0"
     "@babel/runtime": "npm:^7.21.0"
     "@babel/types": "npm:^7.21.2"
-    "@lingui/babel-plugin-extract-messages": "npm:5.4.1"
-    "@lingui/babel-plugin-lingui-macro": "npm:5.4.1"
-    "@lingui/conf": "npm:5.4.1"
-    "@lingui/core": "npm:5.4.1"
-    "@lingui/format-po": "npm:5.4.1"
-    "@lingui/message-utils": "npm:5.4.1"
+    "@lingui/babel-plugin-extract-messages": "npm:5.6.1"
+    "@lingui/babel-plugin-lingui-macro": "npm:5.6.1"
+    "@lingui/conf": "npm:5.6.1"
+    "@lingui/core": "npm:5.6.1"
+    "@lingui/format-po": "npm:5.6.1"
+    "@lingui/message-utils": "npm:5.6.1"
     chokidar: "npm:3.5.1"
     cli-table: "npm:^0.3.11"
     commander: "npm:^10.0.0"
@@ -4164,79 +4164,81 @@ __metadata:
     esbuild: "npm:^0.25.1"
     glob: "npm:^11.0.0"
     micromatch: "npm:^4.0.7"
+    ms: "npm:^2.1.3"
     normalize-path: "npm:^3.0.0"
     ora: "npm:^5.1.0"
     picocolors: "npm:^1.1.1"
     pofile: "npm:^1.1.4"
     pseudolocale: "npm:^2.0.0"
     source-map: "npm:^0.8.0-beta.0"
+    threads: "npm:^1.7.0"
   bin:
-    lingui: ./dist/lingui.js
-  checksum: 10c0/ff6b88ea04d5d50265dcbd2a489cfb3ccd0b3e2638aa2ef647ff17becfda7c991e0febbd8432f4e19d672009fd4854f9671631741ebf2a16e97a827141d1e38e
+    lingui: dist/lingui.js
+  checksum: 10c0/6f6bb5f65869a8d3904280b628eedb732e3753ac257bef678bf65ee44ce1cdcd84e4b05a54a4d344cc0f28b4e1ac3c40a93d90bfdb624c81c2baae5f642a15fc
   languageName: node
   linkType: hard
 
-"@lingui/conf@npm:5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/conf@npm:5.4.1"
+"@lingui/conf@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/conf@npm:5.6.1"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     cosmiconfig: "npm:^8.0.0"
     jest-validate: "npm:^29.4.3"
-    jiti: "npm:^1.17.1"
+    jiti: "npm:^2.5.1"
     picocolors: "npm:^1.1.1"
-  checksum: 10c0/c47eb31cbf3f6d347047395681595b8ef071804388218e6e92ce2e2588dac1d64ab413ddfba1448a79afa942360681d9dc26e95c7bc6c775091ca3c6bd938adb
+  checksum: 10c0/ee770494058383aff9877473124a8766aab848b83f78ec98af56ccaf8b940747c394f30d3436327564700e123e8f30f4fe5d6e37621e4b9e818e40db17be2240
   languageName: node
   linkType: hard
 
-"@lingui/core@npm:5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/core@npm:5.4.1"
+"@lingui/core@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/core@npm:5.6.1"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
-    "@lingui/message-utils": "npm:5.4.1"
+    "@lingui/message-utils": "npm:5.6.1"
   peerDependencies:
-    "@lingui/babel-plugin-lingui-macro": 5.4.1
+    "@lingui/babel-plugin-lingui-macro": 5.6.1
     babel-plugin-macros: 2 || 3
   peerDependenciesMeta:
     "@lingui/babel-plugin-lingui-macro":
       optional: true
     babel-plugin-macros:
       optional: true
-  checksum: 10c0/6cbfb3fa5bd46e3523a41774fd4b948b60d1ee643d8c82db8f4ed135d051dcdacb3132a42780b76dd6b3c3a030430f0e5325557c117175673e6f326d7548e5c8
+  checksum: 10c0/1656e0df2cb6b3af52c551636347ce183ae2c3b8905a709fb38215517c97802a3323bd4f94d05cd15c5d6cbf916be05c60d68d09be0f1c26a8dc4dd63021784e
   languageName: node
   linkType: hard
 
-"@lingui/format-po@npm:5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/format-po@npm:5.4.1"
+"@lingui/format-po@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/format-po@npm:5.6.1"
   dependencies:
-    "@lingui/conf": "npm:5.4.1"
-    "@lingui/message-utils": "npm:5.4.1"
+    "@lingui/conf": "npm:5.6.1"
+    "@lingui/message-utils": "npm:5.6.1"
     date-fns: "npm:^3.6.0"
     pofile: "npm:^1.1.4"
-  checksum: 10c0/959ff591cf997c9b97adba4166048d9f259b917b92a1f0fd4117241c0d63162bea383f6dd97f2a26ab5acd55a1fdb6b1c82c9487dcf7f7ba2089c56afe08fcb9
+  checksum: 10c0/b95fd9123ca68868e2c2c517087d1f7789d757c248a623386f13eb5437993e1210954e024e8081c851cb0989a7e4a0b75ce35929d10f55cc1c1b5ee11f435dc3
   languageName: node
   linkType: hard
 
-"@lingui/message-utils@npm:5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/message-utils@npm:5.4.1"
+"@lingui/message-utils@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/message-utils@npm:5.6.1"
   dependencies:
     "@messageformat/parser": "npm:^5.0.0"
     js-sha256: "npm:^0.10.1"
-  checksum: 10c0/96cefc75a883e398ed0c29b06eeb36b917a237d52913848fcf9e4b071cb0d117621354f9aa61679e67c0058936b5e2f051b3969bc3611540c183798eb89f27f1
+  checksum: 10c0/29fb62fca64054e3202b27313fe42e8b17d1f15d443b3874bdbf823f47120e9a202162bc469f2f4a23c5abb292317a80419547266a7def9d73b34c98c27da08c
   languageName: node
   linkType: hard
 
-"@lingui/react@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@lingui/react@npm:5.4.1"
+"@lingui/react@npm:^5.6.1":
+  version: 5.6.1
+  resolution: "@lingui/react@npm:5.6.1"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
-    "@lingui/core": "npm:5.4.1"
+    "@lingui/core": "npm:5.6.1"
   peerDependencies:
-    "@lingui/babel-plugin-lingui-macro": 5.4.1
+    "@lingui/babel-plugin-lingui-macro": 5.6.1
     babel-plugin-macros: 2 || 3
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
@@ -4244,7 +4246,7 @@ __metadata:
       optional: true
     babel-plugin-macros:
       optional: true
-  checksum: 10c0/b0a81bcd677b97a8eb0a82243223f871a7ed00c061669b11a4a6348783c5f1236b2cfbeb227de6d4e50178fe06d2d2185ad8d976ee24b3053aa49b22678ba498
+  checksum: 10c0/1c0823c18669d5cb59c9f7466c658dd1a001b4fb276a58bc3c42db67eecc2d76033d459c4f5e7fcc892063a97e92be23f4782dc47d279a8360f32b897f91ad1b
   languageName: node
   linkType: hard
 
@@ -9381,7 +9383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"callsites@npm:^3.0.0":
+"callsites@npm:^3.0.0, callsites@npm:^3.1.0":
   version: 3.1.0
   resolution: "callsites@npm:3.1.0"
   checksum: 10c0/fff92277400eb06c3079f9e74f3af120db9f8ea03bad0e84d9aede54bbe2d44a56cccb5f6cf12211f93f52306df87077ecec5b712794c5a9b5dac6d615a3f301
@@ -10372,6 +10374,18 @@ __metadata:
   dependencies:
     ms: "npm:^2.1.1"
   checksum: 10c0/37d96ae42cbc71c14844d2ae3ba55adf462ec89fd3a999459dec3833944cd999af6007ff29c780f1c61153bcaaf2c842d1e4ce1ec621e4fc4923244942e4a02a
+  languageName: node
+  linkType: hard
+
+"debug@npm:^4.2.0":
+  version: 4.4.3
+  resolution: "debug@npm:4.4.3"
+  dependencies:
+    ms: "npm:^2.1.3"
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 10c0/d79136ec6c83ecbefd0f6a5593da6a9c91ec4d7ddc4b54c883d6e71ec9accb5f67a1a5e96d00a328196b5b5c86d365e98d8a3a70856aaf16b4e7b1985e67f5a6
   languageName: node
   linkType: hard
 
@@ -12000,6 +12014,13 @@ __metadata:
   bin:
     eslint: bin/eslint.js
   checksum: 10c0/59b2480639404ba24578ca480f973683b87b7aac8aa7e349240474a39067804fd13cd8b9cb22fee074170b8c7c563b57bab703ec0f0d3f81ea017e5d2cad299d
+  languageName: node
+  linkType: hard
+
+"esm@npm:^3.2.25":
+  version: 3.2.25
+  resolution: "esm@npm:3.2.25"
+  checksum: 10c0/8e60e8075506a7ce28681c30c8f54623fe18a251c364cd481d86719fc77f58aa055b293d80632d9686d5408aaf865ffa434897dc9fd9153c8b3f469fad23f094
   languageName: node
   linkType: hard
 
@@ -13632,14 +13653,14 @@ __metadata:
     "@eslint/eslintrc": "npm:^3.3.3"
     "@eslint/js": "npm:^9.39.1"
     "@expo/vector-icons": "npm:^15.0.3"
-    "@formatjs/intl-locale": "npm:^4.2.11"
-    "@formatjs/intl-localematcher": "npm:^0.6.1"
-    "@formatjs/intl-pluralrules": "npm:^5.4.4"
+    "@formatjs/intl-locale": "npm:^4.2.13"
+    "@formatjs/intl-localematcher": "npm:^0.6.2"
+    "@formatjs/intl-pluralrules": "npm:^5.4.6"
     "@gorhom/bottom-sheet": "npm:^5.2.8"
     "@libsql/client": "npm:^0.15.11"
-    "@lingui/babel-plugin-lingui-macro": "npm:^5.4.1"
-    "@lingui/cli": "npm:^5.4.1"
-    "@lingui/react": "npm:^5.4.1"
+    "@lingui/babel-plugin-lingui-macro": "npm:^5.6.1"
+    "@lingui/cli": "npm:^5.6.1"
+    "@lingui/react": "npm:^5.6.1"
     "@op-engineering/op-sqlite": "npm:^15.1.6"
     "@react-native-async-storage/async-storage": "npm:2.2.0"
     "@react-native-community/datetimepicker": "npm:8.4.4"
@@ -14418,6 +14439,13 @@ __metadata:
   version: 2.0.0
   resolution: "is-obj@npm:2.0.0"
   checksum: 10c0/85044ed7ba8bd169e2c2af3a178cacb92a97aa75de9569d02efef7f443a824b5e153eba72b9ae3aca6f8ce81955271aa2dc7da67a8b720575d3e38104208cb4e
+  languageName: node
+  linkType: hard
+
+"is-observable@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "is-observable@npm:2.1.0"
+  checksum: 10c0/f6ae9e136f66ad59c4faa4661112c389b398461cdeb0ef5bc3c505989469b77b2ba4602e2abc54a635d65f616eec9b5a40cd7d2c1f96b2cc4748b56635eba1c6
   languageName: node
   linkType: hard
 
@@ -15314,21 +15342,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jiti@npm:^1.17.1":
-  version: 1.21.7
-  resolution: "jiti@npm:1.21.7"
-  bin:
-    jiti: bin/jiti.js
-  checksum: 10c0/77b61989c758ff32407cdae8ddc77f85e18e1a13fc4977110dbd2e05fc761842f5f71bce684d9a01316e1c4263971315a111385759951080bbfe17cbb5de8f7a
-  languageName: node
-  linkType: hard
-
 "jiti@npm:^2.4.1":
   version: 2.5.1
   resolution: "jiti@npm:2.5.1"
   bin:
     jiti: lib/jiti-cli.mjs
   checksum: 10c0/f0a38d7d8842cb35ffe883038166aa2d52ffd21f1a4fc839ae4076ea7301c22a1f11373f8fc52e2667de7acde8f3e092835620dd6f72a0fbe9296b268b0874bb
+  languageName: node
+  linkType: hard
+
+"jiti@npm:^2.5.1":
+  version: 2.6.1
+  resolution: "jiti@npm:2.6.1"
+  bin:
+    jiti: lib/jiti-cli.mjs
+  checksum: 10c0/79b2e96a8e623f66c1b703b98ec1b8be4500e1d217e09b09e343471bbb9c105381b83edbb979d01cef18318cc45ce6e153571b6c83122170eefa531c64b6789b
   languageName: node
   linkType: hard
 
@@ -17545,6 +17573,13 @@ __metadata:
     define-properties: "npm:^1.2.1"
     es-object-atoms: "npm:^1.0.0"
   checksum: 10c0/3c47814fdc64842ae3d5a74bc9d06bdd8d21563c04d9939bf6716a9c00596a4ebc342552f8934013d1ec991c74e3671b26710a0c51815f0b603795605ab6b2c9
+  languageName: node
+  linkType: hard
+
+"observable-fns@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "observable-fns@npm:0.6.1"
+  checksum: 10c0/bf25d5b3e4040233e886800c48b347361d9c7a1179f345590e671c2dd5ea9b4447bd5037f8ed40b2bb6fd7e205f0c5450eff15f48efdf91b3dec027007cf2834
   languageName: node
   linkType: hard
 
@@ -21176,6 +21211,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"threads@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "threads@npm:1.7.0"
+  dependencies:
+    callsites: "npm:^3.1.0"
+    debug: "npm:^4.2.0"
+    is-observable: "npm:^2.1.0"
+    observable-fns: "npm:^0.6.1"
+    tiny-worker: "npm:>= 2"
+  dependenciesMeta:
+    tiny-worker:
+      optional: true
+  checksum: 10c0/34114075c5eb253e937c01e0e51babb71eb1571c2fd4a8170645aa20c10186422324537d017d64bfd3de655cbb6647bf70d1d602260273b1e9750719d67f359a
+  languageName: node
+  linkType: hard
+
 "throat@npm:^5.0.0":
   version: 5.0.0
   resolution: "throat@npm:5.0.0"
@@ -21215,6 +21266,15 @@ __metadata:
   version: 1.0.3
   resolution: "tiny-warning@npm:1.0.3"
   checksum: 10c0/ef8531f581b30342f29670cb41ca248001c6fd7975ce22122bd59b8d62b4fc84ad4207ee7faa95cde982fa3357cd8f4be650142abc22805538c3b1392d7084fa
+  languageName: node
+  linkType: hard
+
+"tiny-worker@npm:>= 2":
+  version: 2.3.0
+  resolution: "tiny-worker@npm:2.3.0"
+  dependencies:
+    esm: "npm:^3.2.25"
+  checksum: 10c0/3106cace86e673216426a517e96fb72ce642ba79002554e4c6bceb585ba77cf5e5e68b452c752cada6136ae94fdbf11c56943a70de6c6bc6a2a3a9ae439746c9
   languageName: node
   linkType: hard
 
