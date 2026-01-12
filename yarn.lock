@@ -13770,8 +13770,8 @@ __metadata:
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^3.7.3"
     prettier-plugin-sql-cst: "npm:^0.16.0"
-    react: "npm:19.1.0"
-    react-dom: "npm:19.1.0"
+    react: "npm:19.1.4"
+    react-dom: "npm:19.1.4"
     react-error-boundary: "npm:^5.0.0"
     react-native: "npm:0.81.5"
     react-native-edge-to-edge: "npm:1.6.0"
@@ -13784,10 +13784,10 @@ __metadata:
     react-native-screens: "npm:~4.16.0"
     react-native-svg: "npm:15.12.1"
     react-native-unistyles: "npm:^3.0.19"
-    react-native-web: "npm:^0.21.0"
+    react-native-web: "npm:^0.21.2"
     react-native-webview: "npm:13.15.0"
     react-native-worklets: "npm:^0.5.1"
-    react-test-renderer: "npm:19.1.0"
+    react-test-renderer: "npm:19.1.4"
     reassure: "npm:^1.4.0"
     sha.js: "npm:^2.4.12"
     sql-formatter: "npm:^15.6.6"
@@ -18928,14 +18928,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.1.0":
-  version: 19.1.0
-  resolution: "react-dom@npm:19.1.0"
+"react-dom@npm:19.1.4":
+  version: 19.1.4
+  resolution: "react-dom@npm:19.1.4"
   dependencies:
     scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.1.0
-  checksum: 10c0/3e26e89bb6c67c9a6aa86cb888c7a7f8258f2e347a6d2a15299c17eb16e04c19194e3452bc3255bd34000a61e45e2cb51e46292392340432f133e5a5d2dfb5fc
+    react: ^19.1.4
+  checksum: 10c0/fffb4c273773727c9b6e79418626bbe4f2546ad92018fe6e6b6b7df5a5ed96ef61602805662012b4e53c0a6d339cf83030fe09baadd688cd3587d6f780f39028
   languageName: node
   linkType: hard
 
@@ -19014,6 +19014,13 @@ __metadata:
   version: 19.1.0
   resolution: "react-is@npm:19.1.0"
   checksum: 10c0/b6c6cadd172d5d39f66d493700d137a5545c294a62ce0f8ec793d59794c97d2bed6bad227626f16bd0e90004ed7fdc8ed662a004e6edcf5d2b7ecb6e3040ea6b
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^19.1.4":
+  version: 19.2.3
+  resolution: "react-is@npm:19.2.3"
+  checksum: 10c0/2b54c422c21b8dbd68a435a1cce21ecd5b6f06f48659531f7d53dd7368365da5a67e946f352fb2010d11ca40658aa67bec90995f0f1ec5556c0f71dbffe54994
   languageName: node
   linkType: hard
 
@@ -19181,9 +19188,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-web@npm:^0.21.0":
-  version: 0.21.1
-  resolution: "react-native-web@npm:0.21.1"
+"react-native-web@npm:^0.21.2":
+  version: 0.21.2
+  resolution: "react-native-web@npm:0.21.2"
   dependencies:
     "@babel/runtime": "npm:^7.18.6"
     "@react-native/normalize-colors": "npm:^0.74.1"
@@ -19196,7 +19203,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
-  checksum: 10c0/6a72f32c30909d2e76f721f8257f6bf32d83ec8dec480aebefc549a479b9c87e4ef019d5dadc9d0d21703a9b1801803d51a25227f54cd4ad330ca14676dd5956
+  checksum: 10c0/8c184fef0045c25deff765c8e80963454a5dffd8e389a9e11cf2fec9e769ff0f82c3d56d082b1897a7ded8374d9ae8a49dac7f09377a104f1995a5ddea645095
   languageName: node
   linkType: hard
 
@@ -19356,10 +19363,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.1.0":
-  version: 19.1.0
-  resolution: "react@npm:19.1.0"
-  checksum: 10c0/530fb9a62237d54137a13d2cfb67a7db6a2156faed43eecc423f4713d9b20c6f2728b026b45e28fcd72e8eadb9e9ed4b089e99f5e295d2f0ad3134251bdd3698
+"react-test-renderer@npm:19.1.4":
+  version: 19.1.4
+  resolution: "react-test-renderer@npm:19.1.4"
+  dependencies:
+    react-is: "npm:^19.1.4"
+    scheduler: "npm:^0.26.0"
+  peerDependencies:
+    react: ^19.1.4
+  checksum: 10c0/3b2be2f631e0a022df5f59fe15240a99a4e8dfeba73c5239f588e4bc78135ff8eb4273273e6255b43f24b5b14f93a8cda801ba90c6c6b946d7f9fc0960280cac
+  languageName: node
+  linkType: hard
+
+"react@npm:19.1.4":
+  version: 19.1.4
+  resolution: "react@npm:19.1.4"
+  checksum: 10c0/159257dbaf168facecc0a34825114e2b00624d315b7dca8468afcc790eadf5a49f90c0234be7492c7207239292e789e443ca419a83121898b82b0824454900f2
   languageName: node
   linkType: hard
 
